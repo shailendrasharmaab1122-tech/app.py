@@ -1,179 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-    <title>DevCoderZ | Secure_System_v3</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body,html{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#010409;font-family:'Segoe UI',sans-serif;color:#fff}
-        #_gate{position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle at center,#0d1117 0%,#010409 100%);display:flex;align-items:center;justify-content:center;z-index:100000}
-        .box{background:#0d1117;padding:30px;border-radius:12px;border:1px solid #30363d;text-align:center;width:90%;max-width:350px;box-shadow:0 10px 40px rgba(0,0,0,0.8)}
-        h2{color:#38bdf8;margin-bottom:20px;letter-spacing:1px;font-size:1.4rem}
-        .btn{display:block;width:100%;padding:14px;margin:10px 0;border:none;border-radius:8px;cursor:pointer;font-weight:bold;transition:0.3s;font-size:14px;text-transform:uppercase;text-decoration:none;box-sizing:border-box}
-        .btn-tut{background:rgba(248,113,113,0.1);color:#f87171;border:1px dashed #f87171;margin-bottom:15px}.btn-tut:hover{background:rgba(248,113,113,0.2)}
-        .btn-srv{background:#38bdf8;color:#000}.btn-srv:hover{background:#7dd3fc;transform:translateY(-2px)}
-        .btn-adm{background:#161b22;color:#8b949e;border:1px solid #30363d}.btn-adm:hover{color:#fff;border-color:#38bdf8}
-        .btn-login{background:#22c55e;color:#fff;margin-top:10px;display:none}
-        input{width:100%;padding:12px;margin-top:10px;background:#010409;border:1px solid #30363d;border-radius:8px;color:#38bdf8;text-align:center;display:none;outline:none;box-sizing:border-box}
-        #_L0x{position:fixed;top:0;left:0;width:100%;height:100%;background:#010409;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:99999;color:#38bdf8;font-family:monospace;gap:12px}
-        ._b{width:120px;height:2px;background:#161b22;position:relative}._b::after{content:'';position:absolute;width:40%;height:100%;background:#38bdf8;animation:L 0.8s infinite}@keyframes L{0%{left:0}50%{left:60%}100%{left:0}}
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>DevCoderZ | Secure_System_v3</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+body,html{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#010409;font-family:'Segoe UI',sans-serif;color:#fff}#_gate{position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle at center,#0d1117 0%,#010409 100%);display:flex;align-items:center;justify-content:center;z-index:100000}.box{background:#0d1117;padding:30px;border-radius:12px;border:1px solid #30363d;text-align:center;width:90%;max-width:350px;box-shadow:0 10px 40px rgba(0,0,0,0.8)}h2{color:#38bdf8;margin-bottom:20px;letter-spacing:1px;font-size:1.4rem}.btn{display:block;width:100%;padding:14px;margin:10px 0;border:none;border-radius:8px;cursor:pointer;font-weight:bold;transition:0.3s;font-size:14px;text-transform:uppercase;text-decoration:none;box-sizing:border-box}.btn-tut{background:rgba(248,113,113,0.1);color:#f87171;border:1px dashed #f87171;margin-bottom:15px}.btn-tut:hover{background:rgba(248,113,113,0.2)}.btn-srv{background:#38bdf8;color:#000}.btn-srv:hover{background:#7dd3fc;transform:translateY(-2px)}.btn-adm{background:#161b22;color:#8b949e;border:1px solid #30363d}.btn-adm:hover{color:#fff;border-color:#38bdf8}.btn-login{background:#22c55e;color:#fff;margin-top:10px;display:none}input{width:100%;padding:12px;margin-top:10px;background:#010409;border:1px solid #30363d;border-radius:8px;color:#38bdf8;text-align:center;display:none;outline:none;box-sizing:border-box}#_L0x{position:fixed;top:0;left:0;width:100%;height:100%;background:#010409;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:99999;color:#38bdf8;font-family:monospace;gap:12px}._b{width:120px;height:2px;background:#161b22;position:relative}._b::after{content:'';position:absolute;width:40%;height:100%;background:#38bdf8;animation:L 0.8s infinite}@keyframes L{0%{left:0}50%{left:60%}100%{left:0}}
+</style>
 </head>
 <body>
-
-    <div id="_gate">
-        <div class="box">
-            <i class="fas fa-user-shield" style="font-size:45px;color:#38bdf8;margin-bottom:15px"></i>
-            <h2>SELECT ACCESS</h2>
-            <a href="https://youtube.com/shorts/VaoPFchVn8w?si=guvjPVAuybqTIhyS" target="_blank" class="btn btn-tut"><i class="fab fa-youtube"></i> How to get 24hrs access</a>
-            <button class="btn btn-srv" onclick="_startSrv()"><i class="fas fa-server"></i> SERVER 1</button>
-            <button class="btn btn-adm" id="admBtn" onclick="_showInput()"><i class="fas fa-unlock-alt"></i> ADMIN ENTER</button>
-            <input type="password" id="admKey" placeholder="Enter Admin Key...">
-            <button class="btn btn-login" id="loginBtn" onclick="_verifyAdm()">VERIFY & ENTER</button>
-            <p style="font-size:9px;color:#444;margin-top:20px;letter-spacing:2px">DEVCODERZ SECURITY SYSTEM</p>
-        </div>
-    </div>
-
-    <div id="_L0x"><div>SYSTEM_BOOT_...</div><div class="_b"></div></div>
-    <div id="_D0x_ROOT"></div>
-
-    <script>
-        (function() {
-            const _f = atob;
-            const _ap = _f("YjhjYmMyYjFkMjQxNzZhOGRmZjIwMjI2MDhiZGQ1YjVjYzhmMWMyYg=="); 
-            const _v1 = _f("RGV2YW5zaDQ1"); 
-            const _v2 = _f("QW51ajE4");
-            const _base = window.location.origin + window.location.pathname;
-
-            const _v = {
-                _h: "0f172a", _b: "020617", _a: "38bdf8", _t: "f1f5f9",
-                _u: _f("aHR0cHM6Ly9lZHV2aWJlLW50LnBhZ2VzLmRldi8="),
-                _tg: "https://t.me/+8tZSJ5FyTXVjM2M1",
-                _dev: _f("RGV2YW5zaCBTaGFybWE=")
-            };
-
-            window._showInput = () => {
-                document.getElementById('admKey').style.display = 'block';
-                document.getElementById('loginBtn').style.display = 'block';
-                document.getElementById('admBtn').style.display = 'none';
-            };
-
-            window._verifyAdm = () => {
-                const _val = document.getElementById('admKey').value;
-                if(_val === _v1 || _val === _v2) {
-                    localStorage.setItem("_vip_access", "1");
-                    localStorage.setItem("_t_sc", new Date().getTime());
-                    location.reload();
-                } else {
-                    alert("Access Denied!");
-                    document.getElementById('admKey').value = "";
-                }
-            };
-
-            window._startSrv = async () => {
-                document.getElementById('_gate').style.display = 'none';
-                document.getElementById('_L0x').style.display = 'flex';
-                const _t = 'dc_' + Math.random().toString(36).substring(2, 12);
-                sessionStorage.setItem("_ex_tk", _t);
-                const _target = `${_base}?auth=${_t}`;
-                try {
-                    const _r = await fetch(`https://indianshortner.com/api?api=${_ap}&url=${encodeURIComponent(_target)}`);
-                    const _d = await _r.json();
-                    window.location.href = _d.status === "success" ? _d.shortenedUrl : _target;
-                } catch (e) { window.location.href = _target; }
-            };
-
-            const _init = async () => {
-                const _q = new URLSearchParams(window.location.search);
-                const _now = new Date().getTime();
-                const _last = localStorage.getItem("_t_sc");
-                
-                if (_last && (_now - _last < 86400000)) {
-                    const _auth = _q.get("auth");
-                    const _temp = sessionStorage.getItem("_ex_tk");
-                    if (_auth && _auth === _temp) {
-                        localStorage.setItem("_t_sc", _now);
-                        sessionStorage.removeItem("_ex_tk");
-                        window.history.replaceState({}, document.title, window.location.pathname);
-                        return true;
-                    }
-                    if (localStorage.getItem("_vip_access") === "1" || _last) return true;
-                } else {
-                    localStorage.removeItem("_vip_access");
-                    localStorage.removeItem("_t_sc");
-                }
-                return false;
-            };
-
-            _init().then(_ok => {
-                if (!_ok) return;
-
-                document.getElementById('_gate').style.display = 'none';
-                document.getElementById('_L0x').style.display = 'flex';
-
-                const _0x_css = `
-                    :root{--1:#${_0x_v._h};--2:#${_0x_v._b};--3:#${_0x_v._a};--4:#${_0x_v._t}}
-                    #_D0x_ROOT{font-family:'Poppins',sans-serif;color:var(--4)}
-                    .H0x{height:65px;background:var(--1);display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid #30363d;z-index:1000;position:relative}
-                    .B0x{font-family:'Space Mono';color:var(--3);font-weight:900;text-shadow:0 0 10px rgba(56,189,248,0.4)}
-                    .M0x{width:100%;height:calc(100vh - 65px);overflow:hidden;position:relative}
-                    .I0x{width:100%;border:none;margin-top:-68px;height:calc(100% + 500px);display:block}
-                    .SD0x{position:fixed;left:-320px;width:290px;height:100%;background:#0d1117;transition:0.4s cubic-bezier(0.4,0,0.2,1);z-index:10000;padding:30px 20px;border-right:1px solid #30363d}
-                    .SD0x.active{left:0}
-                    .ADMIN_BOX{background:rgba(56,189,248,0.03);padding:15px;border-radius:10px;border:1px solid rgba(56,189,248,0.1);margin-bottom:25px}
-                    .IT0x{padding:14px;margin-bottom:8px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:12px;color:#8b949e;text-decoration:none;font-size:14px;transition:0.2s}
-                    .IT0x:hover{background:#161b22;color:var(--3)}
-                    .TIME_WRAP{text-align:right;display:flex;flex-direction:column;justify-content:center}
-                    #_TX{font-family:'Space Mono';font-size:13px;color:#fff;font-weight:600}
-                    #_DX{font-family:'Space Mono';font-size:9px;color:var(--3);letter-spacing:1px;text-transform:uppercase}
-                `;
-
-                const _0x_html = `
-                    <div id="_SX" class="SD0x">
-                        <div style="font-size:11px;color:var(--3);font-family:'Space Mono';margin-bottom:10px">// BACKBONE_SYSTEM</div>
-                        <div class="ADMIN_BOX">
-                            <div style="margin-bottom:12px">
-                                <div style="font-size:14px;font-weight:800;color:#fff"><i class="fas fa-crown" style="color:#fbbf24;font-size:12px"></i> ${_v._dev}</div>
-                                <div style="font-size:10px;color:var(--3);text-transform:uppercase">Lead Architect & Founder</div>
-                            </div>
-                        </div>
-                        <div style="height:1px;background:#30363d;margin-bottom:20px"></div>
-                        <div class="IT0x" onclick="location.reload()"><i class="fas fa-sync-alt"></i> REBOOT_SYSTEM</div>
-                        <a href="${_v._tg}" target="_blank" class="IT0x"><i class="fab fa-telegram-plane"></i> TELEGRAM_AUTH</a>
-                        <div class="IT0x" onclick="document.getElementById('_SX').classList.remove('active')" style="color:#f85149;margin-top:30px"><i class="fas fa-power-off"></i> CLOSE_CORE</div>
-                    </div>
-                    <header class="H0x">
-                        <i class="fas fa-th-large" style="cursor:pointer;color:#8b949e;font-size:20px" onclick="document.getElementById('_SX').classList.add('active')"></i>
-                        <div class="B0x">&lt;DevCoderZ/&gt;</div>
-                        <div class="TIME_WRAP">
-                            <div id="_TX">00:00:00</div>
-                            <div id="_DX">LOADING...</div>
-                        </div>
-                    </header>
-                    <main class="M0x">
-                        <iframe src="${_v._u}" class="I0x"></iframe>
-                        <div style="position:absolute;bottom:0;width:100%;height:50px;background:var(--1);display:flex;align-items:center;justify-content:center;border-top:1px solid #30363d;z-index:999">
-                            <div style="font-size:10px;color:#484f58;font-family:'Space Mono'">[ CORE_VER: 2.0.26_STABLE ]</div>
-                        </div>
-                    </main>
-                `;
-
-                setTimeout(() => {
-                    const s = document.createElement('style'); s.innerHTML = _0x_css; document.head.appendChild(s);
-                    document.getElementById('_D0x_ROOT').innerHTML = _0x_html;
-                    document.getElementById('_L0x').remove();
-                }, 1000);
-
-                setInterval(() => {
-                    const d = new Date();
-                    document.getElementById('_TX').innerText = d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'});
-                    const opts = { day: '2-digit', month: 'short', year: 'numeric' };
-                    document.getElementById('_DX').innerText = d.toLocaleDateString('en-GB', opts).replace(/ /g, '-');
-                }, 1000);
-            });
-            document.oncontextmenu = () => !1;
-        })();
-    </script>
+<div id="_gate"><div class="box"><i class="fas fa-user-shield" style="font-size:45px;color:#38bdf8;margin-bottom:15px"></i><h2>SELECT ACCESS</h2><a href="https://t.me/+8tZSJ5FyTXVjM2M1" target="_blank" class="btn btn-tut"><i class="fab fa-telegram"></i> JOIN TELEGRAM</a><button class="btn btn-srv" onclick="_startSrv()"><i class="fas fa-server"></i> SERVER 1</button><button class="btn btn-adm" id="admBtn" onclick="_showInput()"><i class="fas fa-unlock-alt"></i> ADMIN ENTER</button><input type="password" id="admKey" placeholder="Enter Admin Key..."><button class="btn btn-login" id="loginBtn" onclick="_verifyAdm()">VERIFY & ENTER</button><p style="font-size:9px;color:#444;margin-top:20px;letter-spacing:2px">DEVCODERZ SECURITY SYSTEM</p></div></div>
+<div id="_L0x"><div>SYSTEM_BOOT_...</div><div class="_b"></div></div>
+<div id="_D0x_ROOT"></div>
+<script>
+(function(_0x1,_0x2){const _0x3=atob;const _0x4={_h:"0f172a",_b:"020617",_a:"38bdf8",_t:"f1f5f9",_u:_0x3("aHR0cHM6Ly9lZHV2aWJlLW50LnBhZ2VzLmRldi8="),_tg:"https://t.me/+8tZSJ5FyTXVjM2M1",_dev:_0x3("RGV2YW5zaCBTaGFybWE=")};const _0x5=_0x3("YjhjYmMyYjFkMjQxNzZhOGRmZjIwMjI2MDhiZGQ1YjVjYzhmMWMyYg==");const _0x6=_0x3("RGV2YW5zaDQ1");const _0x7=_0x3("QW51ajE4");window._showInput=()=>{document.getElementById('admKey').style.display='block';document.getElementById('loginBtn').style.display='block';document.getElementById('admBtn').style.display='none'};window._verifyAdm=()=>{const _0x8=document.getElementById('admKey').value;if(_0x8===_0x6||_0x8===_0x7){localStorage.setItem("_vip_access","1");localStorage.setItem("_t_sc",new Date().getTime());location.reload()}else{alert("Access Denied!");document.getElementById('admKey').value=""}};window._startSrv=async()=>{document.getElementById('_gate').style.display='none';document.getElementById('_L0x').style.display='flex';const _0x9='dc_'+Math.random().toString(36).substring(2,12);sessionStorage.setItem("_ex_tk",_0x9);const _0xA=window.location.origin+window.location.pathname+'?auth='+_0x9;try{const _0xB=await fetch(`https://indianshortner.com/api?api=${_0x5}&url=${encodeURIComponent(_0xA)}`);const _0xC=await _0xB.json();window.location.href=_0xC.status==="success"?_0xC.shortenedUrl:_0xA}catch(_0xD){window.location.href=_0xA}};const _0xE=async()=>{const _0xF=new URLSearchParams(window.location.search);const _0x10=new Date().getTime();const _0x11=localStorage.getItem("_t_sc");if(_0x11&&(_0x10-_0x11<86400000)){const _0x12=_0xF.get("auth");const _0x13=sessionStorage.getItem("_ex_tk");if(_0x12&&_0x12===_0x13){localStorage.setItem("_t_sc",_0x10);sessionStorage.removeItem("_ex_tk");window.history.replaceState({},document.title,window.location.pathname);return true}if(localStorage.getItem("_vip_access")==="1"||_0x11)return true}return false};_0xE().then(_0x14=>{if(!_0x14)return;document.getElementById('_gate').style.display='none';document.getElementById('_L0x').style.display='flex';const _0x15=`:root{--1:#${_0x4._h};--2:#${_0x4._b};--3:#${_0x4._a};--4:#${_0x4._t}}#_D0x_ROOT{font-family:'Poppins',sans-serif;color:var(--4)}.H0x{height:65px;background:var(--1);display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid #30363d;z-index:1000;position:relative}.B0x{font-family:'Space Mono';color:var(--3);font-weight:900;text-shadow:0 0 10px rgba(56,189,248,0.4)}.M0x{width:100%;height:calc(100vh - 65px);overflow:hidden;position:relative}.I0x{width:100%;border:none;margin-top:-68px;height:calc(100% + 500px);display:block}.SD0x{position:fixed;left:-320px;width:290px;height:100%;background:#0d1117;transition:0.4s cubic-bezier(0.4,0,0.2,1);z-index:10000;padding:30px 20px;border-right:1px solid #30363d}.SD0x.active{left:0}.ADMIN_BOX{background:rgba(56,189,248,0.03);padding:15px;border-radius:10px;border:1px solid rgba(56,189,248,0.1);margin-bottom:25px}.IT0x{padding:14px;margin-bottom:8px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:12px;color:#8b949e;text-decoration:none;font-size:14px;transition:0.2s}.IT0x:hover{background:#161b22;color:var(--3)}.TIME_WRAP{text-align:right;display:flex;flex-direction:column;justify-content:center}#_TX{font-family:'Space Mono';font-size:13px;color:#fff;font-weight:600}#_DX{font-family:'Space Mono';font-size:9px;color:var(--3);letter-spacing:1px;text-transform:uppercase}`;const _0x16=`<div id="_SX" class="SD0x"><div style="font-size:11px;color:var(--3);font-family:'Space Mono';margin-bottom:10px">// BACKBONE_SYSTEM</div><div class="ADMIN_BOX"><div style="margin-bottom:12px"><div style="font-size:14px;font-weight:800;color:#fff"><i class="fas fa-crown" style="color:#fbbf24;font-size:12px"></i> ${_0x4._dev}</div><div style="font-size:10px;color:var(--3);text-transform:uppercase">Lead Architect</div></div></div><div style="height:1px;background:#30363d;margin-bottom:20px"></div><div class="IT0x" onclick="location.reload()"><i class="fas fa-sync-alt"></i> REBOOT_SYSTEM</div><a href="${_0x4._tg}" target="_blank" class="IT0x"><i class="fab fa-telegram-plane"></i> TELEGRAM_AUTH</a><div class="IT0x" onclick="document.getElementById('_SX').classList.remove('active')" style="color:#f85149;margin-top:30px"><i class="fas fa-power-off"></i> CLOSE_CORE</div></div><header class="H0x"><i class="fas fa-th-large" style="cursor:pointer;color:#8b949e;font-size:20px" onclick="document.getElementById('_SX').classList.add('active')"></i><div class="B0x">&lt;DevCoderZ/&gt;</div><div class="TIME_WRAP"><div id="_TX">00:00:00</div><div id="_DX">LOADING...</div></div></header><main class="M0x"><iframe src="${_0x4._u}" class="I0x"></iframe><div style="position:absolute;bottom:0;width:100%;height:50px;background:var(--1);display:flex;align-items:center;justify-content:center;border-top:1px solid #30363d;z-index:999"><div style="font-size:10px;color:#484f58;font-family:'Space Mono'">[ CORE_VER: 2.0.26_STABLE ]</div></div></main>`;setTimeout(()=>{const _0x17=document.createElement('style');_0x17.innerHTML=_0x15;document.head.appendChild(_0x17);document.getElementById('_D0x_ROOT').innerHTML=_0x16;document.getElementById('_L0x').style.display='none'},1500);setInterval(()=>{const _0x18=new Date();document.getElementById('_TX').innerText=_0x18.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'});document.getElementById('_DX').innerText=_0x18.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}).replace(/ /g,'-')},1000)});document.oncontextmenu=()=>!1})();
+</script>
 </body>
 </html>
