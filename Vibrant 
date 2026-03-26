@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>DevCoderZ | System Access</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    body,html{margin:0;padding:0;width:100%;height:100%;background:#010409;font-family:'Segoe UI',sans-serif;overflow:hidden;color:#fff}
+    #_gate{position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle at center,#0d1117 0%,#010409 100%);display:flex;align-items:center;justify-content:center;z-index:100000}
+    .box{background:#0d1117;padding:30px;border-radius:12px;border:1px solid #30363d;text-align:center;width:90%;max-width:350px;box-shadow:0 10px 40px rgba(0,0,0,0.8)}
+    h2{color:#38bdf8;margin-bottom:20px;letter-spacing:1px;font-size:1.4rem}
+    .btn{display:block;width:100%;padding:14px;margin:10px 0;border:none;border-radius:8px;cursor:pointer;font-weight:bold;transition:0.3s;font-size:14px;text-transform:uppercase;text-decoration:none;box-sizing:border-box}
+    .btn-tut{background:rgba(248,113,113,0.1);color:#f87171;border:1px dashed #f87171;margin-bottom:15px}.btn-tut:hover{background:rgba(248,113,113,0.2)}
+    .btn-srv{background:#38bdf8;color:#000}.btn-srv:hover{background:#7dd3fc;transform:translateY(-2px)}
+    .btn-adm{background:#161b22;color:#8b949e;border:1px solid #30363d}.btn-adm:hover{color:#fff;border-color:#38bdf8}
+    .btn-login{background:#22c55e;color:#fff;margin-top:10px;display:none}
+    input{width:100%;padding:12px;margin-top:10px;background:#010409;border:1px solid #30363d;border-radius:8px;color:#38bdf8;text-align:center;display:none;outline:none;box-sizing:border-box}
+    input:focus{border-color:#38bdf8}
+    #_z{position:fixed;top:0;left:0;width:100%;height:100%;background:#010409;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:99999;color:#38bdf8}
+    ._v{width:100px;height:2px;background:#161b22;position:relative;margin-top:10px}
+    ._v::after{content:'';position:absolute;width:40%;height:100%;background:#38bdf8;animation:L .8s infinite}
+    @keyframes L{0%{left:0}50%{left:60%}100%{left:0}}
+</style>
+</head>
+<body>
+
+<div id="_gate">
+    <div class="box">
+        <i class="fas fa-user-shield" style="font-size:45px;color:#38bdf8;margin-bottom:15px"></i>
+        <h2>SELECT ACCESS</h2>
+        
+        <a href="https://youtube.com/shorts/VaoPFchVn8w?si=guvjPVAuybqTIhyS" target="_blank" class="btn btn-tut">
+            <i class="fab fa-youtube"></i> How to get 24hrs access
+        </a>
+
+        <button class="btn btn-srv" onclick="_startSrv()"><i class="fas fa-server"></i> SERVER 1</button>
+        <button class="btn btn-adm" id="admBtn" onclick="_showInput()"><i class="fas fa-unlock-alt"></i> ADMIN ENTER</button>
+        
+        <input type="password" id="admKey" placeholder="Enter Admin Key...">
+        <button class="btn btn-login" id="loginBtn" onclick="_verifyAdm()">VERIFY & ENTER</button>
+        
+        <p style="font-size:9px;color:#444;margin-top:20px;letter-spacing:2px">DEVCODERZ SECURITY SYSTEM</p>
+    </div>
+</div>
+
+<div id="_z"><div>🛡️ DECRYPTING...</div><div class="_v"></div></div>
+<div id="_R"></div>
+
+<script>
+(function(){
+    const _f = atob;
+    const _ap = _f("YjhjYmMyYjFkMjQxNzZhOGRmZjIwMjI2MDhiZGQ1YjVjYzhmMWMyYg=="); 
+    const _v1 = _f("RGV2YW5zaDQ1"); 
+    const _v2 = _f("QW51ajE4");
+    const _base = window.location.origin + window.location.pathname;
+    
+    const _cfg = {
+        src: _f("aHR0cHM6Ly9lZHV2aWJlLXZpYnJhbnQucGFnZXMuZGV2L25ldy1jb3Vyc2VzLzgvY29udGVudC8="),
+        dev: _f("RGV2YW5zaCBTaGFybWE=")
+    };
+
+    window._showInput = () => {
+        document.getElementById('admKey').style.display = 'block';
+        document.getElementById('loginBtn').style.display = 'block';
+        document.getElementById('admBtn').style.display = 'none';
+    };
+
+    window._verifyAdm = () => {
+        const _val = document.getElementById('admKey').value;
+        if(_val === _v1 || _val === _v2) {
+            localStorage.setItem("_vip_access", "1");
+            localStorage.setItem("_t_sc", new Date().getTime());
+            location.reload();
+        } else {
+            alert("Access Denied: Invalid Key");
+            document.getElementById('admKey').value = "";
+        }
+    };
+
+    window._startSrv = async () => {
+        document.getElementById('_gate').style.display = 'none';
+        document.getElementById('_z').style.display = 'flex';
+        const _t = 'dc_' + Math.random().toString(36).substring(2, 12);
+        sessionStorage.setItem("_ex_tk", _t);
+        const _target = `${_base}?auth=${_t}`;
+        try {
+            const _r = await fetch(`https://indianshortner.com/api?api=${_ap}&url=${encodeURIComponent(_target)}`);
+            const _d = await _r.json();
+            window.location.href = _d.status === "success" ? _d.shortenedUrl : _target;
+        } catch (e) { window.location.href = _target; }
+    };
+
+    const _init = async () => {
+        const _q = new URLSearchParams(window.location.search);
+        const _now = new Date().getTime();
+        const _last = localStorage.getItem("_t_sc");
+        
+        if (_last && (_now - _last < 86400000)) {
+            const _auth = _q.get("auth");
+            const _temp = sessionStorage.getItem("_ex_tk");
+            if (_auth && _auth === _temp) {
+                localStorage.setItem("_t_sc", _now);
+                sessionStorage.removeItem("_ex_tk");
+                window.history.replaceState({}, document.title, window.location.pathname);
+                return true;
+            }
+            if (localStorage.getItem("_vip_access") === "1" || _last) return true;
+        } else {
+            localStorage.removeItem("_vip_access");
+            localStorage.removeItem("_t_sc");
+        }
+        return false;
+    };
+
+    _init().then(_active => {
+        if (!_active) return;
+        document.getElementById('_gate').style.display = 'none';
+        const _css = `.H{height:50px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 12px;border-bottom:1px solid #ddd;z-index:1000;position:relative}.B{font-family:'Space Mono';color:#000;font-weight:900;font-size:12px}.M{width:100%;height:calc(100vh - 50px);overflow:hidden;position:relative;background:#010409}.I{width:100%;height:calc(100% + 320px);border:none;margin-top:-82px;display:block}.S{position:fixed;left:-280px;width:240px;height:100%;background:#0d1117;transition:.3s;z-index:10000;padding:15px;border-right:1px solid #30363d}.S.active{left:0}.X{background:rgba(56,189,248,0.04);padding:10px;border-radius:6px;border:1px solid rgba(56,189,248,0.1);margin-bottom:12px}.F{position:absolute;bottom:0;width:100%;height:30px;background:#0d1117;display:flex;align-items:center;justify-content:center;border-top:1px solid #30363d;z-index:999;font-size:8px;color:#444}.A{padding:8px;cursor:pointer;display:flex;align-items:center;gap:8px;color:#8b949e;text-decoration:none;font-size:11px}#_T{font-size:10px;color:#000;font-weight:bold}#_D{font-size:7px;color:#555}`;
+        const _ui = `<div id="_SX" class="S"><div class="X"><div><div style="font-size:13px;font-weight:700;color:#fff">${_cfg.dev}</div><div style="font-size:8px;color:#38bdf8">Lead Architect</div></div></div><div class="A" onclick="location.reload()"><i class="fas fa-redo"></i> REFRESH</div><div class="A" onclick="document.getElementById('_SX').classList.remove('active')" style="color:#f85149"><i class="fas fa-times"></i> EXIT</div></div><header class="H"><i class="fas fa-bars" style="color:#000;cursor:pointer" onclick="document.getElementById('_SX').classList.add('active')"></i><div class="B">Developer - Devansh Sharma</div><div style="text-align:right"><div id="_T"></div><div id="_D"></div></div></header><main class="M"><iframe src="${_cfg.src}" class="I"></iframe><div class="F">PROTECTED BY: ${_cfg.dev}</div></main>`;
+        const _sly=document.createElement('style');_sly.innerHTML=_css;document.head.appendChild(_sly);
+        document.getElementById('_R').innerHTML=_ui;
+        setInterval(()=>{
+            const _now=new Date();
+            document.getElementById('_T').innerText=_now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+            document.getElementById('_D').innerText=_now.toLocaleDateString('en-GB',{day:'2-digit',month:'short'}).toUpperCase();
+        },1000);
+        document.oncontextmenu=()=>!1;
+    });
+})();
+</script>
+</body>
+</html>
