@@ -3,37 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-    <title>DevCoderZ | Central_Hub_v2</title>
+    <title>DevCoderZ | Main Web</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root{--0x1:#0f172a;--0x2:#020617;--0x3:#38bdf8;--0x4:#f1f5f9;--0x5:#1e293b}
-        body,html{margin:0;padding:0;width:100%;height:100%;background:var(--0x2);color:var(--0x4);font-family:'Segoe UI',Roboto,sans-serif;overflow:hidden}
-        
-        #_O0x{position:fixed;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;background:radial-gradient(circle at center, #0f172a 0%, #020617 100%)}
-        
-        .G0x{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;width:90%;max-width:900px;z-index:101}
-        
-        .C0x{background:rgba(15,23,42,0.6);border:1px solid #30363d;padding:30px 20px;border-radius:20px;text-align:center;transition:0.4s cubic-bezier(0.4,0,0.2,1);cursor:pointer;text-decoration:none;position:relative;overflow:hidden;backdrop-filter:blur(10px);display: flex;flex-direction: column;align-items: center;}
-        
-        .C0x:hover{border-color:var(--0x3);transform:translateY(-10px);box-shadow:0 0 30px rgba(56,189,248,0.15)}
-        
-        /* Image Styling */
-        .C0x img {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 10px rgba(56,189,248,0.3));
-        }
+        :root{--0x1:#0f172a;--0x2:#010409;--0x3:#38bdf8;--0x4:#f1f5f9;--0x5:#161b22}
+        body,html{margin:0;padding:0;width:100%;height:100%;background:var(--0x2);color:var(--0x4);font-family:'Segoe UI',sans-serif;overflow:hidden}
 
-        .C0x h2{font-family:'monospace';letter-spacing:2px;margin-bottom:10px;font-size:1.4rem;color: #fff;}
-        .C0x p{color:#8b949e;font-size:13px;line-height:1.6}
+        #_O0x{position:fixed;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at center, #0d1117 0%, #010409 100%)}
+
+        .L0x{font-family:'monospace';font-weight:900;font-size:2.2rem;color:var(--0x3);margin-bottom:40px;text-shadow:0 0 20px rgba(56,189,248,0.4);letter-spacing:4px}
+
+        .G0x{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:25px;width:90%;max-width:850px;z-index:10}
+
+        .C0x{background:rgba(22,27,34,0.7);border:1px solid #30363d;padding:25px 20px;border-radius:16px;text-align:center;transition:0.3s;cursor:pointer;text-decoration:none;position:relative;overflow:hidden;backdrop-filter:blur(8px);display:flex;flex-direction:column;align-items:center}
+        .C0x:hover{border-color:var(--0x3);transform:translateY(-8px);background:rgba(56,189,248,0.03);box-shadow:0 10px 40px rgba(0,0,0,0.5)}
+
+        .C0x img{width:70px;height:70px;object-fit:contain;margin-bottom:15px;filter:drop-shadow(0 0 8px rgba(56,189,248,0.2))}
+
+        .C0x h2{font-family:'monospace';letter-spacing:1px;margin:0 0 10px 0;font-size:1.2rem;color:#fff}
+        .C0x p{color:#8b949e;font-size:12px;line-height:1.5;margin:0}
+
+        /* Credits Section clickable */
+        .CR0x{margin-top:50px;display:flex;gap:40px;padding:15px 30px;background:rgba(56,189,248,0.05);border:1px solid rgba(56,189,248,0.2);border-radius:50px;backdrop-filter:blur(5px);cursor:pointer;transition:0.3s}
+        .CR0x:hover{border-color:var(--0x3);background:rgba(56,189,248,0.1);box-shadow:0 0 20px rgba(56,189,248,0.1)}
         
-        .L0x{font-family:'monospace';font-weight:900;font-size:2.5rem;color:var(--0x3);margin-bottom:50px;text-shadow:0 0 15px rgba(56,189,248,0.5)}
+        .CR_ITEM{display:flex;flex-direction:column;align-items:center}
+        .CR_NAME{font-size:13px;font-weight:800;color:#fff;letter-spacing:1px}
+        .CR_TAG{font-size:8px;color:var(--0x3);text-transform:uppercase;margin-top:2px}
+
+        /* Popup Styles */
+        .P0x{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(1,4,9,0.9);backdrop-filter:blur(10px);z-index:99999;display:none;align-items:center;justify-content:center;opacity:0;transition:0.3s}
+        .P0x.active{display:flex;opacity:1}
+        .PC0x{background:#0d1117;width:85%;max-width:350px;padding:30px;border-radius:20px;border:1px solid #30363d;border-top:4px solid var(--0x3);text-align:center;position:relative;transform:scale(0.8);transition:0.3s}
+        .P0x.active .PC0x{transform:scale(1)}
         
-        .B0x{position:absolute;bottom:0;right:0;font-size:80px;color:rgba(56,189,248,0.03);z-index:-1;transform:translate(20%, 20%)}
-        
-        footer{position:fixed;bottom:20px;width:100%;text-align:center;font-family:monospace;font-size:10px;color:#484f58;letter-spacing:1px}
+        .P_BTN{display:block;background:#0088cc;color:#fff;text-decoration:none;padding:12px;border-radius:10px;font-weight:700;margin-top:20px;transition:0.2s}
+        .P_BTN:hover{background:#00a2f2;box-shadow:0 0 15px rgba(0,136,204,0.4)}
+
+        footer{position:fixed;bottom:15px;width:100%;text-align:center;font-family:monospace;font-size:9px;color:#30363d;letter-spacing:2px}
     </style>
 </head>
 <body>
@@ -43,41 +50,73 @@
 
     <div class="G0x">
         <a href="https://devcoderzxnt.vercel.app" class="C0x" id="_C1">
-            <img src="nt.png" alt="Next Toppers Logo">
+            <img src="nt.png" alt="NT">
             <h2>NEXT TOPPERS</h2>
             <p>Advanced Educational Interface for NT Portal Access. Fast & Secure.</p>
-            <div class="B0x">NT</div>
         </a>
 
         <a href="https://devcoderzxvt.vercel.app" class="C0x" id="_C2">
-            <img src="vt.png" alt="Vibrant Academy Logo">
+            <img src="vt.png" alt="VT">
             <h2>VIBRANT ACADEMY</h2>
             <p>Premium Kota Curriculum Streaming Engine. Optimized for VT Portal.</p>
-            <div class="B0x">VT</div>
         </a>
     </div>
 
-    <footer>[ SYSTEM_v2.0.26_STABLE // ARCHITECT: DEVANSH SHARMA ]</footer>
+    <div class="CR0x" id="_CR" onclick="openPopup()">
+        <div class="CR_ITEM">
+            <div class="CR_NAME"><i class="fas fa-code" style="font-size:10px;margin-right:5px"></i>Devansh Sharma</div>
+            <div class="CR_TAG">Lead Architect</div>
+        </div>
+        <div style="width:1px;background:rgba(56,189,248,0.2);height:20px;align-self:center"></div>
+        <div class="CR_ITEM">
+            <div class="CR_NAME"><i class="fas fa-terminal" style="font-size:10px;margin-right:5px"></i>Assault Decoder</div>
+            <div class="CR_TAG">Core Decoder</div>
+        </div>
+    </div>
+
+    <footer>MAIN_WEB: 2.0.26_STABLE</footer>
+</div>
+
+<div id="_PX" class="P0x">
+    <div class="PC0x">
+        <i class="fas fa-times" style="position:absolute;top:15px;right:15px;cursor:pointer;color:#484f58" onclick="closePopup()"></i>
+        <i class="fab fa-telegram-plane" style="font-size:40px;color:#0088cc;margin-bottom:15px"></i>
+        <h2 style="margin-bottom:10px;font-size:1.2rem;color:#fff">Join Telegram</h2>
+        <p style="font-size:13px;color:#8b949e">Get latest updates, bypasses and premium tools directly on your telegram.</p>
+        <a href="https://t.me/+8tZSJ5FyTXVjM2M1" target="_blank" class="P_BTN">OPEN CHANNEL</a>
+        <div style="font-size:10px;color:#484f58;margin-top:15px;cursor:pointer;text-decoration:underline" onclick="closePopup()">BACK TO SITE</div>
+    </div>
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const _c1 = document.getElementById('_C1');
-        const _c2 = document.getElementById('_C2');
-        const _lx = document.getElementById('_L0x');
+    function openPopup() {
+        const p = document.getElementById('_PX');
+        p.style.display = 'flex';
+        setTimeout(() => p.classList.add('active'), 10);
+    }
+    function closePopup() {
+        const p = document.getElementById('_PX');
+        p.classList.remove('active');
+        setTimeout(() => p.style.display = 'none', 300);
+    }
 
-        // Smooth Entrance Animation
-        [_lx, _c1, _c2].forEach((el, idx) => {
+    document.addEventListener('DOMContentLoaded', () => {
+        const elements = [
+            document.getElementById('_L0x'),
+            document.getElementById('_C1'),
+            document.getElementById('_C2'),
+            document.getElementById('_CR')
+        ];
+
+        elements.forEach((el, idx) => {
             el.style.opacity = '0';
-            el.style.transform = 'translateY(30px)';
-            el.style.transition = '0.8s cubic-bezier(0.2, 0.8, 0.2, 1)';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = '0.6s cubic-bezier(0.4, 0, 0.2, 1)';
             setTimeout(() => {
                 el.style.opacity = '1';
                 el.style.transform = 'translateY(0)';
-            }, 200 * idx);
+            }, 150 * idx);
         });
-        
-        console.log("DevCoderZ System Initialized with Assets.");
     });
 </script>
 </body>
