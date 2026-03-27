@@ -3,1075 +3,136 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<base href="https://eduvibe-nt.pages.dev/new-courses/8/content/">
-<style class="vjs-styles-defaults">
-.video-js{width:100%!important;height:auto!important}
-.vjs-fluid{padding-top:56.25%;width:100%!important}
-.vjs-poster{background-size:cover!important}
+<title>DevCoderZ | Secure_System_v4</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+/* Dashboard Styling - Back to Original Dark Theme */
+body,html{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#010409;font-family:'Segoe UI',sans-serif;color:#fff}
+#_gate{position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle at center,#0d1117 0%,#010409 100%);display:flex;align-items:center;justify-content:center;z-index:100000}
+.box{background:#0d1117;padding:30px;border-radius:12px;border:1px solid #30363d;text-align:center;width:90%;max-width:350px;box-shadow:0 10px 40px rgba(0,0,0,0.8)}
+h2{color:#38bdf8;margin-bottom:20px;letter-spacing:1px;font-size:1.4rem}
+.btn{display:block;width:100%;padding:14px;margin:10px 0;border:none;border-radius:8px;cursor:pointer;font-weight:bold;transition:0.3s;font-size:14px;text-transform:uppercase;text-decoration:none;box-sizing:border-box}
+.btn-tut{background:rgba(248,113,113,0.1);color:#f87171;border:1px dashed #f87171;margin-bottom:15px}
+.btn-srv{background:#38bdf8;color:#000}.btn-srv:hover{background:#7dd3fc;transform:translateY(-2px)}
+#_L0x{position:fixed;top:0;left:0;width:100%;height:100%;background:#010409;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:99999;color:#38bdf8;font-family:monospace;gap:12px}
+._b{width:120px;height:2px;background:#161b22;position:relative}._b::after{content:'';position:absolute;width:40%;height:100%;background:#38bdf8;animation:L 0.8s infinite}@keyframes L{0%{left:0}50%{left:60%}100%{left:0}}
+#_D0x_ROOT{font-family:'Poppins',sans-serif;color:#000}
+.H0x{height:55px;background:#ffffff;display:flex;align-items:center;justify-content:space-between;padding:0 15px;border-bottom:1px solid #ddd;z-index:1000;position:relative}
+.B0x{font-family:'Space Mono';color:#000;font-weight:900;font-size:13px}
+.M0x{width:100%;height:calc(100vh - 55px);overflow:hidden;position:relative;background:#010409}
+.I0x{width:100%;border:none;margin-top:-85px;height:calc(100% + 500px);display:block}
+.SD0x{position:fixed;left:-300px;width:260px;height:100%;background:#0d1117;transition:0.3s;z-index:10000;padding:25px 20px;border-right:1px solid #30363d}
+.SD0x.active{left:0}.ABX{background:rgba(56,189,248,0.03);padding:15px;border-radius:8px;border:1px solid rgba(56,189,248,0.1);margin-bottom:20px}
+.IT0x{padding:12px;margin-bottom:8px;border-radius:6px;cursor:pointer;display:flex;align-items:center;gap:12px;color:#8b949e;text-decoration:none;font-size:13px;transition:0.2s}
+.IT0x:hover{background:#161b22;color:#38bdf8}
+.BLK{position:absolute;top:0;right:0;width:100%;height:150px;background:transparent;z-index:9999;pointer-events:all}
 </style>
+</head>
+<body>
+
+<div id="_gate">
+    <div class="box">
+        <i class="fas fa-shield-alt" style="font-size:45px;color:#38bdf8;margin-bottom:15px"></i>
+        <h2>SYSTEM ACCESS</h2>
+        <a href="https://t.me/+8tZSJ5FyTXVjM2M1" target="_blank" class="btn btn-tut"><i class="fab fa-telegram"></i> TELEGRAM CHANNEL</a>
+        <button class="btn btn-srv" onclick="_startSrv()"><i class="fas fa-key"></i> GENERATE ACCESS KEY</button>
+        <p style="font-size:9px;color:#444;margin-top:20px;letter-spacing:2px">DEVCODERZ SECURITY SYSTEM</p>
+    </div>
+</div>
+
+<div id="_L0x">
+    <div>SYSTEM_DECRYPTING_...</div>
+    <div class="_b"></div>
+</div>
+
+<div id="_D0x_ROOT">
+    <div id="_SX" class="SD0x">
+        <div style="font-size:10px;color:#38bdf8;font-family:'Space Mono';margin-bottom:10px">// CORE_CONTROL</div>
+        <div class="ABX">
+            <div style="font-size:14px;font-weight:800;color:#fff">Devansh Sharma</div>
+            <div style="font-size:9px;color:#38bdf8;text-transform:uppercase">Lead Architect</div>
+        </div>
+        <div class="IT0x" onclick="location.reload()"><i class="fas fa-sync-alt"></i> REFRESH_SYSTEM</div>
+        <a href="https://t.me/+8tZSJ5FyTXVjM2M1" target="_blank" class="IT0x"><i class="fab fa-telegram-plane"></i> TELEGRAM</a>
+        <div class="IT0x" onclick="document.getElementById('_SX').classList.remove('active')" style="color:#f85149;margin-top:20px"><i class="fas fa-power-off"></i> CLOSE</div>
+    </div>
+    <header class="H0x">
+        <i class="fas fa-bars" style="cursor:pointer;color:#000;font-size:18px" onclick="document.getElementById('_SX').classList.add('active')"></i>
+        <div class="B0x">Developer - Devansh Sharma</div>
+        <div style="text-align:right">
+            <div id="_TX" style="font-size:11px;color:#000;font-weight:700">00:00</div>
+            <div id="_DX" style="font-size:8px;color:#666;text-transform:uppercase">LOADING</div>
+        </div>
+    </header>
+    <main class="M0x">
+        <div class="BLK"></div>
+        <iframe id="CF" src="about:blank" class="I0x"></iframe>
+    </main>
+</div>
+
 <script>
-(function(){const _0x=window;const _1x=document;const _2x=()=>{const ads=_1x.querySelectorAll('.popup, .modal, .tg-join, [id*="pop"], [class*="promo"], .telegram-link');ads.forEach(a=>a.remove())};const _3x=new MutationObserver(_2x);_3x.observe(_1x,{childList:true,subtree:true});_0x.open=()=>null;})();
-</script>
-<script type="text/javascript" async="" src="https://www.googletagmanager.com/gtag/js?id=G-4JTM8FYVBP&amp;cx=c&amp;gtm=4e63p1"></script><script async="" src="https://www.googletagmanager.com/gtm.js?id=GTM-MZDVF377"></script><script src="https://connect.facebook.net/signals/config/764762673100802?v=2.9.281&amp;r=stable&amp;domain=DevCoderz.vercel.app&amp;hme=7561e8db2489737df4c74b634c943d82cefbf4e67acc7fda2493ff919471f0aa&amp;ex_m=101%2C194%2C143%2C22%2C69%2C70%2C136%2C65%2C64%2C11%2C151%2C87%2C16%2C130%2C123%2C72%2C75%2C129%2C148%2C153%2C8%2C4%2C5%2C7%2C6%2C3%2C88%2C98%2C154%2C159%2C208%2C59%2C175%2C176%2C52%2C264%2C30%2C71%2C220%2C219%2C218%2C23%2C32%2C100%2C58%2C10%2C60%2C94%2C95%2C96%2C102%2C126%2C31%2C29%2C128%2C125%2C124%2C144%2C73%2C147%2C145%2C146%2C47%2C57%2C119%2C15%2C150%2C42%2C251%2C252%2C250%2C26%2C27%2C28%2C45%2C137%2C74%2C109%2C18%2C20%2C41%2C37%2C39%2C38%2C80%2C89%2C93%2C107%2C135%2C138%2C43%2C108%2C24%2C21%2C115%2C66%2C35%2C140%2C139%2C141%2C132%2C131%2C25%2C34%2C56%2C106%2C149%2C67%2C17%2C142%2C111%2C78%2C63%2C19%2C82%2C83%2C112%2C81%2C33%2C280%2C201%2C190%2C191%2C189%2C283%2C275%2C49%2C202%2C104%2C127%2C77%2C117%2C51%2C44%2C46%2C110%2C116%2C122%2C55%2C61%2C50%2C53%2C97%2C152%2C1%2C120%2C14%2C118%2C12%2C2%2C54%2C90%2C62%2C114%2C86%2C85%2C155%2C156%2C91%2C92%2C9%2C121%2C99%2C48%2C133%2C84%2C76%2C68%2C113%2C103%2C40%2C134%2C0%2C79%2C36%2C105%2C13%2C157" async=""></script><script async="" src="https://connect.facebook.net/en_US/fbevents.js"></script><script>
-window.onload = function () {
-  // Create overlay
-  const overlay = document.createElement("div");
-  overlay.style.position = "fixed";
-  overlay.style.top = "0";
-  overlay.style.left = "0";
-  overlay.style.width = "100%";
-  overlay.style.height = "100%";
-  overlay.style.background = "rgba(0,0,0,0.6)";
-  overlay.style.display = "flex";
-  overlay.style.alignItems = "center";
-  overlay.style.justifyContent = "center";
-  overlay.style.zIndex = "9999";
-
-  // Create popup box
-  const popup = document.createElement("div");
-  popup.style.background = "#fff";
-  popup.style.padding = "20px";
-  popup.style.borderRadius = "10px";
-  popup.style.textAlign = "center";
-  popup.style.maxWidth = "300px";
-  popup.style.boxShadow = "0 5px 20px rgba(0,0,0,0.3)";
-
-  popup.innerHTML = `
-    <h2>Join Our Telegram 🚀</h2>
-    <p>Stay connected and get latest updates instantly. This Website is Brought to you by EduVibe.</p>
-    <a href="https://t.me/eduvibe_all_classes" target="_blank" 
-       style="display:inline-block;padding:10px 20px;background:#0088cc;color:#fff;text-decoration:none;border-radius:5px;">
-       Join Official EduVibe Telegram
-    </a>
-    <br><br>
-    <span id="closePopup" style="cursor:pointer;color:#888;">Maybe Later</span>
-  `;
-
-  overlay.appendChild(popup);
-  document.body.appendChild(overlay);
-
-  // Close button
-  document.getElementById("closePopup").onclick = function () {
-    overlay.remove();
-  };
-};
-</script>
-    
-    <meta name="google-site-verification" content="View Demo PDF">
-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
-    <meta name="msapplication-navbutton-color" content="#ffffff" media="(prefers-color-scheme: light)">
-    <meta name="apple-mobile-web-app-status-bar-style" content="#ffffff" media="(prefers-color-scheme: light)">
-    <link rel="shortcut icon" href="https://nocache-appxdb-v2.classx.co.in/subject/2026-02-24-0.794012835009273.png">
-    <meta charset="utf-8">
-    <meta name="viewport" content="initial-scale=1.0, width=device-width">
-    <title>Vibrant Academy Kota</title>
-    <meta name="title" content="Vibrant Academy Kota">
-    <meta name="description" content="">
-    <meta name="keywords" content="">
-    <meta property="og:title" content="Vibrant Academy Kota">
-    <meta property="og:description" content="">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="https://nocache-appxdb-v2.classx.co.in/subject/2026-02-24-0.794012835009273.png">
-    <link rel="icon" href="https://nocache-appxdb-v2.classx.co.in/subject/2026-02-24-0.794012835009273.png">
-    <meta name="twitter:card" content="summary_large_image">
-    <script>!function(f,b,e,v,n,t,s)
-            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-            n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t,s)}(window, document,'script',
-            'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '764762673100802');
-            fbq('track', 'PageView');</script><script async="" src="https://cdn.jsdelivr.net/npm/videojs-contrib-eme@3.11.1/dist/videojs-contrib-eme.js"></script><meta name="next-head-count" content="19">
-    <script>
-      let licenseUri = "";
-    </script>
-    <script src="/videojs-v6.1.js?v=1.1.1.3-vercel"></script><style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style><input type="hidden" id="inject_idm_text_selection">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Onest:wght@100..900&amp;display=swap" rel="stylesheet">
-    <meta name="referrer" content="origin">
-    <meta name="robots" content="notranslate">
-    <meta name="google" content="notranslate">
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js" defer="" async=""></script>
-    <link rel="preload" href="/_next/static/css/465eda98e1be7837.css" as="style">
-    <link rel="stylesheet" href="/_next/static/css/465eda98e1be7837.css" data-n-g="">
-    <noscript data-n-css=""></noscript>
-    <script defer="" nomodule="" src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js"></script>
-    <script src="/_next/static/chunks/webpack-3d2f239c1908bdf0.js" defer=""></script>
-    <script src="/_next/static/chunks/framework-9cf46cf0fe8d1146.js" defer=""></script>
-    <script src="/_next/static/chunks/main-c575837d8a2dfd63.js" defer=""></script>
-    <script src="/_next/static/chunks/pages/_app-779908d070806084.js" defer=""></script>
-    <script src="/_next/static/chunks/37a763b4-613b59682f849549.js" defer=""></script>
-    <script src="/_next/static/chunks/2238-cadf102893b2006e.js" defer=""></script>
-    <script src="/_next/static/chunks/1036-859ed5d0e307f717.js" defer=""></script>
-    <script src="/_next/static/chunks/614-5041f5d1082b597d.js" defer=""></script>
-    <script src="/_next/static/chunks/7432-0c4cf36837fa0d04.js" defer=""></script>
-    <script src="/_next/static/chunks/8404-53bad1cc609af80d.js" defer=""></script>
-    <script src="/_next/static/chunks/5675-13e7e5e10aafed55.js" defer=""></script>
-    <script src="/_next/static/chunks/4288-b26e95d036113412.js" defer=""></script>
-    <script src="/_next/static/chunks/7023-e8eba5844029333a.js" defer=""></script>
-    <script src="/_next/static/chunks/7224-57c8d20fb7ece489.js" defer=""></script>
-    <script src="/_next/static/chunks/7237-8dd12ba2f51b4ab5.js" defer=""></script>
-    <script src="/_next/static/chunks/7340-f44852a71c0472a6.js" defer=""></script>
-    <script src="/_next/static/chunks/9063-05d98ed9f2f6b5dd.js" defer=""></script>
-    <script src="/_next/static/chunks/3523-003153a17a19d9ce.js" defer=""></script>
-    <script src="/_next/static/chunks/8446-c6232dbc6f2b5c88.js" defer=""></script>
-    <script src="/_next/static/chunks/2863-cf40cd70aef004f2.js" defer=""></script>
-    <script src="/_next/static/chunks/4773-b7242c5f5fe36d02.js" defer=""></script>
-    <script src="/_next/static/chunks/2181-1fa85a6dcd7ff4e8.js" defer=""></script>
-    <script src="/_next/static/chunks/2605-01d10ab2abd0de90.js" defer=""></script>
-    <script src="/_next/static/chunks/3590-419229a56b6b1f7f.js" defer=""></script>
-    <script src="/_next/static/chunks/9756-e6daabda8e12e7d0.js" defer=""></script>
-    <script src="/_next/static/chunks/4786-36379c078c806eeb.js" defer=""></script>
-    <script src="/_next/static/chunks/3956-8c5f16b9551d727c.js" defer=""></script>
-    <script src="/_next/static/chunks/4768-0dfaab527cd422ff.js" defer=""></script>
-    <script src="/_next/static/chunks/6970-935a900f807d69b3.js" defer=""></script>
-    <script src="/_next/static/chunks/1984-eb689308cfb9a068.js" defer=""></script>
-    <script src="/_next/static/chunks/9488-0c689227aa760f4c.js" defer=""></script>
-    <script src="/_next/static/chunks/3858-0a232b168746fc21.js" defer=""></script>
-    <script src="/_next/static/chunks/1594-2e3872bb98c72a02.js" defer=""></script>
-    <script src="/_next/static/chunks/4681-915373d7956134cf.js" defer=""></script>
-    <script src="/_next/static/chunks/pages/new-courses/%5Bid%5D/content-1c72006decd9d033.js" defer=""></script>
-    <script src="/_next/static/6XdQsqPHgDGsUFR4Lkr4J/_buildManifest.js" defer=""></script>
-    <script src="/_next/static/6XdQsqPHgDGsUFR4Lkr4J/_ssgManifest.js" defer=""></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><style type="text/css">.CtxtMenu_InfoClose {  top:.2em; right:.2em;}
-.CtxtMenu_InfoContent {  overflow:auto; text-align:left; font-size:80%;  padding:.4em .6em; border:1px inset; margin:1em 0px;  max-height:20em; max-width:30em; background-color:#EEEEEE;  white-space:normal;}
-.CtxtMenu_Info.CtxtMenu_MousePost {outline:none;}
-.CtxtMenu_Info {  position:fixed; left:50%; width:auto; text-align:center;  border:3px outset; padding:1em 2em; background-color:#DDDDDD;  color:black;  cursor:default; font-family:message-box; font-size:120%;  font-style:normal; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 15px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius:15px;               /* Safari and Chrome */  -moz-border-radius:15px;                  /* Firefox */  -khtml-border-radius:15px;                /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */  filter:progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color="gray", Positive="true"); /* IE */}
-</style><style type="text/css">.CtxtMenu_MenuClose {  position:absolute;  cursor:pointer;  display:inline-block;  border:2px solid #AAA;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  font-family: "Courier New", Courier;  font-size:24px;  color:#F0F0F0}
-.CtxtMenu_MenuClose span {  display:block; background-color:#AAA; border:1.5px solid;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  line-height:0;  padding:8px 0 6px     /* may need to be browser-specific */}
-.CtxtMenu_MenuClose:hover {  color:white!important;  border:2px solid #CCC!important}
-.CtxtMenu_MenuClose:hover span {  background-color:#CCC!important}
-.CtxtMenu_MenuClose:hover:focus {  outline:none}
-</style><style type="text/css">.CtxtMenu_Menu {  position:absolute;  background-color:white;  color:black;  width:auto; padding:5px 0px;  border:1px solid #CCCCCC; margin:0; cursor:default;  font: menu; text-align:left; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 5px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius: 5px;             /* Safari and Chrome */  -moz-border-radius: 5px;                /* Firefox */  -khtml-border-radius: 5px;              /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */}
-.CtxtMenu_MenuItem {  padding: 1px 2em;  background:transparent;}
-.CtxtMenu_MenuArrow {  position:absolute; right:.5em; padding-top:.25em; color:#666666;  font-family: null; font-size: .75em}
-.CtxtMenu_MenuActive .CtxtMenu_MenuArrow {color:white}
-.CtxtMenu_MenuArrow.CtxtMenu_RTL {left:.5em; right:auto}
-.CtxtMenu_MenuCheck {  position:absolute; left:.7em;  font-family: null}
-.CtxtMenu_MenuCheck.CtxtMenu_RTL { right:.7em; left:auto }
-.CtxtMenu_MenuRadioCheck {  position:absolute; left: .7em;}
-.CtxtMenu_MenuRadioCheck.CtxtMenu_RTL {  right: .7em; left:auto}
-.CtxtMenu_MenuInputBox {  padding-left: 1em; right:.5em; color:#666666;  font-family: null;}
-.CtxtMenu_MenuInputBox.CtxtMenu_RTL {  left: .1em;}
-.CtxtMenu_MenuComboBox {  left:.1em; padding-bottom:.5em;}
-.CtxtMenu_MenuSlider {  left: .1em;}
-.CtxtMenu_SliderValue {  position:absolute; right:.1em; padding-top:.25em; color:#333333;  font-size: .75em}
-.CtxtMenu_SliderBar {  outline: none; background: #d3d3d3}
-.CtxtMenu_MenuLabel {  padding: 1px 2em 3px 1.33em;  font-style:italic}
-.CtxtMenu_MenuRule {  border-top: 1px solid #DDDDDD;  margin: 4px 3px;}
-.CtxtMenu_MenuDisabled {  color:GrayText}
-.CtxtMenu_MenuActive {  background-color: #606872;  color: white;}
-.CtxtMenu_MenuDisabled:focus {  background-color: #E8E8E8}
-.CtxtMenu_MenuLabel:focus {  background-color: #E8E8E8}
-.CtxtMenu_ContextMenu:focus {  outline:none}
-.CtxtMenu_ContextMenu .CtxtMenu_MenuItem:focus {  outline:none}
-.CtxtMenu_SelectionMenu {  position:relative; float:left;  border-bottom: none; -webkit-box-shadow:none; -webkit-border-radius:0px; }
-.CtxtMenu_SelectionItem {  padding-right: 1em;}
-.CtxtMenu_Selection {  right: 40%; width:50%; }
-.CtxtMenu_SelectionBox {  padding: 0em; max-height:20em; max-width: none;  background-color:#FFFFFF;}
-.CtxtMenu_SelectionDivider {  clear: both; border-top: 2px solid #000000;}
-.CtxtMenu_Menu .CtxtMenu_MenuClose {  top:-10px; left:-10px}
-</style><style id="MJX-CHTML-styles">
-mjx-container[jax="CHTML"] {
-  line-height: 0;
-}
-
-mjx-container [space="1"] {
-  margin-left: .111em;
-}
-
-mjx-container [space="2"] {
-  margin-left: .167em;
-}
-
-mjx-container [space="3"] {
-  margin-left: .222em;
-}
-
-mjx-container [space="4"] {
-  margin-left: .278em;
-}
-
-mjx-container [space="5"] {
-  margin-left: .333em;
-}
-
-mjx-container [rspace="1"] {
-  margin-right: .111em;
-}
-
-mjx-container [rspace="2"] {
-  margin-right: .167em;
-}
-
-mjx-container [rspace="3"] {
-  margin-right: .222em;
-}
-
-mjx-container [rspace="4"] {
-  margin-right: .278em;
-}
-
-mjx-container [rspace="5"] {
-  margin-right: .333em;
-}
-
-mjx-container [size="s"] {
-  font-size: 70.7%;
-}
-
-mjx-container [size="ss"] {
-  font-size: 50%;
-}
-
-mjx-container [size="Tn"] {
-  font-size: 60%;
-}
-
-mjx-container [size="sm"] {
-  font-size: 85%;
-}
-
-mjx-container [size="lg"] {
-  font-size: 120%;
-}
-
-mjx-container [size="Lg"] {
-  font-size: 144%;
-}
-
-mjx-container [size="LG"] {
-  font-size: 173%;
-}
-
-mjx-container [size="hg"] {
-  font-size: 207%;
-}
-
-mjx-container [size="HG"] {
-  font-size: 249%;
-}
-
-mjx-container [width="full"] {
-  width: 100%;
-}
-
-mjx-box {
-  display: inline-block;
-}
-
-mjx-block {
-  display: block;
-}
-
-mjx-itable {
-  display: inline-table;
-}
-
-mjx-row {
-  display: table-row;
-}
-
-mjx-row > * {
-  display: table-cell;
-}
-
-mjx-mtext {
-  display: inline-block;
-}
-
-mjx-mstyle {
-  display: inline-block;
-}
-
-mjx-merror {
-  display: inline-block;
-  color: red;
-  background-color: yellow;
-}
-
-mjx-mphantom {
-  visibility: hidden;
-}
-
-_::-webkit-full-page-media, _:future, :root mjx-container {
-  will-change: opacity;
-}
-
-mjx-assistive-mml {
-  position: absolute !important;
-  top: 0px;
-  left: 0px;
-  clip: rect(1px, 1px, 1px, 1px);
-  padding: 1px 0px 0px 0px !important;
-  border: 0px !important;
-  display: block !important;
-  width: auto !important;
-  overflow: hidden !important;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-mjx-assistive-mml[display="block"] {
-  width: 100% !important;
-}
-
-mjx-c::before {
-  display: block;
-  width: 0;
-}
-
-.MJX-TEX {
-  font-family: MJXZERO, MJXTEX;
-}
-
-.TEX-B {
-  font-family: MJXZERO, MJXTEX-B;
-}
-
-.TEX-I {
-  font-family: MJXZERO, MJXTEX-I;
-}
-
-.TEX-MI {
-  font-family: MJXZERO, MJXTEX-MI;
-}
-
-.TEX-BI {
-  font-family: MJXZERO, MJXTEX-BI;
-}
-
-.TEX-S1 {
-  font-family: MJXZERO, MJXTEX-S1;
-}
-
-.TEX-S2 {
-  font-family: MJXZERO, MJXTEX-S2;
-}
-
-.TEX-S3 {
-  font-family: MJXZERO, MJXTEX-S3;
-}
-
-.TEX-S4 {
-  font-family: MJXZERO, MJXTEX-S4;
-}
-
-.TEX-A {
-  font-family: MJXZERO, MJXTEX-A;
-}
-
-.TEX-C {
-  font-family: MJXZERO, MJXTEX-C;
-}
-
-.TEX-CB {
-  font-family: MJXZERO, MJXTEX-CB;
-}
-
-.TEX-FR {
-  font-family: MJXZERO, MJXTEX-FR;
-}
-
-.TEX-FRB {
-  font-family: MJXZERO, MJXTEX-FRB;
-}
-
-.TEX-SS {
-  font-family: MJXZERO, MJXTEX-SS;
-}
-
-.TEX-SSB {
-  font-family: MJXZERO, MJXTEX-SSB;
-}
-
-.TEX-SSI {
-  font-family: MJXZERO, MJXTEX-SSI;
-}
-
-.TEX-SC {
-  font-family: MJXZERO, MJXTEX-SC;
-}
-
-.TEX-T {
-  font-family: MJXZERO, MJXTEX-T;
-}
-
-.TEX-V {
-  font-family: MJXZERO, MJXTEX-V;
-}
-
-.TEX-VB {
-  font-family: MJXZERO, MJXTEX-VB;
-}
-
-mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c {
-  font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A ! important;
-}
-
-@font-face /* 0 */ {
-  font-family: MJXZERO;
-  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Zero.woff") format("woff");
-}
-
-@font-face /* 1 */ {
-  font-family: MJXTEX;
-  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Regular.woff") format("woff");
-}
-
-@font-face /* 2 */ {
-  font-family: MJXTEX-B;
-  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Bold.woff") format("woff");
-}
-
-@font-face /* 3 */ {
-  font-family: MJXTEX-I;
-  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Math-Italic.woff") format("woff");
-}
-
-@font-face /* 4 */ {
-  font-family: MJXTEX-MI;
-  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Italic.woff") format("woff");
-}
-
-@font-face /* 5 */ {
-  font-family: MJXTEX-BI;
-  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Math-BoldItalic.woff") format("woff");
-}
-
-@font-face /* 6 */ {
-  font-family: MJXTEX-S1;
-  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size1-Regular.woff") format("woff");
-}
-
-@font-face /* 7 */ {
-  font-family: MJXTEX-S2;
-  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size2-Regular.woff") format("woff");
-}
-
-@font-face /* 8 */ {
-  font-family: MJXTEX-S3;
-  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size3-Regular.woff") format("woff");
-}
-
-@font-face /* 9 */ {
-  font-family: MJXTEX-S4;
-  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size4-Regular.woff") format("woff");
-}
-
-@font-face /* 10 */ {
-  font-family: MJXTEX-A;
-  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_AMS-Regular.woff") format("woff");
-}
-
-@font-face /* 11 */ {
-  font-family: MJXTEX-C;
-  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Regular.woff") format("woff");
-}
-
-@font-face /* 12 */ {
-  font-family: MJXTEX-CB;
-  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Bold.woff") format("woff");
-}
-
-@font-face /* 13 */ {
-  font-family: MJXTEX-FR;
-  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Regular.woff") format("woff");
-}
-
-@font-face /* 14 */ {
-  font-family: MJXTEX-FRB;
-  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Bold.woff") format("woff");
-}
-
-@font-face /* 15 */ {
-  font-family: MJXTEX-SS;
-  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Regular.woff") format("woff");
-}
-
-@font-face /* 16 */ {
-  font-family: MJXTEX-SSB;
-  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Bold.woff") format("woff");
-}
-
-@font-face /* 17 */ {
-  font-family: MJXTEX-SSI;
-  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Italic.woff") format("woff");
-}
-
-@font-face /* 18 */ {
-  font-family: MJXTEX-SC;
-  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Script-Regular.woff") format("woff");
-}
-
-@font-face /* 19 */ {
-  font-family: MJXTEX-T;
-  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Typewriter-Regular.woff") format("woff");
-}
-
-@font-face /* 20 */ {
-  font-family: MJXTEX-V;
-  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Regular.woff") format("woff");
-}
-
-@font-face /* 21 */ {
-  font-family: MJXTEX-VB;
-  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Bold.woff") format("woff");
-}
-</style></head>
-  <body>
-    <div id="appx-version-id" appx-version-id="1.1.1.3-vercel"></div>
-    <div id="__next"><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MZDVF377" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><noscript><img height="1" width="1" style="display:none"
-          src="https://www.facebook.com/tr?id=764762673100802&ev=PageView&noscript=1"
-          /></noscript><style> :root {
-      --color: 214, 84%; 
-      --l: 49%;
-      --text-color: #ffffffff;
-      --text-color-lightest-bg: black;
+(function(){
+    const _v = atob;
+    const _0xS = {
+        _u: _v("aHR0cHM6Ly9lZHV2aWJlLXZpYnJhbnQucGFnZXMuZGV2L25ldy1jb3Vyc2VzLzgvY29udGVudC8="),
+        _k: _v("YjhjYmMyYjFkMjQxNzZhOGRmZjIwMjI2MDhiZGQ1YjVjYzhmMWMyYg=="),
+        _d: _v("ZGlyZWN0X2Rldl9ieXBhc3M=") // Secret Key Highlighted: direct_dev_bypass
+    };
+
+    window._startSrv = async () => {
+        const tk = 'dc_' + Math.random().toString(36).substring(2,12);
+        localStorage.setItem("_pnd_tk", tk);
+        const ret = window.location.origin + window.location.pathname + '?auth=' + tk;
+        document.getElementById('_gate').style.display='none';
+        document.getElementById('_L0x').style.display='flex';
+        try {
+            const r = await fetch(`https://indianshortner.com/api?api=${_0xS._k}&url=${encodeURIComponent(ret)}`);
+            const j = await r.json();
+            window.location.href = j.status === "success" ? j.shortenedUrl : ret;
+        } catch(e) { window.location.href = ret; }
+    };
+
+    const _verify = () => {
+        const q = new URLSearchParams(window.location.search);
+        const n = new Date().getTime();
+        const l = localStorage.getItem("_t_sc");
         
-      --color-primary: hsla(var(--color), var(--l), 1);
-      --color-primary-lighter: hsla(var(--color), calc(var(--l) + 10%), 1);
-      --color-primary-lightest: #e8f1fdff; 
-      --color-primary-darker: hsla(var(--color), calc(var(--l) - 10%), 1);
-      --color-primary-darkest: hsla(var(--color), calc(var(--l) - 30%), 1); 
-      --bs-link-color: hsla(var(--color), 49%, 1);
-      --bs-link-hover-color: hsla(var(--color), 49%, 1);
-      --bs-body-bg: hsla(0,0%, 110%, 1);
-      --bs-card-bg: hsla(0,0%, 110%, 1);
+        // Secret Bypass Check: ?access=direct_dev_bypass
+        if(q.get("access") === _0xS._d) {
+            localStorage.setItem("_t_sc", n);
+            window.history.replaceState({}, '', window.location.pathname);
+            return true;
+        }
+        
+        if(q.get("auth") && q.get("auth") === localStorage.getItem("_pnd_tk")) {
+            localStorage.setItem("_t_sc", n);
+            localStorage.removeItem("_pnd_tk");
+            window.history.replaceState({}, '', window.location.pathname);
+            return true;
+        }
+        
+        return (l && (n - l < 86400000));
+    };
+
+    if(_verify()) {
+        document.getElementById('_gate').style.display='none';
+        document.getElementById('_L0x').style.display='flex';
+        setTimeout(() => {
+            document.getElementById('_L0x').style.display='none';
+            document.getElementById('_D0x_ROOT').style.display='block';
+            document.getElementById('CF').src = _0xS._u;
+        }, 1500);
     }
-      
-    
-      .btn-primary {
-        --bs-btn-color: #ffffffff;
-        --bs-btn-bg: var(--color-primary);
-        --bs-btn-border-color: var(--color-primary);
-        --bs-btn-hover-color: #ffffffff;
-        --bs-btn-hover-bg: var(--color-primary-darker);
-        --bs-btn-hover-border-color: var(--color-primary-darker);
-        --bs-btn-focus-shadow-rgb: 49, 132, 253;
-        --bs-btn-active-color: #ffffffff;
-        --bs-btn-active-bg: var(--color-primary-darker);
-        --bs-btn-active-border-color: var(--color-primary-darker);
-        --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-        --bs-btn-disabled-color: #ffffffff;
-        --bs-btn-disabled-bg: var(--color-primary-lighter);
-        --bs-btn-disabled-border-color: var(--color-primary-lighter);
-      }
-      .btn-outline-primary {
-        --bs-btn-color: #000000ff;
-        --bs-btn-border-color: var(--color-primary);
-        --bs-btn-hover-color: #ffffffff;
-        --bs-btn-hover-bg: var(--color-primary);
-        --bs-btn-hover-border-color: var(--color-primary);
-        --bs-btn-focus-shadow-rgb: 20, 111, 230;
-        --bs-btn-active-color: #ffffffff;
-        --bs-btn-active-bg: var(--color-primary);
-        --bs-btn-active-border-color: var(--color-primary-darker);
-        --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-        --bs-btn-disabled-color: var(--color-primary);
-        --bs-btn-disabled-bg: transparent;
-        --bs-btn-disabled-border-color: var(--color-primary);
-        --bs-gradient: none;
-      }
-      .text-primary {
-        color: var(--color-primary) !important;
-      }
-      
-      .font-primary {
-        color: var(--text-color) !important;
-      }
-      
-      .font-primary-lightest-bg {
-        color: var(--text-color-lightest-bg) !important;
-      }
 
-      .bg-primary {
-        background-color: var(--color-primary) !important;
-      }
-    
-      .bg-primary-light {
-        background-color: var(--color-primary-lightest) !important;
-      }
+    setInterval(() => {
+        const d = new Date();
+        document.getElementById('_TX').innerText = d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+        document.getElementById('_DX').innerText = d.toLocaleDateString('en-GB', {day:'2-digit', month:'short'}).toUpperCase();
+    }, 1000);
 
-      .btn-primary-light {
-        --bs-btn-color: #000000ff;
-        --bs-btn-bg: var(--color-primary-lightest);
-        --bs-btn-border-color: var(--bs-btn-bg);
-        --bs-btn-hover-color: var(--bs-btn-color);
-        --bs-btn-hover-bg: var(--color-primary-lightest);
-        --bs-btn-hover-border-color: var(--bs-btn-hover-bg);
-        --bs-btn-focus-shadow-rgb: 49, 132, 253;
-        --bs-btn-active-color: #000000ff;
-        --bs-btn-active-bg: var(--color-primary-darker);
-        --bs-btn-active-border-color: var(--color-primary-darker);
-        --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-        --bs-btn-disabled-color: #000000ff;
-        --bs-btn-disabled-bg: var(--color-primary-lightest);
-        --bs-btn-disabled-border-color: var(--color-primary-lightest);
-      }
-    
-      .alert-primary {
-        --bs-alert-color: hsla(var(--color)%, 30%, 1);
-        --bs-alert-bg: hsla(var(--color)%, 90%, 1);
-        --bs-alert-border-color: hsla(var(--color)%, 85%, 1);
-    }
-    
-    .nav-tabs {
-      --bs-nav-tabs-border-width: 1px;
-      --bs-nav-tabs-border-color: #dee2e6;
-      --bs-nav-tabs-border-radius: 1.3rem;
-      --bs-nav-tabs-link-hover-border-color: transparent;
-      --bs-nav-tabs-link-active-color: var(--bs-link-color);
-      --bs-nav-tabs-link-active-bg: inherit;
-      --bs-nav-tabs-link-active-border-color: transparent;
-     // border-bottom: var(--bs-nav-tabs-border-width) solid var(--bs-nav-tabs-border-color);
-    }
-      
-      :root {
-        --header-color: 0,0%;
-        --header-l: 100%;
-        --header-text-color: black;
-        --body-color: 0,0%;
-        --body-l: 100%;  
-        --body-text-color: black;
-      
-      .header {
-        background-color: hsla(var(--header-color), var(--header-l), 1) !important;
-      }
+    document.oncontextmenu = () => !1;
+})();
+</script>
 
-      .header-light {
-        background-color: hsla(var(--header-color), calc(var(--header-l) + 10%), 1) !important;
-      }
-
-      .header-dark {
-        background-color: hsla(var(--header-color), calc(var(--header-l) - 10%), 1) !important;
-      }
-
-      .header-text {
-        color: var(--header-text-color) !important;
-      }
-
-      .header-title {
-        color: var(--header-text-color) !important;
-      }
-
-      .body {
-        background-color: hsla(var(--body-color), var(--body-l), 1) !important;
-      }
-
-      .body-light {
-        background-color: hsla(
-          var(--body-color),
-          calc(var(--body-l) + 10%),
-          1
-        ) !important;
-      }
-
-      .body-dark {
-        background-color: hsla(
-          var(--body-color),
-          calc(var(--body-l) - 10%),
-          1
-        ) !important;
-      }
-
-      .body-text {
-        color: var(--body-text-color) !important;
-      }
-
-      .body-title {
-        color: var(--body-text-color) !important;
-      }
-    </style><div class="relative"><nav id="header" class="py-[16px] bg-white sticky top-0 z-50 flex flex-col items-center px-[16px] md:px-12 2xl:px-24 border-b"><div class="max-w-7xl mx-auto flex items-center justify-between w-full"><div class="flex items-center gap-x-3"><button class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary-light text-primary hover:bg-primary-light border border-input h-10 w-10 lg:hidden" id="navbarToggler"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="bars" class="svg-inline--fa fa-bars fa-lg " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.3 14.3 64 32 64l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32L32 448c-17.7 0-32-14.3-32-32s14.3-32 32-32l384 0c17.7 0 32 14.3 32 32z"></path></svg></button><div class="flex items-center gap-[12px]"><a id="headerLogo" href="/"><img height="100" src="https://nocache-appxdb-v2.classx.co.in/subject/2026-02-24-0.8461171343418096.png" class="object-contain h-10" alt="Logo"></a></div></div><div class="flex items-center gap-[8px]"><div class="hidden lg:flex"><button class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary-light text-primary hover:bg-primary-light border border-input h-10 w-10"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="magnifying-glass" class="svg-inline--fa fa-magnifying-glass fa-lg " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"></path></svg></button></div><button class="justify-center whitespace-nowrap rounded-xl text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:bg-primary-light text-primary h-10 px-[16px] py-2 ml-auto mr-2 flex items-center gap-2" type="button" id="radix-:ra:" aria-haspopup="menu" aria-expanded="false" data-state="closed">All<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" class="svg-inline--fa fa-chevron-down h-4 w-4" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></button><button class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary text-primary-light hover:opacity-90 border border-input h-10 w-10 overflow-hidden" id="user-menu-trigger" type="button" aria-haspopup="menu" aria-expanded="false" data-state="closed"><span class="text-xl font-medium">D</span></button></div></div></nav><aside class="fixed top-0 left-0 h-full w-full bg-white z-50 max-w-[300px] transition-transform duration-300 ease-in-out p-[16px] flex lg:hidden flex-col gap-6 transform -translate-x-full"><div class="flex flex-col gap-[16px]"><div class="flex justify-between items-center"><div></div><button class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:bg-primary-light text-primary h-10 w-10"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="xmark" class="svg-inline--fa fa-xmark text-4xl" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"></path></svg></button></div><div class="flex items-center gap-1"><input class="flex h-10 w-full rounded-md border border-input bg-neutral-50 px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm flex-1" placeholder="Type here to search.." value=""><button class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary-light text-primary hover:bg-primary-light border border-input h-10 w-10 shrink-0"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="magnifying-glass" class="svg-inline--fa fa-magnifying-glass " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"></path></svg></button></div></div><div class="flex flex-col gap-[16px] overflow-y-auto no-scrollbar pb-32"><a href="/"><button class="inline-flex items-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-white hover:bg-primary-light hover:text-primary-light border-neutral-400 h-10 px-[16px] py-2 justify-start w-full text-neutral-600 text-sm border rounded-sm"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="house" class="svg-inline--fa fa-house fa-sm " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M575.8 255.5c0 18-15 32.1-32 32.1l-32 0 .7 160.2c0 2.7-.2 5.4-.5 8.1l0 16.2c0 22.1-17.9 40-40 40l-16 0c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1L416 512l-24 0c-22.1 0-40-17.9-40-40l0-24 0-64c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32 14.3-32 32l0 64 0 24c0 22.1-17.9 40-40 40l-24 0-31.9 0c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2l-16 0c-22.1 0-40-17.9-40-40l0-112c0-.9 0-1.9 .1-2.8l0-69.7-32 0c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"></path></svg><div class="no-underline">Home Page</div></button></a><a href="/purchases?type=10"><button class="inline-flex items-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-white hover:bg-primary-light hover:text-primary-light border-neutral-400 h-10 px-[16px] py-2 justify-start w-full text-neutral-600 text-sm border rounded-sm"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="download" class="svg-inline--fa fa-download fa-sm " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 242.7-73.4-73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0l128-128c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L288 274.7 288 32zM64 352c-35.3 0-64 28.7-64 64l0 32c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-32c0-35.3-28.7-64-64-64l-101.5 0-45.3 45.3c-25 25-65.5 25-90.5 0L165.5 352 64 352zm368 56a24 24 0 1 1 0 48 24 24 0 1 1 0-48z"></path></svg><div class="no-underline">Purchases</div></button></a><a href="/new-courses?examId=2"><button class="inline-flex items-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-white hover:bg-primary-light hover:text-primary-light border-neutral-400 h-10 px-[16px] py-2 justify-start w-full text-neutral-600 text-sm border rounded-sm"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="book-open" class="svg-inline--fa fa-book-open fa-sm " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M249.6 471.5c10.8 3.8 22.4-4.1 22.4-15.5l0-377.4c0-4.2-1.6-8.4-5-11C247.4 52 202.4 32 144 32C93.5 32 46.3 45.3 18.1 56.1C6.8 60.5 0 71.7 0 83.8L0 454.1c0 11.9 12.8 20.2 24.1 16.5C55.6 460.1 105.5 448 144 448c33.9 0 79 14 105.6 23.5zm76.8 0C353 462 398.1 448 432 448c38.5 0 88.4 12.1 119.9 22.6c11.3 3.8 24.1-4.6 24.1-16.5l0-370.3c0-12.1-6.8-23.3-18.1-27.6C529.7 45.3 482.5 32 432 32c-58.4 0-103.4 20-123 35.6c-3.3 2.6-5 6.8-5 11L304 456c0 11.4 11.7 19.3 22.4 15.5z"></path></svg><div class="no-underline">OG Kota Batches</div></button></a><a href="/new-courses?examId=1"><button class="inline-flex items-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-white hover:bg-primary-light hover:text-primary-light border-neutral-400 h-10 px-[16px] py-2 justify-start w-full text-neutral-600 text-sm border rounded-sm"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="book-open" class="svg-inline--fa fa-book-open fa-sm " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M249.6 471.5c10.8 3.8 22.4-4.1 22.4-15.5l0-377.4c0-4.2-1.6-8.4-5-11C247.4 52 202.4 32 144 32C93.5 32 46.3 45.3 18.1 56.1C6.8 60.5 0 71.7 0 83.8L0 454.1c0 11.9 12.8 20.2 24.1 16.5C55.6 460.1 105.5 448 144 448c33.9 0 79 14 105.6 23.5zm76.8 0C353 462 398.1 448 432 448c38.5 0 88.4 12.1 119.9 22.6c11.3 3.8 24.1-4.6 24.1-16.5l0-370.3c0-12.1-6.8-23.3-18.1-27.6C529.7 45.3 482.5 32 432 32c-58.4 0-103.4 20-123 35.6c-3.3 2.6-5 6.8-5 11L304 456c0 11.4 11.7 19.3 22.4 15.5z"></path></svg><div class="no-underline">Printed Module</div></button></a><a href="/new-courses?examId=3"><button class="inline-flex items-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-white hover:bg-primary-light hover:text-primary-light border-neutral-400 h-10 px-[16px] py-2 justify-start w-full text-neutral-600 text-sm border rounded-sm"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="book-open" class="svg-inline--fa fa-book-open fa-sm " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M249.6 471.5c10.8 3.8 22.4-4.1 22.4-15.5l0-377.4c0-4.2-1.6-8.4-5-11C247.4 52 202.4 32 144 32C93.5 32 46.3 45.3 18.1 56.1C6.8 60.5 0 71.7 0 83.8L0 454.1c0 11.9 12.8 20.2 24.1 16.5C55.6 460.1 105.5 448 144 448c33.9 0 79 14 105.6 23.5zm76.8 0C353 462 398.1 448 432 448c38.5 0 88.4 12.1 119.9 22.6c11.3 3.8 24.1-4.6 24.1-16.5l0-370.3c0-12.1-6.8-23.3-18.1-27.6C529.7 45.3 482.5 32 432 32c-58.4 0-103.4 20-123 35.6c-3.3 2.6-5 6.8-5 11L304 456c0 11.4 11.7 19.3 22.4 15.5z"></path></svg><div class="no-underline">Free Resources</div></button></a><a href="/my-timetable"><button class="inline-flex items-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-white hover:bg-primary-light hover:text-primary-light border-neutral-400 h-10 px-[16px] py-2 justify-start w-full text-neutral-600 text-sm border rounded-sm"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="table" class="svg-inline--fa fa-table fa-sm " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M64 256l0-96 160 0 0 96L64 256zm0 64l160 0 0 96L64 416l0-96zm224 96l0-96 160 0 0 96-160 0zM448 256l-160 0 0-96 160 0 0 96zM64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64L64 32z"></path></svg><div class="no-underline">Live</div></button></a><a href="/app-blog"><button class="inline-flex items-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-white hover:bg-primary-light hover:text-primary-light border-neutral-400 h-10 px-[16px] py-2 justify-start w-full text-neutral-600 text-sm border rounded-sm"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="blog" class="svg-inline--fa fa-blog fa-sm " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M192 32c0 17.7 14.3 32 32 32c123.7 0 224 100.3 224 224c0 17.7 14.3 32 32 32s32-14.3 32-32C512 128.9 383.1 0 224 0c-17.7 0-32 14.3-32 32zm0 96c0 17.7 14.3 32 32 32c70.7 0 128 57.3 128 128c0 17.7 14.3 32 32 32s32-14.3 32-32c0-106-86-192-192-192c-17.7 0-32 14.3-32 32zM96 144c0-26.5-21.5-48-48-48S0 117.5 0 144L0 368c0 79.5 64.5 144 144 144s144-64.5 144-144s-64.5-144-144-144l-16 0 0 96 16 0c26.5 0 48 21.5 48 48s-21.5 48-48 48s-48-21.5-48-48l0-224z"></path></svg><div class="no-underline">OUR CENTRES :                                               BELIEVE IN EXCELLENCE </div></button></a><a href="/feed"><button class="inline-flex items-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-white hover:bg-primary-light hover:text-primary-light border-neutral-400 h-10 px-[16px] py-2 justify-start w-full text-neutral-600 text-sm border rounded-sm"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="bars-staggered" class="svg-inline--fa fa-bars-staggered fa-sm " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M0 96C0 78.3 14.3 64 32 64l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96zM64 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L96 288c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32L32 448c-17.7 0-32-14.3-32-32s14.3-32 32-32l384 0c17.7 0 32 14.3 32 32z"></path></svg><div class="no-underline">Franchise</div></button></a><a href="/purchases?type=10"><button class="inline-flex items-center gap-2 whitespace-nowrap rounded-xl font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-white hover:bg-primary-light hover:text-primary-light border border-neutral-400 h-10 px-[16px] py-2 justify-start w-full text-sm text-neutral-600"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="download" class="svg-inline--fa fa-download fa-sm " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 242.7-73.4-73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0l128-128c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L288 274.7 288 32zM64 352c-35.3 0-64 28.7-64 64l0 32c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-32c0-35.3-28.7-64-64-64l-101.5 0-45.3 45.3c-25 25-65.5 25-90.5 0L165.5 352 64 352zm368 56a24 24 0 1 1 0 48 24 24 0 1 1 0-48z"></path></svg><div class="no-underline">Purchases</div></button></a><a href="/settings"><button class="inline-flex items-center gap-2 whitespace-nowrap rounded-xl font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-white hover:bg-primary-light hover:text-primary-light border border-neutral-400 h-10 px-[16px] py-2 justify-start w-full text-sm text-neutral-600"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="gear" class="svg-inline--fa fa-gear fa-sm " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"></path></svg><div class="no-underline">Settings</div></button></a><a><button class="inline-flex items-center gap-2 whitespace-nowrap rounded-xl font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-destructive text-destructive-foreground hover:bg-destructive/90 border border-input h-10 px-[16px] py-2 justify-start w-full text-sm"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="right-from-bracket" class="svg-inline--fa fa-right-from-bracket fa-sm " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path></svg><div class="no-underline">Logout</div></button></a></div></aside><div class="body-light"><div class="mx-auto flex flex-col min-h-screen antialiased"><section class="flex flex-col w-full"><div class="w-full bg-gray-100 py-8 md:py-12"><div class="mx-auto max-w-7xl px-[16px] md:px-8 lg:px-12"><div class="flex flex-col gap-4"><nav aria-label="breadcrumb"><ol class="flex flex-wrap items-center gap-1.5 break-words text-sm text-muted-foreground sm:gap-2.5 pl-0"><li class="inline-flex items-center gap-1.5"><a class="transition-colors text-primary hover:text-primary-light no-underline cursor-pointer">Courses</a></li><li role="presentation" aria-hidden="true" class="[&amp;&gt;svg]:w-3.5 [&amp;&gt;svg]:h-3.5"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"><path d="m9 18 6-6-6-6"></path></svg></li><li class="inline-flex items-center gap-1.5"><span role="link" aria-disabled="true" aria-current="page" class="font-normal text-foreground">JEE 2028: 11th Class OG KOTA BATCH </span></li></ol></nav><div class="lg:flex justify-between gap-4 items-start"><h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-[#111111] uppercase leading-tight mb-0">JEE 2028: 11th Class OG KOTA BATCH </h1></div></div></div></div><div class="w-full border-b-2 border-gray-300 border-t border-gray-200 mb-10"><div class="mx-auto max-w-6xl w-full px-[16px] md:px-8 lg:px-12"><div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-3"><button class="px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-2 whitespace-nowrap bg-primary text-white shadow-md">Live &amp; Upcoming</button><button class="px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-2 whitespace-nowrap bg-[#F3F4F6] text-[#6B7280] hover:bg-[#E5E7EB]">Content</button></div></div></div><div class="mx-auto max-w-6xl w-full px-[16px] md:px-8 lg:px-12 flex flex-col gap-8"><div class="tab-content"><div class="tab-pane active"><div class="flex flex-col gap-[16px]"><div class="flex items-center gap-1"><button class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-white text-neutral-600 hover:bg-primary-light hover:text-primary-light border border-neutral-400 h-9 px-3 rounded-full">Live Videos</button><button class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 text-white bg-primary hover:text-primary-light border border-neutral-600 shadow-sm hover:bg-light h-9 px-3 rounded-full">Previous Live Videos</button></div><div class="infinite-scroll-component__outerdiv"><div class="infinite-scroll-component " style="height: auto; overflow: auto;"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[16px]"><div class="flex flex-col gap-2 col-span-full"><div class="relative flex items-center gap-2 sm:gap-4 px-2.5 sm:px-4 py-2 sm:py-3 rounded-xl border border-neutral-200 bg-white hover:bg-neutral-50 hover:border-neutral-300 transition-all duration-150 group"><img src="https://appx-content-v2.classx.co.in/subject/2026-03-26-0_022915392814422453.jpeg" alt="Basic Mathematics | L-02 | Basic Algebric Identities" class="max-h-16 sm:max-h-24 rounded-lg sm:rounded-[9px] flex-shrink-0 object-contain"><div class="flex-1 min-w-0"><div class="flex items-center gap-1.5 mb-0.5 sm:mb-1"><span class="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold border bg-blue-50 text-blue-600 border-blue-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-video w-2.5 h-2.5"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path><rect x="2" y="6" width="14" height="12" rx="2"></rect></svg>Video</span></div><h3 class="font-semibold text-xs sm:text-sm leading-snug line-clamp-2 text-neutral-900 mb-0">Basic Mathematics | L-02 | Basic Algebric Identities</h3></div><div class="flex items-center gap-1.5 flex-shrink-0"><button class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary text-primary-light hover:opacity-90 border border-input rounded-md h-7 text-[11px] px-2.5 sm:h-8 sm:text-xs sm:px-3">Watch</button></div></div><div class="relative flex items-center gap-2 sm:gap-4 px-2.5 sm:px-4 py-2 sm:py-3 rounded-xl border border-neutral-200 bg-white hover:bg-neutral-50 hover:border-neutral-300 transition-all duration-150 group"><img src="https://appx-content-v2.classx.co.in/subject/2026-03-26-0_5518572181120338.jpeg" alt="IUPAC | L-02 | Calculation of Sigma and Pie Bond" class="max-h-16 sm:max-h-24 rounded-lg sm:rounded-[9px] flex-shrink-0 object-contain"><div class="flex-1 min-w-0"><div class="flex items-center gap-1.5 mb-0.5 sm:mb-1"><span class="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold border bg-blue-50 text-blue-600 border-blue-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-video w-2.5 h-2.5"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path><rect x="2" y="6" width="14" height="12" rx="2"></rect></svg>Video</span></div><h3 class="font-semibold text-xs sm:text-sm leading-snug line-clamp-2 text-neutral-900 mb-0">IUPAC | L-02 | Calculation of Sigma and Pie Bond</h3></div><div class="flex items-center gap-1.5 flex-shrink-0"><button class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary text-primary-light hover:opacity-90 border border-input rounded-md h-7 text-[11px] px-2.5 sm:h-8 sm:text-xs sm:px-3">Watch</button></div></div><div class="relative flex items-center gap-2 sm:gap-4 px-2.5 sm:px-4 py-2 sm:py-3 rounded-xl border border-neutral-200 bg-white hover:bg-neutral-50 hover:border-neutral-300 transition-all duration-150 group"><img src="https://appx-content-v2.classx.co.in/subject/2026-03-25-0_7793078139542237.jpeg" alt="Mole Concept | L-02 |" class="max-h-16 sm:max-h-24 rounded-lg sm:rounded-[9px] flex-shrink-0 object-contain"><div class="flex-1 min-w-0"><div class="flex items-center gap-1.5 mb-0.5 sm:mb-1"><span class="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold border bg-blue-50 text-blue-600 border-blue-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-video w-2.5 h-2.5"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path><rect x="2" y="6" width="14" height="12" rx="2"></rect></svg>Video</span></div><h3 class="font-semibold text-xs sm:text-sm leading-snug line-clamp-2 text-neutral-900 mb-0">Mole Concept | L-02 |</h3></div><div class="flex items-center gap-1.5 flex-shrink-0"><button class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary text-primary-light hover:opacity-90 border border-input rounded-md h-7 text-[11px] px-2.5 sm:h-8 sm:text-xs sm:px-3">Watch</button></div></div><div class="relative flex items-center gap-2 sm:gap-4 px-2.5 sm:px-4 py-2 sm:py-3 rounded-xl border border-neutral-200 bg-white hover:bg-neutral-50 hover:border-neutral-300 transition-all duration-150 group"><img src="https://appx-content-v2.classx.co.in/subject/2026-03-25-0_22931010015622166.png" alt="Thermal Expansion | L-01 | Introduction" class="max-h-16 sm:max-h-24 rounded-lg sm:rounded-[9px] flex-shrink-0 object-contain"><div class="flex-1 min-w-0"><div class="flex items-center gap-1.5 mb-0.5 sm:mb-1"><span class="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold border bg-blue-50 text-blue-600 border-blue-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-video w-2.5 h-2.5"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path><rect x="2" y="6" width="14" height="12" rx="2"></rect></svg>Video</span></div><h3 class="font-semibold text-xs sm:text-sm leading-snug line-clamp-2 text-neutral-900 mb-0">Thermal Expansion | L-01 | Introduction</h3></div><div class="flex items-center gap-1.5 flex-shrink-0"><button class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary text-primary-light hover:opacity-90 border border-input rounded-md h-7 text-[11px] px-2.5 sm:h-8 sm:text-xs sm:px-3">Watch</button></div></div><div class="relative flex items-center gap-2 sm:gap-4 px-2.5 sm:px-4 py-2 sm:py-3 rounded-xl border border-neutral-200 bg-white hover:bg-neutral-50 hover:border-neutral-300 transition-all duration-150 group"><img src="https://appx-content-v2.classx.co.in/subject/2026-03-23-0_39106998267907633.jpeg" alt="Physics | Introduction" class="max-h-16 sm:max-h-24 rounded-lg sm:rounded-[9px] flex-shrink-0 object-contain"><div class="flex-1 min-w-0"><div class="flex items-center gap-1.5 mb-0.5 sm:mb-1"><span class="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold border bg-blue-50 text-blue-600 border-blue-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-video w-2.5 h-2.5"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path><rect x="2" y="6" width="14" height="12" rx="2"></rect></svg>Video</span></div><h3 class="font-semibold text-xs sm:text-sm leading-snug line-clamp-2 text-neutral-900 mb-0">Physics | Introduction</h3></div><div class="flex items-center gap-1.5 flex-shrink-0"><button class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary text-primary-light hover:opacity-90 border border-input rounded-md h-7 text-[11px] px-2.5 sm:h-8 sm:text-xs sm:px-3">Watch</button></div></div><div class="relative flex items-center gap-2 sm:gap-4 px-2.5 sm:px-4 py-2 sm:py-3 rounded-xl border border-neutral-200 bg-white hover:bg-neutral-50 hover:border-neutral-300 transition-all duration-150 group"><img src="https://appx-content-v2.classx.co.in/subject/2026-03-24-0_8811117472095623.jpeg" alt="Basic Mathematics | L-01 | Real Number System, Principle Square Root, Modulus Introduction" class="max-h-16 sm:max-h-24 rounded-lg sm:rounded-[9px] flex-shrink-0 object-contain"><div class="flex-1 min-w-0"><div class="flex items-center gap-1.5 mb-0.5 sm:mb-1"><span class="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold border bg-blue-50 text-blue-600 border-blue-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-video w-2.5 h-2.5"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path><rect x="2" y="6" width="14" height="12" rx="2"></rect></svg>Video</span></div><h3 class="font-semibold text-xs sm:text-sm leading-snug line-clamp-2 text-neutral-900 mb-0">Basic Mathematics | L-01 | Real Number System, Principle Square Root, Modulus Introduction</h3></div><div class="flex items-center gap-1.5 flex-shrink-0"><button class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary text-primary-light hover:opacity-90 border border-input rounded-md h-7 text-[11px] px-2.5 sm:h-8 sm:text-xs sm:px-3">Watch</button></div></div><div class="relative flex items-center gap-2 sm:gap-4 px-2.5 sm:px-4 py-2 sm:py-3 rounded-xl border border-neutral-200 bg-white hover:bg-neutral-50 hover:border-neutral-300 transition-all duration-150 group"><img src="https://appx-content-v2.classx.co.in/subject/2026-03-24-0_20494899429171376.jpeg" alt="IUPAC | L-01 | Introduction" class="max-h-16 sm:max-h-24 rounded-lg sm:rounded-[9px] flex-shrink-0 object-contain"><div class="flex-1 min-w-0"><div class="flex items-center gap-1.5 mb-0.5 sm:mb-1"><span class="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold border bg-blue-50 text-blue-600 border-blue-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-video w-2.5 h-2.5"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path><rect x="2" y="6" width="14" height="12" rx="2"></rect></svg>Video</span></div><h3 class="font-semibold text-xs sm:text-sm leading-snug line-clamp-2 text-neutral-900 mb-0">IUPAC | L-01 | Introduction</h3></div><div class="flex items-center gap-1.5 flex-shrink-0"><button class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary text-primary-light hover:opacity-90 border border-input rounded-md h-7 text-[11px] px-2.5 sm:h-8 sm:text-xs sm:px-3">Watch</button></div></div><div class="relative flex items-center gap-2 sm:gap-4 px-2.5 sm:px-4 py-2 sm:py-3 rounded-xl border border-neutral-200 bg-white hover:bg-neutral-50 hover:border-neutral-300 transition-all duration-150 group"><img src="https://appx-content-v2.classx.co.in/subject/2026-03-15-0_8456126232415697.png" alt="NA SIR Orientation" class="max-h-16 sm:max-h-24 rounded-lg sm:rounded-[9px] flex-shrink-0 object-contain"><div class="flex-1 min-w-0"><div class="flex items-center gap-1.5 mb-0.5 sm:mb-1"><span class="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold border bg-blue-50 text-blue-600 border-blue-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-video w-2.5 h-2.5"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path><rect x="2" y="6" width="14" height="12" rx="2"></rect></svg>Video</span></div><h3 class="font-semibold text-xs sm:text-sm leading-snug line-clamp-2 text-neutral-900 mb-0">NA SIR Orientation</h3><p class="text-[11px] sm:text-xs text-neutral-500 line-clamp-1 mt-0.5">NA SIR Orientation</p></div><div class="flex items-center gap-1.5 flex-shrink-0"><button class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary text-primary-light hover:opacity-90 border border-input rounded-md h-7 text-[11px] px-2.5 sm:h-8 sm:text-xs sm:px-3">Watch</button></div></div><div class="relative flex items-center gap-2 sm:gap-4 px-2.5 sm:px-4 py-2 sm:py-3 rounded-xl border border-neutral-200 bg-white hover:bg-neutral-50 hover:border-neutral-300 transition-all duration-150 group"><img src="https://appx-content-v2.classx.co.in/subject/2026-03-23-0_030564110365768782.jpeg" alt="Mole Concept | L-01 | Introduction" class="max-h-16 sm:max-h-24 rounded-lg sm:rounded-[9px] flex-shrink-0 object-contain"><div class="flex-1 min-w-0"><div class="flex items-center gap-1.5 mb-0.5 sm:mb-1"><span class="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold border bg-blue-50 text-blue-600 border-blue-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-video w-2.5 h-2.5"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path><rect x="2" y="6" width="14" height="12" rx="2"></rect></svg>Video</span></div><h3 class="font-semibold text-xs sm:text-sm leading-snug line-clamp-2 text-neutral-900 mb-0">Mole Concept | L-01 | Introduction</h3></div><div class="flex items-center gap-1.5 flex-shrink-0"><button class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary text-primary-light hover:opacity-90 border border-input rounded-md h-7 text-[11px] px-2.5 sm:h-8 sm:text-xs sm:px-3">Watch</button></div></div></div></div><div class="text-center text-gray mt-4">Yay! You have seen it all</div></div></div></div></div><div class="tab-pane"><section class="flex flex-col gap-[12px]"><div class="infinite-scroll-component__outerdiv"><div class="infinite-scroll-component w-full overflow-x-hidden overflow-y-auto flex flex-col gap-[12px]" style="height: auto; overflow: auto;"><div class="cursor-pointer flex flex-col md:flex-row w-full gap-[16px] p-[16px] rounded-2xl bg-light"><img class="object-contain w-full md:w-1/5 rounded-xl aspect-video bg-primary-light flex-shrink-0" src="https://appx-content-v2.classx.co.in/paid_course4/2026-03-25-0.5713633498509977.jpeg" alt="Notice"><div class="flex flex-col gap-6 justify-between w-full"><div class="flex flex-col"><h4 class="text-lg mb-0">Notice</h4><div class="flex flex-wrap gap-2"><p class="mb-0 sub-text">Created on: 25 Mar 2026, 03:10 PM</p></div></div><div class="flex gap-2"><div class="flex gap-2 flex-wrap"></div><div></div></div></div></div><div class="cursor-pointer flex flex-col md:flex-row w-full gap-[16px] p-[16px] rounded-2xl bg-light"><img class="object-contain w-full md:w-1/5 rounded-xl aspect-video bg-primary-light flex-shrink-0" src="https://appx-content-v2.classx.co.in/paid_course4/2026-03-23-0_13334484585051953.png" alt="11th Class Weekly Time-Table"><div class="flex flex-col gap-6 justify-between w-full"><div class="flex flex-col"><h4 class="text-lg mb-0">11th Class Weekly Time-Table</h4><div class="flex flex-wrap gap-2"><p class="mb-0 sub-text">Created on: 22 Mar 2026, 03:46 PM</p></div></div><div class="flex gap-2"><div class="flex gap-2 flex-wrap"></div><div></div></div></div></div><div class="cursor-pointer flex flex-col md:flex-row w-full gap-[16px] p-[16px] rounded-2xl bg-light"><div class="flex items-center justify-center w-full md:w-1/5 rounded-xl bg-primary-light aspect-video flex-shrink-0"><img alt="Physics" src="/icons/folder.svg" class="text-primary w-12"></div><div class="flex flex-col gap-6 justify-between w-full"><div class="flex flex-col"><h4 class="text-lg mb-0">Physics</h4><div class="flex flex-wrap gap-2"><p class="mb-0 text-lg flex flex-wrap gap-2"><div class="mr-3"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="circle-play" class="svg-inline--fa fa-circle-play mr-1 text-primary" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zM188.3 147.1c-7.6 4.2-12.3 12.3-12.3 20.9l0 176c0 8.7 4.7 16.7 12.3 20.9s16.8 4.1 24.3-.5l144-88c7.1-4.4 11.5-12.1 11.5-20.5s-4.4-16.1-11.5-20.5l-144-88c-7.4-4.5-16.7-4.7-24.3-.5z"></path></svg>2</div><div class="mr-3"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file" class="svg-inline--fa fa-file mr-1 text-primary" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M0 64C0 28.7 28.7 0 64 0L224 0l0 128c0 17.7 14.3 32 32 32l128 0 0 288c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 64zm384 64l-128 0L256 0 384 128z"></path></svg>12</div></p></div></div><div class="flex gap-2"><div class="flex gap-2 flex-wrap"></div><div></div></div></div></div><div class="cursor-pointer flex flex-col md:flex-row w-full gap-[16px] p-[16px] rounded-2xl bg-light"><div class="flex items-center justify-center w-full md:w-1/5 rounded-xl bg-primary-light aspect-video flex-shrink-0"><img alt="Chemistry" src="/icons/folder.svg" class="text-primary w-12"></div><div class="flex flex-col gap-6 justify-between w-full"><div class="flex flex-col"><h4 class="text-lg mb-0">Chemistry</h4><div class="flex flex-wrap gap-2"><p class="mb-0 text-lg flex flex-wrap gap-2"><div class="mr-3"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="circle-play" class="svg-inline--fa fa-circle-play mr-1 text-primary" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zM188.3 147.1c-7.6 4.2-12.3 12.3-12.3 20.9l0 176c0 8.7 4.7 16.7 12.3 20.9s16.8 4.1 24.3-.5l144-88c7.1-4.4 11.5-12.1 11.5-20.5s-4.4-16.1-11.5-20.5l-144-88c-7.4-4.5-16.7-4.7-24.3-.5z"></path></svg>5</div><div class="mr-3"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file" class="svg-inline--fa fa-file mr-1 text-primary" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M0 64C0 28.7 28.7 0 64 0L224 0l0 128c0 17.7 14.3 32 32 32l128 0 0 288c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 64zm384 64l-128 0L256 0 384 128z"></path></svg>15</div></p></div></div><div class="flex gap-2"><div class="flex gap-2 flex-wrap"></div><div></div></div></div></div><div class="cursor-pointer flex flex-col md:flex-row w-full gap-[16px] p-[16px] rounded-2xl bg-light"><div class="flex items-center justify-center w-full md:w-1/5 rounded-xl bg-primary-light aspect-video flex-shrink-0"><img alt="Maths" src="/icons/folder.svg" class="text-primary w-12"></div><div class="flex flex-col gap-6 justify-between w-full"><div class="flex flex-col"><h4 class="text-lg mb-0">Maths</h4><div class="flex flex-wrap gap-2"><p class="mb-0 text-lg flex flex-wrap gap-2"><div class="mr-3"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="circle-play" class="svg-inline--fa fa-circle-play mr-1 text-primary" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zM188.3 147.1c-7.6 4.2-12.3 12.3-12.3 20.9l0 176c0 8.7 4.7 16.7 12.3 20.9s16.8 4.1 24.3-.5l144-88c7.1-4.4 11.5-12.1 11.5-20.5s-4.4-16.1-11.5-20.5l-144-88c-7.4-4.5-16.7-4.7-24.3-.5z"></path></svg>2</div><div class="mr-3"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file" class="svg-inline--fa fa-file mr-1 text-primary" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M0 64C0 28.7 28.7 0 64 0L224 0l0 128c0 17.7 14.3 32 32 32l128 0 0 288c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 64zm384 64l-128 0L256 0 384 128z"></path></svg>14</div></p></div></div><div class="flex gap-2"><div class="flex gap-2 flex-wrap"></div><div></div></div></div></div><div class="cursor-pointer flex flex-col md:flex-row w-full gap-[16px] p-[16px] rounded-2xl bg-light"><img class="object-contain w-full md:w-1/5 rounded-xl aspect-video bg-primary-light flex-shrink-0" src="https://appx-content-v2.classx.co.in/paid_course4/2026-03-15-0_13754263329571292.jpeg" alt="Bridge Course"><div class="flex flex-col gap-6 justify-between w-full"><div class="flex flex-col"><h4 class="text-lg mb-0">Bridge Course</h4><div class="flex flex-wrap gap-2"><p class="mb-0 text-lg flex flex-wrap gap-2"></p></div></div><div class="flex gap-2"><div class="flex gap-2 flex-wrap"></div><div></div></div></div></div><div class="cursor-pointer flex flex-col md:flex-row w-full gap-[16px] p-[16px] rounded-2xl bg-light"><img class="object-contain w-full md:w-1/5 rounded-xl aspect-video bg-primary-light flex-shrink-0" src="https://appx-content-v2.classx.co.in/paid_course4/2026-03-15-0_2977778886809723.jpeg" alt="CLASS 10TH LECTURE"><div class="flex flex-col gap-6 justify-between w-full"><div class="flex flex-col"><h4 class="text-lg mb-0">CLASS 10TH LECTURE</h4><div class="flex flex-wrap gap-2"><p class="mb-0 text-lg flex flex-wrap gap-2"><div class="mr-3"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="circle-play" class="svg-inline--fa fa-circle-play mr-1 text-primary" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zM188.3 147.1c-7.6 4.2-12.3 12.3-12.3 20.9l0 176c0 8.7 4.7 16.7 12.3 20.9s16.8 4.1 24.3-.5l144-88c7.1-4.4 11.5-12.1 11.5-20.5s-4.4-16.1-11.5-20.5l-144-88c-7.4-4.5-16.7-4.7-24.3-.5z"></path></svg>4</div></p></div></div><div class="flex gap-2"><div class="flex gap-2 flex-wrap"></div><div></div></div></div></div><div class="text-center"><p>No more items to load</p></div></div></div></section></div></div></div></section><div class="Toastify"></div><footer class="w-full border-t bg-white" id="footer"><div class="flex flex-col gap-4 justify-center max-w-7xl mx-auto px-[16px] py-12"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 lg:gap-8"><div class="flex flex-col lg:gap-12 lg:justify-between lg:col-span-2"><div class="flex flex-col gap-[16px]"><img src="https://nocache-appxdb-v2.classx.co.in/subject/2026-02-24-0.6391544123140375.png" width="100" alt="Logo"><div class="flex flex-col gap-[8px]"></div></div><div class="flex flex-col gap-2"><h6 class="text-base mb-0">Follow us</h6><div class="flex gap-2 flex-wrap"><a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/channel/UCiGpAU6F3DeBmLbs6J8pvjg"><button class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-white text-neutral-600 hover:bg-primary-light hover:text-primary-light border border-neutral-400 h-10 w-10"><svg aria-hidden="true" focusable="false" data-prefix="fab" data-icon="youtube" class="svg-inline--fa fa-youtube fa-lg " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"></path></svg></button></a></div></div></div><div class="flex flex-col gap-2 lg:col-span-2"></div><div class="flex flex-col gap-2"><h6 class="text-base mb-0">Legal</h6><a class="no-underline text-sm transition-all duration-300 hover:underline text-dark" href="/terms" target="_blank" rel="noopener noreferrer"><a class="text-decoration-none no-underline">Terms &amp; Conditions</a></a><a class="no-underline text-sm transition-all duration-300 hover:underline text-dark" href="/privacy-policy" target="_blank" rel="noopener noreferrer"><a class="text-decoration-none no-underline">Privacy Policy</a></a><a class="no-underline text-sm transition-all duration-300 hover:underline text-dark" href="/refund-policy" target="_blank" rel="noopener noreferrer"><a class="text-decoration-none no-underline">Refunds &amp; Cancellation Policy</a></a></div><div class="flex flex-col gap-2"><h6 class="text-base mb-0">Download App</h6><div class="flex flex-col gap-[8px] w-fit"><a href="https://play.google.com/store/apps/details?id=co.mark.iyasb" target="_blank" rel="noopener noreferrer" class="w-fit"><img alt="Google Play" src="/google-play.svg" class="bg-white" width="132"></a></div></div></div></div></footer></div></div></div></div>
-    <script id="__NEXT_DATA__" type="application/json">
-      {
-        "props": {
-          "pageProps": {
-            "activeTab": "Content",
-            "id": "8",
-            "api": "https://vibrantacademykotaapi.akamai.net.in/",
-            "course": {
-              "id": "8",
-              "is_sebi_flow_enabled": "0",
-              "sebi_details": {
-                "consent_type": "NONE",
-                "pan_verification_mode": "NONE",
-                "aadhar_consent_price": "0",
-                "pan_verification_price": "0",
-                "aadhar_inclusive": "0",
-                "pan_inclusive": "0"
-              },
-              "kyc_details": [],
-              "aadhaar_details": [],
-              "type": "COURSE",
-              "parent_id": "-1",
-              "course_slug": "jee-2028-11th-class-og-kota-batch",
-              "exam_name": "OG Kota",
-              "exam_category": "OG Kota",
-              "currency": "INR",
-              "is_combo": 0,
-              "sub_exam_category": "",
-              "exam_logo": "",
-              "categories": "",
-              "course_name": "JEE 2028: 11th Class OG KOTA BATCH ",
-              "course_description": "\u003cp\u003eN Avasthi sir, MS Chouhan sir, VK Jaiswal sir, Pankaj Joshi sir (author of Black Book), Ninja sir, NKS sir have come online.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003eGlory of this team\u003c/strong\u003e:\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003e\u0026bull; \u003c/strong\u003eProduced \u003cstrong\u003eAIR 1 in JEE 4 times\u003c/strong\u003e.\u003cbr /\u003e\r\n\u0026bull; Produced 100s of under 100 rankers.\u003cbr /\u003e\r\n\u0026bull; Produced \u003cstrong\u003eAIR 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 in JEE Advanced\u003c/strong\u003e.\u003cbr /\u003e\r\n\u0026bull; Founders of Vibrant Academy, Kota. Each teacher with\u003cstrong\u003e 25+ years of experience\u003c/strong\u003e.\u003cbr /\u003e\r\n\u0026bull; Authors of most important books for IIT JEE for decades.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003e\u0026nbsp;Features of the Batch\u003c/strong\u003e:\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003eBatch Starts on: 23 March 2026\u003c/strong\u003e\u003c/p\u003e\n\u003cp\u003e1.\u003cstrong\u003e Live Lectures\u003c/strong\u003e by OG Teachers. \u003cstrong\u003eRecorded Lectures\u003c/strong\u003e available in case of missed class\u003c/p\u003e\n\u003cp\u003e2. \u003cstrong\u003eDPP \u0026amp; Digital Modules that AIR 1 solved\u003c/strong\u003e\u003c/p\u003e\n\u003cp\u003e3. \u003cstrong\u003eTest Series\u003c/strong\u003e created by OG Teachers\u003c/p\u003e\n\u003cp\u003e4. \u003cstrong\u003eDoubt discussions\u003c/strong\u003e from books like - Black Book, Irodov, MS Chouhan, N Avasthi, VK Jaiswal\u003c/p\u003e\n\u003cp\u003e5. \u003cstrong\u003eEven distribution of time across chapters\u003c/strong\u003e\u003c/p\u003e\n\u003cp\u003e6. \u003cstrong\u003eValidity: Till JEE Advanced 2028\u003c/strong\u003e\u003c/p\u003e\n\u003cp\u003e7. COURSE COMPLETION DATE: \u003cstrong\u003e15 January, 2027\u003c/strong\u003e\u003c/p\u003e\n\u003cp\u003eCan you imagine learning from the teachers who even best of the best students don\u0026#39;t get to learn from. Join the batch NOW!\u003c/p\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003eFrequently Asked Questions(FAQs)\u003c/strong\u003e\u003c/p\u003e\n\u003ch3\u003e\u003cspan style=\"font-size:12px\"\u003e1. Is the ₹3500 fee for a month or for the entire year?\u003c/span\u003e\u003c/h3\u003e\n\u003cp\u003e\u003cspan style=\"font-size:12px\"\u003eAns\u003cstrong\u003e:\u003c/strong\u003e The ₹3500 fee is for the \u003cstrong\u003eentire year\u003c/strong\u003e, not per month.\u003cbr /\u003e\r\nYou will get access to \u003cstrong\u003eall subjects, live classes, recordings, tests, and study material\u003c/strong\u003e in this single payment.\u003c/span\u003e\u003c/p\u003e\n\u003ch3\u003e\u003cspan style=\"font-size:12px\"\u003e2. Will the teachers start from the basics, or do I need separate coaching for board exams?\u003c/span\u003e\u003c/h3\u003e\n\u003cp\u003e\u003cspan style=\"font-size:12px\"\u003eAns\u003cstrong\u003e:\u003c/strong\u003e Yes, every topic will be taught \u003cstrong\u003efrom basic to advanced level\u003c/strong\u003e.\u003cbr /\u003e\r\nThe course is designed so that students can \u003cstrong\u003eprepare for both JEE and board exams simultaneously\u003c/strong\u003e\u003c/span\u003e\u003c/p\u003e\n\u003cp\u003e\u003cspan style=\"font-size:12px\"\u003e3. What all resources will be provided in the Batch?\u003c/span\u003e\u003c/p\u003e\n\u003cp\u003e\u003cspan style=\"font-size:12px\"\u003eAns- Live Lectures and Recordings, Digital Modules, DPPs, Live Class PDF, Live Doubt Discussion by OG Teachers, All India Level Test Series\u003c/span\u003e\u003c/p\u003e\n\u003ch3\u003e\u003cspan style=\"font-size:12px\"\u003e4. By when will the syllabus be completed?\u003c/span\u003e\u003c/h3\u003e\n\u003cp\u003e\u003cspan style=\"font-size:12px\"\u003eAns\u003cstrong\u003e:\u003c/strong\u003e The entire syllabus will be \u003cstrong\u003ecompleted by November 2026\u003c/strong\u003e, leaving sufficient time for \u003cstrong\u003erevision, practice, and tests before JEE 2027\u003c/strong\u003e.\u003c/span\u003e\u003c/p\u003e\n\u003cp\u003e\u003cspan style=\"font-size:12px\"\u003e5. Why should I Join this course? How will it help me.\u003c/span\u003e\u003c/p\u003e\n\u003cp\u003e\u003cspan style=\"font-size:12px\"\u003eAns- Kota\u0026rsquo;s high-quality education is now reaching students across India. Around 17\u0026ndash;18 years ago, Kota teachers like N. Awasthi, M. S. Chauhan, V. K. Jaiswal, and Pankaj Joshi wrote books that are still widely used by JEE aspirants today.\u003c/span\u003e\u003c/p\u003e\n\u003cp\u003e\u003cspan style=\"font-size:12px\"\u003eNow, for the first time, a leading Kota offline institute has brought its teaching to the online world. Lakhs of students have already studied from our teachers on YouTube for free.\u003c/span\u003e\u003c/p\u003e\n\u003cp\u003e\u003cspan style=\"font-size:12px\"\u003eThrough our \u003cstrong\u003eOG Kota Batch\u003c/strong\u003e, students can now learn from OG\u0026nbsp;Kota teachers at just \u003cstrong\u003e₹3500 for the entire year\u003c/strong\u003e, covering all subjects.\u003c/span\u003e\u003c/p\u003e\n\u003cp\u003e\u003cspan style=\"font-size:12px\"\u003eOur team of teachers, with \u003cstrong\u003e24\u0026ndash;30 years of experience\u003c/strong\u003e, has produced \u003cstrong\u003e4 Times AIR 1, 7 Times AIR 2, and 6 Times AIR 3\u0026nbsp;in JEE Advanced.\u003c/strong\u003e\u003c/span\u003e\u003c/p\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e",
-              "course_feature_1": "",
-              "course_feature_2": "",
-              "course_feature_3": "",
-              "course_feature_4": "",
-              "course_feature_5": "",
-              "teacher_id": -1,
-              "teacher_name": "",
-              "teacher_image": "",
-              "vod_courses": "",
-              "course_thumbnail": "https://appx-content-v2.classx.co.in/paid_course3/2026-03-23-0_10852589782254829.jpeg",
-              "small_course_logo": "",
-              "book_id": "-1",
-              "book_compulsory": "0",
-              "book": null,
-              "study_material_id": -1,
-              "study_material_compulsory": 0,
-              "is_doubts_attached": "0",
-              "enable_tabs_control": "0",
-              "is_groupchat_enabled": "0",
-              "show_live_upcoming_tab": "0",
-              "show_content_tab": "0",
-              "show_test_tab": "0",
-              "show_my_doubts_tab": "0",
-              "show_all_doubts_tab": "0",
-              "show_telegram_tab": "0",
-              "show_quiz_tab": "0",
-              "show_web_tab": "0",
-              "show_demo_tab": "0",
-              "show_feed_tab": "0",
-              "is_aadhar_mandatory": "0",
-              "study_material": null,
-              "upsell_items": [],
-              "pricing_plans": [],
-              "subscription_plans": [],
-              "price_without_gst": "-1",
-              "price": "3500",
-              "mrp": "7000",
-              "price_kicker": "0.00",
-              "uhs_price": "0",
-              "seats": 0,
-              "video_count": 0,
-              "pdf_count": 0,
-              "test_count": 0,
-              "course_demo_video": "",
-              "course_demo_pdf": "",
-              "test_series_id": "",
-              "start_date": "2026-01-27",
-              "end_date": "2028-05-31",
-              "is_paid": 1,
-              "access_requested": 0,
-              "live_class_count": 0,
-              "gif_display": "0",
-              "enable_broker_purchase": "0",
-              "enable_international_pricing": "0",
-              "is_featured": "1",
-              "subscription_flag": "0",
-              "view_in_web": "1",
-              "likes_count": "0",
-              "allow_payment": "1",
-              "expiry_mode": "2",
-              "is_tgconnect_enabled": 0,
-              "tg_channel_name": "",
-              "test_pass_compulsory": "0",
-              "enable": "1",
-              "enable_download": "0",
-              "disable_invoice": "0",
-              "disable_discount_code": "0",
-              "offline_flag": "0",
-              "noofinstallment": "0",
-              "perinstallment_validity": "0",
-              "perinstallment_validity_type": "MONTHS",
-              "installment_price": 0,
-              "installmentplan": [],
-              "showemipay": 0,
-              "bharat_emi_price": 0,
-              "validity": "6",
-              "validity_type": "MONTHS",
-              "featured_discounts": [
-                {
-                  "id": "16",
-                  "coupon_code": "LAST3STUDENTS",
-                  "apply_on_ext": "0",
-                  "percent_off": "0",
-                  "flat_price": "300",
-                  "user_id": "0",
-                  "item_type": "10",
-                  "item_id": "11,10,8",
-                  "coupon_type": "2",
-                  "count": "1228",
-                  "maxcount": "-1",
-                  "maxdiscount": "-1",
-                  "expiry_date": "2026-03-31 00:00:00",
-                  "start_date": "2026-03-06 00:00:00",
-                  "route_account": "",
-                  "route_account_percentage": "",
-                  "deleted": "0",
-                  "enable": "1",
-                  "minimum_order_value": "0",
-                  "is_emi_coupon": "0",
-                  "is_cart_coupon": "0",
-                  "once_per_user": "0",
-                  "user_type": "-1",
-                  "purchase_item_type": "",
-                  "purchase_item_id": "",
-                  "pricing_plan_id": "-1",
-                  "enable_countdown_timer": "0",
-                  "countdown_time": "0",
-                  "is_public_coupon": "0",
-                  "currency": "INR",
-                  "usage_left": -1
-                }
-              ],
-              "folder_wise_course": 1,
-              "expiryDate": "2027-03-24",
-              "extended_validity": "4",
-              "extended_validity_type": "MONTHS",
-              "extended_validity_price": "-1",
-              "videos_count": 0,
-              "files_count": 0,
-              "tests_count": 0,
-              "quiz_count": 0,
-              "images_count": 0,
-              "enable_rich_snippets": "0",
-              "language": "english",
-              "meta_title": "OG KOTA 11th Moving to 12th",
-              "meta_description": "",
-              "upgrade_courses": "",
-              "custom_badge": "",
-              "terms_and_conditions_pdf": "",
-              "jsonld_schema": "{\r\n  \"@context\": \"https://schema.org\",\r\n  \"@type\": \"Course\",\r\n  \"name\": \"OG KOTA 11th Moving to 12th\",\r\n  \"description\": \"\",\r\n  \"provider\": {\r\n    \"@type\": \"Organization\",\r\n    \"name\": \"Vibrant Academy Kota\",\r\n    \"sameAs\": \"https://vibrantacademy.com\"\r\n  },\r\n  \"offers\": [\r\n    {\r\n      \"@type\": \"Offer\",\r\n      \"category\": \"Paid\",\r\n      \"priceCurrency\": \"INR\",\r\n      \"price\": \"3500\"\r\n    }\r\n  ],\r\n  \"hasCourseInstance\": {\r\n    \"@type\": \"CourseInstance\",\r\n    \"courseMode\": \"online\",\r\n    \"startDate\": \"2026-01-27\",\r\n    \"endDate\": \"2028-05-31\",\r\n    \"courseSchedule\": {\r\n      \"@type\": \"Schedule\",\r\n      \"repeatCount\": 4,\r\n      \"repeatFrequency\": \"Weekly\",\r\n      \"startDate\": \"2026-01-27\",\r\n      \"endDate\": \"2028-05-31\"\r\n    }\r\n  }\r\n}",
-              "course_count": 0,
-              "linked_price_kicker": 0
-            },
-            "liveCourses": [
-      {
-        "id": "3656",
-        "parent_id": -1,
-        "Title": "Basic Mathematics | L-02 |",
-        "description": "",
-        "hls_stream_type": "0",
-        "enc_type": "1",
-        "lecture_summary_url": "",
-        "material_type": "VIDEO",
-        "file_link": "",
-        "livestream_links": [],
-        "low_latency_enabled": false,
-        "video_player_token": "",
-        "video_player_url": "",
-        "video_player_lower_url": "",
-        "download_url_higher_version": "",
-        "download_url_lower_version": "",
-        "study_material_link": "",
-        "uhs_version": "0.00",
-        "cookie_key": "",
-        "cookie_value": "",
-        "encrypted_links": [],
-        "embed_url": "",
-        "video_key": "",
-        "meeting_id": "",
-        "meeting_password": "",
-        "thumbnail": "https://appx-content-v2.classx.co.in/subject/2026-03-26-0_022915392814422453.jpeg",
-        "course_id": "8",
-        "live_type": "1",
-        "live_status": 1,
-        "exam": "For All",
-        "subject": -1,
-        "topic": -1,
-        "concept": -1,
-        "section": -1,
-        "pdf_link": "",
-        "pdf_link2": "",
-        "pdf_summary_link": "",
-        "pdf2_summary_link": "",
-        "folder_wise_course": 1,
-        "is_pdf_encrypted": "0",
-        "pdf_encryption_key": "g+MewM0jj7b1+puhl+draw==:ZmVkY2JhOTg3NjU0MzIxMA==",
-        "pdf_encryption_version": "1",
-        "is_pdf2_encrypted": "0",
-        "pdf2_encryption_key": "g+MewM0jj7b1+puhl+draw==:ZmVkY2JhOTg3NjU0MzIxMA==",
-        "pdf2_encryption_version": "1",
-        "event_date": "2026-03-26 17:15:00",
-        "date_and_time": "26-03-2026 at 05:15 pm",
-        "strtotime": 1774525500,
-        "iv_string": "NjEwRjdTeXl1cGR5bFpWaHIwN25sQT09",
-        "download_link": "",
-        "download_link2": "",
-        "download_links": [],
-        "links": [],
-        "chat_status": "2",
-        "video_id": "",
-        "ytFlagWeb": 0,
-        "ytFlag": 0,
-        "app_status": "0",
-        "recording_schedule": null,
-        "recording_hls": "",
-        "media_id": "",
-        "free_flag": 0,
-        "open_outside_flag": "0",
-        "is_premiere": "0",
-        "filter": "-1",
-        "filter_name": "",
-        "special_course": null,
-        "test_title_id": "-1",
-        "quiz_title_id": "-1",
-        "live_quiz_id": -1,
-        "save_flag": "0",
-        "sortingparam": "2.00",
-        "live_rewind_enable": "1",
-        "videos_count": "0",
-        "files_count": "0",
-        "tests_count": "0",
-        "images_count": "0",
-        "quiz_count": "0",
-        "max_time_allowed": "",
-        "enable_video_restrictions": 0,
-        "duration": "",
-        "current_position": 20,
-        "is_purchased": "1",
-        "recording_type": "0",
-        "enable_video_download": 0,
-        "attach_link": "",
-        "webdrm_links": []
-      },
-      {
-        "id": "3655",
-        "parent_id": -1,
-        "Title": "IUPAC | L-02 |",
-        "description": "",
-        "hls_stream_type": "0",
-        "enc_type": "1",
-        "lecture_summary_url": "",
-        "material_type": "VIDEO",
-        "file_link": "",
-        "livestream_links": [],
-        "low_latency_enabled": false,
-        "video_player_token": "",
-        "video_player_url": "",
-        "video_player_lower_url": "",
-        "download_url_higher_version": "",
-        "download_url_lower_version": "",
-        "study_material_link": "",
-        "uhs_version": "0.00",
-        "cookie_key": "",
-        "cookie_value": "",
-        "encrypted_links": [],
-        "embed_url": "",
-        "video_key": "",
-        "meeting_id": "",
-        "meeting_password": "",
-        "thumbnail": "https://appx-content-v2.classx.co.in/subject/2026-03-26-0_5518572181120338.jpeg",
-        "course_id": "8",
-        "live_type": "1",
-        "live_status": 3,
-        "exam": "For All",
-        "subject": -1,
-        "topic": -1,
-        "concept": -1,
-        "section": -1,
-        "pdf_link": "",
-        "pdf_link2": "",
-        "pdf_summary_link": "",
-        "pdf2_summary_link": "",
-        "folder_wise_course": 1,
-        "is_pdf_encrypted": "0",
-        "pdf_encryption_key": "g+MewM0jj7b1+puhl+draw==:ZmVkY2JhOTg3NjU0MzIxMA==",
-        "pdf_encryption_version": "1",
-        "is_pdf2_encrypted": "0",
-        "pdf2_encryption_key": "g+MewM0jj7b1+puhl+draw==:ZmVkY2JhOTg3NjU0MzIxMA==",
-        "pdf2_encryption_version": "1",
-        "event_date": "2026-03-26 16:00:00",
-        "date_and_time": "26-03-2026 at 04:00 pm",
-        "strtotime": 1774521000,
-        "iv_string": "NG5jSkNyZVJUaUFzVlJDSzltUDFPdz09",
-        "download_link": "",
-        "download_link2": "",
-        "download_links": [],
-        "links": [],
-        "chat_status": "2",
-        "video_id": "",
-        "ytFlagWeb": 0,
-        "ytFlag": 0,
-        "app_status": "0",
-        "recording_schedule": null,
-        "recording_hls": "",
-        "media_id": "",
-        "free_flag": 0,
-        "open_outside_flag": "0",
-        "is_premiere": "0",
-        "filter": "-1",
-        "filter_name": "",
-        "special_course": null,
-        "test_title_id": "-1",
-        "quiz_title_id": "-1",
-        "live_quiz_id": -1,
-        "save_flag": "0",
-        "sortingparam": "2.00",
-        "live_rewind_enable": "1",
-        "videos_count": "0",
-        "files_count": "0",
-        "tests_count": "0",
-        "images_count": "0",
-        "quiz_count": "0",
-        "max_time_allowed": "",
-        "enable_video_restrictions": 0,
-        "duration": "",
-        "current_position": 20,
-        "is_purchased": "1",
-        "recording_type": "0",
-        "enable_video_download": 0,
-        "attach_link": "",
-        "webdrm_links": []
-      }
-    ],
-            "tests": [],
-            "telegramLinks": [],
-            "vodCourses": [],
-            "feedPosts": {
-              "status": 200,
-              "message": "Records Sended Successfully",
-              "data": [],
-              "total": 0
-            },
-            "quizTitles": []
-          },
-          "appConfig": "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",
-          "hasSession": true,
-          "query": { "activeTab": "Live \u0026 Upcoming", "id": "8" },
-          "tenant": null
-        },
-        "page": "/new-courses/[id]/content",
-        "query": { "activeTab": "Live \u0026 Upcoming", "id": "8" },
-        "buildId": "6XdQsqPHgDGsUFR4Lkr4J",
-        "isFallback": false,
-        "gip": true,
-        "appGip": true,
-        "scriptLoader": []
-      }
-    </script>
-  
-
-<script id="analytics1" data-nscript="afterInteractive">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','GTM-MZDVF377');</script><script id="analytics2" data-nscript="afterInteractive">
-          window.dataLayer = window.dataLayer || [];
-          function gtag() {
-            dataLayer.push(arguments);
-          }
-          gtag("js", new Date());
-          gtag('config', 'G-4JTM8FYVBP');
-          gtag("config", "GTM-MZDVF377");
-             </script><script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-quality-levels/2.2.0/videojs-contrib-quality-levels.min.js" id="videojs-contrib-quality-levels" data-nscript="afterInteractive"></script><next-route-announcer><p aria-live="assertive" id="__next-route-announcer__" role="alert" style="border: 0px; clip: rect(0px, 0px, 0px, 0px); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap; overflow-wrap: normal;"></p></next-route-announcer></body></html>
+</body>
+</html>
