@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>DevCoderZ | Secure_System_v5</title>
+<title>DevCoderZ | Secure_System_v6</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 body,html{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#010409;font-family:'Segoe UI',sans-serif;color:#fff}
@@ -32,9 +32,9 @@ h2{color:#38bdf8;margin-bottom:20px;letter-spacing:1px;font-size:1.4rem}
     <div class="box">
         <i class="fas fa-shield-alt" style="font-size:45px;color:#38bdf8;margin-bottom:15px"></i>
         <h2>SYSTEM ACCESS</h2>
-        <a href="https://youtube.com/0" target="_blank" class="btn btn-tut"><i class="fab fa-youtube"></i> HOW TO GENERATE KEY</a>
+        <a href="https://www.youtube.com/watch?v=VIDEO_ID" target="_blank" class="btn btn-tut"><i class="fab fa-youtube"></i> HOW TO GENERATE KEY</a>
         <button class="btn btn-srv" onclick="_startSrv()"><i class="fas fa-key"></i> GENERATE ACCESS KEY</button>
-        <p id="msg_box" style="font-size:9px;color:#444;margin-top:20px;letter-spacing:2px">DEVCODERZ SECURITY SYSTEM</p>
+        <p style="font-size:9px;color:#444;margin-top:20px;letter-spacing:2px">DEVCODERZ SECURITY SYSTEM</p>
     </div>
 </div>
 
@@ -80,7 +80,6 @@ h2{color:#38bdf8;margin-bottom:20px;letter-spacing:1px;font-size:1.4rem}
     window._startSrv = async () => {
         const tk = 'dc_' + Math.random().toString(36).substring(2,12);
         localStorage.setItem("_pnd_tk", tk);
-        localStorage.setItem("_is_waiting", "true");
         const ret = window.location.origin + window.location.pathname + '?auth=' + tk;
         
         document.getElementById('_gate').style.display='none';
@@ -97,35 +96,29 @@ h2{color:#38bdf8;margin-bottom:20px;letter-spacing:1px;font-size:1.4rem}
         const q = new URLSearchParams(window.location.search);
         const n = new Date().getTime();
         const last = localStorage.getItem("_t_sc");
-        const isWaiting = localStorage.getItem("_is_waiting");
 
+        // Bypass check
         if(q.get("access") === _cfg._d) {
             localStorage.setItem("_t_sc", n);
-            localStorage.removeItem("_is_waiting");
             window.history.replaceState({}, '', window.location.pathname);
             return true;
         }
 
+        // Return from Shortener check
         if(q.get("auth") && q.get("auth") === localStorage.getItem("_pnd_tk")) {
             localStorage.setItem("_t_sc", n);
             localStorage.removeItem("_pnd_tk");
-            localStorage.removeItem("_is_waiting");
             window.history.replaceState({}, '', window.location.pathname);
             return true;
         }
 
+        // 24 Hour Check
         if(last && (n - last < 86400000)) return true;
 
-        if(isWaiting === "true") {
-            const msg = document.getElementById('msg_box');
-            msg.innerHTML = "<span style='color:#f87171'>PLEASE COMPLETE SHORTENER TO UNLOCK!</span>";
-            msg.style.fontSize = "10px";
-        }
         return false;
     };
 
-    const authOk = _verify();
-    if(authOk) {
+    if(_verify()) {
         document.getElementById('_gate').style.display='none';
         document.getElementById('_L0x').style.display='flex';
         document.getElementById('status_txt').innerText = "SYSTEM_DECRYPTING_...";
