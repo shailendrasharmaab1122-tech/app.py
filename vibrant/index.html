@@ -3,18 +3,176 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>DevCoderZ | Secure_System_v3</title>
+<title>DevCoderZ | Omni_System_v4</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-body,html{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#010409;font-family:'Segoe UI',sans-serif;color:#fff}#_gate{position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle at center,#0d1117 0%,#010409 100%);display:flex;align-items:center;justify-content:center;z-index:100000}.box{background:#0d1117;padding:30px;border-radius:12px;border:1px solid #30363d;text-align:center;width:90%;max-width:350px;box-shadow:0 10px 40px rgba(0,0,0,0.8)}h2{color:#38bdf8;margin-bottom:20px;letter-spacing:1px;font-size:1.4rem}.btn{display:block;width:100%;padding:14px;margin:10px 0;border:none;border-radius:8px;cursor:pointer;font-weight:bold;transition:0.3s;font-size:14px;text-transform:uppercase;text-decoration:none;box-sizing:border-box}.btn-tut{background:rgba(248,113,113,0.1);color:#f87171;border:1px dashed #f87171;margin-bottom:15px}.btn-tut:hover{background:rgba(248,113,113,0.2)}.btn-srv{background:#38bdf8;color:#000}.btn-srv:hover{background:#7dd3fc;transform:translateY(-2px)}.btn-adm{background:#161b22;color:#8b949e;border:1px solid #30363d}.btn-adm:hover{color:#fff;border-color:#38bdf8}.btn-login{background:#22c55e;color:#fff;margin-top:10px;display:none}input{width:100%;padding:12px;margin-top:10px;background:#010409;border:1px solid #30363d;border-radius:8px;color:#38bdf8;text-align:center;display:none;outline:none;box-sizing:border-box}#_L0x{position:fixed;top:0;left:0;width:100%;height:100%;background:#010409;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:99999;color:#38bdf8;font-family:monospace;gap:12px}._b{width:120px;height:2px;background:#161b22;position:relative}._b::after{content:'';position:absolute;width:40%;height:100%;background:#38bdf8;animation:L 0.8s infinite}@keyframes L{0%{left:0}50%{left:60%}100%{left:0}}
+/* Base UI */
+body,html{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#010409;font-family:'Segoe UI',sans-serif;color:#8b949e}
+#_gate{position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle at center,#0d1117 0%,#010409 100%);display:flex;align-items:center;justify-content:center;z-index:100000}
+.box{background:#0d1117;padding:40px 30px;border-radius:16px;border:1px solid #30363d;text-align:center;width:90%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,0.9);position:relative}
+.box::before{content:'';position:absolute;top:-2px;left:-2px;right:-2px;bottom:-2px;background:linear-gradient(45deg,#38bdf8,#1d4ed8,#38bdf8);z-index:-1;border-radius:18px;opacity:0.3;filter:blur(10px)}
+h2{color:#f8fafc;margin-bottom:10px;letter-spacing:2px;font-size:1.6rem;font-weight:900}
+.sub-t{font-size:10px;color:#38bdf8;margin-bottom:30px;text-transform:uppercase;letter-spacing:4px}
+.btn{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:16px;margin:12px 0;border:none;border-radius:10px;cursor:pointer;font-weight:800;transition:0.4s;font-size:13px;text-transform:uppercase;text-decoration:none;box-sizing:border-box}
+.btn-srv{background:#38bdf8;color:#010409;box-shadow:0 4px 15px rgba(56,189,248,0.3)}
+.btn-srv:hover{background:#7dd3fc;transform:translateY(-3px);box-shadow:0 8px 25px rgba(56,189,248,0.5)}
+.btn-tut{background:rgba(255,255,255,0.05);color:#fff;border:1px solid #30363d}
+.btn-tut:hover{background:rgba(255,255,255,0.1);border-color:#38bdf8}
+#_L0x{position:fixed;top:0;left:0;width:100%;height:100%;background:#010409;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:99999;color:#38bdf8;font-family:monospace;gap:15px;font-size:12px}
+.log-box{width:80%;max-width:400px;height:150px;overflow:hidden;background:#000;border:1px solid #161b22;padding:10px;font-size:10px;color:#22c55e;margin-bottom:20px;border-radius:4px}
+._b{width:200px;height:2px;background:#161b22;position:relative}._b::after{content:'';position:absolute;width:40%;height:100%;background:#38bdf8;animation:L 1s infinite alternate}@keyframes L{0%{left:0}100%{left:60%}}
+#_D0x_ROOT{display:none}
+.H0x{height:60px;background:#ffffff;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid #e1e4e8;position:relative;z-index:100}
+.B0x{font-family:'Space Mono';color:#000;font-weight:900;font-size:14px}
+.M0x{width:100%;height:calc(100vh - 60px);overflow:hidden;position:relative;background:#010409}
+.I0x{width:100%;border:none;margin-top:-82px;height:calc(100% + 400px)}
+.SD0x{position:fixed;left:-300px;width:280px;height:100%;background:#0d1117;transition:0.5s cubic-bezier(0.4,0,0.2,1);z-index:10000;padding:30px;border-right:1px solid #30363d;box-shadow:20px 0 50px rgba(0,0,0,0.5)}
+.SD0x.active{left:0}.IT0x{padding:14px;margin-bottom:10px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:15px;color:#8b949e;text-decoration:none;font-size:14px;transition:0.3s}
+.IT0x:hover{background:#161b22;color:#38bdf8;padding-left:20px}
+.BLK{position:absolute;top:0;left:0;width:100%;height:155px;background:transparent;z-index:999;pointer-events:all}
 </style>
 </head>
 <body>
-<div id="_gate"><div class="box"><i class="fas fa-user-shield" style="font-size:45px;color:#38bdf8;margin-bottom:15px"></i><h2>SELECT ACCESS</h2><a href="https://youtube.com/shorts/VaoPFchVn8w?si=guvjPVAuybqTIhyS" target="_blank" class="btn btn-tut"><i class="fab fa-youtube"></i> GET 24H ACCESS</a><button class="btn btn-srv" onclick="_startSrv()"><i class="fas fa-server"></i> SERVER 1</button><button class="btn btn-adm" id="admBtn" onclick="_showInput()"><i class="fas fa-unlock-alt"></i> ADMIN ENTER</button><input type="password" id="admKey" placeholder="Enter Admin Key..."><button class="btn btn-login" id="loginBtn" onclick="_verifyAdm()">VERIFY & ENTER</button><p style="font-size:9px;color:#444;margin-top:20px;letter-spacing:2px">DEVCODERZ SECURITY SYSTEM</p></div></div>
-<div id="_L0x"><div>SYSTEM_DECRYPTING_...</div><div class="_b"></div></div>
-<div id="_D0x_ROOT"></div>
+
+<div id="_gate">
+    <div class="box">
+        <div class="sub-t">Encrypted Access</div>
+        <i class="fas fa-fingerprint" style="font-size:55px;color:#38bdf8;margin-bottom:20px;display:block"></i>
+        <h2>CORE_TERMINAL</h2>
+        <button class="btn btn-srv" onclick="_0xAlpha()"><i class="fas fa-key"></i> GENERATE ACCESS KEY</button>
+        <a href="https://t.me/+8tZSJ5FyTXVjM2M1" target="_blank" class="btn btn-tut"><i class="fab fa-telegram"></i> SUPPORT CHANNEL</a>
+        <p style="font-size:8px;color:#444;margin-top:30px;letter-spacing:3px;text-transform:uppercase">System Architect: Devansh Sharma</p>
+    </div>
+</div>
+
+<div id="_L0x">
+    <div class="log-box" id="log-console"></div>
+    <div style="letter-spacing:2px">DECRYPTING_OIDC_HANDSHAKE</div>
+    <div class="_b"></div>
+</div>
+
+<div id="_D0x_ROOT">
+    <div id="_SX" class="SD0x">
+        <div style="font-size:11px;color:#38bdf8;font-family:'Space Mono';margin-bottom:20px;opacity:0.6">// OVERRIDE_MENU</div>
+        <div style="background:rgba(56,189,248,0.05);padding:20px;border-radius:12px;border:1px solid #1e293b;margin-bottom:30px">
+            <div style="font-size:15px;font-weight:800;color:#fff">Devansh Sharma</div>
+            <div style="font-size:9px;color:#38bdf8;text-transform:uppercase;margin-top:4px">System Administrator</div>
+        </div>
+        <div class="IT0x" onclick="location.reload()"><i class="fas fa-sync-alt"></i> REBOOT_SYSTEM</div>
+        <div class="IT0x" onclick="document.getElementById('_SX').classList.remove('active')" style="color:#f87171;margin-top:30px"><i class="fas fa-power-off"></i> TERMINATE_SESSION</div>
+    </div>
+    <header class="H0x">
+        <i class="fas fa-stream" style="cursor:pointer;color:#000;font-size:20px" onclick="document.getElementById('_SX').classList.add('active')"></i>
+        <div class="B0x">DevCoderZ - Core Alpha</div>
+        <div style="text-align:right">
+            <div id="_TX" style="font-size:12px;color:#000;font-weight:900">00:00</div>
+            <div id="_DX" style="font-size:8px;color:#666;font-weight:700">DATE_LOADING</div>
+        </div>
+    </header>
+    <main class="M0x">
+        <div class="BLK"></div>
+        <iframe id="CF" src="about:blank" class="I0x"></iframe>
+    </main>
+</div>
+
 <script>
-(function(){const _0x1=atob;const _0x2={_h:"ffffff",_b:"f8f9fa",_a:"000000",_t:"000000",_u:_0x1("aHR0cHM6Ly9lZHV2aWJlLXZpYnJhbnQucGFnZXMuZGV2L25ldy1jb3Vyc2VzLzgvY29udGVudC8="),_tg:_0x1("aHR0cHM6Ly90Lm1lLys4dFpTSjVGeVRYVmpNMk0x"),_dev:_0x1("RGV2YW5zaCBTaGFybWE=")};const _0x3=_0x1("YjhjYmMyYjFkMjQxNzZhOGRmZjIwMjI2MDhiZGQ1YjVjYzhmMWMyYg==");const _0x4=_0x1("RGV2YW5zaDQ1");const _0x5=_0x1("QW51ajE4");window._showInput=()=>{document.getElementById('admKey').style.display='block';document.getElementById('loginBtn').style.display='block';document.getElementById('admBtn').style.display='none'};window._verifyAdm=()=>{const _0x6=document.getElementById('admKey').value;if(_0x6===_0x4||_0x6===_0x5){localStorage.setItem("_vip_access","1");localStorage.setItem("_t_sc",new Date().getTime());location.reload()}else{alert("Access Denied!");document.getElementById('admKey').value=""}};window._startSrv=async()=>{document.getElementById('_gate').style.display='none';document.getElementById('_L0x').style.display='flex';const _0x7='dc_'+Math.random().toString(36).substring(2,12);sessionStorage.setItem("_ex_tk",_0x7);const _0x8=window.location.origin+window.location.pathname+'?auth='+_0x7;try{const _0x9=await fetch(`https://indianshortner.com/api?api=${_0x3}&url=${encodeURIComponent(_0x8)}`);const _0xA=await _0x9.json();window.location.href=_0xA.status==="success"?_0xA.shortenedUrl:_0x8}catch(_0xB){window.location.href=_0x8}};const _0xC=async()=>{const _0xD=new URLSearchParams(window.location.search);const _0xE=new Date().getTime();const _0xF=localStorage.getItem("_t_sc");if(_0xF&&(_0xE-_0xF<86400000)){const _0x10=_0xD.get("auth");const _0x11=sessionStorage.getItem("_ex_tk");if(_0x10&&_0x10===_0x11){localStorage.setItem("_t_sc",_0xE);sessionStorage.removeItem("_ex_tk");window.history.replaceState({},document.title,window.location.pathname);return true}if(localStorage.getItem("_vip_access")==="1"||_0xF)return true}return false};_0xC().then(_0x12=>{if(!_0x12)return;document.getElementById('_gate').style.display='none';document.getElementById('_L0x').style.display='flex';const _0x13=`:root{--1:#${_0x2._h};--2:#${_0x2._b};--3:#${_0x2._a};--4:#${_0x2._t}}#_D0x_ROOT{font-family:'Poppins',sans-serif;color:var(--4)}.H0x{height:55px;background:var(--1);display:flex;align-items:center;justify-content:space-between;padding:0 15px;border-bottom:1px solid #ddd;z-index:1000;position:relative}.B0x{font-family:'Space Mono';color:var(--3);font-weight:900;font-size:13px}.M0x{width:100%;height:calc(100vh - 55px);overflow:hidden;position:relative;background:#010409}.I0x{width:100%;border:none;margin-top:-85px;height:calc(100% + 500px);display:block}.SD0x{position:fixed;left:-300px;width:260px;height:100%;background:#0d1117;transition:0.3s;z-index:10000;padding:25px 20px;border-right:1px solid #30363d}.SD0x.active{left:0}.ABX{background:rgba(56,189,248,0.03);padding:15px;border-radius:8px;border:1px solid rgba(56,189,248,0.1);margin-bottom:20px}.IT0x{padding:12px;margin-bottom:8px;border-radius:6px;cursor:pointer;display:flex;align-items:center;gap:12px;color:#8b949e;text-decoration:none;font-size:13px;transition:0.2s}.IT0x:hover{background:#161b22;color:#38bdf8}.T_W{text-align:right}#_TX{font-size:11px;color:#000;font-weight:700}#_DX{font-size:8px;color:#666;text-transform:uppercase}.BLK{position:absolute;top:0;right:0;width:100%;height:150px;background:transparent;z-index:9999;pointer-events:all}`;const _0x14=`<div id="_SX" class="SD0x"><div style="font-size:10px;color:#38bdf8;font-family:'Space Mono';margin-bottom:10px">// CORE_CONTROL</div><div class="ABX"><div style="font-size:14px;font-weight:800;color:#fff">${_0x2._dev}</div><div style="font-size:9px;color:#38bdf8;text-transform:uppercase">Lead Architect</div></div><div class="IT0x" onclick="location.reload()"><i class="fas fa-sync-alt"></i> REFRESH_SYSTEM</div><a href="${_0x2._tg}" target="_blank" class="IT0x"><i class="fab fa-telegram-plane"></i> TELEGRAM</a><div class="IT0x" onclick="document.getElementById('_SX').classList.remove('active')" style="color:#f85149;margin-top:20px"><i class="fas fa-power-off"></i> CLOSE</div></div><header class="H0x"><i class="fas fa-bars" style="cursor:pointer;color:#000;font-size:18px" onclick="document.getElementById('_SX').classList.add('active')"></i><div class="B0x">Developer - Devansh Sharma</div><div class="T_W"><div id="_TX">00:00</div><div id="_DX">LOADING</div></div></header><main class="M0x"><div class="BLK"></div><iframe id="CF" src="${_0x2._u}" class="I0x" sandbox="allow-forms allow-scripts allow-same-origin"></iframe><div style="position:absolute;bottom:0;width:100%;height:35px;background:#0d1117;display:flex;align-items:center;justify-content:center;border-top:1px solid #30363d;z-index:999"><div style="font-size:9px;color:#444;font-family:'Space Mono'">PROTECTED BY: ${_0x2._dev}</div></div></main>`;setTimeout(()=>{const _0x15=document.createElement('style');_0x15.innerHTML=_0x13;document.head.appendChild(_0x15);document.getElementById('_D0x_ROOT').innerHTML=_0x14;const f=document.getElementById('CF');f.onload=()=>{try{const s=document.createElement('style');s.innerHTML='.telegram-promo,.tg-btn,.popup-modal,.header-promo{display:none!important}';f.contentDocument.head.appendChild(s)}catch(e){}};document.getElementById('_L0x').style.display='none'},1500);setInterval(()=>{const d=new Date();document.getElementById('_TX').innerText=d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});document.getElementById('_DX').innerText=d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'}).toUpperCase()},1000)});document.oncontextmenu=()=>!1})();
+/**
+ * OMNI_PROTOCOL_V4
+ * AUTHOR: DEVANSH SHARMA
+ */
+(function(){
+    const _v = atob;
+    const _cfg = {
+        _s: _v("YjhjYmMyYjFkMjQxNzZhOGRmZjIwMjI2MDhiZGQ1YjVjYzhmMWMyYg=="), // API Key
+        _u: _v("aHR0cHM6Ly9lZHV2aWJlLXZpYnJhbnQucGFnZXMuZGV2L25ldy1jb3Vyc2VzLzgvY29udGVudC8="), // Content URL
+        _d: _v("ZGlyZWN0X2Rldl9ieXBhc3M=") // Secret Access Key
+    };
+
+    const logs = [
+        "Initializing core protocols...", "Injecting bypass strings...",
+        "Handshaking with Akamai servers...", "Extracting session tokens...",
+        "Bypassing Classplus security...", "Mapping Eduvibe directories...",
+        "Filtering Facebook pixels...", "Suppressing Telegram popups...",
+        "Encryption layer decrypted.", "System ready for deployment."
+    ];
+
+    function printLogs() {
+        const consoleObj = document.getElementById('log-console');
+        let index = 0;
+        const interval = setInterval(() => {
+            if(index < logs.length) {
+                const p = document.createElement('div');
+                p.textContent = `> ${logs[index]}`;
+                consoleObj.appendChild(p);
+                consoleObj.scrollTop = consoleObj.scrollHeight;
+                index++;
+            } else {
+                clearInterval(interval);
+            }
+        }, 150);
+    }
+
+    window._0xAlpha = async () => {
+        const _k = 'dc_' + Math.random().toString(36).substring(7);
+        localStorage.setItem("_pnd", _k);
+        const _r = window.location.origin + window.location.pathname + '?auth=' + _k;
+        document.getElementById('_gate').style.display = 'none';
+        document.getElementById('_L0x').style.display = 'flex';
+        printLogs();
+        try {
+            const resp = await fetch(`https://indianshortner.com/api?api=${_cfg._s}&url=${encodeURIComponent(_r)}`);
+            const data = await resp.json();
+            window.location.href = data.status === "success" ? data.shortenedUrl : _r;
+        } catch (e) { window.location.href = _r; }
+    };
+
+    const _0xCheck = () => {
+        const u = new URLSearchParams(window.location.search);
+        const t = new Date().getTime();
+        const s = localStorage.getItem("_t_sc");
+
+        // Secret Direct Link Check
+        if(u.get("access") === _cfg._d) {
+            localStorage.setItem("_t_sc", t);
+            window.history.replaceState({}, '', window.location.pathname);
+            return true;
+        }
+
+        // Shortener Callback Check
+        if(u.get("auth") && u.get("auth") === localStorage.getItem("_pnd")) {
+            localStorage.setItem("_t_sc", t);
+            localStorage.removeItem("_pnd");
+            window.history.replaceState({}, '', window.location.pathname);
+            return true;
+        }
+
+        // 24 Hour Check
+        if(s && (t - s < 86400000)) return true;
+        return false;
+    };
+
+    if(_0xCheck()) {
+        document.getElementById('_gate').style.display = 'none';
+        document.getElementById('_L0x').style.display = 'flex';
+        printLogs();
+        setTimeout(() => {
+            document.getElementById('_L0x').style.display = 'none';
+            document.getElementById('_D0x_ROOT').style.display = 'block';
+            document.getElementById('CF').src = _cfg._u;
+        }, 2500);
+    }
+
+    // Dynamic Clock
+    setInterval(() => {
+        const d = new Date();
+        document.getElementById('_TX').innerText = d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+        document.getElementById('_DX').innerText = d.toLocaleDateString('en-GB', {day:'2-digit', month:'short'}).toUpperCase();
+    }, 1000);
+
+    document.oncontextmenu = () => !1;
+    document.onkeydown = (e) => { if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73)) return false; };
+})();
 </script>
+
 </body>
 </html>
