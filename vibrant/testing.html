@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevCoderZ | OG Kota Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --bg: #0d1117; --card: #161b22; --blue: #58a6ff; --green: #238636; --text: #c9d1d9; }
+        body { background: var(--bg); color: var(--text); font-family: -apple-system, sans-serif; margin: 0; padding: 15px; }
+        
+        /* Navbar (Eduvibe Jaisa) */
+        .nav { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #30363d; margin-bottom: 20px; }
+        .logo { font-weight: bold; color: var(--blue); font-size: 20px; letter-spacing: 1px; }
+
+        /* Course Card Design */
+        .course-card { background: var(--card); border: 1px solid #30363d; border-radius: 12px; overflow: hidden; max-width: 400px; margin: auto; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .thumb-box { position: relative; width: 100%; }
+        .thumb-box img { width: 100%; display: block; border-bottom: 1px solid #30363d; }
+        
+        .content { padding: 18px; text-align: left; }
+        .tag { background: rgba(88, 166, 255, 0.1); color: var(--blue); font-size: 11px; padding: 4px 10px; border-radius: 4px; font-weight: bold; display: inline-block; margin-bottom: 12px; }
+        .title { font-size: 17px; font-weight: 600; margin-bottom: 15px; color: white; line-height: 1.4; }
+        
+        /* Action Button */
+        .btn-play { background: var(--green); color: white; border: none; width: 100%; padding: 14px; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; }
+        .btn-play:hover { background: #2ea043; transform: translateY(-2px); }
+
+        /* Anti-Popup Shield Info */
+        .shield-info { font-size: 11px; color: #8b949e; margin-top: 15px; text-align: center; display: block; }
+        .shield-info i { color: var(--blue); margin-right: 5px; }
+    </style>
+</head>
+<body>
+
+    <div class="nav">
+        <div class="logo">DEVCODERZ</div>
+        <div class="user-icon"><i class="fas fa-user-circle" style="font-size: 26px; color: #8b949e;"></i></div>
+    </div>
+
+    <div class="course-card">
+        <div class="thumb-box">
+            <img src="https://nocache-appxdb-v2.classx.co.in/subject/2026-02-24-0.794012835009273.png" alt="Batch Thumbnail">
+        </div>
+        <div class="content">
+            <span class="tag">JEE 2028 | CLASS 11TH | OG KOTA</span>
+            <div class="title">Physics & Chemistry: Full Course Live (Vibrant Edition)</div>
+            
+            <button class="btn-play" onclick="openPlayer()">
+                <i class="fas fa-play-circle" style="font-size: 18px;"></i> START LEARNING NOW
+            </button>
+
+            <span class="shield-info">
+                <i class="fas fa-shield-check"></i> SECURE GATEWAY: NO POP-UPS | NO TRACKING
+            </span>
+        </div>
+    </div>
+
+    <script>
+        function openPlayer() {
+            // Bhai, jab aapko 1DM se .m3u8 link mil jaye, toh use yahan dalo
+            const videoLink = "LINK_FROM_1DM_HERE"; 
+            
+            if(videoLink === "LINK_FROM_1DM_HERE") {
+                alert("Bhai, 1DM se .m3u8 link nikal kar code mein 'videoLink' ki jagah dalo!");
+            } else {
+                // Ye line aapke secure player par le jayegi
+                window.location.href = "https://pwa.devcoderz.vercel.app/player?url=" + btoa(videoLink);
+            }
+        }
+    </script>
+</body>
+</html>
