@@ -6,17 +6,15 @@
 <title>DevCoderZ | Secure_System_v4</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-/* Dashboard Styling - Back to Original Dark Theme */
 body,html{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#010409;font-family:'Segoe UI',sans-serif;color:#fff}
-#_gate{position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle at center,#0d1117 0%,#010409 100%);display:flex;align-items:center;justify-content:center;z-index:100000}
+#_gate,#_L0x{position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle at center,#0d1117 0%,#010409 100%);display:flex;align-items:center;justify-content:center;z-index:100000}
 .box{background:#0d1117;padding:30px;border-radius:12px;border:1px solid #30363d;text-align:center;width:90%;max-width:350px;box-shadow:0 10px 40px rgba(0,0,0,0.8)}
 h2{color:#38bdf8;margin-bottom:20px;letter-spacing:1px;font-size:1.4rem}
 .btn{display:block;width:100%;padding:14px;margin:10px 0;border:none;border-radius:8px;cursor:pointer;font-weight:bold;transition:0.3s;font-size:14px;text-transform:uppercase;text-decoration:none;box-sizing:border-box}
 .btn-tut{background:rgba(248,113,113,0.1);color:#f87171;border:1px dashed #f87171;margin-bottom:15px}
 .btn-srv{background:#38bdf8;color:#000}.btn-srv:hover{background:#7dd3fc;transform:translateY(-2px)}
-#_L0x{position:fixed;top:0;left:0;width:100%;height:100%;background:#010409;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:99999;color:#38bdf8;font-family:monospace;gap:12px}
+#_L0x{background:#010409;display:none;flex-direction:column;gap:15px;z-index:100001}
 ._b{width:120px;height:2px;background:#161b22;position:relative}._b::after{content:'';position:absolute;width:40%;height:100%;background:#38bdf8;animation:L 0.8s infinite}@keyframes L{0%{left:0}50%{left:60%}100%{left:0}}
-#_D0x_ROOT{font-family:'Poppins',sans-serif;color:#000}
 .H0x{height:55px;background:#ffffff;display:flex;align-items:center;justify-content:space-between;padding:0 15px;border-bottom:1px solid #ddd;z-index:1000;position:relative}
 .B0x{font-family:'Space Mono';color:#000;font-weight:900;font-size:13px}
 .M0x{width:100%;height:calc(100vh - 55px);overflow:hidden;position:relative;background:#010409}
@@ -35,17 +33,17 @@ h2{color:#38bdf8;margin-bottom:20px;letter-spacing:1px;font-size:1.4rem}
         <i class="fas fa-shield-alt" style="font-size:45px;color:#38bdf8;margin-bottom:15px"></i>
         <h2>SYSTEM ACCESS</h2>
         <a href="https://t.me/+8tZSJ5FyTXVjM2M1" target="_blank" class="btn btn-tut"><i class="fab fa-telegram"></i> TELEGRAM CHANNEL</a>
-        <button class="btn btn-srv" onclick="_startSrv()"><i class="fas fa-key"></i> GENERATE ACCESS KEY</button>
+        <button class="btn btn-srv" id="genBtn" onclick="_startSrv()"><i class="fas fa-key"></i> GENERATE ACCESS KEY</button>
         <p style="font-size:9px;color:#444;margin-top:20px;letter-spacing:2px">DEVCODERZ SECURITY SYSTEM</p>
     </div>
 </div>
 
 <div id="_L0x">
-    <div>SYSTEM_DECRYPTING_...</div>
+    <div id="status_txt" style="color:#38bdf8;font-family:monospace;font-size:14px;text-align:center">REDIRECTING TO SECURE SERVER...<br><span style="font-size:10px;color:#555">Do not close this tab.</span></div>
     <div class="_b"></div>
 </div>
 
-<div id="_D0x_ROOT">
+<div id="_D0x_ROOT" style="display:none">
     <div id="_SX" class="SD0x">
         <div style="font-size:10px;color:#38bdf8;font-family:'Space Mono';margin-bottom:10px">// CORE_CONTROL</div>
         <div class="ABX">
@@ -53,7 +51,6 @@ h2{color:#38bdf8;margin-bottom:20px;letter-spacing:1px;font-size:1.4rem}
             <div style="font-size:9px;color:#38bdf8;text-transform:uppercase">Lead Architect</div>
         </div>
         <div class="IT0x" onclick="location.reload()"><i class="fas fa-sync-alt"></i> REFRESH_SYSTEM</div>
-        <a href="https://t.me/+8tZSJ5FyTXVjM2M1" target="_blank" class="IT0x"><i class="fab fa-telegram-plane"></i> TELEGRAM</a>
         <div class="IT0x" onclick="document.getElementById('_SX').classList.remove('active')" style="color:#f85149;margin-top:20px"><i class="fas fa-power-off"></i> CLOSE</div>
     </div>
     <header class="H0x">
@@ -73,61 +70,89 @@ h2{color:#38bdf8;margin-bottom:20px;letter-spacing:1px;font-size:1.4rem}
 <script>
 (function(){
     const _v = atob;
-    const _0xS = {
+    const _cfg = {
         _u: _v("aHR0cHM6Ly9lZHV2aWJlLXZpYnJhbnQucGFnZXMuZGV2L25ldy1jb3Vyc2VzLzgvY29udGVudC8="),
         _k: _v("YjhjYmMyYjFkMjQxNzZhOGRmZjIwMjI2MDhiZGQ1YjVjYzhmMWMyYg=="),
-        _d: _v("ZGlyZWN0X2Rldl9ieXBhc3M=") // Secret Key Highlighted: direct_dev_bypass
+        _d: _v("ZGlyZWN0X2Rldl9ieXBhc3M=") // ?access=direct_dev_bypass
     };
 
     window._startSrv = async () => {
         const tk = 'dc_' + Math.random().toString(36).substring(2,12);
         localStorage.setItem("_pnd_tk", tk);
+        localStorage.setItem("_is_waiting", "true"); // Mark as waiting
+        
         const ret = window.location.origin + window.location.pathname + '?auth=' + tk;
+        
         document.getElementById('_gate').style.display='none';
         document.getElementById('_L0x').style.display='flex';
+
         try {
-            const r = await fetch(`https://indianshortner.com/api?api=${_0xS._k}&url=${encodeURIComponent(ret)}`);
+            const r = await fetch(`https://indianshortner.com/api?api=${_cfg._k}&url=${encodeURIComponent(ret)}`);
             const j = await r.json();
-            window.location.href = j.status === "success" ? j.shortenedUrl : ret;
+            if(j.status === "success") {
+                window.location.href = j.shortenedUrl;
+            } else {
+                window.location.href = ret;
+            }
         } catch(e) { window.location.href = ret; }
     };
 
     const _verify = () => {
         const q = new URLSearchParams(window.location.search);
         const n = new Date().getTime();
-        const l = localStorage.getItem("_t_sc");
-        
-        // Secret Bypass Check: ?access=direct_dev_bypass
-        if(q.get("access") === _0xS._d) {
+        const last = localStorage.getItem("_t_sc");
+        const isWaiting = localStorage.getItem("_is_waiting");
+
+        // Bypass check
+        if(q.get("access") === _cfg._d) {
             localStorage.setItem("_t_sc", n);
+            localStorage.removeItem("_is_waiting");
             window.history.replaceState({}, '', window.location.pathname);
             return true;
         }
-        
+
+        // Return from Shortener check
         if(q.get("auth") && q.get("auth") === localStorage.getItem("_pnd_tk")) {
             localStorage.setItem("_t_sc", n);
             localStorage.removeItem("_pnd_tk");
+            localStorage.removeItem("_is_waiting");
             window.history.replaceState({}, '', window.location.pathname);
             return true;
         }
-        
-        return (l && (n - l < 86400000));
+
+        // Check if 24h still valid
+        if(last && (n - last < 86400000)) {
+            return true;
+        }
+
+        // If user is supposed to be on shortener, keep showing redirect screen
+        if(isWaiting === "true") {
+            document.getElementById('_gate').style.display='none';
+            document.getElementById('_L0x').style.display='flex';
+            document.getElementById('status_txt').innerHTML = "WAITING FOR VERIFICATION...<br><span style='font-size:10px;color:#f87171'>Please complete the shortener to unlock.</span>";
+            return false; 
+        }
+
+        return false;
     };
 
     if(_verify()) {
         document.getElementById('_gate').style.display='none';
         document.getElementById('_L0x').style.display='flex';
+        document.getElementById('status_txt').innerText = "SYSTEM_DECRYPTING_...";
         setTimeout(() => {
             document.getElementById('_L0x').style.display='none';
             document.getElementById('_D0x_ROOT').style.display='block';
-            document.getElementById('CF').src = _0xS._u;
+            document.getElementById('CF').src = _cfg._u;
         }, 1500);
     }
 
     setInterval(() => {
         const d = new Date();
-        document.getElementById('_TX').innerText = d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-        document.getElementById('_DX').innerText = d.toLocaleDateString('en-GB', {day:'2-digit', month:'short'}).toUpperCase();
+        const tx = document.getElementById('_TX');
+        const dx = document.getElementById('_DX');
+        if(tx) tx.innerText = d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+        if(dx) dx.innerText = d.toLocaleDateString('en-GB', {day:'2-digit', month:'short'}).toUpperCase();
     }, 1000);
 
     document.oncontextmenu = () => !1;
