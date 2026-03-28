@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DevCoderz | Mission Jeet Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        body { background: #09090b; color: #fafafa; font-family: 'Inter', sans-serif; }
+        .dev-card { background: #18181b; border: 1px solid #27272a; transition: 0.3s; }
+        .dev-card:hover { border-color: #10b981; transform: translateY(-3px); }
+        [v-cloak] { display: none; }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+    <div id="app" v-cloak>
+        <header class="p-5 border-b border-zinc-800 flex justify-between items-center bg-zinc-900/50 backdrop-blur">
+            <h1 class="text-xl font-bold text-emerald-500">DevCoderz <span class="text-zinc-500 text-sm font-normal italic">| Mission Jeet</span></h1>
+            <div class="text-xs text-zinc-400">By Devansh Sharma</div>
+        </header>
+
+        <main class="p-6 container mx-auto">
+            <div v-if="loading" class="text-center mt-20 text-emerald-500 animate-pulse">Fetching Batches...</div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div v-for="b in batches" :key="b.id" class="dev-card p-4 rounded-xl cursor-pointer">
+                    <img :src="b.image" class="rounded-lg mb-3">
+                    <h2 class="font-semibold">{{ b.title }}</h2>
+                </div>
+            </div>
+        </main>
+
+        <footer class="mt-20 py-10 border-t border-zinc-800 text-center">
+            <p class="text-zinc-500 text-sm">© 2026 Developed by <span class="text-emerald-500 font-bold uppercase">Devansh Sharma</span></p>
+        </footer>
+    </div>
+
+    <script>
+        const { createApp, ref, onMounted } = Vue;
+        createApp({
+            setup() {
+                const batches = ref([]);
+                const loading = ref(true);
+                const TOKEN = "01435724a174992567244bbf57604f4bd648d03cf4a3d1a30ba9b1c531f8a67a";
+
+                const fetchBatches = async () => {
+                    try {
+                        const res = await fetch('https://examcrushers.in/missionjeet/?p=b', {
+                            headers: { 'X-EC-Token': TOKEN, 'X-Requested-With': 'XMLHttpRequest' }
+                        });
+                        const data = await res.json();
+                        if (data.success) batches.value = data.data[0].list;
+                    } catch (e) { console.log("CORS block ya API down ho sakti hai."); }
+                    loading.value = false;
+                };
+
+                onMounted(() => {
+                    fetchBatches();
+                    // Basic Security to protect your work
+                    document.onkeydown = (e) => {
+                        if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey)) return false;
+                    };
+                });
+
+                return { batches, loading };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
