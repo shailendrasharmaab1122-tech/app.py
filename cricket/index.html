@@ -3,112 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>DevCoderZ | Fullscreen_Branding_Locked</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>DevCoderZ | Force_Rotate_IPL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #05080f; --accent: #2563eb; --glass: rgba(255, 255, 255, 0.03); --border: rgba(255, 255, 255, 0.08); }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: #fff; min-height: 100vh; padding: 12px; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; }
-        .main-wrapper { width: 100%; max-width: 850px; }
+        :root { --bg: #05080f; --accent: #2563eb; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body { background: var(--bg); color: #fff; overflow-x: hidden; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 
-        /* Modern Header */
-        .brand-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: var(--glass); backdrop-filter: blur(15px); border: 1px solid var(--border); border-radius: 18px; margin-bottom: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-
-        /* THE MAGIC CONTAINER (Targets this for Fullscreen) */
-        .player-shell { 
-            width: 100%; 
-            aspect-ratio: 16/9; 
-            background: #000; 
-            border-radius: 20px; 
-            overflow: hidden; 
-            border: 1px solid var(--border); 
-            position: relative; 
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); 
-            transition: border-radius 0.2s; /* smooth change to sharp edges in FS */
+        /* Main Player Shell */
+        #playerWrapper {
+            width: 100%;
+            max-width: 850px;
+            aspect-ratio: 16/9;
+            background: #000;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
         }
 
-        /* Essential for standard CSS behavior when Container is Fullscreen */
-        .player-shell:-webkit-full-screen { width: 100% !important; height: 100% !important; border-radius: 0 !important; border: none !important; }
-        .player-shell:-ms-fullscreen { width: 100% !important; height: 100% !important; border-radius: 0 !important; border: none !important; }
-        .player-shell:fullscreen { width: 100% !important; height: 100% !important; border-radius: 0 !important; border: none !important; }
-
-        /* THE BRANDING TAG - LOCKED TO Z-INDEX */
-        .dev-tag { 
-            position: absolute; 
-            top: 15px; 
-            left: 15px; 
-            background: rgba(0, 0, 0, 0.7); 
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(37, 99, 235, 0.5); 
-            padding: 6px 14px; 
-            border-radius: 50px; 
-            font-size: 11px; 
-            z-index: 100; /* Ensures it stays on top of iframe always */
-            color: #eee; 
+        /* THE BRANDING TAG - LOCKED */
+        .dev-tag {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--accent);
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 11px;
+            z-index: 2000;
+            color: #eee;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
             pointer-events: none;
-            display: flex; gap: 4px; align-items: center;
         }
-        .dev-tag .dot { height: 6px; width: 6px; background: rgba(37, 99, 235, 0.8); border-radius: 50%; }
         .dev-tag span { color: var(--accent); font-weight: 800; }
 
-        /* The Iframe Source - Standard 100/100 within container */
         iframe { width: 100%; height: 100%; border: none; }
 
-        /* Bottom Controls */
-        .controls { display: flex; gap: 10px; margin-top: 15px; }
-        .btn-action { flex: 1; padding: 14px; border-radius: 14px; border: 1px solid var(--border); background: var(--glass); color: #fff; cursor: pointer; font-weight: 700; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); text-transform: uppercase; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-action:hover { background: var(--border); border-color: var(--accent); transform: translateY(-2px); }
+        /* FAKE FULLSCREEN / FORCE ROTATE CLASS */
+        .force-landscape {
+            position: fixed !important;
+            top: 50% !important;
+            left: 50% !important;
+            width: 100vh !important;   /* Height becomes Width */
+            height: 100vw !important;  /* Width becomes Height */
+            transform: translate(-50%, -50%) rotate(90deg) !important;
+            max-width: none !important;
+            aspect-ratio: auto !important;
+            border-radius: 0 !important;
+        }
 
-        /* Telegram Button */
-        .tg-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 16px; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; text-decoration: none; border-radius: 18px; font-weight: 800; margin-top: 15px; text-align: center; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3); transition: 0.3s; text-transform: uppercase; font-size: 14px; }
-        .tg-btn:active { transform: scale(0.97); }
-
-        /* Live Pulse Dot */
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
-        .live-dot { height: 8px; width: 8px; background: #ff4757; border-radius: 50%; animation: pulse 1.5s infinite; }
+        .controls { margin-top: 20px; display: flex; gap: 10px; width: 90%; max-width: 400px; }
+        .btn { flex: 1; padding: 15px; border-radius: 12px; border: none; background: var(--accent); color: #fff; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 12px; }
+        
+        /* Hide UI when in Fake Fullscreen */
+        .hide-ui { display: none !important; }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
-    <div class="main-wrapper">
-        <header class="brand-header">
-            <div style="font-weight:800; font-size: 15px; letter-spacing: -0.5px;">DevCoderZ <span style="color:var(--accent);">X</span> Assault</div>
-            <div style="color: #ff4757; font-weight: 900; display: flex; align-items: center; gap: 6px; font-size: 13px;">
-                <span class="live-dot"></span> LIVE
-            </div>
-        </header>
+    <div id="ui-header" style="margin-bottom: 20px; text-align: center;">
+        <h2 style="font-size: 18px;">DevCoderZ <span style="color:var(--accent);">Live</span></h2>
+    </div>
 
-        <div class="player-shell" id="fsContainer">
-            <div class="dev-tag"><div class="dot"></div>Developer: <span>Devansh Sharma</span></div>
-            <iframe 
-                src="https://shwe7ank-jeeyo.netlify.app/watch.html?id=362" 
-                allowfullscreen="true" 
-                allow="autoplay; encrypted-media; gyroscope; picture-in-picture">
-            </iframe>
-        </div>
+    <div id="playerWrapper">
+        <div class="dev-tag">Developer: <span>Devansh Sharma</span></div>
+        <iframe 
+            src="https://shwe7ank-jeeyo.netlify.app/watch.html?id=362" 
+            allowfullscreen="true">
+        </iframe>
+    </div>
 
-        <div class="controls">
-            <button class="btn-action" onclick="toggleFS()">Fullscreen</button>
-            <button class="btn-action" onclick="location.reload()">Refresh Stream</button>
-        </div>
-
-        <a href="https://t.me/Cric_decoders" target="_blank" class="tg-btn">Join Telegram Channel</a>
+    <div class="controls" id="controls">
+        <button class="btn" onclick="toggleRotate()">Rotate Fullscreen</button>
+        <button class="btn" style="background: #333;" onclick="location.reload()">Refresh</button>
     </div>
 
     <script>
-        // JS now forces browser to fullscreen the 'fsContainer' instead of the iframe inside it.
-        function toggleFS() {
-            const el = document.getElementById('fsContainer');
-            if (!document.fullscreenElement) {
-                if (el.requestFullscreen) { el.requestFullscreen(); } 
-                else if (el.webkitRequestFullscreen) { el.webkitRequestFullscreen(); } // Safari/iOS bypass
+        function toggleRotate() {
+            const player = document.getElementById('playerWrapper');
+            const header = document.getElementById('ui-header');
+            const controls = document.getElementById('controls');
+
+            if (!player.classList.contains('force-landscape')) {
+                // Enter Fake Fullscreen
+                player.classList.add('force-landscape');
+                header.classList.add('hide-ui');
+                // Auto-hide controls after rotate
+                controls.style.position = "fixed";
+                controls.style.bottom = "10px";
+                controls.style.zIndex = "3000";
+                controls.style.opacity = "0.3"; 
             } else {
-                if (document.exitFullscreen) { document.exitFullscreen(); }
-                else if (document.webkitExitFullscreen) { document.webkitExitFullscreen(); } // Safari exit bypass
+                // Exit Fake Fullscreen
+                player.classList.remove('force-landscape');
+                header.classList.remove('hide-ui');
+                controls.style.position = "relative";
+                controls.style.opacity = "1";
             }
         }
+
+        // Close rotate if user presses Back button
+        window.addEventListener('popstate', function() {
+            const player = document.getElementById('playerWrapper');
+            if (player.classList.contains('force-landscape')) {
+                toggleRotate();
+            }
+        });
     </script>
 </body>
 </html>
