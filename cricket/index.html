@@ -3,111 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>DevCoderZ | Force_Rotate_IPL</title>
+    <title>DevCoderZ | IPL LIVE FIXED</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;800&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #05080f; --accent: #2563eb; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
-        body { background: var(--bg); color: #fff; overflow-x: hidden; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-
-        /* Main Player Shell */
+        body { background: var(--bg); color: #fff; margin: 0; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+        
+        /* The Player Container */
         #playerWrapper {
-            width: 100%;
-            max-width: 850px;
-            aspect-ratio: 16/9;
-            background: #000;
-            position: relative;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 1000;
+            width: 95%; max-width: 800px; aspect-ratio: 16/9;
+            background: #000; border-radius: 15px; overflow: hidden;
+            position: relative; border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
         }
 
-        /* THE BRANDING TAG - LOCKED */
+        /* Developer Tag - Hamesha Top par rahega */
         .dev-tag {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid var(--accent);
-            padding: 6px 14px;
-            border-radius: 50px;
-            font-size: 11px;
-            z-index: 2000;
-            color: #eee;
-            text-transform: uppercase;
-            pointer-events: none;
+            position: absolute; top: 12px; left: 12px;
+            background: rgba(0,0,0,0.8); border: 1px solid var(--accent);
+            padding: 5px 12px; border-radius: 50px; font-size: 10px;
+            z-index: 9999; color: #fff; text-transform: uppercase;
         }
         .dev-tag span { color: var(--accent); font-weight: 800; }
 
-        iframe { width: 100%; height: 100%; border: none; }
+        iframe { width: 100%; height: 100%; border: none; pointer-events: auto; }
 
-        /* FAKE FULLSCREEN / FORCE ROTATE CLASS */
+        /* FAKE FULLSCREEN (90 DEGREE ROTATE) */
         .force-landscape {
-            position: fixed !important;
-            top: 50% !important;
-            left: 50% !important;
-            width: 100vh !important;   /* Height becomes Width */
-            height: 100vw !important;  /* Width becomes Height */
+            position: fixed !important; top: 50% !important; left: 50% !important;
+            width: 100vh !important; height: 100vw !important;
             transform: translate(-50%, -50%) rotate(90deg) !important;
-            max-width: none !important;
-            aspect-ratio: auto !important;
-            border-radius: 0 !important;
+            z-index: 99999 !important; border-radius: 0 !important;
         }
 
-        .controls { margin-top: 20px; display: flex; gap: 10px; width: 90%; max-width: 400px; }
-        .btn { flex: 1; padding: 15px; border-radius: 12px; border: none; background: var(--accent); color: #fff; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 12px; }
-        
-        /* Hide UI when in Fake Fullscreen */
-        .hide-ui { display: none !important; }
+        .controls { margin-top: 15px; display: flex; gap: 10px; z-index: 10; }
+        .btn { padding: 12px 20px; border-radius: 10px; border: none; background: var(--accent); color: #fff; font-weight: 800; cursor: pointer; font-size: 12px; }
     </style>
 </head>
-<body oncontextmenu="return false;">
-
-    <div id="ui-header" style="margin-bottom: 20px; text-align: center;">
-        <h2 style="font-size: 18px;">DevCoderZ <span style="color:var(--accent);">Live</span></h2>
-    </div>
+<body>
 
     <div id="playerWrapper">
         <div class="dev-tag">Developer: <span>Devansh Sharma</span></div>
         <iframe 
+            id="liveStream"
             src="https://shwe7ank-jeeyo.netlify.app/watch.html?id=362" 
+            sandbox="allow-scripts allow-same-origin allow-forms"
             allowfullscreen="true">
         </iframe>
     </div>
 
-    <div class="controls" id="controls">
+    <div class="controls" id="ui-btn">
         <button class="btn" onclick="toggleRotate()">Rotate Fullscreen</button>
-        <button class="btn" style="background: #333;" onclick="location.reload()">Refresh</button>
+        <button class="btn" style="background: #222;" onclick="location.reload()">Refresh</button>
     </div>
 
     <script>
         function toggleRotate() {
-            const player = document.getElementById('playerWrapper');
-            const header = document.getElementById('ui-header');
-            const controls = document.getElementById('controls');
-
-            if (!player.classList.contains('force-landscape')) {
-                // Enter Fake Fullscreen
-                player.classList.add('force-landscape');
-                header.classList.add('hide-ui');
-                // Auto-hide controls after rotate
-                controls.style.position = "fixed";
-                controls.style.bottom = "10px";
-                controls.style.zIndex = "3000";
-                controls.style.opacity = "0.3"; 
+            const p = document.getElementById('playerWrapper');
+            const b = document.getElementById('ui-btn');
+            
+            if (!p.classList.contains('force-landscape')) {
+                p.classList.add('force-landscape');
+                b.style.display = "none"; // Hide buttons in FS
+                // Add a small close button for FS
+                const closeBtn = document.createElement('div');
+                closeBtn.id = "closeFS";
+                closeBtn.innerHTML = "EXIT";
+                closeBtn.style = "position:fixed; top:10px; right:10px; z-index:100000; background:red; padding:5px 10px; font-size:10px; font-weight:800; border-radius:5px; transform: rotate(90deg); cursor:pointer;";
+                closeBtn.onclick = toggleRotate;
+                document.body.appendChild(closeBtn);
             } else {
-                // Exit Fake Fullscreen
-                player.classList.remove('force-landscape');
-                header.classList.remove('hide-ui');
-                controls.style.position = "relative";
-                controls.style.opacity = "1";
+                p.classList.remove('force-landscape');
+                b.style.display = "flex";
+                const cb = document.getElementById('closeFS');
+                if(cb) cb.remove();
             }
         }
 
-        // Close rotate if user presses Back button
-        window.addEventListener('popstate', function() {
-            const player = document.getElementById('playerWrapper');
-            if (player.classList.contains('force-landscape')) {
-                toggleRotate();
+        // Anti-CORS Alert
+        window.addEventListener('message', function(e) {
+            if(e.data === 'error') {
+                alert("Bhai, stream block ho gayi hai. Naya link check kar raha hoon...");
             }
         });
     </script>
