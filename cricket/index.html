@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>DevCoderZ | Star Sports 1 Hindi</title>
+    <title>DevCoderZ | Live Player</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
     <style>
@@ -21,13 +21,13 @@
         <video id="video" autoplay playsinline poster="https://img.media.jio.com/tvpimages/13/81/302112_1749665154709_l_medium.jpg"></video>
     </div>
     <script>
+        // --- CORS BYPASS PROXY ---
+        const PROXY = "https://corsproxy.io/?";
+
         const CONFIG = {
-            // Star Sports 1 Hindi MPD URL
             url: "https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Sports_1_Hindi_BTS/output/index.mpd",
-            // Teri current working keys
             keyId: "6017d0514d425fa38f6e80ba6dcc852f",
             key: "0018944b00adf2078f62386f30c68b74",
-            // TERA NAYA TOKEN (Yahan update kar diya hai)
             token: "__hdnea__=st=1774767416~exp=1774853816~acl=/*~hmac=19006e250bcb4a3431a332754f08ebb0032a9c209e0febd59a1dcdec2c87511c"
         };
 
@@ -40,11 +40,7 @@
 
             player.configure({
                 drm: { clearKeys: { [CONFIG.keyId]: CONFIG.key } },
-                streaming: { 
-                    lowLatencyMode: true, 
-                    stallEnabled: false,
-                    bufferingGoal: 30
-                }
+                streaming: { lowLatencyMode: true, stallEnabled: false }
             });
 
             player.getNetworkingEngine().registerRequestFilter((type, request) => {
@@ -52,23 +48,24 @@
                 request.headers['User-Agent'] = 'plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6';
                 
                 if(CONFIG.token){
-                    // Header mein cookie injection
                     request.headers['Cookie'] = CONFIG.token;
-                    
-                    // URL mein token injection
                     const sep = request.uris[0].includes('?') ? '&' : '?';
-                    if(!request.uris[0].includes("__hdnea__")){
-                        request.uris[0] += sep + CONFIG.token;
-                    }
+                    if(!request.uris[0].includes("__hdnea__")) request.uris[0] += sep + CONFIG.token;
+                }
+
+                // Injecting Proxy to every request to bypass CORS
+                if (!request.uris[0].includes("corsproxy.io")) {
+                    request.uris[0] = PROXY + encodeURIComponent(request.uris[0]);
                 }
             });
 
             try{
-                await player.load(CONFIG.url);
+                // Loading Manifest through Proxy
+                await player.load(PROXY + encodeURIComponent(CONFIG.url));
                 document.getElementById('loading').style.display = 'none';
                 video.play();
-            }catch(e){
-                document.getElementById('loading').innerText = "FAILED: CHECK CORS/IP";
+            } catch(e) {
+                document.getElementById('loading').innerText = "ERROR: " + e.code;
                 document.getElementById('loading').style.color = "red";
             }
         }
