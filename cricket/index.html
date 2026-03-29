@@ -3,59 +3,65 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>DevCoderZ | Dynamic Player</title>
+    <title>DevCoderZ | Live Cricket</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
-        body{background:#000;height:100vh;width:100vw;overflow:hidden;font-family:sans-serif}
+        body{background:#000;height:100vh;width:100vw;overflow:hidden;font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif}
         .shaka-video-container{position:absolute;inset:0;width:100%;height:100%}
         video{width:100%;height:100%;object-fit:contain}
-        #ch-info{position:absolute;top:10px;left:10px;color:#fff;z-index:10;background:rgba(0,0,0,0.5);padding:5px 10px;border-radius:5px}
-        #loading{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#00FF00;z-index:100;font-weight:bold}
+        #ui-layer{position:absolute;top:15px;left:15px;z-index:10;display:flex;flex-direction:column;gap:5px}
+        .badge{background:rgba(255,0,0,0.8);color:#fff;padding:4px 10px;border-radius:4px;font-size:12px;font-weight:bold;text-transform:uppercase;width:fit-content}
+        #ch-name{color:#00FF00;font-size:18px;text-shadow:2px 2px 4px #000;font-weight:bold}
+        #loading{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#00FF00;z-index:100;font-weight:bold;letter-spacing:1px}
         .shaka-spinner-container{display:none !important}
     </style>
 </head>
 <body>
-    <div id="ch-info">Channel: <span id="ch-name">Loading...</span></div>
-    <div id="loading">DevCoderZ API Syncing...</div>
+    <div id="ui-layer">
+        <div class="badge">Live</div>
+        <div id="ch-name">DevCoderZ Loading...</div>
+    </div>
+    
+    <div id="loading">FETCHING STREAM...</div>
     
     <div class="shaka-video-container" id="player-container" data-shaka-player-container shaka-controls="true">
-        <video id="video" autoplay playsinline></video>
+        <video id="video" autoplay playsinline poster="https://img.media.jio.com/tvpimages/13/81/302112_1749665154709_l_medium.jpg"></video>
     </div>
 
     <script>
-        // --- TERA PRIVATE API DATA (Shwetank Style) ---
-        const CHANNELS_API = {
+        // --- DevCoderZ Channel API ---
+        const CHANNELS = {
             "302": {
                 name: "Star Sports 1 Hindi",
                 url: "https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Sports_1_Hindi_BTS/output/index.mpd",
                 keyId: "6017d0514d425fa38f6e80ba6dcc852f",
                 key: "0018944b00adf2078f62386f30c68b74"
             },
-            "81": {
-                name: "Star Sports 1 HD",
+            "301": {
+                name: "Star Sports 1 English",
                 url: "https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Sports_1_HD_BTS/output/index.mpd",
-                keyId: "your_hd_key_id",
-                key: "your_hd_key"
+                keyId: "6017d0514d425fa38f6e80ba6dcc852f",
+                key: "0018944b00adf2078f62386f30c68b74"
             }
         };
 
-        // URL se ID nikalne ka logic (?id=302)
-        const urlParams = new URLSearchParams(window.location.search);
-        const channelId = urlParams.get('id') || "302"; // Default 302
-        const currentChannel = CHANNELS_API[channelId];
+        // URL logic
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id') || "302";
+        const channel = CHANNELS[id];
 
-        // TERA TOKEN (Network tab wala yahan paste kar)
-        const TOKEN = "__hdnea__=st=1774767416~exp=1774853816~acl=/*~hmac=19006e250bcb4a3431a332754f08ebb0032a9c209e0febd59a1dcdec2c87511c";
+        // LATEST TOKEN (Isse har 24 ghante mein update karna padega)
+        const TOKEN = "st=1774767416~exp=1774853816~acl=/*~hmac=19006e250bcb4a3431a332754f08ebb0032a9c209e0febd59a1dcdec2c87511c";
 
-        async function initPlayer() {
-            if (!currentChannel) {
-                document.getElementById('loading').innerText = "Channel ID Not Found!";
+        async function startDevCoderZ() {
+            if (!channel) {
+                document.getElementById('loading').innerText = "CHANNEL NOT FOUND";
                 return;
             }
 
-            document.getElementById('ch-name').innerText = currentChannel.name;
+            document.getElementById('ch-name').innerText = channel.name;
             shaka.polyfill.installAll();
             
             const video = document.getElementById('video');
@@ -64,7 +70,7 @@
             new shaka.ui.Overlay(player, container, video);
 
             player.configure({
-                drm: { clearKeys: { [currentChannel.keyId]: currentChannel.key } },
+                drm: { clearKeys: { [channel.keyId]: channel.key } },
                 streaming: { lowLatencyMode: true, stallEnabled: false }
             });
 
@@ -72,30 +78,28 @@
                 request.headers['Referer'] = 'https://www.jiotv.com/';
                 request.headers['User-Agent'] = 'plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6';
                 
-                if(TOKEN){
-                    request.headers['Cookie'] = TOKEN;
-                    const sep = request.uris[0].includes('?') ? '&' : '?';
-                    if(!request.uris[0].includes("__hdnea__")) request.uris[0] += sep + TOKEN;
+                const sep = request.uris[0].includes('?') ? '&' : '?';
+                if(!request.uris[0].includes("__hdnea__")) {
+                    request.uris[0] += sep + "__hdnea__=" + TOKEN;
                 }
             });
 
             try {
-                // Shwetank Logic: Fetching and creating Blob
-                const response = await fetch(currentChannel.url + "?" + TOKEN);
-                const manifestText = await response.text();
-                const blob = new Blob([manifestText], { type: 'application/dash+xml' });
+                // Fetch & Blob (Shwetank's secret weapon)
+                const res = await fetch(channel.url + "?__hdnea__=" + TOKEN);
+                const data = await res.text();
+                const blob = new Blob([data], { type: 'application/dash+xml' });
                 const blobUrl = URL.createObjectURL(blob);
 
                 await player.load(blobUrl);
                 document.getElementById('loading').style.display = 'none';
-                video.play();
             } catch (e) {
-                document.getElementById('loading').innerText = "FAILED: CHECK CORS/TOKEN";
+                document.getElementById('loading').innerText = "FAILED: CHECK CORS EXTENSION";
                 document.getElementById('loading').style.color = "red";
             }
         }
 
-        document.addEventListener('shaka-ui-loaded', initPlayer);
+        document.addEventListener('shaka-ui-loaded', startDevCoderZ);
     </script>
 </body>
 </html>
