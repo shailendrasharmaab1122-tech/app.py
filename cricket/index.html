@@ -1,96 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>DevCoderZ Live | Star Sports Select 2</title>
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
-  
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sans-serif}
-    .shaka-video-container{position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center}
-    video{width:100%;height:100%;object-fit:contain}
-    #status {position:absolute;top:10px;left:10px;z-index:50;color:#00FF00;font-size:12px;background:rgba(0,0,0,0.5);padding:5px;border-radius:4px;pointer-events:none}
-  </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>DevCoderZ Live</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:#000;height:100vh;width:100vw;overflow:hidden;font-family:sans-serif}
+        .shaka-video-container{position:absolute;inset:0;width:100%;height:100%}
+        video{width:100%;height:100%;object-fit:contain}
+        #loading{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#00FF00;z-index:100;font-weight:bold}
+        .shaka-spinner-container{display:none !important}
+    </style>
 </head>
 <body>
-
-  <div id="status">Starting Player...</div>
-  <div class="shaka-video-container" id="player-container" data-shaka-player-container shaka-controls="true">
-    <video id="video" autoplay playsinline poster="https://img.media.jio.com/tvpimages/98/79/302114_1749665414817_l_medium.jpg"></video>
-  </div>
-
-  <script>
-    // --- TERI WORKING CONFIG ---
-    const CONFIG = {
-        url: "https://jiotvpllive.cdn.jio.com/bpk-tv//Star_Sports_Select_HD_2_BTS/output/index.mpd",
-        keyId: "6017d0514d425fa38f6e80ba6dcc852f",
-        key: "0018944b00adf2078f62386f30c68b74",
-        // Ye wahi link hai jahan se wo banda cookie utha raha hai
-        cookieFetchUrl: "https://raw.githubusercontent.com/Shubhamkur/Tv/refs/heads/main/Cookies"
-    };
-
-    const statusEl = document.getElementById('status');
-
-    // 1. Cookie nikalne ka function
-    async function getLiveCookie() {
-        try {
-            const res = await fetch(CONFIG.cookieFetchUrl);
-            const urls = await res.json();
-            const firstUrl = urls[0];
-            const cookieRes = await fetch(firstUrl);
-            const text = await cookieRes.text();
-            const match = text.match(/(__hdnea__=[^"'\s&|]+)/);
-            return match ? match[1] : "";
-        } catch (e) {
-            console.error("Cookie error", e);
-            return "";
-        }
-    }
-
-    async function initPlayer() {
-        statusEl.innerText = "Fetching Session...";
-        const activeCookie = await getLiveCookie();
-        
-        shaka.polyfill.installAll();
-        const video = document.getElementById('video');
-        const container = document.getElementById('player-container');
-        const player = new shaka.Player(video);
-        const ui = new shaka.ui.Overlay(player, container, video);
-
-        // 2. DRM Config
-        player.configure({
-            drm: { clearKeys: { [CONFIG.keyId]: CONFIG.key } },
-            streaming: { lowLatencyMode: true }
-        });
-
-        // 3. Request Filter (Headers + Cookie Injection)
-        player.getNetworkingEngine().registerRequestFilter((type, request) => {
-            request.headers['Referer'] = 'https://www.jiotv.com/';
-            request.headers['User-Agent'] = 'plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6';
-
-            if (activeCookie) {
-                // Ye line har segment ke peeche cookie chipka deti hai
-                const separator = request.uris[0].includes('?') ? '&' : '?';
-                request.uris[0] += separator + activeCookie;
+    <div id="loading">DevCoderZ Loading...</div>
+    <div class="shaka-video-container" id="player-container" data-shaka-player-container shaka-controls="true">
+        <video id="video" autoplay playsinline poster="https://img.media.jio.com/tvpimages/98/79/302114_1749665414817_l_medium.jpg"></video>
+    </div>
+    <script>
+        const CONFIG = {
+            url: "https://jiotvpllive.cdn.jio.com/bpk-tv//Star_Sports_Select_HD_2_BTS/output/index.mpd",
+            keyId: "6017d0514d425fa38f6e80ba6dcc852f",
+            key: "0018944b00adf2078f62386f30c68b74",
+            token: "__hdnea__=st=1743241519~exp=1743327919~acl=/*~hmac=8626c04f44778393e961967269176378417937494793717493"
+        };
+        async function init(){
+            shaka.polyfill.installAll();
+            if(!shaka.Player.isBrowserSupported()) return;
+            const video = document.getElementById('video');
+            const container = document.getElementById('player-container');
+            const player = new shaka.Player(video);
+            new shaka.ui.Overlay(player, container, video);
+            player.configure({
+                drm: {clearKeys: {[CONFIG.keyId]: CONFIG.key}},
+                streaming: {
+                    lowLatencyMode: true,
+                    bufferingGoal: 30,
+                    rebufferingGoal: 2,
+                    stallEnabled: false,
+                    retryParameters: {timeout: 10000, maxAttempts: 5}
+                }
+            });
+            player.getNetworkingEngine().registerRequestFilter((type, request) => {
+                request.headers['Referer'] = 'https://www.jiotv.com/';
+                request.headers['User-Agent'] = 'plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6';
+                if(CONFIG.token){
+                    request.headers['Cookie'] = CONFIG.token;
+                    if(type === shaka.net.NetworkingEngine.RequestType.SEGMENT || type === shaka.net.NetworkingEngine.RequestType.MANIFEST){
+                        if(!request.uris[0].includes("__hdnea__")){
+                            const sep = request.uris[0].includes('?') ? '&' : '?';
+                            request.uris[0] += sep + CONFIG.token;
+                        }
+                    }
+                }
+            });
+            try{
+                await player.load(CONFIG.url);
+                document.getElementById('loading').style.display = 'none';
+                video.play();
+            }catch(e){
+                document.getElementById('loading').innerText = "FAILED: CHECK TOKEN/CORS";
+                document.getElementById('loading').style.color = "red";
             }
-        });
-
-        try {
-            statusEl.innerText = "Loading Stream...";
-            await player.load(CONFIG.url);
-            statusEl.innerText = "Playing Live!";
-            setTimeout(() => statusEl.style.display = 'none', 3000);
-        } catch (e) {
-            statusEl.innerText = "Error: Stream Blocked or Key Expired";
-            statusEl.style.color = "red";
         }
-    }
-
-    document.addEventListener('shaka-ui-loaded', initPlayer);
-  </script>
+        document.addEventListener('shaka-ui-loaded', init);
+    </script>
 </body>
 </html>
