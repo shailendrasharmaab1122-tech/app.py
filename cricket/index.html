@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>DevCoderZ Live</title>
+    <title>DevCoderZ | Star Sports 1 Hindi</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
     <style>
@@ -18,51 +18,57 @@
 <body>
     <div id="loading">DevCoderZ Loading...</div>
     <div class="shaka-video-container" id="player-container" data-shaka-player-container shaka-controls="true">
-        <video id="video" autoplay playsinline poster="https://img.media.jio.com/tvpimages/98/79/302114_1749665414817_l_medium.jpg"></video>
+        <video id="video" autoplay playsinline poster="https://img.media.jio.com/tvpimages/13/81/302112_1749665154709_l_medium.jpg"></video>
     </div>
     <script>
         const CONFIG = {
-            url: "https://jiotvpllive.cdn.jio.com/bpk-tv//Star_Sports_Select_HD_2_BTS/output/index.mpd",
+            // Star Sports 1 Hindi MPD URL
+            url: "https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Sports_1_Hindi_BTS/output/index.mpd",
+            // Teri current working keys
             keyId: "6017d0514d425fa38f6e80ba6dcc852f",
             key: "0018944b00adf2078f62386f30c68b74",
-            token: "__hdnea__=st=1743241519~exp=1743327919~acl=/*~hmac=8626c04f44778393e961967269176378417937494793717493"
+            // TERA NAYA TOKEN (Yahan update kar diya hai)
+            token: "__hdnea__=st=1774767416~exp=1774853816~acl=/*~hmac=19006e250bcb4a3431a332754f08ebb0032a9c209e0febd59a1dcdec2c87511c"
         };
+
         async function init(){
             shaka.polyfill.installAll();
-            if(!shaka.Player.isBrowserSupported()) return;
             const video = document.getElementById('video');
             const container = document.getElementById('player-container');
             const player = new shaka.Player(video);
             new shaka.ui.Overlay(player, container, video);
+
             player.configure({
-                drm: {clearKeys: {[CONFIG.keyId]: CONFIG.key}},
-                streaming: {
-                    lowLatencyMode: true,
-                    bufferingGoal: 30,
-                    rebufferingGoal: 2,
+                drm: { clearKeys: { [CONFIG.keyId]: CONFIG.key } },
+                streaming: { 
+                    lowLatencyMode: true, 
                     stallEnabled: false,
-                    retryParameters: {timeout: 10000, maxAttempts: 5}
+                    bufferingGoal: 30
                 }
             });
+
             player.getNetworkingEngine().registerRequestFilter((type, request) => {
                 request.headers['Referer'] = 'https://www.jiotv.com/';
                 request.headers['User-Agent'] = 'plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6';
+                
                 if(CONFIG.token){
+                    // Header mein cookie injection
                     request.headers['Cookie'] = CONFIG.token;
-                    if(type === shaka.net.NetworkingEngine.RequestType.SEGMENT || type === shaka.net.NetworkingEngine.RequestType.MANIFEST){
-                        if(!request.uris[0].includes("__hdnea__")){
-                            const sep = request.uris[0].includes('?') ? '&' : '?';
-                            request.uris[0] += sep + CONFIG.token;
-                        }
+                    
+                    // URL mein token injection
+                    const sep = request.uris[0].includes('?') ? '&' : '?';
+                    if(!request.uris[0].includes("__hdnea__")){
+                        request.uris[0] += sep + CONFIG.token;
                     }
                 }
             });
+
             try{
                 await player.load(CONFIG.url);
                 document.getElementById('loading').style.display = 'none';
                 video.play();
             }catch(e){
-                document.getElementById('loading').innerText = "FAILED: CHECK TOKEN/CORS";
+                document.getElementById('loading').innerText = "FAILED: CHECK CORS/IP";
                 document.getElementById('loading').style.color = "red";
             }
         }
@@ -70,4 +76,3 @@
     </script>
 </body>
 </html>
-
