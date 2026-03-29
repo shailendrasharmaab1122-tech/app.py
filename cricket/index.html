@@ -1,85 +1,96 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>DevCoderZ X ExamCrushers | LIVE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
-    <style>
-        :root{--bg:#05080f;--accent:#2563eb;--glass:rgba(255,255,255,0.03);--border:rgba(255,255,255,0.08)}*{margin:0;padding:0;box-sizing:border-box;font-family:'Outfit',sans-serif;-webkit-tap-highlight-color:transparent}body{background:var(--bg);color:#fff;min-height:100vh;padding:12px;display:flex;flex-direction:column;align-items:center;overflow-x:hidden}.main-wrapper{width:100%;max-width:850px}.brand-header{display:flex;justify-content:space-between;align-items:center;padding:15px 20px;background:var(--glass);backdrop-filter:blur(15px);border:1px solid var(--border);border-radius:18px;margin-bottom:15px;box-shadow:0 10px 30px rgba(0,0,0,0.3)}.player-shell{width:100%;aspect-ratio:16/9;background:#000;border-radius:20px;overflow:hidden;border:1px solid var(--border);position:relative;box-shadow:0 25px 50px -12px rgba(0,0,0,0.5);transition:border-radius .2s}.player-shell:fullscreen{width:100%!important;height:100%!important;border-radius:0!important;border:none!important}.dev-tag{position:absolute;top:15px;left:15px;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);border:1px solid rgba(37,99,235,0.5);padding:6px 14px;border-radius:50px;font-size:10px;z-index:100;color:#eee;text-transform:uppercase;letter-spacing:.5px;pointer-events:none;display:flex;gap:4px;align-items:center}.dev-tag .dot{height:6px;width:6px;background:rgba(37,99,235,0.8);border-radius:50%}.dev-tag span{color:var(--accent);font-weight:800}iframe{width:100%;height:100%;border:none}.controls{display:flex;gap:10px;margin-top:15px}.btn-action{flex:1;padding:14px;border-radius:14px;border:1px solid var(--border);background:var(--glass);color:#fff;cursor:pointer;font-weight:700;transition:all .3s cubic-bezier(0.4,0,0.2,1);text-transform:uppercase;font-size:12px;display:flex;align-items:center;justify-content:center;gap:8px}.btn-action:hover{background:var(--border);border-color:var(--accent);transform:translateY(-2px)}.tg-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;text-decoration:none;border-radius:18px;font-weight:800;margin-top:15px;text-align:center;box-shadow:0 10px 25px rgba(37,99,235,0.3);transition:.3s;text-transform:uppercase;font-size:14px}.tg-btn:active{transform:scale(0.97)}@keyframes pulse{0%{opacity:1}50%{opacity:0.4}100%{opacity:1}}.live-dot{height:8px;width:8px;background:#ff4757;border-radius:50%;animation:pulse 1.5s infinite}
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>DevCoderZ Live | Star Sports Select 2</title>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
+  
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sans-serif}
+    .shaka-video-container{position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center}
+    video{width:100%;height:100%;object-fit:contain}
+    #status {position:absolute;top:10px;left:10px;z-index:50;color:#00FF00;font-size:12px;background:rgba(0,0,0,0.5);padding:5px;border-radius:4px;pointer-events:none}
+  </style>
 </head>
-<body oncontextmenu="return false;">
-    <div class="main-wrapper">
-        <header class="brand-header">
-            <div style="font-weight:800; font-size: 15px; letter-spacing: -0.5px;">DevCoderZ <span style="color:var(--accent);">X</span> ExamCrushers</div>
-            <div style="color: #ff4757; font-weight: 900; display: flex; align-items: center; gap: 6px; font-size: 13px;">
-                <span class="live-dot"></span> LIVE
-            </div>
-        </header>
-        <div class="player-shell" id="fsContainer">
-            <div class="dev-tag"><div class="dot"></div>Developer: <span>Devansh Sharma</span></div>
-            <iframe id="ex-stream" src="about:blank" allowfullscreen="true" allow="autoplay; encrypted-media;"></iframe>
-        </div>
-        <div class="controls">
-            <button class="btn-action" onclick="_0x4d2a1()">Fullscreen</button>
-            <button class="btn-action" onclick="location.reload()">Refresh Stream</button>
-        </div>
-        <a href="https://t.me/Cric_decoders" target="_blank" class="tg-btn">Join Telegram Channel</a>
-    </div>
-    <script>
-        var _0xDeadData = [];
-        for(var i=0; i<1500; i++) {
-            _0xDeadData.push(Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15));
+<body>
+
+  <div id="status">Starting Player...</div>
+  <div class="shaka-video-container" id="player-container" data-shaka-player-container shaka-controls="true">
+    <video id="video" autoplay playsinline poster="https://img.media.jio.com/tvpimages/98/79/302114_1749665414817_l_medium.jpg"></video>
+  </div>
+
+  <script>
+    // --- TERI WORKING CONFIG ---
+    const CONFIG = {
+        url: "https://jiotvpllive.cdn.jio.com/bpk-tv//Star_Sports_Select_HD_2_BTS/output/index.mpd",
+        keyId: "6017d0514d425fa38f6e80ba6dcc852f",
+        key: "0018944b00adf2078f62386f30c68b74",
+        // Ye wahi link hai jahan se wo banda cookie utha raha hai
+        cookieFetchUrl: "https://raw.githubusercontent.com/Shubhamkur/Tv/refs/heads/main/Cookies"
+    };
+
+    const statusEl = document.getElementById('status');
+
+    // 1. Cookie nikalne ka function
+    async function getLiveCookie() {
+        try {
+            const res = await fetch(CONFIG.cookieFetchUrl);
+            const urls = await res.json();
+            const firstUrl = urls[0];
+            const cookieRes = await fetch(firstUrl);
+            const text = await cookieRes.text();
+            const match = text.match(/(__hdnea__=[^"'\s&|]+)/);
+            return match ? match[1] : "";
+        } catch (e) {
+            console.error("Cookie error", e);
+            return "";
         }
-        function _0xNoiseGenerator(_0xInput) {
-            var _0xRes = "";
-            for(var j=0; j<_0xInput.length; j++) {
-                _0xRes += String.fromCharCode(_0xInput.charCodeAt(j) ^ 0x12);
-            }
-            return _0xRes;
-        }
-        (function() {
-            var _0xTrash = 0;
-            for(var k=0; k<8000; k++) {
-                _0xTrash += k;
-                if(_0xTrash == 8888888) { _0xNoiseGenerator("Dummy"); }
-            }
-        })();
-        const _0xKeyPool = ["\x61\x48\x52\x30\x63\x48\x4d\x36\x4c\x79\x39\x7a\x61\x48\x64\x6c\x4e\x32\x46\x75\x61\x79\x31\x71\x5a\x57\x56\x35\x62\x79\x35\x75\x5a\x58\x52\x73\x61\x57\x5a\x35\x4c\x6d\x46\x77\x63\x43\x39\x33\x32\x58\x52\x6a\x61\x43\x35\x6f\x64\x47\x31\x73\x50\x32\x6c\x6b\x50\x54\x4d\x32\x4d\x67\x3d\x3d", "\x66\x73\x43\x6f\x6e\x74\x61\x69\x6e\x65\x72", "\x65\x78\x2d\x73\x74\x72\x65\x61\x6m"];
-        var _0xBloat = "";
-        _0xDeadData.forEach(function(item) {
-            _0xBloat += item.charAt(0);
-            if(_0xBloat.length > 500) _0xBloat = "";
+    }
+
+    async function initPlayer() {
+        statusEl.innerText = "Fetching Session...";
+        const activeCookie = await getLiveCookie();
+        
+        shaka.polyfill.installAll();
+        const video = document.getElementById('video');
+        const container = document.getElementById('player-container');
+        const player = new shaka.Player(video);
+        const ui = new shaka.ui.Overlay(player, container, video);
+
+        // 2. DRM Config
+        player.configure({
+            drm: { clearKeys: { [CONFIG.keyId]: CONFIG.key } },
+            streaming: { lowLatencyMode: true }
         });
-        function _0xSecureBoot(_0x0) {
-            var _0x1 = atob(_0xKeyPool[0]);
-            var _0x2 = document.getElementById(_0xKeyPool[2]);
-            _0x2.src = _0x1;
-        }
-        for(let l=0; l<600; l++){
-            window['_0xDevCoderZ_Security_Check_'+l] = function(){ return l * 0x77; };
-        }
-        function _0x4d2a1() {
-            var _0xTarget = document.getElementById(_0xKeyPool[1]);
-            if (!document.fullscreenElement) {
-                if (_0xTarget.requestFullscreen) _0xTarget.requestFullscreen();
-                else if (_0xTarget.webkitRequestFullscreen) _0xTarget.webkitRequestFullscreen();
-            } else {
-                if (document.exitFullscreen) document.exitFullscreen();
+
+        // 3. Request Filter (Headers + Cookie Injection)
+        player.getNetworkingEngine().registerRequestFilter((type, request) => {
+            request.headers['Referer'] = 'https://www.jiotv.com/';
+            request.headers['User-Agent'] = 'plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6';
+
+            if (activeCookie) {
+                // Ye line har segment ke peeche cookie chipka deti hai
+                const separator = request.uris[0].includes('?') ? '&' : '?';
+                request.uris[0] += separator + activeCookie;
             }
+        });
+
+        try {
+            statusEl.innerText = "Loading Stream...";
+            await player.load(CONFIG.url);
+            statusEl.innerText = "Playing Live!";
+            setTimeout(() => statusEl.style.display = 'none', 3000);
+        } catch (e) {
+            statusEl.innerText = "Error: Stream Blocked or Key Expired";
+            statusEl.style.color = "red";
         }
-        _0xSecureBoot();
-        document.addEventListener('contextmenu', e => e.preventDefault());
-        document.onkeydown = function(e) {
-            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) || (e.ctrlKey && e.keyCode == 85)) {
-                return false;
-            }
-        };
-        for(var m=0; m<1000; m++){
-             var _0xX = m + 1;
-             var _0xY = _0xX * Math.random();
-        }
-    </script>
+    }
+
+    document.addEventListener('shaka-ui-loaded', initPlayer);
+  </script>
 </body>
 </html>
