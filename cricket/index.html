@@ -2,78 +2,74 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>DevCoderZ | Star Sports 1 Hindi</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>DevCoderZ | Private Blob Player</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
-        body{background:#000;height:100vh;width:100vw;overflow:hidden;font-family:sans-serif}
-        .shaka-video-container{position:absolute;inset:0;width:100%;height:100%}
-        video{width:100%;height:100%;object-fit:contain}
-        #loading{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#00FF00;z-index:100;font-weight:bold}
-        .shaka-spinner-container{display:none !important}
+        body{background:#000;height:100vh;overflow:hidden;font-family:sans-serif}
+        #video{width:100%;height:100%;background:#000}
+        #status{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#00FF00;z-index:10}
     </style>
 </head>
 <body>
-    <div id="loading">DevCoderZ Loading...</div>
-    <div class="shaka-video-container" id="player-container" data-shaka-player-container shaka-controls="true">
-        <video id="video" autoplay playsinline poster="https://img.media.jio.com/tvpimages/13/81/302112_1749665154709_l_medium.jpg"></video>
+    <div id="status">Creating DevCoderZ Blob...</div>
+    <div data-shaka-player-container style="width:100%;height:100%">
+        <video id="video" autoplay playsinline></video>
     </div>
+
     <script>
         const CONFIG = {
             url: "https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Sports_1_Hindi_BTS/output/index.mpd",
             keyId: "6017d0514d425fa38f6e80ba6dcc852f",
             key: "0018944b00adf2078f62386f30c68b74",
-            token: "__hdnea__=st=1774767416~exp=1774853816~acl=/*~hmac=19006e250bcb4a3431a332754f08ebb0032a9c209e0febd59a1dcdec2c87511c"
+            token: "st=1774767416~exp=1774853816~acl=/*~hmac=19006e250bcb4a3431a332754f08ebb0032a9c209e0febd59a1dcdec2c87511c"
         };
 
-        async function init(){
+        async function createBlobAndPlay() {
             shaka.polyfill.installAll();
             const video = document.getElementById('video');
-            const container = document.getElementById('player-container');
             const player = new shaka.Player(video);
+            const container = document.querySelector('[data-shaka-player-container]');
             new shaka.ui.Overlay(player, container, video);
 
             player.configure({
                 drm: { clearKeys: { [CONFIG.keyId]: CONFIG.key } },
-                streaming: { 
-                    lowLatencyMode: true, 
-                    stallEnabled: false,
-                    bufferingGoal: 30,
-                    rebufferingGoal: 2,
-                    bufferBehind: 30,
-                    inaccurateManifestTolerance: 2
-                }
+                streaming: { stallEnabled: false, lowLatencyMode: true }
             });
 
+            // --- THE BLOB & NETWORK LOGIC ---
             player.getNetworkingEngine().registerRequestFilter((type, request) => {
                 request.headers['Referer'] = 'https://www.jiotv.com/';
                 request.headers['User-Agent'] = 'plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6';
-                
-                if(CONFIG.token){
-                    // Shwetank Logic: Header aur URL dono mein token
-                    request.headers['Cookie'] = CONFIG.token;
-                    
-                    if(type === shaka.net.NetworkingEngine.RequestType.SEGMENT || type === shaka.net.NetworkingEngine.RequestType.MANIFEST){
-                        if(!request.uris[0].includes("__hdnea__")){
-                            const sep = request.uris[0].includes('?') ? '&' : '?';
-                            request.uris[0] += sep + CONFIG.token;
-                        }
-                    }
+
+                // Har request ke peeche token chipkana (Segment/Manifest)
+                const separator = request.uris[0].includes('?') ? '&' : '?';
+                if (!request.uris[0].includes("__hdnea__")) {
+                    request.uris[0] += separator + "__hdnea__=" + CONFIG.token;
                 }
             });
 
-            try{
-                await player.load(CONFIG.url);
-                document.getElementById('loading').style.display = 'none';
-                video.play();
-            } catch(e) {
-                document.getElementById('loading').innerText = "ERROR: " + e.code;
-                document.getElementById('loading').style.color = "red";
+            try {
+                // Fetching the manifest to create a local virtual copy
+                const response = await fetch(CONFIG.url + "?__hdnea__=" + CONFIG.token);
+                const manifestData = await response.text();
+                
+                // Blob Creation (Shwetank Logic)
+                const blob = new Blob([manifestData], { type: 'application/dash+xml' });
+                const blobUrl = URL.createObjectURL(blob);
+
+                await player.load(blobUrl);
+                document.getElementById('status').style.display = 'none';
+                console.log("DevCoderZ Blob Loaded:", blobUrl);
+            } catch (e) {
+                document.getElementById('status').innerText = "CORS BLOCK: Use 'Allow CORS' Extension";
+                document.getElementById('status').style.color = "red";
             }
         }
-        document.addEventListener('shaka-ui-loaded', init);
+
+        document.addEventListener('shaka-ui-loaded', createBlobAndPlay);
     </script>
 </body>
 </html>
