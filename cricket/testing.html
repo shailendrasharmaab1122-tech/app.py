@@ -3,72 +3,73 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>DevCoderZ | SS1 Hindi HD</title>
+    <title>DevCoderZ | Cric Hype Style</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
     <style>
-        :root { --neon: #00FF00; --bg: #050505; }
-        body { background: var(--bg); color: #fff; font-family: sans-serif; margin: 0; overflow: hidden; height: 100vh; }
-        .player-card { height: 100vh; width: 100vw; background: #000; position: relative; }
-        #video { width: 100%; height: 100%; object-fit: contain; }
-        #loader { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: #000; z-index: 99; color: var(--neon); font-weight: bold; letter-spacing: 2px; }
-        header { position: absolute; top: 0; width: 100%; padding: 15px; z-index: 10; font-weight: 900; background: linear-gradient(rgba(0,0,0,0.8), transparent); }
-        header span { color: var(--neon); }
+        body { margin: 0; background: #000; font-family: sans-serif; overflow: hidden; height: 100vh; }
+        #p-con { height: 100vh; width: 100vw; background: #000; }
+        video { width: 100%; height: 100%; object-fit: contain; }
+        /* Custom Loader */
+        #loader { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; 
+                  background: #000; z-index: 99; color: #00FF00; font-weight: bold; }
     </style>
 </head>
 <body>
-    <header>DEV<span>CODERZ</span> | HD LIVE</header>
-    <div class="player-card" id="p-con" data-shaka-player-container shaka-controls="true">
-        <div id="loader">CONNECTING TO PROXY...</div>
-        <video id="video" autoplay playsinline poster="https://img.media.jio.com/tvpimages/5/6/301982_1749665314605_l_medium.jpg"></video>
+
+    <div id="p-con" data-shaka-player-container shaka-controls="true">
+        <div id="loader">DEVCODERZ PROXY LOADING...</div>
+        <video id="video" autoplay playsinline poster="https://i.postimg.cc/76cbBjty/P.jpg"></video>
     </div>
 
     <script>
-        // TERA WORKER URL
+        // 1. TERA WORKER LINK
         const PROXY = "https://proxy.shailendrasharmaab1122.workers.dev/?url=";
         
-        // DAILY TOKEN (Refresh this from Network Tab if Error 1001 occurs)
-        const TK = "st=1775303208~exp=1775389608~acl=/*~hmac=5c6a1d87e02..."; 
+        // 2. FRESH TOKEN (Har 24 ghante mein update karna)
+        const TK = "st=1743344160~exp=1743430560~acl=/*~hmac=5c6a1d87e02..."; 
 
-        const HD_CH = {
+        const CHANNEL = {
             url: "https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Sports_HD1_Hindi_BTS/output/index.mpd",
             ki: "400131994b445d8c8817202248760fda",
             k: "2d56cb6f07a75b9aff165d534ae2bfc4"
         };
 
-        async function initHD() {
+        async function initApp() {
             shaka.polyfill.installAll();
             const video = document.getElementById('video');
             const player = new shaka.Player(video);
             const ui = new shaka.ui.Overlay(player, document.getElementById('p-con'), video);
 
             player.configure({
-                drm: { clearKeys: { [HD_CH.ki]: HD_CH.k } },
-                streaming: { lowLatencyMode: true, stallEnabled: false }
+                drm: { clearKeys: { [CHANNEL.ki]: CHANNEL.k } },
+                streaming: { lowLatencyMode: true, stallEnabled: false, bufferingGoal: 30 }
             });
 
-            // Proxy Filtering for Phone Chrome Bypass
+            // "Cric Hype" Secret Request Logic
             player.getNetworkingEngine().registerRequestFilter((type, request) => {
                 let url = request.uris[0];
-                const sep = url.includes('?') ? '&' : '?';
                 
-                if (!url.includes('__hdnea__')) {
-                    url += sep + "__hdnea__=" + TK;
+                // Sabhi requests ko tere worker se bypass karna
+                if (!url.startsWith(PROXY)) {
+                    const sep = url.includes('?') ? '&' : '?';
+                    if (!url.includes('__hdnea__')) {
+                        url += sep + "__hdnea__=" + TK;
+                    }
+                    request.uris[0] = PROXY + encodeURIComponent(url);
                 }
-
-                // Shwetank Style: Bypassing CORS via Cloudflare
-                request.uris[0] = PROXY + encodeURIComponent(url);
             });
 
             try {
-                await player.load(PROXY + encodeURIComponent(HD_CH.url + "?__hdnea__=" + TK));
+                await player.load(PROXY + encodeURIComponent(CHANNEL.url + "?__hdnea__=" + TK));
                 document.getElementById('loader').style.display = 'none';
+                console.log("Stream Started!");
             } catch (e) {
-                document.getElementById('loader').innerText = "ERROR " + e.code + ": TOKEN EXPIRED";
+                document.getElementById('loader').innerText = "ERROR: TOKEN EXPIRED OR PROXY DOWN";
                 document.getElementById('loader').style.color = "red";
             }
         }
-        document.addEventListener('shaka-ui-loaded', initHD);
+        document.addEventListener('shaka-ui-loaded', initApp);
     </script>
 </body>
 </html>
