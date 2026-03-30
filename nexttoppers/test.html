@@ -13,9 +13,6 @@ h2{color:#38bdf8;margin-bottom:20px;letter-spacing:1px;font-size:1.4rem}
 .btn{display:block;width:100%;padding:14px;margin:10px 0;border:none;border-radius:8px;cursor:pointer;font-weight:bold;transition:0.3s;font-size:14px;text-transform:uppercase;text-decoration:none;box-sizing:border-box}
 .btn-tut{background:rgba(248,113,113,0.1);color:#f87171;border:1px dashed #f87171;margin-bottom:15px}
 .btn-srv{background:#38bdf8;color:#000}.btn-srv:hover{background:#7dd3fc;transform:translateY(-2px)}
-.btn-adm{background:#161b22;color:#8b949e;border:1px solid #30363d}.btn-adm:hover{color:#fff;border-color:#38bdf8}
-.btn-login{background:#22c55e;color:#fff;margin-top:10px;display:none}
-input{width:100%;padding:12px;margin-top:10px;background:#010409;border:1px solid #30363d;border-radius:8px;color:#38bdf8;text-align:center;display:none;outline:none;box-sizing:border-box}
 #_L0x{position:fixed;top:0;left:0;width:100%;height:100%;background:#010409;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:99999;color:#38bdf8;font-family:monospace;gap:12px}
 ._b{width:120px;height:2px;background:#161b22;position:relative}._b::after{content:'';position:absolute;width:40%;height:100%;background:#38bdf8;animation:L 0.8s infinite}@keyframes L{0%{left:0}50%{left:60%}100%{left:0}}
 #_D0x_ROOT{display:none;width:100%;height:100vh;flex-direction:column}
@@ -35,19 +32,16 @@ input{width:100%;padding:12px;margin-top:10px;background:#010409;border:1px soli
 
 <div id="_gate">
     <div class="box">
-        <i class="fas fa-user-shield" style="font-size:45px;color:#38bdf8;margin-bottom:15px"></i>
-        <h2>SELECT ACCESS</h2>
+        <i class="fas fa-shield-alt" style="font-size:45px;color:#38bdf8;margin-bottom:15px"></i>
+        <h2>SYSTEM ACCESS</h2>
         <a href="https://t.me/+8tZSJ5FyTXVjM2M1" target="_blank" class="btn btn-tut"><i class="fab fa-telegram"></i> JOIN TELEGRAM</a>
-        <button class="btn btn-srv" onclick="_startSrv()"><i class="fas fa-server"></i> SERVER 1 (KEY)</button>
-        <button class="btn btn-adm" id="admBtn" onclick="_showInput()"><i class="fas fa-unlock-alt"></i> ADMIN ENTER</button>
-        <input type="password" id="admKey" placeholder="Enter Admin Key...">
-        <button class="btn btn-login" id="loginBtn" onclick="_verifyAdm()">VERIFY & ENTER</button>
+        <button class="btn btn-srv" onclick="_startSrv()"><i class="fas fa-key"></i> GENERATE ACCESS KEY</button>
         <p style="font-size:9px;color:#444;margin-top:20px;letter-spacing:2px">DEVCODERZ SECURITY SYSTEM</p>
     </div>
 </div>
 
 <div id="_L0x">
-    <div>SYSTEM_BOOT_...</div>
+    <div id="status_txt" style="color:#38bdf8;font-family:monospace;font-size:14px;text-align:center">BOOTING_CORE_...</div>
     <div class="_b"></div>
 </div>
 
@@ -55,7 +49,7 @@ input{width:100%;padding:12px;margin-top:10px;background:#010409;border:1px soli
     <div id="_SX" class="SD0x">
         <div style="font-size:11px;color:#38bdf8;font-family:'Space Mono';margin-bottom:10px">// CORE_CONTROL</div>
         <div class="ADMIN_BOX">
-            <div style="font-size:14px;font-weight:800;color:#fff"><i class="fas fa-crown" style="color:#fbbf24;font-size:12px"></i> Devansh Sharma</div>
+            <div style="font-size:14px;font-weight:800;color:#fff">Devansh Sharma</div>
             <div style="font-size:10px;color:#38bdf8;text-transform:uppercase">Lead Architect</div>
         </div>
         <div class="IT0x" onclick="location.reload()"><i class="fas fa-sync-alt"></i> REBOOT_SYSTEM</div>
@@ -64,7 +58,7 @@ input{width:100%;padding:12px;margin-top:10px;background:#010409;border:1px soli
     </div>
 
     <header class="H0x">
-        <i class="fas fa-th-large" style="cursor:pointer;color:#8b949e;font-size:20px" onclick="document.getElementById('_SX').classList.add('active')"></i>
+        <i class="fas fa-bars" style="cursor:pointer;color:#8b949e;font-size:20px" onclick="document.getElementById('_SX').classList.add('active')"></i>
         <div class="B0x"><DevCoderZ/></div>
         <div class="TIME_WRAP">
             <div id="_TX">00:00:00</div>
@@ -82,35 +76,19 @@ input{width:100%;padding:12px;margin-top:10px;background:#010409;border:1px soli
 (function(){
     const _v = atob;
     const _cfg = {
-        _u: _v("aHR0cHM6Ly9lZHV2aWJlLW50LnBhZ2VzLmRldi8="),
-        _k: _v("YjhjYmMyYjFkMjQxNzZhOGRmZjIwMjI2MDhiZGQ1YjVjYzhmMWMyYg=="),
-        _a1: _v("RGV2YW5zaDQ1"), // Devansh45
-        _a2: _v("QW51ajE4")     // Anuj18
-    };
-
-    window._showInput = () => {
-        document.getElementById('admKey').style.display='block';
-        document.getElementById('loginBtn').style.display='block';
-        document.getElementById('admBtn').style.display='none';
-    };
-
-    window._verifyAdm = () => {
-        const val = document.getElementById('admKey').value;
-        if(val === _cfg._a1 || val === _cfg._a2) {
-            localStorage.setItem("_vip_access","1");
-            localStorage.setItem("_t_sc", new Date().getTime());
-            location.reload();
-        } else {
-            alert("Access Denied!");
-        }
+        _u: _v("aHR0cHM6Ly9lZHV2aWJlLW50LnBhZ2VzLmRldi8="), // Content
+        _k: _v("YjhjYmMyYjFkMjQxNzZhOGRmZjIwMjI2MDhiZGQ1YjVjYzhmMWMyYg==") // API Key
     };
 
     window._startSrv = async () => {
         const tk = 'dc_' + Math.random().toString(36).substring(2,12);
-        sessionStorage.setItem("_ex_tk", tk);
+        localStorage.setItem("_pnd_tk", tk);
         const ret = window.location.origin + window.location.pathname + '?auth=' + tk;
+        
         document.getElementById('_gate').style.display='none';
         document.getElementById('_L0x').style.display='flex';
+        document.getElementById('status_txt').innerText = "CONNECTING_SERVER_...";
+
         try {
             const r = await fetch(`https://indianshortner.com/api?api=${_cfg._k}&url=${encodeURIComponent(ret)}`);
             const j = await r.json();
@@ -123,11 +101,9 @@ input{width:100%;padding:12px;margin-top:10px;background:#010409;border:1px soli
         const n = new Date().getTime();
         const last = localStorage.getItem("_t_sc");
         
-        if(localStorage.getItem("_vip_access") === "1" && (last && (n - last < 86400000))) return true;
-
-        if(q.get("auth") && q.get("auth") === sessionStorage.getItem("_ex_tk")) {
+        if(q.get("auth") && q.get("auth") === localStorage.getItem("_pnd_tk")) {
             localStorage.setItem("_t_sc", n);
-            sessionStorage.removeItem("_ex_tk");
+            localStorage.removeItem("_pnd_tk");
             window.history.replaceState({}, '', window.location.pathname);
             return true;
         }
@@ -137,17 +113,20 @@ input{width:100%;padding:12px;margin-top:10px;background:#010409;border:1px soli
     if(_verify()) {
         document.getElementById('_gate').style.display='none';
         document.getElementById('_L0x').style.display='flex';
+        document.getElementById('status_txt').innerText = "DECRYPTING_SYSTEM_...";
         setTimeout(() => {
             document.getElementById('_L0x').style.display='none';
             document.getElementById('_D0x_ROOT').style.display='flex';
             document.getElementById('CF').src = _cfg._u;
         }, 1500);
+    } else {
+        document.getElementById('_gate').style.display='flex';
     }
 
     setInterval(() => {
         const d = new Date();
         document.getElementById('_TX').innerText = d.toLocaleTimeString();
-        document.getElementById('_DX').innerText = d.toLocaleDateString('en-GB', {day:'2-digit', month:'short', year:'numeric'});
+        document.getElementById('_DX').innerText = d.toLocaleDateString('en-GB', {day:'2-digit', month:'short', year:'numeric'}).toUpperCase();
     }, 1000);
 
     document.oncontextmenu = () => !1;
