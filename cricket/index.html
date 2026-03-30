@@ -3,33 +3,27 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>DevCoderZ | Live Sports</title>
+    <title>DevCoderZ | Pro Player</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
     <style>
-        :root { --neon: #00FF00; --bg: #050505; }
-        body { background: var(--bg); color: white; font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; height: 100vh; }
-        .ambient { position: fixed; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(0, 255, 0, 0.05), transparent); z-index: -1; }
-        header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .brand { font-weight: 900; font-size: 22px; letter-spacing: 1px; }
-        .brand span { color: var(--neon); }
-        .player-card { margin: 15px; height: calc(100vh - 100px); background: #000; border-radius: 15px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); position: relative; }
-        #video { width: 100%; height: 100%; object-fit: contain; }
-        #loader { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #000; z-index: 30; color: var(--neon); font-weight: bold; letter-spacing: 2px; }
-        .shaka-video-container { width: 100% !important; height: 100% !important; }
+        :root { --neon: #00FF00; --bg: #000; }
+        body { background: var(--bg); color: #fff; font-family: sans-serif; margin: 0; overflow: hidden; }
+        .player-wrapper { height: 100vh; width: 100vw; position: relative; }
+        #video { width: 100%; height: 100%; }
+        #status { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); color: var(--neon); z-index: 99; font-weight: bold; letter-spacing: 1px; }
+        header { position: absolute; top: 0; width: 100%; padding: 15px; background: linear-gradient(rgba(0,0,0,0.8), transparent); z-index: 10; display: flex; justify-content: space-between; }
+        .brand { font-weight: 900; } .brand span { color: var(--neon); }
     </style>
 </head>
 <body>
-    <div class="ambient"></div>
     <header><div class="brand">DEV<span>CODERZ</span></div></header>
-
-    <div class="player-card" id="p-con" data-shaka-player-container shaka-controls="true">
-        <div id="loader">INITIALIZING STREAM...</div>
+    <div class="player-wrapper" id="p-con" data-shaka-player-container shaka-controls="true">
+        <div id="status">BYPASSING SECURITY...</div>
         <video id="video" autoplay playsinline poster="https://i.postimg.cc/76cbBjty/P.jpg"></video>
     </div>
 
     <script>
-        // --- Hype Style Dynamic API ---
         const API = {
             "302": {
                 u: "https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Sports_1_Hindi_BTS/output/index.mpd",
@@ -40,50 +34,48 @@
 
         const id = new URLSearchParams(window.location.search).get('id') || "302";
         const ch = API[id];
-        
-        // YE TOKEN NETWORK TAB SE COPY KAR KE YAHAN DALO (ZARURI HAI)
+        // DHAYAN DE: Ye Token naya hona chahiye (Network Tab se le lo)
         const tk = "st=1774767416~exp=1774853816~acl=/*~hmac=19006e250bcb4a3431a332754f08ebb0032a9c209e0febd59a1dcdec2c87511c";
 
-        async function startPlayer() {
-            if(!ch) return document.getElementById('loader').innerText = "INVALID ID";
-            
+        async function init() {
             shaka.polyfill.installAll();
             const video = document.getElementById('video');
             const player = new shaka.Player(video);
             new shaka.ui.Overlay(player, document.getElementById('p-con'), video);
 
-            // Shwetank's DRM Config
             player.configure({
                 drm: { clearKeys: { [ch.ki]: ch.k } },
-                streaming: { lowLatencyMode: true, jumpLargeGaps: true }
+                streaming: { lowLatencyMode: true }
             });
 
-            // --- THE BYPASS ENGINE (Inka Asli Logic) ---
             player.getNetworkingEngine().registerRequestFilter((type, request) => {
-                // Browser security ko dhokha dene ke liye headers
+                // Inka asli bypass: Request ko Proxy ke through bhejna
+                const originalUrl = request.uris[0];
+                const sep = originalUrl.includes('?') ? '&' : '?';
+                const finalUrlWithToken = originalUrl + (originalUrl.includes('__hdnea__') ? '' : sep + "__hdnea__=" + tk);
+                
+                // YE HAI SHWETANK KA ASLI LOGIC: Public Proxy Bypass
+                request.uris[0] = "https://api.allorigins.win/raw?url=" + encodeURIComponent(finalUrlWithToken);
+                
                 request.headers['Referer'] = 'https://www.jiotv.com/';
                 request.headers['User-Agent'] = 'plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6';
-
-                // Har request (Segments/Manifest) mein token chipkana
-                const url = request.uris[0];
-                const separator = url.includes('?') ? '&' : '?';
-                if (!url.includes('__hdnea__')) {
-                    request.uris[0] = url + separator + "__hdnea__=" + tk;
-                }
             });
 
             try {
-                // Direct loading bina fetch() ke taaki CORS guard trigger na ho
-                await player.load(ch.u);
-                document.getElementById('loader').style.display = 'none';
+                // Pehle Manifest fetch karke Blob banate hain (Cric Hype Style)
+                const res = await fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent(ch.u + "?__hdnea__=" + tk));
+                const text = await res.text();
+                const blob = new Blob([text], { type: 'application/dash+xml' });
+                const blobUrl = URL.createObjectURL(blob);
+
+                await player.load(blobUrl);
+                document.getElementById('status').style.display = 'none';
             } catch (e) {
-                // Agar abhi bhi error aaye, toh error code dikhayega (1001 = CORS)
-                document.getElementById('loader').innerText = "ERROR " + e.code + ": REFRESH TOKEN";
-                console.error("Shaka Error:", e);
+                // Agar block hua toh error code dikhayega
+                document.getElementById('status').innerText = "TOKEN EXPIRED OR IP BLOCKED";
             }
         }
-
-        document.addEventListener('shaka-ui-loaded', startPlayer);
+        document.addEventListener('shaka-ui-loaded', init);
     </script>
 </body>
 </html>
