@@ -3,75 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevCoderz | Live Streaming Portal</title>
+    <title>DevCoderz Live</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/shaka-player.ui.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/controls.min.css">
     <style>
-        body { margin: 0; background: #000; font-family: 'Segoe UI', sans-serif; overflow: hidden; }
-        #video-container { width: 100vw; height: 100vh; background-color: black; }
+        body { margin: 0; background: #000; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+        #video-container { width: 100%; height: 100%; background: #000; }
         video { width: 100%; height: 100%; }
-        /* DevCoderz Watermark Customization */
-        .watermark {
-            position: absolute; top: 20px; right: 20px;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 18px; font-weight: bold;
-            text-shadow: 2px 2px 4px #000;
-            pointer-events: none; z-index: 10;
-        }
+        .dev-watermark { position: absolute; top: 15px; left: 15px; color: rgba(255, 255, 255, 0.4); font-family: sans-serif; font-size: 12px; z-index: 10; pointer-events: none; }
     </style>
 </head>
 <body>
-
-    <div class="watermark">DevCoderz Live</div>
+    <div class="dev-watermark">DEVCODERZ</div>
     <div data-shaka-player-container id="video-container">
         <video data-shaka-player id="video" autoplay></video>
     </div>
-
     <script>
-        // --- DECODED & CLEANED LOGIC BY GEMINI ---
-        const manifestUri = 'https://Bhai-Yahan-Apna-MPD-URL-Daal'; // Tera Main Stream URL
-        const licenseServer = 'https://devcoderz-proxy.workers.dev'; // Tera Cloudflare Worker URL
+        const MPD_URL = 'YOUR_MPD_URL'; 
+        const DIRECT_LICENSE_URL = 'https://wv-license.livetv7.xyz/license'; 
 
-        async function initApp() {
+        async function init() {
             const video = document.getElementById('video');
             const uiContainer = document.getElementById('video-container');
             const player = new shaka.Player(video);
             const ui = new shaka.ui.Overlay(player, uiContainer, video);
 
-            // Configure Player (Bypassing livtv7 restrictions)
             player.configure({
-                drm: {
-                    servers: { 'com.widevine.alpha': licenseServer }
+                drm: { 
+                    servers: { 'com.widevine.alpha': DIRECT_LICENSE_URL },
+                    advanced: {
+                        'com.widevine.alpha': {
+                            'videoRobustness': 'SW_SECURE_DECODE',
+                            'audioRobustness': 'SW_SECURE_DECODE'
+                        }
+                    }
                 },
-                streaming: {
-                    bufferingGoal: 10,
-                    rebufferingGoal: 2,
-                }
+                streaming: { bufferingGoal: 30, rebufferingGoal: 2 }
             });
 
-            // Token Injection (Jo tune obfuscated code mein bheja tha)
             player.getNetworkingEngine().registerRequestFilter((type, request) => {
+                request.headers['Origin'] = 'https://livetv7.xyz'; 
+                request.headers['Referer'] = 'https://livetv7.xyz/';
+
+                if (type == shaka.net.NetworkingEngine.RequestType.LICENSE) {
+                    request.headers['Content-Type'] = 'application/octet-stream';
+                }
+
                 if (type == shaka.net.NetworkingEngine.RequestType.MANIFEST || type == shaka.net.NetworkingEngine.RequestType.SEGMENT) {
-                    // Yahan wo security token attach hoga jo humne decode kiya
-                    const token = "__hdnea__=st=12345~exp=67890~acl=/*~hmac=devcoderz_secret";
+                    const token = "st=1711822400~exp=1711836800~acl=/*~hmac=6ed4f1c34ef393cb4d8a2b49f5f2";
                     request.uris[0] += (request.uris[0].includes('?') ? '&' : '?') + token;
                 }
-                
-                // Add Referer/Origin headers for bypass
-                request.headers['X-Forwarded-For'] = '1.1.1.1'; 
             });
 
             try {
-                await player.load(manifestUri);
-                console.log('The video has now been loaded!');
+                await player.load(MPD_URL);
             } catch (e) {
-                console.error('Error code', e.code, 'object', e);
+                console.error("Error Code:", e.code, e);
             }
         }
-
-        document.addEventListener('shaka-ui-loaded', initApp);
-        // Anti-Right Click to Protect your source code
-        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('shaka-ui-loaded', init);
     </script>
 </body>
 </html>
