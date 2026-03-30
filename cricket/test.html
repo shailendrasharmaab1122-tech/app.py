@@ -3,24 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevCoderz Live</title>
+    <title>DevCoderz Unlocked</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/shaka-player.ui.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/controls.min.css">
     <style>
-        body { margin: 0; background: #000; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
-        #video-container { width: 100%; height: 100%; background: #000; }
+        body { margin: 0; background: #000; overflow: hidden; }
+        #video-container { width: 100vw; height: 100vh; }
         video { width: 100%; height: 100%; }
-        .dev-watermark { position: absolute; top: 15px; left: 15px; color: rgba(255, 255, 255, 0.4); font-family: sans-serif; font-size: 12px; z-index: 10; pointer-events: none; }
     </style>
 </head>
 <body>
-    <div class="dev-watermark">DEVCODERZ</div>
     <div data-shaka-player-container id="video-container">
         <video data-shaka-player id="video" autoplay></video>
     </div>
     <script>
         const MPD_URL = 'YOUR_MPD_URL'; 
-        const DIRECT_LICENSE_URL = 'https://wv-license.livetv7.xyz/license'; 
+        const LICENSE_URL = 'https://wv-license.livetv7.xyz/license'; 
 
         async function init() {
             const video = document.getElementById('video');
@@ -29,36 +27,35 @@
             const ui = new shaka.ui.Overlay(player, uiContainer, video);
 
             player.configure({
-                drm: { 
-                    servers: { 'com.widevine.alpha': DIRECT_LICENSE_URL },
+                drm: {
+                    servers: { 'com.widevine.alpha': LICENSE_URL },
                     advanced: {
                         'com.widevine.alpha': {
                             'videoRobustness': 'SW_SECURE_DECODE',
                             'audioRobustness': 'SW_SECURE_DECODE'
                         }
                     }
-                },
-                streaming: { bufferingGoal: 30, rebufferingGoal: 2 }
+                }
             });
 
             player.getNetworkingEngine().registerRequestFilter((type, request) => {
-                request.headers['Origin'] = 'https://livetv7.xyz'; 
+                // Bina Worker ke ye headers sirf tabhi chalenge agar server CORS-free ho
+                request.headers['Origin'] = 'https://livetv7.xyz';
                 request.headers['Referer'] = 'https://livetv7.xyz/';
 
                 if (type == shaka.net.NetworkingEngine.RequestType.LICENSE) {
-                    request.headers['Content-Type'] = 'application/octet-stream';
-                }
-
-                if (type == shaka.net.NetworkingEngine.RequestType.MANIFEST || type == shaka.net.NetworkingEngine.RequestType.SEGMENT) {
-                    const token = "st=1711822400~exp=1711836800~acl=/*~hmac=6ed4f1c34ef393cb4d8a2b49f5f2";
-                    request.uris[0] += (request.uris[0].includes('?') ? '&' : '?') + token;
+                    // License request ke liye extra headers
+                    request.allowCrossSiteCredentials = true;
                 }
             });
 
             try {
                 await player.load(MPD_URL);
             } catch (e) {
-                console.error("Error Code:", e.code, e);
+                console.error("Error Code:", e.code);
+                if(e.code == 6007 || e.code == 1001) {
+                    alert("CORS Blocked: Bhai, bina Worker ke ye server block kar raha hai.");
+                }
             }
         }
         document.addEventListener('shaka-ui-loaded', init);
