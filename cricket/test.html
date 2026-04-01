@@ -3,62 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevCoderz Unlocked</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/shaka-player.ui.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/controls.min.css">
+    <title>DevCoderZ - Live Stream</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
-        body { margin: 0; background: #000; overflow: hidden; }
-        #video-container { width: 100vw; height: 100vh; }
-        video { width: 100%; height: 100%; }
+        body { margin: 0; background: #000; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif; }
+        .container { width: 100%; max-width: 900px; position: relative; }
+        video { width: 100%; border-radius: 8px; box-shadow: 0 0 20px rgba(0,255,0,0.2); }
+        .watermark { position: absolute; top: 10px; left: 10px; color: #fff; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 5px; font-size: 12px; pointer-events: none; }
     </style>
 </head>
 <body>
-    <div data-shaka-player-container id="video-container">
-        <video data-shaka-player id="video" autoplay></video>
-    </div>
-    <script>
-        const MPD_URL = 'YOUR_MPD_URL'; 
-        const LICENSE_URL = 'https://wv-license.livetv7.xyz/license'; 
 
-        async function init() {
-            const video = document.getElementById('video');
-            const uiContainer = document.getElementById('video-container');
-            const player = new shaka.Player(video);
-            const ui = new shaka.ui.Overlay(player, uiContainer, video);
+<div class="container">
+    <div class="watermark">DevCoderZ Live</div>
+    <video id="video" controls autoplay playsinline></video>
+</div>
 
-            player.configure({
-                drm: {
-                    servers: { 'com.widevine.alpha': LICENSE_URL },
-                    advanced: {
-                        'com.widevine.alpha': {
-                            'videoRobustness': 'SW_SECURE_DECODE',
-                            'audioRobustness': 'SW_SECURE_DECODE'
-                        }
-                    }
-                }
-            });
+<script>
+    const video = document.getElementById('video');
+    
+    // YAHAN APNA NAYA LINK DALO (Jo 1DM se nikala hai)
+    const videoSrc = 'https://al.hls.nimo.tv/live/su2339515402418ra050543638a294f45e8612ca74a743a5.m3u8?appid=81&tp=1775052225839&id=su2339515402418ra050543638a294f45e8612ca74a743a5&needwm=0&ratio=500&wsSecret=46c8ae3c3caad701f21ac90a720035b8&wsTime=69ce7723&seqid=1776395188278&ctype=nimo_media_wap&u=1342959896&t=110&sv=2411271811';
 
-            player.getNetworkingEngine().registerRequestFilter((type, request) => {
-                // Bina Worker ke ye headers sirf tabhi chalenge agar server CORS-free ho
-                request.headers['Origin'] = 'https://livetv7.xyz';
-                request.headers['Referer'] = 'https://livetv7.xyz/';
-
-                if (type == shaka.net.NetworkingEngine.RequestType.LICENSE) {
-                    // License request ke liye extra headers
-                    request.allowCrossSiteCredentials = true;
-                }
-            });
-
-            try {
-                await player.load(MPD_URL);
-            } catch (e) {
-                console.error("Error Code:", e.code);
-                if(e.code == 6007 || e.code == 1001) {
-                    alert("CORS Blocked: Bhai, bina Worker ke ye server block kar raha hai.");
-                }
+    if (Hls.isSupported()) {
+        const hls = new Hls({
+            // Ye settings buffering kam karne ke liye hain
+            maxBufferLength: 30,
+            startLevel: -1,
+            abandonRules: {
+                requestTimeout: 10000,
             }
-        }
-        document.addEventListener('shaka-ui-loaded', init);
-    </script>
+        });
+        hls.loadSource(videoSrc);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+            video.play();
+        });
+
+        // Error handling agar link expire ho jaye
+        hls.on(Hls.Events.ERROR, function (event, data) {
+            if (data.fatal) {
+                console.log("Bhai link expire ho gaya ya CORS error hai!");
+            }
+        });
+
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        // For Safari/iOS
+        video.src = videoSrc;
+        video.addEventListener('loadedmetadata', function() {
+            video.play();
+        });
+    }
+</script>
+
 </body>
 </html>
