@@ -10,61 +10,104 @@ body,html{margin:0;padding:0;width:100%;height:100%;background:#010409;font-fami
 </style>
 </head>
 <body oncontextmenu="return false;">
-<div id="_gate"><div class="box"><i class="fas fa-shield-alt" style="font-size:45px;color:#38bdf8;margin-bottom:15px"></i><h2>SYSTEM ACCESS</h2><button class="btn btn-srv" onclick="_0x_run()"><i class="fas fa-key"></i> GENERATE ACCESS KEY</button><p style="font-size:9px;color:#444;margin-top:20px;letter-spacing:2px">DEVCODERZ SECURITY SYSTEM</p></div></div>
-<div id="_L0x"><div id="status_txt" style="font-size:14px">CONNECTING_SERVER_...</div><div class="_b"></div></div>
-<div id="_D0x_ROOT"><header class="H0x"><div class="B0x"><DevCoderZ/></div><div id="_TX" style="font-size:12px;font-family:'Space Mono'">00:00:00</div></header><main class="M0x"><div class="BLK"></div><iframe id="CF" src="about:blank" class="I0x"></iframe></main></div>
+
+<div id="_gate">
+    <div class="box">
+        <i class="fas fa-shield-alt" style="font-size:45px;color:#38bdf8;margin-bottom:15px"></i>
+        <h2>SYSTEM ACCESS</h2>
+        <button class="btn btn-srv" id="main_btn">
+            <i class="fas fa-key"></i> GENERATE ACCESS KEY
+        </button>
+        <p style="font-size:9px;color:#444;margin-top:20px;letter-spacing:2px">DEVCODERZ SECURITY SYSTEM</p>
+    </div>
+</div>
+
+<div id="_L0x">
+    <div id="status_txt" style="font-size:14px">CONNECTING_SERVER_...</div>
+    <div class="_b"></div>
+</div>
+
+<div id="_D0x_ROOT">
+    <header class="H0x">
+        <div class="B0x"><DevCoderZ/></div>
+        <div id="_TX" style="font-size:12px;font-family:'Space Mono'">00:00:00</div>
+    </header>
+    <main class="M0x">
+        <div class="BLK"></div>
+        <iframe id="CF" src="about:blank" class="I0x"></iframe>
+    </main>
+</div>
+
 <script type="text/javascript">
-(function(_0x1,_0x2){const _0x3=function(_0x4){while(--_0x4){_0x1['push'](_0x1['shift']());}};_0x3(++_0x2);}(_0x4422,0x1b3));function _0x2244(_0x1,_0x2){return _0x4422[_0x1-0x0];}function _0x4422(){const _0x1=['\x61\x74\x6f\x62','\x6c\x6f\x63\x61\x6c\x53\x74\x6f\x72\x61\x67\x65','\x73\x65\x74\x49\x74\x65\x6d','\x6c\x6f\x63\x61\x74\x69\x6f\x6e','\x6f\x72\x69\x67\x69\x6e','\x70\x61\x74\x68\x6e\x61\x6d\x65','\x64\x69\x73\x70\x6c\x61\x79','\x6e\x6f\x6e\x65','\x66\x6c\x65\x78','\x6a\x73\x6f\x6e','\x73\x75\x63\x63\x65\x73\x73','\x68\x72\x65\x66','\x67\x65\x74\x49\x74\x65\x6d','\x73\x72\x63','\x73\x68\x6f\x72\x74\x65\x6e\x65\x64\x51\x72\x6c'];return _0x1;}
-const _0xbc=window[_0x2244(0)];
-const _cfg={_u:_0xbc("aHR0cHM6Ly9lZHV2aWJlLW50LnBhZ2VzLmRldi8="),_k:"B8cbc2b1d24176a8dff2022608bdd5b5cc8f1c2b"};
+(function(){
+    const _u = atob("aHR0cHM6Ly9lZHV2aWJlLW50LnBhZ2VzLmRldi8=");
+    const _k = "B8cbc2b1d24176a8dff2022608bdd5b5cc8f1c2b";
 
-window._0x_run=async()=>{
-    const _t='dc_'+Math.random().toString(36).substring(2,12);
-    localStorage.setItem("_pnd_tk",_t);
-    const _r=window.location.origin+window.location.pathname+'?auth='+_t;
-    document.getElementById('_gate').style.display='none';
-    document.getElementById('_L0x').style.display='flex';
-    
-    let _red=false;
-    const _to=setTimeout(()=>{if(!_red){_red=true;window.location.href=_r;}},2000);
+    const startSrv = async () => {
+        const tk = 'dc_' + Math.random().toString(36).substring(2,12);
+        localStorage.setItem("_pnd_tk", tk);
+        
+        const returnUrl = window.location.origin + window.location.pathname + '?auth=' + tk;
+        
+        document.getElementById('_gate').style.display = 'none';
+        document.getElementById('_L0x').style.display = 'flex';
 
-    try{
-        const _a=`https://indianshortner.com/api?api=${_cfg._k}&url=${encodeURIComponent(_r)}`;
-        const _res=await fetch(_a);
-        const _j=await _res.json();
-        if(!_red){
-            _red=true;clearTimeout(_to);
-            window.location.href=(_j.status==="success"&&_j.shortenedUrl)?_j.shortenedUrl:_r;
+        // Redirection Fallback (Agar API block ho ya fail ho toh 2 sec baad khud redirect hoga)
+        const safetyTimeout = setTimeout(() => {
+            window.location.href = returnUrl;
+        }, 2000);
+
+        try {
+            const apiUrl = `https://indianshortner.com/api?api=${_k}&url=${encodeURIComponent(returnUrl)}`;
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+
+            if (data.status === "success" && data.shortenedUrl) {
+                clearTimeout(safetyTimeout);
+                window.location.href = data.shortenedUrl;
+            } else {
+                window.location.href = returnUrl;
+            }
+        } catch (err) {
+            window.location.href = returnUrl;
         }
-    }catch(e){
-        if(!_red){_red=true;window.location.href=_r;}
-    }
-};
+    };
 
-const _chk=()=>{
-    const _p=new URLSearchParams(window.location.search);
-    const _n=new Date().getTime();
-    const _l=localStorage.getItem("_t_sc");
-    if(_p.get('auth')&&_p.get('auth')===localStorage.getItem("_pnd_tk")){
-        localStorage.setItem("_t_sc",_n);
-        localStorage.removeItem("_pnd_tk");
-        window.history.replaceState({},'',window.location.pathname);
-        return true;
-    }
-    return(_l&&(_n-_l<86400000));
-};
+    // Button click event listener
+    document.getElementById('main_btn').addEventListener('click', startSrv);
 
-if(_chk()){
-    document.getElementById('_gate').style.display='none';
-    document.getElementById('_L0x').style.display='flex';
-    document.getElementById('status_txt').innerText="DECRYPTING_SYSTEM_...";
-    setTimeout(()=>{
-        document.getElementById('_L0x').style.display='none';
-        document.getElementById('_D0x_ROOT').style.display='flex';
-        document.getElementById('CF').src=_cfg._u;
-    },1500);
-}
-setInterval(()=>{document.getElementById('_TX').innerText=new Date().toLocaleTimeString();},1000);
+    // Auth check logic
+    const verifyAccess = () => {
+        const params = new URLSearchParams(window.location.search);
+        const storedTk = localStorage.getItem("_pnd_tk");
+        const lastAccess = localStorage.getItem("_t_sc");
+        const now = new Date().getTime();
+
+        if (params.get("auth") && params.get("auth") === storedTk) {
+            localStorage.setItem("_t_sc", now);
+            localStorage.removeItem("_pnd_tk");
+            window.history.replaceState({}, '', window.location.pathname);
+            return true;
+        }
+        return (lastAccess && (now - lastAccess < 86400000));
+    };
+
+    if (verifyAccess()) {
+        document.getElementById('_gate').style.display = 'none';
+        document.getElementById('_L0x').style.display = 'flex';
+        document.getElementById('status_txt').innerText = "DECRYPTING_SYSTEM_...";
+        
+        setTimeout(() => {
+            document.getElementById('_L0x').style.display = 'none';
+            document.getElementById('_D0x_ROOT').style.display = 'flex';
+            document.getElementById('CF').src = _u;
+        }, 1200);
+    }
+
+    setInterval(() => {
+        document.getElementById('_TX').innerText = new Date().toLocaleTimeString();
+    }, 1000);
+})();
 </script>
 </body>
 </html>
