@@ -10,33 +10,46 @@
   <style>
     body { background-color: #000; margin: 0; padding: 0; overflow: hidden; height: 100%; width: 100%; }
     .video-container { position: relative; width: 100%; height: 100%; background: #000; }
-    
-    /* Shaka Player Like UI Fix */
+
+    /* Shaka UI Style */
     :root {
-      --plyr-color-main: #ff0000; /* Shaka/YouTube Red Style */
+      --plyr-color-main: #38bdf8; /* Shaka Light Blue */
+      --plyr-video-controls-background: linear-gradient(0deg, rgba(0,0,0,0.8), transparent);
     }
 
-    .dev-credits {
+    /* Minimal Controls Like Shaka */
+    .plyr--video .plyr__controls {
+      padding: 10px 15px !important;
+      opacity: 0.95;
+    }
+
+    .plyr__progress__container {
+      margin-right: 15px !important;
+    }
+
+    /* Gear Icon for Settings */
+    .plyr__control[data-plyr="settings"]::after {
+      content: '\2699'; /* Unicode for Gear/Settings icon */
+      font-size: 18px;
+    }
+
+    /* Text Only Permanent Credits (No Box) */
+    .dev-credits-permanent {
       position: absolute;
       top: 15px;
       right: 15px;
-      background: rgba(0, 0, 0, 0.5);
-      color: #ffffff;
-      padding: 4px 12px;
-      font-family: 'Segoe UI', sans-serif;
+      color: #fff;
+      font-family: sans-serif;
       font-size: 11px;
-      font-weight: bold;
-      border-radius: 2px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      font-weight: 700;
       z-index: 2147483647;
       pointer-events: none;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      backdrop-filter: blur(5px);
+      letter-spacing: 2px;
     }
 
-    /* Fullscreen Permanent Display Fix */
-    .plyr--fullscreen-enabled .dev-credits {
+    /* Fullscreen Support Fix */
+    .plyr--fullscreen-enabled .dev-credits-permanent {
       display: block !important;
       visibility: visible !important;
       opacity: 1 !important;
@@ -46,27 +59,39 @@
 <body>
 
   <div class="video-container" id="wrapper">
-    <div class="dev-credits" id="p-tag">Developer : Devansh Sharma</div>
+    <div class="dev-credits-permanent" id="permanent-p">Devansh Sharma</div>
     <video autoplay playsinline muted id="player"></video>
   </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const video = document.getElementById("player");
-      const credits = document.getElementById("p-tag");
+      const credits = document.getElementById("permanent-p");
       const source = "https://dillzy-stream.sayanwork-studioo.workers.dev/live/abc123.m3u8";
 
-      const options = {
+      // Shaka Style Options
+      const shakaOptions = {
         autoplay: true,
-        controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen'],
-        settings: ['quality', 'speed']
+        controls: [
+          'play-large', // Centered play button
+          'play', // Smaller play button
+          'progress', // Minimal seek bar
+          'current-time', // Timestamp
+          'mute', // Volume toggle
+          'volume', // Volume slider
+          'settings', // Gear for quality/speed
+          'fullscreen' // Enter fullscreen
+        ],
+        settings: ['quality', 'speed'],
+        speed: { selected: 1, options: [0.5, 0.75, 1, 1.25, 1.5, 2] },
+        quality: { default: 1080 } // Prefer highest
       };
 
       function setupPlayer(hls, qualities = []) {
         const player = new Plyr(video, {
-          ...options,
+          ...shakaOptions,
           quality: qualities.length ? {
-            default: qualities[0],
+            default: qualities[0], // Prefer highest resolution
             options: qualities,
             forced: true,
             onChange: q => {
@@ -77,16 +102,18 @@
           } : {}
         });
 
-        // Credits Injection for Fullscreen
+        // Permanent Credits Injection inside Plyr
         player.on('ready', () => {
           const container = video.closest('.plyr');
-          container.appendChild(credits);
+          container.appendChild(credits); // Injecting inside to persist in fullscreen
         });
 
+        // Auto-Resume
         setInterval(() => {
           if (video.paused && video.readyState > 2) video.play().catch(()=>{});
         }, 3000);
 
+        // Auto-Unmute
         const unmute = () => {
           video.muted = false;
           video.volume = 1;
@@ -96,7 +123,7 @@
       }
 
       if (Hls.isSupported()) {
-        const hls = new Hls({ autoStartLoad: true });
+        const hls = new Hls({ autoStartLoad: true, ABR: { selected: 1080 } }); // Force high quality
         hls.loadSource(source);
         hls.attachMedia(video);
         hls.on(Hls.Events.MANIFEST_PARSED, (_, data) => {
