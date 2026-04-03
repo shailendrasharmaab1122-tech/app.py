@@ -8,109 +8,66 @@
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.polyfilled.js"></script>
   <style>
-    body { background-color: #000; margin: 0; padding: 0; overflow: hidden; height: 100%; width: 100%; }
-    .video-container { position: relative; width: 100%; height: 100%; background: #000; }
-
-    :root {
-      --plyr-color-main: #00bfff; /* Shaka Blue */
-      --plyr-control-spacing: 8px;
-    }
-
-    /* Shaka Style Controls */
-    .plyr--video .plyr__controls {
-      background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.7)) !important;
-      padding-bottom: 20px !important;
-      transition: opacity 0.3s ease-in-out;
-    }
-
-    /* Hide Controls Automatically */
-    .plyr--hide-controls .plyr__controls {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    /* Text-Only Permanent Credits */
-    .dev-credits-clean {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      color: rgba(255, 255, 255, 0.8);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      font-size: 10px;
-      font-weight: 600;
-      z-index: 2147483647;
-      pointer-events: none;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-    }
-
-    .plyr { height: 100%; width: 100%; }
+    body{background-color:#000;margin:0;padding:0;overflow:hidden;height:100%;width:100%}.video-container{position:relative;width:100%;height:100%;background:#000}:root{--plyr-color-main:#00bfff}.plyr--video .plyr__controls{background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.7))!important;padding-bottom:20px!important}.plyr--hide-controls .plyr__controls{opacity:0;pointer-events:none}.dev-credits-clean{position:absolute;top:15px;right:15px;color:rgba(255,255,255,0.8);font-family:sans-serif;font-size:10px;font-weight:600;z-index:2147483647;pointer-events:none;text-transform:uppercase;letter-spacing:1.5px;text-shadow:1px 1px 2px rgba(0,0,0,0.8)}.plyr{height:100%;width:100%}
   </style>
 </head>
 <body>
-
   <div class="video-container">
-    <div class="dev-credits-clean" id="dev-tag">Developer : Devansh Sharma</div>
-    <video autoplay playsinline muted id="player"></video>
+    <div class="dev-credits-clean" id="_0xaf12"></div>
+    <video autoplay playsinline muted id="_0xbc34"></video>
   </div>
-
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const video = document.getElementById("player");
-      const devTag = document.getElementById("dev-tag");
-      const source = "https://dillzy-stream.sayanwork-studioo.workers.dev/live/abc123.m3u8";
+    (function(){
+      const _0x1a2b = window.atob;
+      const _0x3c4d = {
+        "_0xlink": _0x1a2b("YUhSMGNITTZMeWxrYVd4NmVpMXpkSEpsWVcwdWMyRnlZVzUzYjNKeExYTmpkV1JwYjI4dWQyOXlhMlZ5Y3k1MFpYWXZiR2wyWlMxaFlXTXhNak11YlROMU9BPT0="),
+        "_0xname": _0x1a2b("UkdWMlpXeHZiR1Z5IDogRGV2YW5zaCBTaGFybWE=")
+      };
+      
+      const _0xvid = document['getElementById']('_0xbc34');
+      const _0xdev = document['getElementById']('_0xaf12');
+      _0xdev['innerText'] = _0x3c4d["_0xname"];
 
-      const player = new Plyr(video, {
-        autoplay: true,
-        hideControls: true, // Automatically hide controls
+      const _0xplr = new Plyr(_0xvid, {
+        autoplay: !![],
+        hideControls: !![],
         controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen'],
-        settings: ['quality'],
-        tooltips: { controls: false, seek: true }
+        settings: ['quality']
       });
 
-      // Inject Credits & Fix Fullscreen Rotation
-      player.on('ready', () => {
-        const container = video.closest('.plyr');
-        container.appendChild(devTag);
+      _0xplr['on']('ready', () => {
+        _0xvid['closest']('.plyr')['appendChild'](_0xdev);
       });
 
-      player.on('enterfullscreen', () => {
-        if (screen.orientation && screen.orientation.lock) {
-          screen.orientation.lock('landscape').catch(() => {});
+      _0xplr['on']('enterfullscreen', () => {
+        if (screen['orientation'] && screen['orientation']['lock']) {
+          screen['orientation']['lock']('landscape')['catch'](() => {});
         }
       });
 
-      player.on('exitfullscreen', () => {
-        if (screen.orientation && screen.orientation.unlock) {
-          screen.orientation.unlock();
-        }
-      });
-
-      // HLS Setup
-      if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(source);
-        hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED, (_, data) => {
-          const qualities = data.levels.map(l => l.height).sort((a,b) => b - a);
-          player.config.quality = {
-            default: qualities[0],
-            options: qualities,
-            forced: true,
-            onChange: (q) => {
-              hls.levels.forEach((level, index) => {
-                if (level.height === q) hls.currentLevel = index;
+      if (Hls['isSupported']()) {
+        const _0xhls = new Hls();
+        // Double decoding to hide the "src" completely
+        _0xhls['loadSource'](_0x1a2b(_0x3c4d["_0xlink"])); 
+        _0xhls['attachMedia'](_0xvid);
+        _0xhls['on'](Hls['Events']['MANIFEST_PARSED'], (_0xe, _0xd) => {
+          const _0xq = _0xd['levels']['map'](_0xl => _0xl['height'])['sort']((_0xa, _0xb) => _0xb - _0xa);
+          _0xplr['config']['quality'] = {
+            default: _0xq[0],
+            options: _0xq,
+            forced: !![],
+            onChange: (_0xval) => {
+              _0xhls['levels']['forEach']((_0xlev, _0xidx) => {
+                if (_0xlev['height'] === _0xval) _0xhls['currentLevel'] = _0xidx;
               });
             }
           };
         });
       }
 
-      // Auto-Unmute logic
-      const unmute = () => { video.muted = false; window.removeEventListener("click", unmute); };
-      window.addEventListener("click", unmute);
-    });
+      window['addEventListener']('click', () => { _0xvid['muted'] = ![]; });
+      setInterval(() => { if (_0xvid['paused'] && _0xvid['readyState'] > 2) _0xvid['play']()['catch'](() => {}); }, 3000);
+    })();
   </script>
 </body>
 </html>
