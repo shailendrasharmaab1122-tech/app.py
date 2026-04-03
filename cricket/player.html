@@ -11,127 +11,105 @@
     body { background-color: #000; margin: 0; padding: 0; overflow: hidden; height: 100%; width: 100%; }
     .video-container { position: relative; width: 100%; height: 100%; background: #000; }
 
-    /* Shaka UI Style */
     :root {
-      --plyr-color-main: #38bdf8; /* Shaka Light Blue */
-      --plyr-video-controls-background: linear-gradient(0deg, rgba(0,0,0,0.8), transparent);
+      --plyr-color-main: #00bfff; /* Shaka Blue */
+      --plyr-control-spacing: 8px;
     }
 
-    /* Minimal Controls Like Shaka */
+    /* Shaka Style Controls */
     .plyr--video .plyr__controls {
-      padding: 10px 15px !important;
-      opacity: 0.95;
+      background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.7)) !important;
+      padding-bottom: 20px !important;
+      transition: opacity 0.3s ease-in-out;
     }
 
-    .plyr__progress__container {
-      margin-right: 15px !important;
+    /* Hide Controls Automatically */
+    .plyr--hide-controls .plyr__controls {
+      opacity: 0;
+      pointer-events: none;
     }
 
-    /* Gear Icon for Settings */
-    .plyr__control[data-plyr="settings"]::after {
-      content: '\2699'; /* Unicode for Gear/Settings icon */
-      font-size: 18px;
-    }
-
-    /* Text Only Permanent Credits (No Box) */
-    .dev-credits-permanent {
+    /* Text-Only Permanent Credits */
+    .dev-credits-clean {
       position: absolute;
       top: 15px;
       right: 15px;
-      color: #fff;
-      font-family: sans-serif;
-      font-size: 11px;
-      font-weight: 700;
+      color: rgba(255, 255, 255, 0.8);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 10px;
+      font-weight: 600;
       z-index: 2147483647;
       pointer-events: none;
       text-transform: uppercase;
-      letter-spacing: 2px;
+      letter-spacing: 1.5px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
     }
 
-    /* Fullscreen Support Fix */
-    .plyr--fullscreen-enabled .dev-credits-permanent {
-      display: block !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-    }
+    .plyr { height: 100%; width: 100%; }
   </style>
 </head>
 <body>
 
-  <div class="video-container" id="wrapper">
-    <div class="dev-credits-permanent" id="permanent-p">Devansh Sharma</div>
+  <div class="video-container">
+    <div class="dev-credits-clean" id="dev-tag">Developer : Devansh Sharma</div>
     <video autoplay playsinline muted id="player"></video>
   </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const video = document.getElementById("player");
-      const credits = document.getElementById("permanent-p");
+      const devTag = document.getElementById("dev-tag");
       const source = "https://dillzy-stream.sayanwork-studioo.workers.dev/live/abc123.m3u8";
 
-      // Shaka Style Options
-      const shakaOptions = {
+      const player = new Plyr(video, {
         autoplay: true,
-        controls: [
-          'play-large', // Centered play button
-          'play', // Smaller play button
-          'progress', // Minimal seek bar
-          'current-time', // Timestamp
-          'mute', // Volume toggle
-          'volume', // Volume slider
-          'settings', // Gear for quality/speed
-          'fullscreen' // Enter fullscreen
-        ],
-        settings: ['quality', 'speed'],
-        speed: { selected: 1, options: [0.5, 0.75, 1, 1.25, 1.5, 2] },
-        quality: { default: 1080 } // Prefer highest
-      };
+        hideControls: true, // Automatically hide controls
+        controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen'],
+        settings: ['quality'],
+        tooltips: { controls: false, seek: true }
+      });
 
-      function setupPlayer(hls, qualities = []) {
-        const player = new Plyr(video, {
-          ...shakaOptions,
-          quality: qualities.length ? {
-            default: qualities[0], // Prefer highest resolution
+      // Inject Credits & Fix Fullscreen Rotation
+      player.on('ready', () => {
+        const container = video.closest('.plyr');
+        container.appendChild(devTag);
+      });
+
+      player.on('enterfullscreen', () => {
+        if (screen.orientation && screen.orientation.lock) {
+          screen.orientation.lock('landscape').catch(() => {});
+        }
+      });
+
+      player.on('exitfullscreen', () => {
+        if (screen.orientation && screen.orientation.unlock) {
+          screen.orientation.unlock();
+        }
+      });
+
+      // HLS Setup
+      if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(source);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, (_, data) => {
+          const qualities = data.levels.map(l => l.height).sort((a,b) => b - a);
+          player.config.quality = {
+            default: qualities[0],
             options: qualities,
             forced: true,
-            onChange: q => {
+            onChange: (q) => {
               hls.levels.forEach((level, index) => {
                 if (level.height === q) hls.currentLevel = index;
               });
             }
-          } : {}
+          };
         });
-
-        // Permanent Credits Injection inside Plyr
-        player.on('ready', () => {
-          const container = video.closest('.plyr');
-          container.appendChild(credits); // Injecting inside to persist in fullscreen
-        });
-
-        // Auto-Resume
-        setInterval(() => {
-          if (video.paused && video.readyState > 2) video.play().catch(()=>{});
-        }, 3000);
-
-        // Auto-Unmute
-        const unmute = () => {
-          video.muted = false;
-          video.volume = 1;
-          window.removeEventListener("click", unmute);
-        };
-        window.addEventListener("click", unmute);
       }
 
-      if (Hls.isSupported()) {
-        const hls = new Hls({ autoStartLoad: true, ABR: { selected: 1080 } }); // Force high quality
-        hls.loadSource(source);
-        hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED, (_, data) => {
-          const availableQualities = data.levels.map(l => l.height).sort((a,b) => b - a);
-          setupPlayer(hls, availableQualities);
-        });
-        hls.on(Hls.Events.ERROR, (_, data) => { if (data.fatal) hls.startLoad(); });
-      }
+      // Auto-Unmute logic
+      const unmute = () => { video.muted = false; window.removeEventListener("click", unmute); };
+      window.addEventListener("click", unmute);
     });
   </script>
 </body>
