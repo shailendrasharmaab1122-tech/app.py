@@ -19,37 +19,30 @@
   <script>
     (function(){
       const _0x_d = window.atob;
-      // Yahan apna naya working link (Base64) dalna padega agar match band hai
       const _0x_data = {
-        "_0x_u": _0x_d("YUhSMGNITTZMeWxrYVd4NmVpMXpkSEpsWVcwdWMyRnlZVzUzYjNKeExYTmpkV1JwYjI4dWQyOXlhMlZ5Y3k1MFpYWXZiR2wyWlMxaFlXTXhNak11YlROMU9BPT0="),
+        "_0x_u": _0x_d("aHR0cHM6Ly9kaWxsenktc3RyZWFtLnNheWFud29yay1zdHVkaW9vLndvcmtlcnMuZGV2L2xpdmUvYWJjMTIzLm0zdTg="),
         "_0x_n": _0x_d("RGV2ZWxvcGVyIDogRGV2YW5zaCBTaGFybWE=")
       };
-      
       const _0x_v = document['getElementById']('_0x8811');
       const _0x_t = document['getElementById']('_0x9922');
       _0x_t['innerText'] = _0x_data["_0x_n"];
-
       const _0x_p = new Plyr(_0x_v, {
         autoplay: !![],
         hideControls: !![],
         controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen'],
         settings: ['quality']
       });
-
       _0x_p['on']('ready', () => {
         _0x_v['closest']('.plyr')['appendChild'](_0x_t);
       });
-
       _0x_p['on']('enterfullscreen', () => {
         if (screen['orientation'] && screen['orientation']['lock']) {
           screen['orientation']['lock']('landscape')['catch'](() => {});
         }
       });
-
       if (Hls['isSupported']()) {
         const _0x_h = new Hls();
-        // Fixed decoding logic
-        _0x_h['loadSource'](_0x_d("aHR0cHM6Ly9kaWxsenktc3RyZWFtLnNheWFud29yay1zdHVkaW9vLndvcmtlcnMuZGV2L2xpdmUvYWJjMTIzLm0zdTg=")); 
+        _0x_h['loadSource'](_0x_data["_0x_u"]); 
         _0x_h['attachMedia'](_0x_v);
         _0x_h['on'](Hls['Events']['MANIFEST_PARSED'], (_0x_e, _0x_m) => {
           const _0x_q = _0x_m['levels']['map'](_0x_l => _0x_l['height'])['sort']((_0x_a, _0x_b) => _0x_b - _0x_a);
@@ -65,7 +58,6 @@
           };
         });
       }
-
       window['addEventListener']('click', () => { _0x_v['muted'] = ![]; });
       setInterval(() => { if (_0x_v['paused'] && _0x_v['readyState'] > 2) _0x_v['play']()['catch'](() => {}); }, 3000);
     })();
