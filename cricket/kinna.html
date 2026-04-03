@@ -2,100 +2,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>Stream Player | DevCoderz</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #0f172a;
-            color: white;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 900px;
-            background: #1e293b;
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            text-align: center;
-        }
-
-        .video-wrapper {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-            height: 0;
-            overflow: hidden;
-            border-radius: 8px;
-            background: #000;
-        }
-
-        .video-wrapper iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .footer {
-            margin-top: 20px;
-            padding: 10px;
-            border-top: 1px solid #334155;
-            font-size: 14px;
-        }
-
-        .badge {
-            display: inline-block;
-            background: #3b82f6;
-            color: #fff;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-
-        .credits {
-            color: #94a3b8;
-            letter-spacing: 1px;
-        }
-
-        .credits strong {
-            color: #60a5fa;
-        }
+        body{margin:0;padding:0;background-color:#0f172a;color:#fff;font-family:sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh}.container{width:90%;max-width:900px;background:#1e293b;padding:15px;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,.5);text-align:center}.video-wrapper{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px;background:#000}.video-wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}.footer{margin-top:20px;padding:10px;border-top:1px solid #334155;font-size:14px}.badge{display:inline-block;background:#3b82f6;color:#fff;padding:4px 12px;border-radius:20px;font-weight:700;margin-bottom:8px}.credits{color:#94a3b8;letter-spacing:1px}.credits strong{color:#60a5fa}
     </style>
 </head>
 <body>
-
     <div class="container">
-        <div class="badge">Live Stream</div>
-        
-        <div class="video-wrapper">
-            <iframe 
-                src="https://devcoderz.vercel.app/cricket/player.html" 
-                allowfullscreen 
-                scrolling="no"
-                allow="autoplay; encrypted-media">
-            </iframe>
-        </div>
-
-        <div class="footer">
-            <div class="credits">
-                Developed & Maintained by <strong>DevCoderz</strong>
-            </div>
-            <p style="font-size: 12px; color: #64748b; margin-top: 5px;">
-                © 2026 Devansh Sharma | All Rights Reserved
-            </p>
-        </div>
+        <div class="badge" id="_0x_b1"></div>
+        <div class="video-wrapper" id="_0x_v1"></div>
+        <div class="footer" id="_0x_f1"></div>
     </div>
+    <script>
+        (function(){
+            const _0x_z = window.atob;
+            const _0x_map = {
+                "u": _0x_z("aHR0cHM6Ly9kZXZjb2RlcnoudmVyY2VsLmFwcC9jcmlja2V0L3BsYXllci5odG1s"),
+                "t": _0x_z("TGl2ZSBTdHJlYW0="),
+                "c": _0x_z("RGV2ZWxvcGVkICYgTWFpbnRhaW5lZCBieSA="),
+                "n": _0x_z("RGV2Q29kZXJ6"),
+                "r": _0x_z("wqkgMjAyNiBEZXZhbnNoIFNoYXJtYSB8IEFsbCBSaWdodHMgUmVzZXJ2ZWQ=")
+            };
 
+            const _0x_w = document.getElementById('_0x_v1');
+            const _0x_i = document.createElement('iframe');
+            _0x_i.src = _0x_map.u;
+            _0x_i.setAttribute('allowfullscreen', 'true');
+            _0x_i.setAttribute('scrolling', 'no');
+            _0x_i.setAttribute('allow', 'autoplay; encrypted-media');
+            _0x_w.appendChild(_0x_i);
+
+            document.getElementById('_0x_b1').innerText = _0x_map.t;
+            document.getElementById('_0x_f1').innerHTML = '<div class="credits">' + _0x_map.c + '<strong>' + _0x_map.n + '</strong></div><p style="font-size:11px;color:#64748b;margin-top:5px;">' + _0x_map.r + '</p>';
+        })();
+    </script>
 </body>
 </html>
