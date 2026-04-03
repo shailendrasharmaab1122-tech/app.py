@@ -1,112 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>DevCoderZ | Secure_Vault_v3</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-body,html{margin:0;padding:0;width:100%;height:100%;background:#010409;font-family:'Segoe UI',sans-serif;color:#fff;overflow:hidden}#_gate,#_L0x{position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle at center,#0d1117 0%,#010409 100%);display:flex;align-items:center;justify-content:center;z-index:100000}.box{background:#0d1117;padding:30px;border-radius:12px;border:1px solid #30363d;text-align:center;width:90%;max-width:350px;box-shadow:0 10px 40px rgba(0,0,0,.8)}h2{color:#38bdf8;margin-bottom:20px;letter-spacing:1px;font-size:1.4rem}.btn{display:block;width:100%;padding:14px;margin:10px 0;border:none;border-radius:8px;cursor:pointer;font-weight:700;transition:.3s;font-size:14px;text-transform:uppercase;text-decoration:none;box-sizing:border-box;text-align:center}.btn-srv{background:#38bdf8;color:#000}.btn-srv:hover{background:#7dd3fc;transform:translateY(-2px)}#_L0x{background:#010409;display:none;flex-direction:column;gap:12px;z-index:100001;color:#38bdf8;font-family:monospace}._b{width:120px;height:2px;background:#161b22;position:relative}._b::after{content:'';position:absolute;width:40%;height:100%;background:#38bdf8;animation:L .8s infinite}@keyframes L{0%{left:0}50%{left:60%}100%{left:0}}#_D0x_ROOT{display:none;width:100%;height:100vh;flex-direction:column}.H0x{height:65px;background:#0d1117;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid #30363d;z-index:1000}.B0x{font-family:'Space Mono';color:#38bdf8;font-weight:900}.M0x{width:100%;height:calc(100vh - 65px);overflow:hidden;position:relative}.I0x{width:100%;height:100%;border:none;display:block}.BLK{position:absolute;top:0;right:0;width:100%;height:140px;background:transparent;z-index:9999;pointer-events:all}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>DevCoderZ | Secure_Vault_v3</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body,html{margin:0;padding:0;width:100%;height:100%;background:#010409;font-family:sans-serif;color:#fff;overflow:hidden}
+        #_gate,#_L0x{position:fixed;top:0;left:0;width:100%;height:100%;background:#010409;display:flex;align-items:center;justify-content:center;z-index:100000}
+        .box{background:#0d1117;padding:30px;border-radius:12px;border:1px solid #30363d;text-align:center;width:90%;max-width:350px}
+        h2{color:#38bdf8;margin-bottom:20px}
+        .btn{display:block;width:100%;padding:14px;margin:10px 0;border:none;border-radius:8px;cursor:pointer;font-weight:700;background:#38bdf8;color:#000;text-transform:uppercase}
+        #_L0x{display:none;flex-direction:column;gap:15px}
+        ._b{width:120px;height:2px;background:#38bdf8;animation:L 0.8s infinite}
+        @keyframes L{0%{opacity:0.2}50%{opacity:1}100%{opacity:0.2}}
+        #_D0x_ROOT{display:none;width:100%;height:100vh;flex-direction:column}
+        .H0x{height:60px;background:#0d1117;display:flex;align-items:center;justify-content:center;border-bottom:1px solid #30363d}
+        .M0x{width:100%;height:calc(100vh - 60px)}
+        .I0x{width:100%;height:100%;border:none}
+    </style>
 </head>
-<body oncontextmenu="return false;">
+<body>
 
 <div id="_gate">
     <div class="box">
         <i class="fas fa-shield-alt" style="font-size:45px;color:#38bdf8;margin-bottom:15px"></i>
         <h2>SYSTEM ACCESS</h2>
-        <button class="btn btn-srv" id="main_btn">
-            <i class="fas fa-key"></i> GENERATE ACCESS KEY
-        </button>
-        <p style="font-size:9px;color:#444;margin-top:20px;letter-spacing:2px">DEVCODERZ SECURITY SYSTEM</p>
+        <button class="btn" id="activeBtn">GENERATE ACCESS KEY</button>
     </div>
 </div>
 
 <div id="_L0x">
-    <div id="status_txt" style="font-size:14px">CONNECTING_SERVER_...</div>
+    <div style="color:#38bdf8">CONNECTING...</div>
     <div class="_b"></div>
 </div>
 
 <div id="_D0x_ROOT">
-    <header class="H0x">
-        <div class="B0x"><DevCoderZ/></div>
-        <div id="_TX" style="font-size:12px;font-family:'Space Mono'">00:00:00</div>
-    </header>
-    <main class="M0x">
-        <div class="BLK"></div>
-        <iframe id="CF" src="about:blank" class="I0x"></iframe>
-    </main>
+    <header class="H0x"><div style="color:#38bdf8;font-weight:900">DevCoderZ</div></header>
+    <main class="M0x"><iframe id="CF" src="" class="I0x"></iframe></main>
 </div>
 
-<script type="text/javascript">
-(function(){
-    const _u = atob("aHR0cHM6Ly9lZHV2aWJlLW50LnBhZ2VzLmRldi8=");
-    const _k = "B8cbc2b1d24176a8dff2022608bdd5b5cc8f1c2b";
+<script>
+(function() {
+    var config = {
+        u: "https://eduvibe-nt.pages.dev/",
+        k: "B8cbc2b1d24176a8dff2022608bdd5b5cc8f1c2b"
+    };
 
-    const startSrv = async () => {
-        const tk = 'dc_' + Math.random().toString(36).substring(2,12);
+    var btn = document.getElementById('activeBtn');
+    
+    btn.onclick = function() {
+        var tk = 'dc_' + Math.random().toString(36).substring(7);
         localStorage.setItem("_pnd_tk", tk);
         
-        const returnUrl = window.location.origin + window.location.pathname + '?auth=' + tk;
+        var currentUrl = window.location.href.split('?')[0];
+        var finalReturn = currentUrl + '?auth=' + tk;
         
         document.getElementById('_gate').style.display = 'none';
         document.getElementById('_L0x').style.display = 'flex';
 
-        // Redirection Fallback (Agar API block ho ya fail ho toh 2 sec baad khud redirect hoga)
-        const safetyTimeout = setTimeout(() => {
-            window.location.href = returnUrl;
-        }, 2000);
+        // Direct Redirect Timeout (Safety)
+        var forceRedirect = setTimeout(function() {
+            window.location.href = finalReturn;
+        }, 2500);
 
-        try {
-            const apiUrl = `https://indianshortner.com/api?api=${_k}&url=${encodeURIComponent(returnUrl)}`;
-            const response = await fetch(apiUrl);
-            const data = await response.json();
+        var api = "https://indianshortner.com/api?api=" + config.k + "&url=" + encodeURIComponent(finalReturn);
 
-            if (data.status === "success" && data.shortenedUrl) {
-                clearTimeout(safetyTimeout);
+        // Fetch API call
+        fetch(api).then(function(r) { return r.json(); }).then(function(data) {
+            clearTimeout(forceRedirect);
+            if(data.status === "success" && data.shortenedUrl) {
                 window.location.href = data.shortenedUrl;
             } else {
-                window.location.href = returnUrl;
+                window.location.href = finalReturn;
             }
-        } catch (err) {
-            window.location.href = returnUrl;
-        }
+        }).catch(function() {
+            window.location.href = finalReturn;
+        });
     };
 
-    // Button click event listener
-    document.getElementById('main_btn').addEventListener('click', startSrv);
+    // Verify Access
+    var urlParams = new URLSearchParams(window.location.search);
+    var auth = urlParams.get('auth');
+    var savedTk = localStorage.getItem("_pnd_tk");
+    var lastAccess = localStorage.getItem("_t_sc");
+    var now = new Date().getTime();
 
-    // Auth check logic
-    const verifyAccess = () => {
-        const params = new URLSearchParams(window.location.search);
-        const storedTk = localStorage.getItem("_pnd_tk");
-        const lastAccess = localStorage.getItem("_t_sc");
-        const now = new Date().getTime();
-
-        if (params.get("auth") && params.get("auth") === storedTk) {
-            localStorage.setItem("_t_sc", now);
-            localStorage.removeItem("_pnd_tk");
-            window.history.replaceState({}, '', window.location.pathname);
-            return true;
-        }
-        return (lastAccess && (now - lastAccess < 86400000));
-    };
-
-    if (verifyAccess()) {
-        document.getElementById('_gate').style.display = 'none';
-        document.getElementById('_L0x').style.display = 'flex';
-        document.getElementById('status_txt').innerText = "DECRYPTING_SYSTEM_...";
-        
-        setTimeout(() => {
-            document.getElementById('_L0x').style.display = 'none';
-            document.getElementById('_D0x_ROOT').style.display = 'flex';
-            document.getElementById('CF').src = _u;
-        }, 1200);
+    if(auth && auth === savedTk) {
+        localStorage.setItem("_t_sc", now);
+        localStorage.removeItem("_pnd_tk");
+        window.history.replaceState({}, '', window.location.pathname);
+        showContent();
+    } else if(lastAccess && (now - lastAccess < 86400000)) {
+        showContent();
     }
 
-    setInterval(() => {
-        document.getElementById('_TX').innerText = new Date().toLocaleTimeString();
-    }, 1000);
+    function showContent() {
+        document.getElementById('_gate').style.display = 'none';
+        document.getElementById('_L0x').style.display = 'flex';
+        setTimeout(function() {
+            document.getElementById('_L0x').style.display = 'none';
+            document.getElementById('_D0x_ROOT').style.display = 'flex';
+            document.getElementById('CF').src = config.u;
+        }, 1000);
+    }
 })();
 </script>
 </body>
