@@ -15,9 +15,15 @@
         ._b{width:120px;height:2px;background:#38bdf8;animation:L 0.8s infinite}
         @keyframes L{0%{opacity:0.2}50%{opacity:1}100%{opacity:0.2}}
         #_D0x_ROOT{display:none;width:100%;height:100vh;flex-direction:column}
-        .H0x{height:60px;background:#0d1117;display:flex;align-items:center;justify-content:center;border-bottom:1px solid #30363d}
-        .M0x{width:100%;height:calc(100vh - 60px)}
-        .I0x{width:100%;height:100%;border:none}
+        .H0x{height:60px;background:#0d1117;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid #30363d;box-sizing:border-box}
+        .M0x{width:100%;height:calc(100vh - 60px);overflow:hidden;position:relative}
+        .I0x{width:100%;height:calc(100% + 100px);border:none;position:absolute;top:0;left:0}
+        #menuPanel{position:fixed;top:0;left:-300px;width:280px;height:100%;background:#0d1117;border-right:1px solid #30363d;z-index:100001;transition:0.3s;padding:20px;box-sizing:border-box}
+        #menuPanel.active{left:0}
+        .menu-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:none;z-index:100000}
+        .cred-item{margin-bottom:20px;padding:10px;border-bottom:1px solid #161b22}
+        .cred-title{color:#38bdf8;font-size:11px;text-transform:uppercase;margin-bottom:5px;font-weight:bold}
+        .cred-name{font-size:16px;font-weight:bold}
     </style>
 </head>
 <body>
@@ -35,76 +41,36 @@
     <div class="_b"></div>
 </div>
 
+<div class="menu-overlay" id="overlay" onclick="window['_tM']()"></div>
+<div id="menuPanel">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:30px">
+        <span style="color:#38bdf8;font-weight:bold">SYSTEM CREDITS</span>
+        <i class="fas fa-times" onclick="window['_tM']()" style="cursor:pointer"></i>
+    </div>
+    <div class="cred-item">
+        <div class="cred-title">Lead Founder & Architect</div>
+        <div class="cred-name">Devansh Sharma</div>
+    </div>
+    <div class="cred-item">
+        <div class="cred-title">Co-Founder</div>
+        <div class="cred-name">Assault Decoder</div>
+    </div>
+    <button class="btn" onclick="location.reload()" style="font-size:12px;margin-top:20px">Refresh System</button>
+</div>
+
 <div id="_D0x_ROOT">
-    <header class="H0x"><div style="color:#38bdf8;font-weight:900">DevCoderZ</div></header>
-    <main class="M0x"><iframe id="CF" src="" class="I0x"></iframe></main>
+    <header class="H0x">
+        <i class="fas fa-bars" onclick="window['_tM']()" style="cursor:pointer;color:#38bdf8;font-size:20px"></i>
+        <div style="color:#38bdf8;font-weight:900;letter-spacing:1px">DevCoderZ</div>
+        <div style="width:20px"></div>
+    </header>
+    <main class="M0x">
+        <iframe id="CF" class="I0x" sandbox="allow-forms allow-scripts allow-same-origin"></iframe>
+    </main>
 </div>
 
 <script>
-(function() {
-    var config = {
-        u: "https://eduvibe-nt.pages.dev/",
-        k: "B8cbc2b1d24176a8dff2022608bdd5b5cc8f1c2b"
-    };
-
-    var btn = document.getElementById('activeBtn');
-    
-    btn.onclick = function() {
-        var tk = 'dc_' + Math.random().toString(36).substring(7);
-        localStorage.setItem("_pnd_tk", tk);
-        
-        var currentUrl = window.location.href.split('?')[0];
-        var finalReturn = currentUrl + '?auth=' + tk;
-        
-        document.getElementById('_gate').style.display = 'none';
-        document.getElementById('_L0x').style.display = 'flex';
-
-        // Direct Redirect Timeout (Safety)
-        var forceRedirect = setTimeout(function() {
-            window.location.href = finalReturn;
-        }, 2500);
-
-        var api = "https://indianshortner.com/api?api=" + config.k + "&url=" + encodeURIComponent(finalReturn);
-
-        // Fetch API call
-        fetch(api).then(function(r) { return r.json(); }).then(function(data) {
-            clearTimeout(forceRedirect);
-            if(data.status === "success" && data.shortenedUrl) {
-                window.location.href = data.shortenedUrl;
-            } else {
-                window.location.href = finalReturn;
-            }
-        }).catch(function() {
-            window.location.href = finalReturn;
-        });
-    };
-
-    // Verify Access
-    var urlParams = new URLSearchParams(window.location.search);
-    var auth = urlParams.get('auth');
-    var savedTk = localStorage.getItem("_pnd_tk");
-    var lastAccess = localStorage.getItem("_t_sc");
-    var now = new Date().getTime();
-
-    if(auth && auth === savedTk) {
-        localStorage.setItem("_t_sc", now);
-        localStorage.removeItem("_pnd_tk");
-        window.history.replaceState({}, '', window.location.pathname);
-        showContent();
-    } else if(lastAccess && (now - lastAccess < 86400000)) {
-        showContent();
-    }
-
-    function showContent() {
-        document.getElementById('_gate').style.display = 'none';
-        document.getElementById('_L0x').style.display = 'flex';
-        setTimeout(function() {
-            document.getElementById('_L0x').style.display = 'none';
-            document.getElementById('_D0x_ROOT').style.display = 'flex';
-            document.getElementById('CF').src = config.u;
-        }, 1000);
-    }
-})();
+(function(_0x1,_0x2){const _0x3=atob;window['_tM']=function(){const _0x4=document.getElementById('menuPanel');const _0x5=document.getElementById('overlay');if(_0x4.classList.contains('active')){_0x4.classList.remove('active');_0x5.style.display='none';}else{_0x4.classList.add('active');_0x5.style.display='block';}};const _0x6={_u:_0x3("aHR0cHM6Ly9lZHV2aWJlLW50LnBhZ2VzLmRldi8="),_k:_0x3("QjhjYmMyYjFkMjQxNzZhOGRmZjIwMjI2MDhiZGQ1YjVjYzhmMWMyYg=="),_a:_0x3("c3Jj"),_f:_0x3("aHR0cHM6Ly9pbmRpYW5zaG9ydG5lci5jb20vYXBpP2FwaT0=")};const _0x7=document.getElementById('activeBtn');_0x7.onclick=function(){const _0x8='dc_'+Math.random().toString(36).substring(7);localStorage.setItem("_pnd_tk",_0x8);const _0x9=window.location.href.split('?')[0];const _0xA=_0x9+'?auth='+_0x8;document.getElementById('_gate').style.display='none';document.getElementById('_L0x').style.display='flex';const _0xB=setTimeout(function(){window.location.href=_0xA;},2500);const _0xC=_0x6._f+_0x6._k+"&url="+encodeURIComponent(_0xA);fetch(_0xC).then(function(_0xD){return _0xD.json();}).then(function(_0xE){clearTimeout(_0xB);if(_0xE.status==="success"&&_0xE.shortenedUrl){window.location.href=_0xE.shortenedUrl;}else{window.location.href=_0xA;}}).catch(function(){window.location.href=_0xA;});};const _0xF=new URLSearchParams(window.location.search);const _0x10=_0xF.get('auth');const _0x11=localStorage.getItem("_pnd_tk");const _0x12=localStorage.getItem("_t_sc");const _0x13=new Date().getTime();if(_0x10&&_0x10===_0x11){localStorage.setItem("_t_sc",_0x13);localStorage.removeItem("_pnd_tk");window.history.replaceState({},'',window.location.pathname);_0x14();}else if(_0x12&&(_0x13-_0x12<86400000)){_0x14();}function _0x14(){document.getElementById('_gate').style.display='none';document.getElementById('_L0x').style.display='flex';setTimeout(function(){document.getElementById('_L0x').style.display='none';document.getElementById('_D0x_ROOT').style.display='flex';document.getElementById('CF')[_0x6._a]=_0x6._u;},1000);}})();
 </script>
 </body>
 </html>
