@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>DevCoderZ X Cricket</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <meta name="referrer" content="no-referrer">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.css">
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.polyfilled.js"></script>
+  <style>
+    body{background-color:#000;margin:0;padding:0;overflow:hidden;height:100%;width:100%}.video-container{position:relative;width:100%;height:100%;background:#000;display:flex;align-items:center;justify-content:center}:root{--plyr-color-main:#00bfff}.plyr--video .plyr__controls{background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.7))!important;padding-bottom:20px!important}.plyr--hide-controls .plyr__controls{opacity:0;pointer-events:none}.dev-tag-clean{position:absolute;top:15px;right:15px;color:rgba(255,255,255,0.6);font-family:sans-serif;font-size:10px;font-weight:700;z-index:2147483647;pointer-events:none;text-transform:uppercase;letter-spacing:1.8px;text-shadow:1px 1px 2px rgba(0,0,0,0.9)}
+    #_0x_u_btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,191,255,0.9);color:#fff;padding:15px 30px;border-radius:50px;font-family:sans-serif;font-size:14px;font-weight:800;cursor:pointer;z-index:2147483646;display:flex;align-items:center;box-shadow:0 0 30px rgba(0,0,0,0.6);border:none;text-transform:uppercase;letter-spacing:1px;animation:p_scale 1.2s infinite ease-in-out;white-space:nowrap}
+    @keyframes p_scale{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.05)}}.plyr{height:100%;width:100%}
+  </style>
+</head>
+<body>
+  <div class="video-container" id="main-ui">
+    <div class="dev-tag-clean" id="_0x5a21"></div>
+    <button id="_0x_u_btn">🔊 Tap to Unmute</button>
+    <video autoplay playsinline muted id="_0x11ff"></video>
+  </div>
+  <script>
+    (function(){
+      const _0x_a = window.atob;
+      const _0x_allowed = _0x_a("ZGV2Y29kZXJ6LnZlcmNlbC5hcHA="); 
+      if (!window.location.hostname.includes(_0x_allowed) && window.location.hostname !== "localhost") {
+        document.body.innerHTML = "<div style='color:white;text-align:center;margin-top:20%;font-family:sans-serif;'><h1>Domain Not Authorized!</h1><p>Contact DevCoderZ for Access</p></div>";
+        return;
+      }
+      const _0x_v = document['getElementById']('_0x11ff');
+      const _0x_t = document['getElementById']('_0x5a21');
+      const _0x_b = document['getElementById']('_0x_u_btn');
+      _0x_t['innerText'] = _0x_a("RGV2ZWxvcGVyIDogRGV2YW5zaCBTaGFybWE=");
+      const _0x_p = new Plyr(_0x_v, {autoplay:!![],hideControls:!![],controls:['play-large','play','progress','current-time','mute','volume','settings','fullscreen']});
+      _0x_p['on']('ready', () => {
+        const _0x_c = _0x_v['closest']('.plyr');
+        _0x_c['appendChild'](_0x_t);
+        _0x_c['appendChild'](_0x_b);
+      });
+      _0x_p['on']('enterfullscreen', () => {
+        if (screen['orientation'] && screen['orientation']['lock']) {
+          screen['orientation']['lock']('landscape')['catch'](() => {});
+        }
+      });
+      _0x_p['on']('exitfullscreen', () => {
+        if (screen['orientation'] && screen['orientation']['unlock']) {
+          screen['orientation']['unlock']();
+        }
+      });
+      const _0x_f = () => {
+        _0x_v['muted'] = ![];
+        _0x_v['volume'] = 1;
+        _0x_b['style']['display'] = 'none';
+        window['removeEventListener']('touchstart', _0x_f);
+        window['removeEventListener']('click', _0x_f);
+      };
+      _0x_b['addEventListener']('click', _0x_f);
+      window['addEventListener']('touchstart', _0x_f);
+      if (Hls['isSupported']()) {
+        const _0x_h = new Hls();
+        _0x_h['loadSource'](_0x_a("aHR0cHM6Ly9hbGxpbm9uZXJlYm9ybi5vbmxpbmUvb3BwbGV4L2xpdmUxMjgucGhwP2lkPTE2NzU3Mw=="));
+        _0x_h['attachMedia'](_0x_v);
+        _0x_h['on'](Hls['Events']['MANIFEST_PARSED'], (_0x_e, _0x_m) => {
+          const _0x_q = _0x_m['levels']['map'](_0x_l => _0x_l['height'])['sort']((_0x_1, _0x_2) => _0x_2 - _0x_1);
+          _0x_p['config']['quality'] = { default: _0x_q[0], options: _0x_q, forced: !![], onChange: (v) => {
+            _0x_h['levels']['forEach']((l, i) => { if (l['height'] === v) _0x_h['currentLevel'] = i; });
+          }};
+        });
+      }
+      setInterval(() => { if(_0x_v['paused'] && _0x_v['readyState'] > 2) _0x_v['play'](); }, 2500);
+    })();
+  </script>
+</body>
+</html>
