@@ -1,175 +1,129 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevCoderZ Arena | Premium Stream</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/shaka-player.compiled.debug.js"></script>
-
+    <title>DevCoderZ Sports Portal</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
     <style>
-        body { background-color: #020617; color: #e2e8f0; }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        body { background: #0b0b0b; color: white; font-family: sans-serif; margin: 0; }
+        .container { display: flex; flex-direction: column; height: 100vh; }
+        
+        /* Video Section */
+        #video-wrapper { width: 100%; background: #000; aspect-ratio: 16/9; }
+        video { width: 100%; height: 100%; }
+
+        /* Channel List Section */
+        .channel-list {
+            padding: 15px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            overflow-y: auto;
         }
-        .active-card {
-            background: rgba(249, 115, 22, 0.1);
-            border-color: rgba(249, 115, 22, 0.5);
-            box-shadow: 0 0 20px rgba(249, 115, 22, 0.1);
+        .channel-card {
+            background: #1a1a1a;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 1px solid #333;
         }
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-track { background: #020617; }
-        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
+        .channel-card:hover { border-color: #00bfff; transform: translateY(-3px); }
+        .channel-card img { width: 60px; height: 60px; object-fit: contain; margin-bottom: 8px; }
+        .channel-card p { font-size: 12px; margin: 0; font-weight: bold; }
     </style>
 </head>
-<body class="font-sans antialiased selection:bg-orange-500/30">
+<body>
 
-    <div class="max-w-6xl mx-auto px-4 py-6 md:py-10">
-        
-        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-            <div class="flex items-center gap-4">
-                <div class="h-12 w-12 bg-gradient-to-br from-orange-500 to-orange-700 rounded-2xl flex items-center justify-center shadow-lg shadow-orange-900/20 ring-1 ring-orange-400/30">
-                    <span class="text-xl font-black italic text-white">D</span>
-                </div>
-                <div>
-                    <h1 class="text-2xl font-black uppercase tracking-tighter italic">DevCoderZ Arena</h1>
-                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-[0.4em]">Premium Ad-Free Experience</p>
-                </div>
-            </div>
-            <div class="glass-card px-4 py-2 rounded-2xl flex items-center gap-3">
-                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                <span id="status-text" class="text-[10px] font-black text-slate-400 uppercase tracking-widest">System Online</span>
-            </div>
-        </header>
-
-        <div class="relative w-full aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl border border-white/10 mb-10 group">
-            <video id="video-player" class="w-full h-full object-contain" autoplay playsinline></video>
-            
-            <div class="absolute top-4 left-4 flex gap-2 pointer-events-none">
-                <div class="bg-orange-600 px-2 py-1 rounded text-[10px] font-black uppercase tracking-tighter shadow-lg text-white">LIVE HD</div>
-                <div id="current-channel-name" class="bg-black/60 backdrop-blur-md px-2 py-1 rounded text-[10px] font-bold text-white/70 border border-white/10 uppercase tracking-tighter">
-                    Select a Channel
-                </div>
-            </div>
-        </div>
-
-        <section>
-            <div class="flex items-center justify-between mb-6 border-b border-white/5 pb-4">
-                <h2 class="text-xs font-black uppercase tracking-widest text-slate-500 italic">Premium Channels</h2>
-                <p class="text-[10px] font-bold text-orange-500 uppercase tracking-tighter">720P Optimized</p>
-            </div>
-
-            <div id="channel-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                </div>
-        </section>
-
-        <footer class="mt-20 pt-8 border-t border-white/5 text-center">
-            <p class="text-[9px] text-slate-700 font-bold uppercase tracking-[0.8em]">Handcrafted by DevCoderZ Infrastructure</p>
-        </footer>
+<div class="container">
+    <div id="video-wrapper" data-shaka-player-container>
+        <video id="video" autoplay playsinline></video>
     </div>
 
-    <script>
-        // --- CHANNEL DATA ---
-        // Yahan apne working links daal dena
-        const CHANNELS = [
-            { 
-                id: 1, 
-                name: "Star Sports 1 Hindi", 
-                url: "https://your-m3u8-link.m3u8", 
-                logo: "https://img.media.jio.com/tvpimages/13/81/302112_l_medium.jpg" 
-            },
-            { 
-                id: 2, 
-                name: "Star Sports Select 1", 
-                url: "https://your-m3u8-link-2.m3u8", 
-                logo: "https://img.media.jio.com/tvpimages/13/82/301994_l_medium.jpg" 
-            },
-            { 
-                id: 3, 
-                name: "Sports 18 HD", 
-                url: "https://your-m3u8-link-3.m3u8", 
-                logo: "https://img.media.jio.com/tvpimages/10/10/sports18_l_medium.jpg" 
-            },
-            { 
-                id: 4, 
-                name: "Star Sports 2 Hindi", 
-                url: "https://your-m3u8-link-4.m3u8", 
-                logo: "https://img.media.jio.com/tvpimages/57/17/302124_l_medium.jpg" 
-            }
-        ];
+    <div class="channel-list" id="list">
+        </div>
+</div>
 
-        let player;
-        const videoElement = document.getElementById('video-player');
-        const channelNameDisplay = document.getElementById('current-channel-name');
-
-        // --- SHAKA PLAYER INIT ---
-        async function initPlayer() {
-            shaka.polyfill.installAll();
-            if (shaka.Player.isBrowserSupported()) {
-                player = new shaka.Player(videoElement);
-                player.addEventListener('error', onErrorEvent);
-                
-                // Load First Channel by default
-                loadChannel(CHANNELS[0]);
-                renderChannels();
-            } else {
-                alert('Browser not supported!');
-            }
+<script>
+    // Paste your JSON data here
+    const channels = [
+        {
+            "name": "DD Sports",
+            "url": "https://jiotvbpkmob.cdn.jio.com/bpk-tv/DD_Sports_BTS/output/index.mpd",
+            "keyId": "0c1b139b9a955134a1efae8e44b63aac",
+            "key": "00897bffd6997049787270797b8c3a17",
+            "logo": "https://jiotv.catchup.cdn.jio.com/dare_images/images/DD_Sports.png"
+        },
+        {
+            "name": "Eurosport HD",
+            "url": "https://jiotvbpkmob.cdn.jio.com/bpk-tv/Dsports_HD_BTS/output/index.mpd",
+            "keyId": "14fc31f9d832509c9f7cdd77e622e30b",
+            "key": "a884515f4e1dd77f07aa100ccec13388",
+            "logo": "https://jiotv.catchup.cdn.jio.com/dare_images/images/Dsports_HD.png"
+        },
+        {
+            "name": "Star Sports Select 1 HD",
+            "url": "https://jiotvbpkmob.cdn.jio.com/bpk-tv/Star_Sports_Select_HD_1_BTS/output/index.mpd",
+            "keyId": "c2c048e439d65316beeda6ef64d5d0f8",
+            "key": "e2fdc132cbdee65501b845ce414fce39",
+            "logo": "https://img.media.jio.com/tvpimages/96/65/302113_1749664252703_l_medium.jpg"
         }
+        // ... Add all other channels here
+    ];
 
-        async function loadChannel(channel) {
-            try {
-                await player.load(channel.url);
-                channelNameDisplay.innerText = channel.name;
-                // Highlight active card
-                renderChannels(channel.id);
-            } catch (e) {
-                console.error('Error loading stream', e);
-            }
-        }
+    let player;
+    const video = document.getElementById('video');
+    const container = document.getElementById('video-wrapper');
 
-        function onErrorEvent(event) {
-            console.error('Error code', event.detail.code, 'object', event.detail);
-        }
+    async function initPlayer() {
+        shaka.polyfill.installAll();
+        player = new shaka.Player(video);
+        
+        // Custom Header logic (Mobile spoofing)
+        player.getNetworkingEngine().registerRequestFilter((type, request) => {
+            request.headers['User-Agent'] = 'plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6';
+        });
 
-        // --- RENDER GRID ---
-        function renderChannels(activeId = 1) {
-            const grid = document.getElementById('channel-grid');
-            grid.innerHTML = '';
+        const ui = new shaka.ui.Overlay(player, container, video);
+        
+        // Initial load (First channel)
+        playChannel(channels[0]);
+    }
 
-            CHANNELS.forEach(ch => {
-                const isActive = ch.id === activeId;
-                const button = document.createElement('button');
-                button.className = `p-4 rounded-[2rem] border text-left transition-all duration-300 group ${isActive ? 'active-card' : 'glass-card hover:bg-white/5'}`;
-                
-                button.innerHTML = `
-                    <div class="aspect-video rounded-2xl overflow-hidden bg-black/40 mb-4 flex items-center justify-center p-4 relative">
-                        <img src="${ch.logo}" alt="${ch.name}" class="w-full h-full object-contain transition-transform group-hover:scale-110">
-                        ${isActive ? `
-                            <div class="absolute inset-0 bg-orange-600/10 backdrop-blur-[1px] flex items-center justify-center">
-                                <div class="flex gap-1 h-3 items-end">
-                                    <div class="w-1 bg-orange-500 animate-bounce h-2"></div>
-                                    <div class="w-1 bg-orange-500 animate-bounce h-3" style="animation-delay: 0.1s"></div>
-                                    <div class="w-1 bg-orange-500 animate-bounce h-2" style="animation-delay: 0.2s"></div>
-                                </div>
-                            </div>
-                        ` : ''}
-                    </div>
-                    <h3 class="text-[11px] font-bold truncate ${isActive ? 'text-orange-500' : 'text-slate-400'}">${ch.name}</h3>
-                    <p class="text-[8px] text-slate-600 font-black mt-1 uppercase tracking-tighter italic">Auto-Bitrate • HD</p>
-                `;
-
-                button.onclick = () => loadChannel(ch);
-                grid.appendChild(button);
+    async function playChannel(ch) {
+        try {
+            // Configure DRM
+            player.configure({
+                drm: {
+                    clearKeys: {
+                        [ch.keyId]: ch.key
+                    }
+                }
             });
+            await player.load(ch.url);
+            console.log("Playing:", ch.name);
+        } catch (e) {
+            console.error("Error loading channel:", e);
         }
+    }
 
-        document.addEventListener('DOMContentLoaded', initPlayer);
-    </script>
+    // Load channel list into UI
+    const listDiv = document.getElementById('list');
+    channels.forEach(ch => {
+        const card = document.createElement('div');
+        card.className = 'channel-card';
+        card.innerHTML = `
+            <img src="${ch.logo}" alt="${ch.name}">
+            <p>${ch.name}</p>
+        `;
+        card.onclick = () => playChannel(ch);
+        listDiv.appendChild(card);
+    });
+
+    document.addEventListener('shaka-ui-loaded', initPlayer);
+</script>
 </body>
 </html>
