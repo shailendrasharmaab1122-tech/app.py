@@ -1,129 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevCoderZ Sports Portal</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
-    <style>
-        body { background: #0b0b0b; color: white; font-family: sans-serif; margin: 0; }
-        .container { display: flex; flex-direction: column; height: 100vh; }
-        
-        /* Video Section */
-        #video-wrapper { width: 100%; background: #000; aspect-ratio: 16/9; }
-        video { width: 100%; height: 100%; }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>DevCoderZ | All-In-One Sports</title>
+  <meta name="referrer" content="no-referrer">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
+  
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:#000;color:#fff;font-family:sans-serif;overflow:hidden;height:100vh;}
+    
+    .main-container { display: flex; flex-direction: column; height: 100%; }
+    
+    /* Player Section */
+    #player-container { width: 100%; aspect-ratio: 16/9; background: #000; position: relative; }
+    video { width: 100%; height: 100%; }
 
-        /* Channel List Section */
-        .channel-list {
-            padding: 15px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 15px;
-            overflow-y: auto;
-        }
-        .channel-card {
-            background: #1a1a1a;
-            border-radius: 8px;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.3s;
-            border: 1px solid #333;
-        }
-        .channel-card:hover { border-color: #00bfff; transform: translateY(-3px); }
-        .channel-card img { width: 60px; height: 60px; object-fit: contain; margin-bottom: 8px; }
-        .channel-card p { font-size: 12px; margin: 0; font-weight: bold; }
-    </style>
+    /* Channel List Section */
+    .channel-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 12px;
+      padding: 15px;
+      overflow-y: auto;
+      background: #0f0f0f;
+    }
+    .ch-card {
+      background: #1a1a1a;
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      border: 1px solid #333;
+      transition: 0.2s;
+    }
+    .ch-card:hover { border-color: #00bfff; transform: scale(1.03); }
+    .ch-card img { width: 50px; height: 50px; object-fit: contain; margin-bottom: 5px; }
+    .ch-card p { font-size: 11px; font-weight: bold; overflow: hidden; text-wrap: nowrap; }
+
+    #status-overlay {
+      position: absolute; top: 10px; left: 10px; z-index: 10;
+      background: rgba(0,0,0,0.6); padding: 4px 10px; font-size: 10px;
+      border-radius: 4px; color: #00FF00; font-family: monospace;
+    }
+  </style>
 </head>
 <body>
 
-<div class="container">
-    <div id="video-wrapper" data-shaka-player-container>
-        <video id="video" autoplay playsinline></video>
-    </div>
+<div class="main-container">
+  <div id="player-container" data-shaka-player-container>
+    <div id="status-overlay">READY</div>
+    <video id="video" autoplay playsinline></video>
+  </div>
 
-    <div class="channel-list" id="list">
-        </div>
+  <div class="channel-grid" id="channel-list">
+    </div>
 </div>
 
 <script>
-    // Paste your JSON data here
-    const channels = [
-        {
-            "name": "DD Sports",
-            "url": "https://jiotvbpkmob.cdn.jio.com/bpk-tv/DD_Sports_BTS/output/index.mpd",
-            "keyId": "0c1b139b9a955134a1efae8e44b63aac",
-            "key": "00897bffd6997049787270797b8c3a17",
-            "logo": "https://jiotv.catchup.cdn.jio.com/dare_images/images/DD_Sports.png"
-        },
-        {
-            "name": "Eurosport HD",
-            "url": "https://jiotvbpkmob.cdn.jio.com/bpk-tv/Dsports_HD_BTS/output/index.mpd",
-            "keyId": "14fc31f9d832509c9f7cdd77e622e30b",
-            "key": "a884515f4e1dd77f07aa100ccec13388",
-            "logo": "https://jiotv.catchup.cdn.jio.com/dare_images/images/Dsports_HD.png"
-        },
-        {
-            "name": "Star Sports Select 1 HD",
-            "url": "https://jiotvbpkmob.cdn.jio.com/bpk-tv/Star_Sports_Select_HD_1_BTS/output/index.mpd",
-            "keyId": "c2c048e439d65316beeda6ef64d5d0f8",
-            "key": "e2fdc132cbdee65501b845ce414fce39",
-            "logo": "https://img.media.jio.com/tvpimages/96/65/302113_1749664252703_l_medium.jpg"
-        }
-        // ... Add all other channels here
+    // --- 1. CONFIGURATION ---
+    const API_SOURCES = [
+        "aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTE=",
+        "aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTI="
     ];
 
-    let player;
-    const video = document.getElementById('video');
-    const container = document.getElementById('video-wrapper');
+    // Paste your full JSON channel data here
+    const myChannels = [
+      { "name": "DD Sports", "id": "204", "url": "https://jiotvbpkmob.cdn.jio.com/bpk-tv/DD_Sports_BTS/output/index.mpd", "keyId": "0c1b139b9a955134a1efae8e44b63aac", "key": "00897bffd6997049787270797b8c3a17", "logo": "https://jiotv.catchup.cdn.jio.com/dare_images/images/DD_Sports.png" },
+      { "name": "Eurosport HD", "id": "875", "url": "https://jiotvbpkmob.cdn.jio.com/bpk-tv/Dsports_HD_BTS/output/index.mpd", "keyId": "14fc31f9d832509c9f7cdd77e622e30b", "key": "a884515f4e1dd77f07aa100ccec13388", "logo": "https://jiotv.catchup.cdn.jio.com/dare_images/images/Dsports_HD.png" },
+      { "name": "Star Sports Select 1", "id": "300", "url": "https://jiotvbpkmob.cdn.jio.com/bpk-tv/Star_Sports_Select_HD_1_BTS/output/index.mpd", "keyId": "c2c048e439d65316beeda6ef64d5d0f8", "key": "e2fdc132cbdee65501b845ce414fce39", "logo": "https://img.media.jio.com/tvpimages/96/65/302113_1749664252703_l_medium.jpg" }
+      // Add all other objects here...
+    ];
 
-    async function initPlayer() {
+    let player, currentCookie = "";
+    const statusEl = document.getElementById('status-overlay');
+
+    // --- 2. SMART TOKEN EXTRACTOR ---
+    async function getLiveToken() {
+        for (let encodedUrl of API_SOURCES) {
+            try {
+                statusEl.innerText = "FETCHING API...";
+                const res = await fetch(atob(encodedUrl));
+                const text = await res.text();
+                const match = text.match(/(__hdnea__=[^"'\s&|<>\\]+)/i);
+                if (match) return match[1];
+            } catch(e) { console.error("API Fetch Error"); }
+        }
+        return "";
+    }
+
+    // --- 3. PLAYER INITIALIZATION ---
+    async function initApp() {
         shaka.polyfill.installAll();
+        const video = document.getElementById('video');
+        const container = document.getElementById('player-container');
         player = new shaka.Player(video);
-        
-        // Custom Header logic (Mobile spoofing)
+
+        // UI Overlay
+        new shaka.ui.Overlay(player, container, video);
+
+        // Header Spoofing & Token Injection
         player.getNetworkingEngine().registerRequestFilter((type, request) => {
             request.headers['User-Agent'] = 'plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6';
+            if (currentCookie && (type === shaka.net.NetworkingEngine.RequestType.MANIFEST || type === shaka.net.NetworkingEngine.RequestType.SEGMENT)) {
+                request.uris[0] = request.uris[0].split('?')[0] + '?' + currentCookie;
+            }
         });
 
-        const ui = new shaka.ui.Overlay(player, container, video);
-        
-        // Initial load (First channel)
-        playChannel(channels[0]);
+        loadGrid();
+        // Play first channel by default
+        playChannel(myChannels[0]);
     }
 
     async function playChannel(ch) {
         try {
-            // Configure DRM
+            statusEl.innerText = "CONNECTING...";
+            if (!currentCookie) currentCookie = await getLiveToken();
+
             player.configure({
-                drm: {
-                    clearKeys: {
-                        [ch.keyId]: ch.key
-                    }
-                }
+                drm: { clearKeys: { [ch.keyId]: ch.key } }
             });
+
             await player.load(ch.url);
-            console.log("Playing:", ch.name);
+            statusEl.innerText = "LIVE: " + ch.name;
         } catch (e) {
-            console.error("Error loading channel:", e);
+            statusEl.innerText = "RETRYING WITH NEW API...";
+            currentCookie = await getLiveToken(); // Refresh token on failure
+            try { await player.load(ch.url); } catch(err) { statusEl.innerText = "FAILED"; }
         }
     }
 
-    // Load channel list into UI
-    const listDiv = document.getElementById('list');
-    channels.forEach(ch => {
-        const card = document.createElement('div');
-        card.className = 'channel-card';
-        card.innerHTML = `
-            <img src="${ch.logo}" alt="${ch.name}">
-            <p>${ch.name}</p>
-        `;
-        card.onclick = () => playChannel(ch);
-        listDiv.appendChild(card);
-    });
+    function loadGrid() {
+        const grid = document.getElementById('channel-list');
+        myChannels.forEach(ch => {
+            const div = document.createElement('div');
+            div.className = 'ch-card';
+            div.innerHTML = `<img src="${ch.logo}"><p>${ch.name}</p>`;
+            div.onclick = () => playChannel(ch);
+            grid.appendChild(div);
+        });
+    }
 
-    document.addEventListener('shaka-ui-loaded', initPlayer);
+    document.addEventListener('shaka-ui-loaded', initApp);
 </script>
 </body>
 </html>
