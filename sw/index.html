@@ -1,45 +1,111 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selection Way - Embedded View</title>
+    <title>Selection Way | DevCoderz Central</title>
     <style>
-        body {
+        /* Reset and Layout */
+        body, html {
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background-color: #000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
-            height: 100vh;
         }
-        .iframe-container {
+
+        /* Iframe Styling */
+        .content-frame {
             flex-grow: 1;
-            border: none;
-        }
-        iframe {
             width: 100%;
-            height: 100%;
             border: none;
+            background-color: #fff; /* Loading background */
         }
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
+
+        /* Credits Footer Section */
+        .dev-footer {
+            background: linear-gradient(90deg, #0f0f0f, #1a1a1a);
+            color: #ffffff;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 2px solid #00ffcc;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5);
+            z-index: 100;
+        }
+
+        .credits-left {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-credit {
             font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #00ffcc;
+            text-transform: uppercase;
+        }
+
+        .sub-credit {
+            font-size: 10px;
+            color: #aaaaaa;
+            margin-top: 2px;
+        }
+
+        .brand-tag {
+            font-size: 12px;
+            background: rgba(0, 255, 204, 0.1);
+            padding: 4px 10px;
+            border: 1px solid #00ffcc;
+            border-radius: 4px;
+            color: #00ffcc;
+        }
+
+        /* Smooth UI for Mobile */
+        @media (max-width: 600px) {
+            .dev-footer {
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="iframe-container">
-        <iframe src="https://deltastudy.site/selectionway" title="Selection Way"></iframe>
-    </div>
+    <iframe 
+        src="https://deltastudy.site/selectionway" 
+        class="content-frame"
+        id="main-frame"
+        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+        sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+        referrerpolicy="no-referrer-when-downgrade"
+        allowfullscreen>
+    </iframe>
 
-    <footer>
-        Developed & Maintained by <strong>[Aapka Naam/Brand]</strong> | Content Source: Delta Study
+    <footer class="dev-footer">
+        <div class="credits-left">
+            <span class="main-credit">Developed by: DEVANSH SHARMA</span>
+            <span class="sub-credit">Lead Architect & Founder | System Integrated</span>
+        </div>
+        <div class="brand-tag">
+            DEVCODERZ HUB
+        </div>
     </footer>
+
+    <script>
+        // Check if the iframe failed to load due to security headers
+        const frame = document.getElementById('main-frame');
+        
+        // Safety: Log for developer debugging
+        console.log("System Initialized by Devansh Sharma");
+    </script>
 
 </body>
 </html>
