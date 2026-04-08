@@ -3,86 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connecting... | DevCoderz Central</title>
+    <title>Selection Way Hub | DevCoderz</title>
     <style>
-        body {
-            background-color: #0a0a0a;
-            color: #ffffff;
-            font-family: 'Segoe UI', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-        }
-
-        .loader-container {
-            text-align: center;
-        }
-
-        /* Neon Circle Animation */
-        .loader {
-            border: 4px solid #1a1a1a;
-            border-top: 4px solid #00ffcc;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-            box-shadow: 0 0 15px #00ffcc;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .status-text {
-            font-size: 18px;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #000; }
+        .frame-wrapper { height: calc(100vh - 55px); width: 100%; }
+        iframe { width: 100%; height: 100%; border: none; }
+        
+        /* Aapke Professional Credits */
+        footer {
+            height: 55px;
+            background: #111;
             color: #00ffcc;
-            text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 25px;
+            font-family: 'Segoe UI', sans-serif;
+            border-top: 2px solid #00ffcc;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
         }
-
-        .credits {
-            border-top: 1px solid #333;
-            padding-top: 15px;
-            margin-top: 20px;
-        }
-
-        .dev-name {
-            font-size: 14px;
-            font-weight: bold;
-            display: block;
-        }
-
-        .dev-role {
-            font-size: 11px;
-            color: #888;
-            text-transform: uppercase;
-        }
+        .dev-title { font-weight: bold; font-size: 14px; letter-spacing: 1px; }
+        .role-tag { font-size: 10px; color: #888; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
-    <div class="loader-container">
-        <div class="loader"></div>
-        <div class="status-text">Establishing Connection...</div>
-        
-        <div class="credits">
-            <span class="dev-name">DEVANSH SHARMA</span>
-            <span class="dev-role">Lead Architect & Founder</span>
-        </div>
+    <div class="frame-wrapper">
+        <iframe 
+            src="https://api.allorigins.win/raw?url=https://deltastudy.site/selectionway" 
+            title="Selection Way Content">
+        </iframe>
     </div>
 
-    <script>
-        // Automatic redirection after 3 seconds
-        setTimeout(function() {
-            window.location.href = "https://deltastudy.site/selectionway";
-        }, 3000);
-    </script>
+    <footer>
+        <div>
+            <div class="dev-title">DEVANSH SHARMA</div>
+            <div class="role-tag">Lead Architect & Founder</div>
+        </div>
+        <div style="font-size: 12px; border: 1px solid #00ffcc; padding: 3px 8px; border-radius: 4px;">
+            DEVCODERZ CENTRAL
+        </div>
+    </footer>
 
 </body>
 </html>
