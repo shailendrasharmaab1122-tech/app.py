@@ -4,111 +4,139 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <title>DevCoderZ X Cricket</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.polyfilled.js"></script>
     <style>
         body{margin:0;padding:0;background-color:#050810;color:#fff;font-family:'Rajdhani',sans-serif;background-image:radial-gradient(circle at 50% -20%, #1e2631 0%, #050810 80%);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px 10px;-webkit-user-select:none;user-select:none}
         .container{width:100%;max-width:900px;background:#1e293b;padding:15px;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,.5);text-align:center;margin-bottom:20px}
         .video-wrapper{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:8px;background:#000}
-        .video-wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;display:none;z-index:5}
-        :root{--plyr-color-main:#00bfff}
-        .dev-tag-full{position:absolute;top:15px;right:15px;color:rgba(255,255,255,0.8);font-size:11px;font-weight:700;z-index:1000;pointer-events:none;text-transform:uppercase;letter-spacing:1.5px;text-shadow:1px 1px 3px #000;font-family:sans-serif}
-        #_0x_u_btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,191,255,0.9);color:#fff;padding:12px 24px;border-radius:50px;font-size:13px;font-weight:800;cursor:pointer;z-index:11;border:none;text-transform:uppercase;animation:p_scale 1.2s infinite ease-in-out;white-space:nowrap}
-        @keyframes p_scale{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.05)}}
+        video{width:100%;height:100%}
+        .dev-tag-full{position:absolute;top:15px;right:15px;color:rgba(255,255,255,0.9);font-size:11px;font-weight:700;z-index:1000;pointer-events:none;text-transform:uppercase;letter-spacing:1.5px;text-shadow:1px 1px 3px #000;font-family:sans-serif}
+        #_status_box{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,191,255,0.2);border:1px solid #00bfff;color:#fff;padding:10px 20px;border-radius:50px;font-size:12px;z-index:100;display:none;backdrop-filter:blur(5px)}
         .footer{margin-top:20px;padding:10px;border-top:1px solid #334155;font-size:14px}
         .badge{display:inline-block;background:#3b82f6;color:#fff;padding:4px 12px;border-radius:20px;font-weight:700;margin-bottom:8px;text-transform:uppercase}
-        .credits{color:#94a3b8;letter-spacing:1px}.credits strong{color:#60a5fa}
-        .ch-list{width:100%;max-width:900px;display:grid;grid-template-columns:1fr;gap:10px}
+        .credits strong{color:#60a5fa;letter-spacing:1px}
+        .ch-list{width:100%;max-width:900px;display:grid;grid-template-columns:1fr;gap:10px;max-height:400px;overflow-y:auto;padding-right:5px}
+        .ch-list::-webkit-scrollbar{width:5px}
+        .ch-list::-webkit-scrollbar-thumb{background:#3b82f6;border-radius:10px}
         .ch-item{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 15px;display:flex;justify-content:space-between;align-items:center}
-        .ch-name{font-weight:700;color:#e0e0e0;text-transform:uppercase;font-size:1rem}
-        .btn-grp{display:flex;gap:8px}
-        .play-btn{border:none;cursor:pointer;padding:6px 14px;border-radius:6px;font-size:0.8rem;font-weight:700;text-transform:uppercase;transition:0.3s}
-        .ps1{background:transparent;border:1.5px solid #00d2ff;color:gold}.ps1:hover{background:#00d2ff;color:#000}
-        .ps2{background:transparent;border:1.5px solid #00ff00;color:#00ff00}.ps2:hover{background:#00ff00;color:#000}
+        .ch-name{font-weight:700;color:#e0e0e0;text-transform:uppercase;font-size:0.9rem}
+        .play-btn{border:none;cursor:pointer;padding:8px 20px;border-radius:6px;font-size:0.8rem;font-weight:700;text-transform:uppercase;background:transparent;border:1.5px solid #00d2ff;color:gold;transition:0.3s}
+        .play-btn:hover{background:#00d2ff;color:#000}
     </style>
 </head>
 <body oncontextmenu="return false;" onkeydown="return false;">
 
 <div class="container">
     <div class="badge">DevCoderZ X Cricket</div>
-    <div class="video-wrapper">
-        <button id="_0x_u_btn">🔊 Tap to Unmute</button>
-        <video autoplay playsinline muted id="_0x_v"></video>
-        <iframe id="_0x_if" allowfullscreen scrolling="no" allow="autoplay; encrypted-media"></iframe>
+    <div class="video-wrapper" id="player-container" shaka-controls="true">
+        <div class="dev-tag-full">Developer: Devansh Sharma</div>
+        <div id="_status_box">LOADING...</div>
+        <video id="video" autoplay playsinline></video>
     </div>
-    <div class="footer" id="_0x_f"></div>
+    <div class="footer">
+        <div class="credits"><strong>DevCoderZ X Cricket</strong></div>
+        <p style="font-size:11px;color:#64748b;margin-top:5px;">© 2026 Devansh Sharma | All Rights Reserved</p>
+    </div>
 </div>
 
-<div class="ch-list" id="_0x_l"></div>
+<div class="ch-list" id="ch-list"></div>
 
 <script>
     (function(){
-        // Junk/Obfuscation layers
-        const _0x_junk = ["\x64\x65\x62\x75\x67\x67\x65\x72", "\x63\x6F\x6E\x73\x6F\x6C\x65", "\x69\x6E\x66\x6F"];
-        setInterval(function(){ (function(_0x1){ if(_0x1) { debugger; } })(true); }, 1000);
-
-        const _0x_z = window.atob;
-        const _0x_m = {
-            _0x1: _0x_z("aHR0cHM6Ly9hcGlvay5wYWdlcy5kZXYvP2lkPQ=="),
-            _0x2: _0x_z("aHR0cHM6Ly90djR3YXBvay5wYWdlcy5kZXYvP2lkPQ=="),
-            _0x3: _0x_z("UG93ZXJlZCBieSBEZXZhbnNoIFNoYXJtYQ=="),
-            _0x4: _0x_z("RGV2Q29kZXJ6IFggQ3JpY2tldA=="),
-            _0x5: _0x_z("wqkgMjAyNiBEZXZhbnNoIFNoYXJtYSB8IEFsbCBSaWdodHMgUmVzZXJ2ZWQ=")
+        const _0x_a = window.atob;
+        const _0x_c = {
+            _1: _0x_a("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvanNvbi9yZWZzL2hlYWRzL21haW4vanNwbw=="),
+            _2: [
+                _0x_a("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTE="),
+                _0x_a("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTI="),
+                _0x_a("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTM=")
+            ]
         };
 
-        const _0x_ch = [
-            { n: "STR Sports 1 HD", i: "4470" }, { n: "STR Sports 1", i: "1142" },
-            { n: "STR Sports 1 Hindi HD", i: "174" }, { n: "STR Sports 1 Hindi", i: "148" },
-            { n: "STR Sports 2 HD", i: "4456" }, { n: "STR Sports 2", i: "1141" },
-            { n: "STR Sports 2 Hindi HD", i: "1984" }, { n: "STR Sports 2 Hindi", i: "1985" },
-            { n: "STR Sports 3", i: "147" }, { n: "STR Sports 1 Tamil HD", i: "4468" },
-            { n: "STR Sports 1 Tamil", i: "1124" }, { n: "STR Sports 1 Telugu HD", i: "4471" },
-            { n: "STR Sports 1 Telugu", i: "1651" }, { n: "STR Sports 1 Kannada", i: "1650" },
-            { n: "STR Sports 2 Kannada", i: "4472" }, { n: "STR Sports 2 Tamil HD", i: "4473" },
-            { n: "STR Sports 2 Tamil", i: "2853" }, { n: "STR Sports 2 Telugu HD", i: "4474" },
-            { n: "STR Sports 2 Telugu", i: "2852" }, { n: "STR Sports Khel", i: "1998" },
-            { n: "STR Sports Select 1 HD", i: "300" }, { n: "STR Sports Select 1", i: "1123" },
-            { n: "STR Sports Select 2 HD", i: "301" }, { n: "STR Sports Select 2", i: "1114" }
-        ];
+        let player, activeCookie = "";
+        const video = document.getElementById('video');
+        const statusBox = document.getElementById('_status_box');
 
-        const v = document.getElementById('_0x_v'), f = document.getElementById('_0x_if'), b = document.getElementById('_0x_u_btn');
-        const tag = document.createElement('div'); 
-        tag.className = 'dev-tag-full'; 
-        tag.innerText = _0x_m._0x3;
+        function updateStatus(t, s = true) {
+            statusBox.innerText = t;
+            statusBox.style.display = s ? 'block' : 'none';
+        }
 
-        document.getElementById('_0x_f').innerHTML = `<div class="credits"><strong>${_0x_m._0x4}</strong></div><p style="font-size:11px;color:#64748b;margin-top:5px;">${_0x_m._0x5}</p>`;
-        
-        const py = new Plyr(v, { controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen'] });
-        
-        py.on('ready', () => { v.closest('.plyr').appendChild(tag); });
+        async function fetchT(u) {
+            try {
+                const r = await fetch(u, { signal: AbortSignal.timeout(7000) });
+                return r.ok ? await r.text() : "";
+            } catch(e) { return ""; }
+        }
 
-        let h = null;
-        window.loadCh = function(id, s) {
-            const u = (s === 2 ? _0x_m._0x2 : _0x_m._0x1) + id;
-            f.style.display = 'none'; v.style.display = 'block'; document.querySelector('.plyr').style.display = 'block'; b.style.display = 'block';
-            if (h) h.destroy();
-            if (Hls.isSupported()) {
-                h = new Hls({ xhrSetup: x => { x.withCredentials = false; } });
-                h.loadSource(u); h.attachMedia(v);
-                h.on(Hls.Events.MANIFEST_PARSED, () => { v.play(); });
-                h.on(Hls.Events.ERROR, (e, d) => { if (d.fatal) { v.style.display = 'none'; document.querySelector('.plyr').style.display = 'none'; f.src = u; f.style.display = 'block'; b.style.display = 'none'; } });
-            } else { v.src = u; }
-            window.scrollTo({top: 0, behavior: 'smooth'});
-        };
+        async function getC(u) {
+            let t = await fetchT(u);
+            let m = t.match(/(__hdnea__=[^"'\s&|<>\\]+)/i);
+            return m ? m[1].replace(/\\/g, '').trim() : "";
+        }
 
-        b.onclick = () => { v.muted = false; v.volume = 1; b.style.display = 'none'; };
+        async function init() {
+            shaka.polyfill.installAll();
+            player = new shaka.Player(video);
+            new shaka.ui.Overlay(player, document.getElementById('player-container'), video);
 
-        _0x_ch.forEach(c => {
-            const i = document.createElement('div'); i.className = 'ch-item';
-            i.innerHTML = `<div class="ch-name">${c.n}</div><div class="btn-grp"><button class="play-btn ps1" onclick="loadCh('${c.i}',1)">Play 1</button><button class="play-btn ps2" onclick="loadCh('${c.i}',2)">Play 2</button></div>`;
-            document.getElementById('_0x_l').appendChild(i);
+            player.getNetworkingEngine().registerRequestFilter((t, r) => {
+                r.headers['User-Agent'] = 'plaYtv/7.1.5 (Linux;Android 13)';
+                if (activeCookie) {
+                    r.headers['Cookie'] = activeCookie;
+                    const s = r.uris[0].includes('?') ? '&' : '?';
+                    r.uris[0] += s + activeCookie;
+                }
+            });
+        }
+
+        async function play(c) {
+            updateStatus("AUTH SEARCHING...");
+            for (let i = 0; i < _0x_c._2.length; i++) {
+                updateStatus(`API ${i+1} CONNECTING...`);
+                let ck = await getC(_0x_c._2[i]);
+                if (ck) {
+                    activeCookie = ck;
+                    try {
+                        player.configure({ drm: { clearKeys: { [c.keyId]: c.key } } });
+                        await player.load(c.url);
+                        updateStatus("", false);
+                        return;
+                    } catch(e) {}
+                }
+            }
+            updateStatus("SERVER DOWN");
+        }
+
+        async function loadUI() {
+            let r = await fetchT(_0x_c._1);
+            if (!r) return;
+            let d = JSON.parse(r);
+            let chs = d.channels || d;
+
+            chs.forEach(c => {
+                let u = c.url || c.channel_url;
+                if (!u) return;
+                const i = document.createElement('div');
+                i.className = 'ch-item';
+                i.innerHTML = `<div class="ch-name">${c.name || c.channel_name}</div><button class="play-btn">Play</button>`;
+                i.querySelector('button').onclick = () => play({url: u, keyId: c.keyId, key: c.key});
+                document.getElementById('ch-list').appendChild(i);
+            });
+            if(chs[0]) play({url: chs[0].url || chs[0].channel_url, keyId: chs[0].keyId, key: chs[0].key});
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await init();
+            await loadUI();
         });
 
-        loadCh(_0x_ch[0].i, 1);
-        setInterval(() => { if(v.paused && v.readyState > 2) v.play(); }, 3000);
-        document.onkeydown = function(e) { if (e.keyCode == 123 || (e.ctrlKey && (e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.keyCode == 85))) return false; };
+        setInterval(() => { debugger; }, 500);
+        document.onkeydown = (e) => {
+            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) return false;
+        };
     })();
 </script>
 </body>
