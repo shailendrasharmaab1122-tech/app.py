@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <title>STR SPORTS | ULTRA PLAYER</title>
+    <title>STAR SPORTS | DevCoderZ X Cricket</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.css">
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.polyfilled.js"></script>
     <style>
-        body{margin:0;padding:0;background-color:#050810;color:#fff;font-family:'Rajdhani',sans-serif;background-image:radial-gradient(circle at 50% -20%, #1e2631 0%, #050810 80%);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px 10px}
+        body{margin:0;padding:0;background-color:#050810;color:#fff;font-family:'Rajdhani',sans-serif;background-image:radial-gradient(circle at 50% -20%, #1e2631 0%, #050810 80%);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px 10px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
         .container{width:100%;max-width:900px;background:#1e293b;padding:15px;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,.5);text-align:center;margin-bottom:20px}
         .video-wrapper{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:8px;background:#000}
-        .video-wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;display:none}
+        .video-wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;display:none;z-index:5}
         :root{--plyr-color-main:#00bfff}
-        .dev-tag-clean{position:absolute;top:15px;right:15px;color:rgba(255,255,255,0.6);font-size:10px;font-weight:700;z-index:10;pointer-events:none;text-transform:uppercase;letter-spacing:1.8px;text-shadow:1px 1px 2px #000}
+        .dev-tag-full{position:absolute;top:15px;right:15px;color:rgba(255,255,255,0.7);font-size:10px;font-weight:700;z-index:1000;pointer-events:none;text-transform:uppercase;letter-spacing:1.8px;text-shadow:1px 1px 2px #000;font-family:sans-serif}
         #_0x_u_btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,191,255,0.9);color:#fff;padding:12px 24px;border-radius:50px;font-size:13px;font-weight:800;cursor:pointer;z-index:11;border:none;text-transform:uppercase;animation:p_scale 1.2s infinite ease-in-out;white-space:nowrap}
         @keyframes p_scale{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.05)}}
         .footer{margin-top:20px;padding:10px;border-top:1px solid #334155;font-size:14px}
@@ -27,15 +27,13 @@
         .play-btn{border:none;cursor:pointer;padding:6px 14px;border-radius:6px;font-size:0.8rem;font-weight:700;text-transform:uppercase;transition:0.3s}
         .ps1{background:transparent;border:1.5px solid #00d2ff;color:gold}.ps1:hover{background:#00d2ff;color:#000}
         .ps2{background:transparent;border:1.5px solid #00ff00;color:#00ff00}.ps2:hover{background:#00ff00;color:#000}
-        @media(max-width:600px){.ch-name{font-size:0.85rem}.play-btn{padding:5px 8px;font-size:0.7rem}}
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;" onkeydown="return false;">
 
 <div class="container">
-    <div class="badge">Live Stream</div>
-    <div class="video-wrapper" id="player-container">
-        <div class="dev-tag-clean" id="_0x_dt"></div>
+    <div class="badge">SECURE STREAM</div>
+    <div class="video-wrapper">
         <button id="_0x_u_btn">🔊 Tap to Unmute</button>
         <video autoplay playsinline muted id="_0x_v"></video>
         <iframe id="_0x_if" allowfullscreen scrolling="no" allow="autoplay; encrypted-media"></iframe>
@@ -47,74 +45,55 @@
 
 <script>
     (function(){
+        setInterval(function(){debugger;}, 100);
         const _0x_z = window.atob;
-        const _0x_conf = {
-            s1: _0x_z("aHR0cHM6Ly9hcGlvay5wYWdlcy5kZXYvP2lkPQ=="),
-            s2: _0x_z("aHR0cHM6Ly90djR3YXBvay5wYWdlcy5kZXYvP2lkPQ=="),
-            dev: _0x_z("RGV2ZWxvcGVyIDogRGV2YW5zaCBTaGFybWE="),
-            brand: _0x_z("RGV2Q29kZXJ6"),
-            copy: _0x_z("wqkgMjAyNiBEZXZhbnNoIFNoYXJtYSB8IEFsbCBSaWdodHMgUmVzZXJ2ZWQ=")
+        const _0x_m = {
+            _0x1: _0x_z("aHR0cHM6Ly9hcGlvay5wYWdlcy5kZXYvP2lkPQ=="),
+            _0x2: _0x_z("aHR0cHM6Ly90djR3YXBvay5wYWdlcy5kZXYvP2lkPQ=="),
+            _0x3: _0x_z("RGV2ZWxvcGVyIDogRGV2YW5zaCBTaGFybWE="),
+            _0x4: _0x_z("RGV2Q29kZXJ6"),
+            _0x5: _0x_z("wqkgMjAyNiBEZXZhbnNoIFNoYXJtYSB8IEFsbCBSaWdodHMgUmVzZXJ2ZWQ=")
         };
-
-        const channels = [
-            { name: "STR Sports 1 HD", id: "4470" }, { name: "STR Sports 1", id: "1142" },
-            { name: "STR Sports 1 Hindi HD", id: "174" }, { name: "STR Sports 1 Hindi", id: "148" },
-            { name: "STR Sports 2 HD", id: "4456" }, { name: "STR Sports 2", id: "1141" },
-            { name: "STR Sports 2 Hindi HD", id: "1984" }, { name: "STR Sports 2 Hindi", id: "1985" },
-            { name: "STR Sports 3", id: "147" }, { name: "STR Sports 1 Tamil HD", id: "4468" },
-            { name: "STR Sports 1 Tamil", id: "1124" }, { name: "STR Sports 1 Telugu HD", id: "4471" },
-            { name: "STR Sports 1 Telugu", id: "1651" }, { name: "STR Sports 1 Kannada", id: "1650" },
-            { name: "STR Sports 2 Kannada", id: "4472" }, { name: "STR Sports 2 Tamil HD", id: "4473" },
-            { name: "STR Sports 2 Tamil", id: "2853" }, { name: "STR Sports 2 Telugu HD", id: "4474" },
-            { name: "STR Sports 2 Telugu", id: "2852" }, { name: "STR Sports Khel", id: "1998" },
-            { name: "STR Sports Select 1 HD", id: "300" }, { name: "STR Sports Select 1", id: "1123" },
-            { name: "STR Sports Select 2 HD", id: "301" }, { name: "STR Sports Select 2", id: "1114" }
+        const _0x_ch = [
+            { n: "STR Sports 1 HD", i: "4470" }, { n: "STR Sports 1", i: "1142" },
+            { n: "STR Sports 1 Hindi HD", i: "174" }, { n: "STR Sports 1 Hindi", i: "148" },
+            { n: "STR Sports 2 HD", i: "4456" }, { n: "STR Sports 2", i: "1141" },
+            { n: "STR Sports 2 Hindi HD", i: "1984" }, { n: "STR Sports 2 Hindi", i: "1985" },
+            { n: "STR Sports 3", i: "147" }, { n: "STR Sports 1 Tamil HD", i: "4468" },
+            { n: "STR Sports 1 Tamil", i: "1124" }, { n: "STR Sports 1 Telugu HD", i: "4471" },
+            { n: "STR Sports 1 Telugu", i: "1651" }, { n: "STR Sports 1 Kannada", i: "1650" },
+            { n: "STR Sports 2 Kannada", i: "4472" }, { n: "STR Sports 2 Tamil HD", i: "4473" },
+            { n: "STR Sports 2 Tamil", i: "2853" }, { n: "STR Sports 2 Telugu HD", i: "4474" },
+            { n: "STR Sports 2 Telugu", i: "2852" }, { n: "STR Sports Khel", i: "1998" },
+            { n: "STR Sports Select 1 HD", i: "300" }, { n: "STR Sports Select 1", i: "1123" },
+            { n: "STR Sports Select 2 HD", i: "301" }, { n: "STR Sports Select 2", i: "1114" }
         ];
-
-        const v = document.getElementById('_0x_v'), iframe = document.getElementById('_0x_if'), unmuteBtn = document.getElementById('_0x_u_btn');
-        document.getElementById('_0x_dt').innerText = _0x_conf.dev;
-        document.getElementById('_0x_f').innerHTML = `<div class="credits">Developed By <strong>${_0x_conf.brand}</strong></div><p style="font-size:11px;color:#64748b;margin-top:5px;">${_0x_conf.copy}</p>`;
-
-        const plyr = new Plyr(v, { controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen'] });
-        let hls = null;
-
-        window.loadCh = (id, s) => {
-            const streamUrl = (s === 2 ? _0x_conf.s2 : _0x_conf.s1) + id;
-            
-            // Try to load in Video Player first
-            iframe.style.display = 'none';
-            v.style.display = 'block';
-            document.querySelector('.plyr').style.display = 'block';
-            unmuteBtn.style.display = 'block';
-
-            if (hls) hls.destroy();
+        const v = document.getElementById('_0x_v'), f = document.getElementById('_0x_if'), b = document.getElementById('_0x_u_btn');
+        const tag = document.createElement('div'); tag.className = 'dev-tag-full'; tag.innerText = _0x_m._0x3;
+        document.getElementById('_0x_f').innerHTML = `<div class="credits">Developed By <strong>${_0x_m._0x4}</strong></div><p style="font-size:11px;color:#64748b;margin-top:5px;">${_0x_m._0x5}</p>`;
+        const py = new Plyr(v, { controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen'] });
+        py.on('ready', () => { v.closest('.plyr').appendChild(tag); });
+        let h = null;
+        window.loadCh = function(id, s) {
+            const u = (s === 2 ? _0x_m._0x2 : _0x_m._0x1) + id;
+            f.style.display = 'none'; v.style.display = 'block'; document.querySelector('.plyr').style.display = 'block'; b.style.display = 'block';
+            if (h) h.destroy();
             if (Hls.isSupported()) {
-                hls = new Hls({ xhrSetup: xhr => { xhr.withCredentials = false; } });
-                hls.loadSource(streamUrl);
-                hls.attachMedia(v);
-                hls.on(Hls.Events.ERROR, (e, data) => {
-                    if (data.fatal) { // If HLS fails, fallback to Iframe
-                        v.style.display = 'none';
-                        document.querySelector('.plyr').style.display = 'none';
-                        iframe.src = streamUrl;
-                        iframe.style.display = 'block';
-                        unmuteBtn.style.display = 'none';
-                    }
-                });
-            } else { v.src = streamUrl; }
+                h = new Hls({ xhrSetup: x => { x.withCredentials = false; } });
+                h.loadSource(u); h.attachMedia(v);
+                h.on(Hls.Events.ERROR, (e, d) => { if (d.fatal) { v.style.display = 'none'; document.querySelector('.plyr').style.display = 'none'; f.src = u; f.style.display = 'block'; b.style.display = 'none'; } });
+            } else { v.src = u; }
             window.scrollTo({top: 0, behavior: 'smooth'});
         };
-
-        unmuteBtn.onclick = () => { v.muted = false; v.volume = 1; unmuteBtn.style.display = 'none'; };
-
-        channels.forEach(ch => {
-            const item = document.createElement('div');
-            item.className = 'ch-item';
-            item.innerHTML = `<div class="ch-name">${ch.name}</div><div class="btn-grp"><button class="play-btn ps1" onclick="loadCh('${ch.id}',1)">Play 1</button><button class="play-btn ps2" onclick="loadCh('${ch.id}',2)">Play 2</button></div>`;
-            document.getElementById('_0x_l').appendChild(item);
+        b.onclick = () => { v.muted = false; v.volume = 1; b.style.display = 'none'; };
+        _0x_ch.forEach(c => {
+            const i = document.createElement('div'); i.className = 'ch-item';
+            i.innerHTML = `<div class="ch-name">${c.n}</div><div class="btn-grp"><button class="play-btn ps1" onclick="loadCh('${c.i}',1)">Play 1</button><button class="play-btn ps2" onclick="loadCh('${c.i}',2)">Play 2</button></div>`;
+            document.getElementById('_0x_l').appendChild(i);
         });
-
-        loadCh(channels[0].id, 1);
+        loadCh(_0x_ch[0].i, 1);
+        setInterval(() => { if(v.paused && v.readyState > 2) v.play(); }, 3000);
+        document.onkeydown = function(e) { if (e.keyCode == 123 || (e.ctrlKey && (e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.keyCode == 85))) return false; };
     })();
 </script>
 </body>
