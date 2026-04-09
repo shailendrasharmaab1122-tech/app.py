@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>DevCoderZ | Premium Stream</title>
+    <meta name="referrer" content="no-referrer">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; height: 100%; background: #000; overflow: hidden; font-family: 'Rajdhani', sans-serif; }
+        
+        .shaka-video-container { position: absolute; inset: 0; width: 100%; height: 100%; background: #000; display: flex; align-items: center; justify-content: center; }
+        video { width: 100%; height: 100%; object-fit: contain; background: #000; outline: none; }
+
+        /* Tumhara Secure Watermark */
+        .wm-dev-secure { 
+            position: absolute; 
+            z-index: 40; 
+            pointer-events: none; 
+            font-size: 10px; 
+            font-weight: bold; 
+            color: rgba(255, 255, 255, 0.5); 
+            letter-spacing: 1.2px; 
+            text-shadow: 1px 1px 2px #000;
+            top: 5%; 
+            right: 5%; 
+            text-transform: uppercase;
+        }
+
+        #ai-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 999;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .status-text { 
+            font-size: 14px; 
+            font-weight: bold; 
+            letter-spacing: 1px; 
+            color: #00bfff;
+            text-transform: uppercase;
+        }
+
+        #fatal-error { display: none; position: fixed; inset: 0; background: #000; z-index: 99999; color: red; align-items: center; justify-content: center; flex-direction: column; text-align: center; font-family: sans-serif; }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <div id="fatal-error">
+        <h1>⛔ ACCESS DENIED ⛔</h1>
+    </div>
+
+    <div class="shaka-video-container" id="player-container" shaka-controls="true">
+        <div id="wm-element" class="wm-dev-secure">DEVELOPER: DEVANSH SHARMA</div>
+        <div id="_status_box" style="position:absolute; top:10px; left:10px; z-index:50; color:gold; font-size:10px; font-weight:bold;">DevCoderZ Engine v3.0</div>
+        <video id="video" autoplay playsinline preload="metadata" class="shaka-video"></video>
+    </div>
+
+    <div id="ai-overlay">
+        <div class="status-text" id="ai-message">INITIALIZING SYSTEM...</div>
+    </div>
+
+    <script>
+        (function(){
+            // Base64 hidden links (No Credits)
+            const _0xData = [
+                "aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvanNvbi9yZWZzL2hlYWRzL21haW4vanNwbw==", 
+                "aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTE=",     
+                "aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTI=",     
+                "aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTM="
+            ];
+
+            const DB_URL = atob(_0xData[0]);
+            const APIs = [atob(_0xData[1]), atob(_0xData[2]), atob(_0xData[3])];
+            const PROXIES = ["", "https://api.codetabs.com/v1/proxy?quest=", "https://l.ratanliton2.workers.dev/?url="];
+
+            let shakaPlayer = null, activeCookie = "", chConfig = { url: "", keyId: "", key: "" };
+            const video = document.getElementById('video');
+            const aiOverlay = document.getElementById('ai-overlay');
+            const aiMessage = document.getElementById('ai-message');
+
+            function showStatus(msg, color = "#fff", hide = false) {
+                if (hide) { aiOverlay.style.display = 'none'; return; }
+                aiOverlay.style.display = 'flex';
+                aiMessage.innerText = msg;
+                aiMessage.style.color = color;
+            }
+
+            async function fetchRaw(url) {
+                for (let p of PROXIES) {
+                    try {
+                        const res = await fetch(p + url, { signal: AbortSignal.timeout(6000) });
+                        if (res.ok) return await res.text();
+                    } catch (e) {}
+                }
+                return "";
+            }
+
+            async function getCookie(rawData) {
+                let match = rawData.match(/(__hdnea__=[^"'\s&|<>\\]+)/i);
+                return match ? match[1].replace(/\\/g, '').trim() : "";
+            }
+
+            async function loadData() {
+                const id = new URLSearchParams(window.location.search).get('id') || '174';
+                showStatus("SEARCHING CHANNEL...");
+                let raw = await fetchRaw(DB_URL);
+                if (!raw) return false;
+                try {
+                    let data = JSON.parse(raw);
+                    let channels = data.channels || data;
+                    let found = channels.find(c => String(c.id) === id || String(c.channel_id) === id);
+                    if (found) {
+                        chConfig.url = found.url || found.channel_url;
+                        chConfig.keyId = found.keyId;
+                        chConfig.key = found.key;
+                        return true;
+                    }
+                } catch(e) {}
+                return false;
+            }
+
+            async function init() {
+                shaka.polyfill.installAll();
+                shakaPlayer = new shaka.Player(video);
+                new shaka.ui.Overlay(shakaPlayer, document.getElementById('player-container'), video);
+                
+                shakaPlayer.configure({
+                    drm: { clearKeys: { [chConfig.keyId]: chConfig.key } },
+                    streaming: { lowLatencyMode: true }
+                });
+
+                shakaPlayer.getNetworkingEngine().registerRequestFilter((type, request) => {
+                    request.headers['User-Agent'] = 'plaYtv/7.1.5 (Linux;Android 13)';
+                    if (activeCookie) {
+                        request.headers['Cookie'] = activeCookie;
+                        const sep = request.uris[0].includes('?') ? '&' : '?';
+                        if (!request.uris[0].includes('__hdnea')) request.uris[0] += sep + activeCookie;
+                    }
+                });
+            }
+
+            async function startCycle() {
+                while (true) {
+                    for (let i = 0; i < APIs.length; i++) {
+                        showStatus(`CONNECTING API ${i+1}...`, "gold");
+                        let raw = await fetchRaw(APIs[i]);
+                        let cookie = await getCookie(raw);
+                        if (cookie) {
+                            activeCookie = cookie;
+                            try {
+                                await shakaPlayer.load(chConfig.url);
+                                showStatus("", "", true);
+                                return; 
+                            } catch(e) {}
+                        }
+                    }
+                    showStatus("SERVER BUSY - RETRYING", "red");
+                    await new Promise(r => setTimeout(r, 3000));
+                }
+            }
+
+            document.addEventListener("DOMContentLoaded", async () => {
+                if (await loadData()) {
+                    await init();
+                    startCycle();
+                } else {
+                    showStatus("CHANNEL NOT FOUND", "red");
+                }
+            });
+
+            // Security: Anti-Inspect
+            setInterval(() => { if (!document.getElementById('wm-element')) window.location.reload(); debugger; }, 1000);
+        })();
+    </script>
+</body>
+</html>
