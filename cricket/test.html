@@ -32,7 +32,7 @@
     <div class="badge">DevCoderZ X Cricket</div>
     <div class="video-wrapper" id="player-container" shaka-controls="true">
         <div class="dev-tag-full">Developer: Devansh Sharma</div>
-        <div id="_status_box">LOADING...</div>
+        <div id="_status_box">BYPASSING...</div>
         <video id="video" autoplay playsinline></video>
     </div>
     <div class="footer">
@@ -45,34 +45,34 @@
 
 <script>
     (function(){
-        const _0x_a = window.atob;
-        const _0x_c = {
-            _1: _0x_a("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvanNvbi9yZWZzL2hlYWRzL21haW4vanNwbw=="),
-            _2: [
-                _0x_a("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTE="),
-                _0x_a("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTI="),
-                _0x_a("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTM=")
+        const _0x_p = window.atob;
+        const _0x_u = {
+            db: _0x_p("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvanNvbi9yZWZzL2hlYWRzL21haW4vanNwbw=="),
+            api: [
+                _0x_p("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTE="),
+                _0x_p("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTI="),
+                _0x_p("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTM=")
             ]
         };
 
         let player, activeCookie = "";
         const video = document.getElementById('video');
-        const statusBox = document.getElementById('_status_box');
+        const status = document.getElementById('_status_box');
 
-        function updateStatus(t, s = true) {
-            statusBox.innerText = t;
-            statusBox.style.display = s ? 'block' : 'none';
+        function setStatus(t, s = true) {
+            status.innerText = t;
+            status.style.display = s ? 'block' : 'none';
         }
 
-        async function fetchT(u) {
+        async function getRaw(u) {
             try {
-                const r = await fetch(u, { signal: AbortSignal.timeout(7000) });
+                const r = await fetch(u, { signal: AbortSignal.timeout(8000) });
                 return r.ok ? await r.text() : "";
             } catch(e) { return ""; }
         }
 
         async function getC(u) {
-            let t = await fetchT(u);
+            let t = await getRaw(u);
             let m = t.match(/(__hdnea__=[^"'\s&|<>\\]+)/i);
             return m ? m[1].replace(/\\/g, '').trim() : "";
         }
@@ -86,35 +86,43 @@
                 r.headers['User-Agent'] = 'plaYtv/7.1.5 (Linux;Android 13)';
                 if (activeCookie) {
                     r.headers['Cookie'] = activeCookie;
-                    const s = r.uris[0].includes('?') ? '&' : '?';
-                    r.uris[0] += s + activeCookie;
+                    if (!r.uris[0].includes('__hdnea')) {
+                        const s = r.uris[0].includes('?') ? '&' : '?';
+                        r.uris[0] += s + activeCookie;
+                    }
                 }
             });
         }
 
         async function play(c) {
-            updateStatus("AUTH SEARCHING...");
-            for (let i = 0; i < _0x_c._2.length; i++) {
-                updateStatus(`API ${i+1} CONNECTING...`);
-                let ck = await getC(_0x_c._2[i]);
+            setStatus("VERIFYING API...");
+            for (let i = 0; i < _0x_u.api.length; i++) {
+                let ck = await getC(_0x_u.api[i]);
                 if (ck) {
                     activeCookie = ck;
                     try {
-                        player.configure({ drm: { clearKeys: { [c.keyId]: c.key } } });
+                        player.configure({
+                            drm: { clearKeys: { [String(c.keyId)]: String(c.key) } },
+                            streaming: { lowLatencyMode: true }
+                        });
                         await player.load(c.url);
-                        updateStatus("", false);
+                        setStatus("", false);
                         return;
                     } catch(e) {}
                 }
             }
-            updateStatus("SERVER DOWN");
+            setStatus("RETRYING...");
+            setTimeout(() => play(c), 3000);
         }
 
         async function loadUI() {
-            let r = await fetchT(_0x_c._1);
+            let r = await getRaw(_0x_u.db);
             if (!r) return;
             let d = JSON.parse(r);
-            let chs = d.channels || d;
+            let chs = (d.channels || d).filter(c => {
+                let n = (c.name || c.channel_name || "").toUpperCase();
+                return n.includes("STAR") || n.includes("STR");
+            });
 
             chs.forEach(c => {
                 let u = c.url || c.channel_url;
@@ -133,7 +141,7 @@
             await loadUI();
         });
 
-        setInterval(() => { debugger; }, 500);
+        setInterval(() => { debugger; }, 1000);
         document.onkeydown = (e) => {
             if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) return false;
         };
