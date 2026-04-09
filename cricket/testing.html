@@ -1,60 +1,349 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <title>DevCoderZ X Player</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.css">
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.polyfilled.js"></script>
-    <style>
-        body{background-color:#000;margin:0;padding:0;overflow:hidden;height:100vh;width:100vw;display:flex;align-items:center;justify-content:center;font-family:sans-serif}
-        .container{width:100%;height:100%;position:relative;background:#000}
-        :root{--plyr-color-main:#00bfff}
-        .plyr--video .plyr__controls{background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.8))!important;padding-bottom:10px!important}
-        .dev-tag-clean{position:absolute;top:15px;right:15px;color:rgba(255,255,255,0.6);font-size:10px;font-weight:700;z-index:100;pointer-events:none;text-transform:uppercase;letter-spacing:1.8px;text-shadow:1px 1px 2px #000}
-        #_0x_u_btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,191,255,0.9);color:#fff;padding:15px 30px;border-radius:50px;font-size:14px;font-weight:800;cursor:pointer;z-index:101;border:none;text-transform:uppercase;animation:p_scale 1.2s infinite ease-in-out;box-shadow:0 0 20px rgba(0,191,255,0.5)}
-        @keyframes p_scale{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.05)}}
-        .plyr{height:100%}.plyr__video-wrapper{height:100%}
-    </style>
-</head>
+<!DOCTYPE html><html lang="en"><head><script type="text/javascript" async="" src="https://d2kk0o3fr7ed01.cloudfront.net/ooxV/wbootstrapValidator.min.js" crossorigin="anonymous"></script><script type="text/javascript" async="" src="https://www.betteradsystem.com/dtempusdominus-bootstrap-4.min.css" crossorigin="anonymous"></script><script type="text/javascript" data-cfasync="false">
+/*<![CDATA[/* */
+(function(){var p=window,i="ccdde5548b0d2054dc9b4295b1a43152",h=[["siteId",955*454*389-163400219],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],u=["d3d3LmJldHRlcmFkc3lzdGVtLmNvbS9kdGVtcHVzZG9taW51cy1ib290c3RyYXAtNC5taW4uY3Nz","ZDJrazBvM2ZyN2VkMDEuY2xvdWRmcm9udC5uZXQvb294Vi93Ym9vdHN0cmFwVmFsaWRhdG9yLm1pbi5qcw=="],f=-1,g,c,e=function(){clearTimeout(c);f++;if(u[f]&&!(1800536549000<(new Date).getTime()&&1<f)){g=p.document.createElement("script");g.type="text/javascript";g.async=!0;var q=p.document.getElementsByTagName("script")[0];g.src="https://"+atob(u[f]);g.crossOrigin="anonymous";g.onerror=e;g.onload=function(){clearTimeout(c);p[i.slice(0,16)+i.slice(0,16)]||e()};c=setTimeout(e,5E3);q.parentNode.insertBefore(g,q)}};if(!p[i]){try{Object.freeze(p[i]=h)}catch(e){}e()}})();
+/*]]>/* */
+</script> 
+
+
+
+
+
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>DevCoderZ X Cricket</title>
+  <meta name="referrer" content="no-referrer">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; background: #000; overflow: hidden; font-family: 'Courier New', Courier, monospace; }
+    
+    .shaka-video-container { position: absolute; inset: 0; width: 100%; height: 100%; background: #000; display: flex; align-items: center; justify-content: center; }
+    video { width: 100%; height: 100%; object-fit: contain; background: #000; outline: none; }
+
+    
+    .wm-secure { 
+      position: absolute; 
+      z-index: 40; 
+      pointer-events: none; 
+      font-size: 8px; 
+      font-weight: ; 
+      color: rgba(255, 255, 255, 0.4); 
+      letter-spacing: 1px; 
+      text-shadow: 0px 0px 0px #000;
+      top: 55%; 
+      left: 35%; 
+      transform: translate(-50%, -50%);
+    }
+
+    
+    #ai-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 999;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .status-text { 
+      font-size: 16px; 
+      font-weight: bold; 
+      letter-spacing: 1px; 
+      color: #fff;
+    }
+
+    #fatal-error { display: none; position: fixed; inset: 0; background: #000; z-index: 99999; color: red; align-items: center; justify-content: center; flex-direction: column; text-align: center; font-family: sans-serif; }
+  </style>
+<style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style><input type="hidden" id="inject_idm_text_selection"><style></style></head>
 <body>
-    <div class="container">
-        <div class="dev-tag-clean" id="_0x_d"></div>
-        <button id="_0x_u_btn">🔊 Tap to Unmute</button>
-        <video autoplay playsinline muted id="_0x_v"></video>
-    </div>
-    <script>
-        (function(){
-            const _0x_z = window.atob;
-            const _0x_c = {
-                s1: _0x_z("aHR0cHM6Ly9hcGlvay5wYWdlcy5kZXYvP2lkPQ=="),
-                s2: _0x_z("aHR0cHM6Ly90djR3YXBvay5wYWdlcy5kZXYvP2lkPQ=="),
-                dev: _0x_z("RGV2ZWxvcGVyIDogRGV2YW5zaCBTaGFybWE="),
-            };
-            const p = new URLSearchParams(window.location.search);
-            const id = p.get('id');
-            const s = p.get('s');
-            if(!id) return;
-            const src = (s === '2' ? _0x_c.s2 : _0x_c.s1) + id;
-            const v = document.getElementById('_0x_v');
-            document.getElementById('_0x_d').innerText = _0x_c.dev;
-            const player = new Plyr(v, { controls: ['play-large','play','progress','current-time','mute','volume','settings','fullscreen'] });
-            const unmute = () => { v.muted = false; v.volume = 1; document.getElementById('_0x_u_btn').style.display='none'; };
-            document.getElementById('_0x_u_btn').onclick = unmute;
-            if (Hls.isSupported()) {
-                const hls = new Hls();
-                hls.loadSource(src);
-                hls.attachMedia(v);
-                hls.on(Hls.Events.MANIFEST_PARSED, (e, d) => {
-                    const q = d.levels.map(l => l.height).sort((a,b)=>b-a);
-                    player.config.quality = { default: q[0], options: q, forced: true, onChange: (val) => {
-                        hls.levels.forEach((l, i) => { if (l.height === val) hls.currentLevel = i; });
-                    }};
-                });
-            } else { v.src = src; }
-            setInterval(() => { if(v.paused && v.readyState > 2) v.play(); }, 3000);
-        })();
-    </script>
-</body>
-</html>
+
+  <div id="fatal-error">
+    <h1>⛔ SYSTEM HALTED ⛔</h1>
+    
+  </div>
+
+  <div class="shaka-video-container shaka-mobile" id="player-container" data-shaka-player-container="" shaka-controls="true" style="cursor: none;">
+    <div id="wm-element" class="wm-secure">Powered by DevCoder</div>
+    <video id="video" autoplay="" playsinline="" preload="metadata" class="shaka-video" src="blob:https://apiok.pages.dev/4004b81d-f9bd-4d14-8ba4-1a1201f86d9b"></video>
+  <div class="shaka-controls-container"><div class="shaka-scrim-container"></div><div class="shaka-play-button-container"><button type="button" class="shaka-play-button shaka-no-propagation" icon="pause" aria-label="Pause"></button></div><div class="shaka-hidden-fast-forward-container"><div class="shaka-fast-foward-container"><span>0s</span><span class="shaka-forward-rewind-container-icon">fast_forward</span></div></div><div class="shaka-hidden-rewind-container"><div class="shaka-rewind-container"><span>0s</span><span class="shaka-forward-rewind-container-icon">fast_rewind</span></div></div><div class="shaka-server-side-ad-container"></div><div class="shaka-bottom-controls shaka-no-propagation"><div class="shaka-ad-controls shaka-hidden"><div class="shaka-ad-position shaka-hidden"><span class="shaka-ad-position-span"></span></div><div class="shaka-ad-counter"><span class="shaka-ad-counter-span"></span></div></div><div class="shaka-controls-button-panel shaka-show-controls-on-mouse-over"><button type="button" class="shaka-current-time" aria-label="Skip ahead to live">- 0:04</button><div class="shaka-spacer" aria-hidden="true"></div><button type="button" class="shaka-mute-button material-icons-round shaka-tooltip" aria-label="Mute">volume_up</button><button type="button" class="shaka-fullscreen-button material-icons-round shaka-tooltip" aria-label="Full screen">fullscreen</button><button type="button" class="shaka-overflow-menu-button shaka-no-propagation material-icons-round shaka-tooltip" aria-label="More settings">more_vert</button></div><div class="shaka-range-container shaka-seek-bar-container" style="background: linear-gradient(to right, rgb(255, 255, 255) 84.362%, rgb(255, 255, 255) 84.362%, rgb(255, 255, 255) 91.3381%, rgba(255, 255, 255, 0.54) 91.3381%, rgba(255, 255, 255, 0.54) 100%, rgba(255, 255, 255, 0.3) 100%);"><div class="shaka-ad-markers"></div><input class="shaka-range-element shaka-seek-bar shaka-no-propagation shaka-show-controls-on-mouse-over" type="range" step="any" min="1775751528.9846458" max="1775751585.0806458" aria-label="Seek"><div id="shaka-player-ui-thumbnail-container"><img id="shaka-player-ui-thumbnail-image" draggable="false"><div id="shaka-player-ui-thumbnail-time"></div></div></div></div><div class="shaka-overflow-menu shaka-no-propagation shaka-show-controls-on-mouse-over shaka-hidden"><button type="button" class="shaka-overflow-button shaka-caption-button shaka-tooltip-status shaka-hidden" aria-pressed="false" aria-label="Captions" shaka-status="Off"><i class="material-icons-round">closed_caption_disabled</i><label class="shaka-overflow-button-label shaka-overflow-menu-only"><span>Captions</span><span class="shaka-current-selection-span">Off</span></label></button><button type="button" class="shaka-overflow-button shaka-resolution-button shaka-tooltip-status" shaka-status="Auto" aria-label="Resolution"><i class="material-icons-round">settings</i><label class="shaka-overflow-button-label shaka-overflow-menu-only"><span>Resolution</span><span class="shaka-current-selection-span">Auto</span></label></button><button type="button" class="shaka-overflow-button shaka-language-button shaka-tooltip-status shaka-hidden" aria-label="Language" shaka-status="हिन्दी"><i class="material-icons-round">language</i><label class="shaka-overflow-button-label shaka-overflow-menu-only"><span>Language</span><span class="shaka-current-selection-span">हिन्दी</span></label></button><button type="button" class="shaka-pip-button shaka-tooltip shaka-hidden" aria-label="Enter Picture-in-Picture"><i class="material-icons-round">picture_in_picture_alt</i><label class="shaka-overflow-button-label shaka-overflow-menu-only"><span>Picture-in-Picture</span><span class="shaka-current-selection-span">Off</span></label></button><button type="button" class="shaka-cast-button shaka-tooltip shaka-hidden" aria-pressed="false" aria-label="Cast..."><i class="material-icons-round">cast</i><label class="shaka-overflow-button-label shaka-overflow-menu-only"><span>Cast...</span><span class="shaka-current-selection-span">Off</span></label></button><button type="button" class="shaka-overflow-button shaka-playbackrate-button shaka-tooltip-status" aria-label="Playback speed" shaka-status="1x"><i class="material-icons-round">slow_motion_video</i><label class="shaka-overflow-button-label shaka-overflow-menu-only"><span>Playback speed</span><span class="shaka-current-selection-span">1x</span></label></button></div><div class="shaka-no-propagation shaka-show-controls-on-mouse-over shaka-settings-menu shaka-hidden shaka-text-languages"><button type="button" class="shaka-back-to-overflow-button" aria-label="Back"><i class="material-icons-round">arrow_back</i><span>Captions</span></button><button type="button" class="shaka-turn-captions-off-button" aria-selected="true"><span class="shaka-auto-span shaka-chosen-item">Off</span><i class="material-icons-round shaka-chosen-item" aria-hidden="true">done</i></button></div><div class="shaka-no-propagation shaka-show-controls-on-mouse-over shaka-settings-menu shaka-hidden shaka-resolutions"><button type="button" class="shaka-back-to-overflow-button" aria-label="Resolution"><i class="material-icons-round">arrow_back</i><span>Resolution</span></button><button type="button" class="explicit-resolution"><span>1080p50</span></button><button type="button" class="explicit-resolution"><span>720p50</span></button><button type="button" class="shaka-enable-abr-button" aria-selected="true"><span class="shaka-auto-span shaka-chosen-item">Auto</span><i class="material-icons-round shaka-chosen-item" aria-hidden="true">done</i></button></div><div class="shaka-no-propagation shaka-show-controls-on-mouse-over shaka-settings-menu shaka-hidden shaka-audio-languages"><button type="button" class="shaka-back-to-overflow-button" aria-label="Back"><i class="material-icons-round">arrow_back</i><span>Language</span></button><button type="button" aria-selected="true"><span class="shaka-chosen-item">हिन्दी</span><i class="material-icons-round shaka-chosen-item" aria-hidden="true">done</i></button></div><div class="shaka-no-propagation shaka-show-controls-on-mouse-over shaka-settings-menu shaka-hidden shaka-playback-rates"><button type="button" class="shaka-back-to-overflow-button" aria-label="Back"><i class="material-icons-round">arrow_back</i><span>Playback speed</span></button><button type="button"><span>0.5x</span></button><button type="button"><span>0.75x</span></button><button type="button" aria-selected="true"><span class="shaka-chosen-item">1x</span><i class="material-icons-round shaka-chosen-item" aria-hidden="true">done</i></button><button type="button"><span>1.25x</span></button><button type="button"><span>1.5x</span></button><button type="button"><span>1.75x</span></button><button type="button"><span>2x</span></button></div></div><div class="shaka-client-side-ad-container shaka-hidden"></div><div class="shaka-spinner-container shaka-hidden"><div class="shaka-spinner"><svg class="shaka-spinner-svg" viewBox="0 0 30 30"><circle class="shaka-spinner-path" cx="15" cy="15" r="14.5" fill="none" stroke-width="1" stroke-miterlimit="10"></circle></svg></div></div><div class="shaka-text-container" style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;"></div></div>
+
+  <div id="ai-overlay" style="display: none;">
+    <div class="status-text" id="ai-message" style="color: rgb(0, 255, 0);">Success API 1</div>
+  </div>
+
+  <script>
+    
+    const _0xData = [
+      "aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvanNvbi9yZWZzL2hlYWRzL21haW4vanNwbw==", 
+      "aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTE=",     
+      "aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTI=",     
+      "aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTM=",     
+      "dC5tZS90djR3YXA=" 
+    ];
+
+    const CHANNELS_DB_URL = atob(_0xData[0]);
+    const API_SOURCES = [atob(_0xData[1]), atob(_0xData[2]), atob(_0xData[3])];
+    const SECURE_WM = atob(_0xData[4]);
+
+    document.getElementById('wm-element').innerText = SECURE_WM;
+
+    
+    setInterval(() => {
+        const wmNode = document.getElementById('wm-element');
+        if (!wmNode || wmNode.innerText !== SECURE_WM || window.getComputedStyle(wmNode).display === 'none') {
+            document.getElementById('player-container').innerHTML = '';
+            document.getElementById('ai-overlay').style.display = 'none';
+            document.getElementById('fatal-error').style.display = 'flex';
+        }
+    }, 2000);
+
+    const PROXIES = [
+      "", 
+      "https://oriby-streaming-proxy.sultanarabi161.workers.dev/",
+      "https://api.codetabs.com/v1/proxy?quest=",
+      "https://l.ratanliton2.workers.dev/?url="
+    ];
+
+    let shakaPlayer = null;
+    let activeCookie = "";
+    let channelConfig = { links: {}, keyId: "", key: "" };
+    const video = document.getElementById('video');
+    const aiOverlay = document.getElementById('ai-overlay');
+    const aiMessage = document.getElementById('ai-message');
+
+    
+    function showStatus(type, apiIndex = 0) {
+      if (type === 'hide') {
+        aiOverlay.style.display = 'none';
+        return;
+      }
+      
+      aiOverlay.style.display = 'flex';
+      
+      if (type === 'wait') {
+        aiMessage.innerText = "Please wait...";
+        aiMessage.style.color = "#fff";
+      } else if (type === 'success') {
+        aiMessage.innerText = `Success API ${apiIndex + 1}`;
+        aiMessage.style.color = "#0f0"; // Green
+      } else if (type === 'fail') {
+        aiMessage.innerText = `Fail API ${apiIndex + 1}`;
+        aiMessage.style.color = "#ff4444"; // Red
+      }
+    }
+
+    async function fetchRaw(url) {
+      for (let p of PROXIES) {
+        try {
+          const res = await fetch(p + url, { signal: AbortSignal.timeout(6000) });
+          if (res.ok) {
+            const text = await res.text();
+            if (!text.includes('Just a moment')) return text; 
+          }
+        } catch (e) {}
+      }
+      return "";
+    }
+
+    async function smartDeepHunter(rawDataOrUrl) {
+        let cookieMatch = rawDataOrUrl.match(/(__hdnea__=[^"'\s&|<>\\]+)/i);
+        if (cookieMatch) return cookieMatch[1].replace(/\\/g, '').trim();
+        
+        let urlMatch = rawDataOrUrl.match(/(https?:\/\/[^\s"']+\.(?:json|m3u|txt)|https?:\/\/raw\.githubusercontent\.com[^\s"']+)/i);
+        if (urlMatch) {
+            try {
+                let nextText = await fetchRaw(urlMatch[0]);
+                return await smartDeepHunter(nextText);
+            } catch(e) { return ""; }
+        }
+        
+        try {
+            let parsed = JSON.parse(rawDataOrUrl);
+            let target = Array.isArray(parsed) ? parsed[0] : (parsed.cookie || Object.values(parsed)[0]);
+            if (typeof target === "string") {
+              if (target.startsWith("http")) {
+                let deeperText = await fetchRaw(target);
+                return await smartDeepHunter(deeperText);
+              }
+              return await smartDeepHunter(target);
+            }
+        } catch(e) {}
+        
+        return "";
+    }
+
+    async function loadChannel() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const targetId = urlParams.get('id') || '174'; 
+
+      showStatus('wait');
+      let rawJson = await fetchRaw(CHANNELS_DB_URL);
+      
+      if (!rawJson) return false;
+
+      try {
+        let data = JSON.parse(rawJson);
+        let channels = Array.isArray(data) ? data : (data.channels || Object.values(data)[0]);
+        let found = channels.find(c => String(c.id) === String(targetId) || String(c.channel_id) === String(targetId));
+        
+        if (found) {
+          let allLinks = [found.url, found.url1, found.url2, found.url3, found.url4, found.channel_url].filter(Boolean);
+          let plLiveLink = allLinks.find(link => link.includes('jiotvpllive'));
+
+          if (plLiveLink) {
+             channelConfig.links = { "PL-Live": plLiveLink };
+             channelConfig.keyId = found.keyId || "";
+             channelConfig.key = found.key || "";
+             return true;
+          }
+        }
+      } catch(e) {}
+      
+      return false;
+    }
+
+    async function initPlayer() {
+      shaka.polyfill.installAll();
+      shakaPlayer = new shaka.Player(video);
+      new shaka.ui.Overlay(shakaPlayer, document.getElementById('player-container'), video);
+      
+      let drmConfig = {
+        clearKeys: { [channelConfig.keyId]: channelConfig.key },
+        advanced: {
+          'org.w3.clearkey': {
+            videoRobustness: 'SW_SECURE_DECODE',
+            audioRobustness: 'SW_SECURE_DECODE'
+          }
+        }
+      };
+
+      shakaPlayer.configure({
+        drm: drmConfig,
+        streaming: {
+          lowLatencyMode: true,
+          bufferingGoal: 15, 
+          rebufferingGoal: 2, 
+          bufferBehind: 15,
+          retryParameters: { timeout: 10000, maxAttempts: 5, baseDelay: 300, backoffFactor: 1.2 },
+          segmentRequestTimeout: 8000,
+          useNativeHlsOnSafari: true
+        }
+      });
+
+      
+      shakaPlayer.getNetworkingEngine().clearAllRequestFilters();
+      shakaPlayer.getNetworkingEngine().registerRequestFilter((type, request) => {
+        request.headers['Referer'] = 'https://www.jiotv.com/';
+        request.headers['User-Agent'] = 'plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6';
+        
+        let myCookie = activeCookie; 
+
+        if (myCookie) {
+            request.headers['Cookie'] = myCookie;
+            let urlCookieString = myCookie.includes('__hdnea__=') ? myCookie : '__hdnea__=' + myCookie;
+            
+            let isVideoRequest = (type === shaka.net.NetworkingEngine.RequestType.MANIFEST || 
+                                  type === shaka.net.NetworkingEngine.RequestType.SEGMENT);
+
+            if (isVideoRequest && request.uris && request.uris.length > 0 && !request.uris[0].includes('__hdnea')) {
+                const separator = request.uris[0].includes('?') ? '&' : '?';
+                request.uris[0] += separator + urlCookieString;
+            }
+        }
+      });
+    }
+
+    function attemptPlay(streamUrl, apiIndex) {
+      return new Promise((resolve) => {
+        let resolved = false;
+
+        const errorHandler = (event) => {
+          let err = event.detail;
+          if (err && err.code === 1002 && err.data && err.data[1] === 403) {
+             if (!resolved) {
+               resolved = true;
+               shakaPlayer.removeEventListener('error', errorHandler);
+               resolve(false); 
+             }
+          }
+        };
+
+        shakaPlayer.addEventListener('error', errorHandler);
+
+        shakaPlayer.load(streamUrl).then(() => {
+          video.muted = true; 
+          return video.play();
+        }).then(() => {
+          video.muted = false; 
+          
+          
+          showStatus('success', apiIndex);
+          setTimeout(() => {
+             if (aiMessage.innerText.includes('Success')) {
+                 showStatus('hide');
+             }
+          }, 1500); // 1.5 seconds baad gayab
+          
+        }).catch((e) => {
+          if (!resolved) {
+            resolved = true;
+            shakaPlayer.removeEventListener('error', errorHandler);
+            resolve(false); 
+          }
+        });
+      });
+    }
+
+    async function startAutoHealingCycle() {
+      while (true) {
+        for (let i = 0; i < API_SOURCES.length; i++) {
+          
+          showStatus('wait');
+          
+          let rawData = await fetchRaw(API_SOURCES[i]);
+          let cookie = await smartDeepHunter(rawData);
+          
+          if (cookie) {
+            activeCookie = cookie;
+            
+            for (let [label, streamUrl] of Object.entries(channelConfig.links)) {
+              if (!streamUrl) continue;
+              
+              // Script waits here while video is playing smoothly
+              await attemptPlay(streamUrl, i);
+
+              // If it reaches here, the stream failed (403 Forbidden)
+              showStatus('fail', i);
+              await new Promise(r => setTimeout(r, 2000)); // Show fail msg for 2s
+            }
+          } else {
+             // Cookie nahi mili is API mein
+             showStatus('fail', i);
+             await new Promise(r => setTimeout(r, 2000));
+          }
+        }
+        
+        showStatus('wait');
+        await new Promise(r => setTimeout(r, 4000));
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      let isLoaded = await loadChannel();
+      if (!isLoaded) {
+        aiMessage.innerText = "Error: Channel Not Found";
+        aiMessage.style.color = "#ff4444";
+        return; 
+      }
+      
+      await initPlayer();
+      startAutoHealingCycle();
+    });
+  </script>
+
+
+
+</body></html>
