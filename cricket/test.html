@@ -4,16 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <title>DevCoderZ X Cricket</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.css">
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.polyfilled.js"></script>
     <style>
         body{margin:0;padding:0;background-color:#050810;color:#fff;font-family:'Rajdhani',sans-serif;background-image:radial-gradient(circle at 50% -20%, #1e2631 0%, #050810 80%);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px 10px;-webkit-user-select:none;user-select:none}
         .container{width:100%;max-width:900px;background:#1e293b;padding:15px;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,.5);text-align:center;margin-bottom:20px}
         .video-wrapper{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:8px;background:#000}
-        video{width:100%;height:100%}
+        :root{--plyr-color-main:#00bfff}
         .dev-tag-full{position:absolute;top:15px;right:15px;color:rgba(255,255,255,0.9);font-size:11px;font-weight:700;z-index:1000;pointer-events:none;text-transform:uppercase;letter-spacing:1.5px;text-shadow:1px 1px 3px #000;font-family:sans-serif}
-        #_status_box{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,191,255,0.2);border:1px solid #00bfff;color:#fff;padding:10px 20px;border-radius:50px;font-size:12px;z-index:100;display:none;backdrop-filter:blur(5px)}
+        #_status_box{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,191,255,0.2);border:1px solid #00bfff;color:#fff;padding:10px 20px;border-radius:50px;font-size:12px;z-index:11;display:none;backdrop-filter:blur(5px)}
         .footer{margin-top:20px;padding:10px;border-top:1px solid #334155;font-size:14px}
         .badge{display:inline-block;background:#3b82f6;color:#fff;padding:4px 12px;border-radius:20px;font-weight:700;margin-bottom:8px;text-transform:uppercase}
         .credits strong{color:#60a5fa;letter-spacing:1px}
@@ -30,10 +31,10 @@
 
 <div class="container">
     <div class="badge">DevCoderZ X Cricket</div>
-    <div class="video-wrapper" id="player-container" shaka-controls="true">
+    <div class="video-wrapper">
         <div class="dev-tag-full">Developer: Devansh Sharma</div>
-        <div id="_status_box">BYPASSING...</div>
-        <video id="video" autoplay playsinline></video>
+        <div id="_status_box">LOADING...</div>
+        <video id="video" autoplay playsinline crossorigin controls></video>
     </div>
     <div class="footer">
         <div class="credits"><strong>DevCoderZ X Cricket</strong></div>
@@ -45,19 +46,20 @@
 
 <script>
     (function(){
-        const _0x_p = window.atob;
-        const _0x_u = {
-            db: _0x_p("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvanNvbi9yZWZzL2hlYWRzL21haW4vanNwbw=="),
+        const _0_a = window.atob;
+        const _0_u = {
+            db: _0_a("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvanNvbi9yZWZzL2hlYWRzL21haW4vanNwbw=="),
             api: [
-                _0x_p("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTE="),
-                _0x_p("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTI="),
-                _0x_p("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTM=")
+                _0_a("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTE="),
+                _0_a("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTI="),
+                _0_a("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTM=")
             ]
         };
 
-        let player, activeCookie = "";
+        let activeCookie = "";
         const video = document.getElementById('video');
         const status = document.getElementById('_status_box');
+        const player = new Plyr(video, { controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen'] });
 
         function setStatus(t, s = true) {
             status.innerText = t;
@@ -66,7 +68,7 @@
 
         async function getRaw(u) {
             try {
-                const r = await fetch(u, { signal: AbortSignal.timeout(8000) });
+                const r = await fetch(u);
                 return r.ok ? await r.text() : "";
             } catch(e) { return ""; }
         }
@@ -77,46 +79,38 @@
             return m ? m[1].replace(/\\/g, '').trim() : "";
         }
 
-        async function init() {
-            shaka.polyfill.installAll();
-            player = new shaka.Player(video);
-            new shaka.ui.Overlay(player, document.getElementById('player-container'), video);
-
-            player.getNetworkingEngine().registerRequestFilter((t, r) => {
-                r.headers['User-Agent'] = 'plaYtv/7.1.5 (Linux;Android 13)';
-                if (activeCookie) {
-                    r.headers['Cookie'] = activeCookie;
-                    if (!r.uris[0].includes('__hdnea')) {
-                        const s = r.uris[0].includes('?') ? '&' : '?';
-                        r.uris[0] += s + activeCookie;
-                    }
-                }
-            });
-        }
-
+        let hls;
         async function play(c) {
-            setStatus("VERIFYING API...");
-            for (let i = 0; i < _0x_u.api.length; i++) {
-                let ck = await getC(_0x_u.api[i]);
+            setStatus("BYPASSING...");
+            if (hls) hls.destroy();
+            
+            for (let i = 0; i < _0_u.api.length; i++) {
+                let ck = await getC(_0_u.api[i]);
                 if (ck) {
                     activeCookie = ck;
-                    try {
-                        player.configure({
-                            drm: { clearKeys: { [String(c.keyId)]: String(c.key) } },
-                            streaming: { lowLatencyMode: true }
+                    const streamUrl = c.url + (c.url.includes('?') ? '&' : '?') + activeCookie;
+                    
+                    if (Hls.isSupported()) {
+                        hls = new Hls({ xhrSetup: xhr => { xhr.withCredentials = false; } });
+                        hls.loadSource(streamUrl);
+                        hls.attachMedia(video);
+                        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                            video.play();
+                            setStatus("", false);
                         });
-                        await player.load(c.url);
+                    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                        video.src = streamUrl;
+                        video.play();
                         setStatus("", false);
-                        return;
-                    } catch(e) {}
+                    }
+                    return;
                 }
             }
-            setStatus("RETRYING...");
-            setTimeout(() => play(c), 3000);
+            setStatus("SERVER ERROR");
         }
 
         async function loadUI() {
-            let r = await getRaw(_0x_u.db);
+            let r = await getRaw(_0_u.db);
             if (!r) return;
             let d = JSON.parse(r);
             let chs = (d.channels || d).filter(c => {
@@ -130,21 +124,17 @@
                 const i = document.createElement('div');
                 i.className = 'ch-item';
                 i.innerHTML = `<div class="ch-name">${c.name || c.channel_name}</div><button class="play-btn">Play</button>`;
-                i.querySelector('button').onclick = () => play({url: u, keyId: c.keyId, key: c.key});
+                i.querySelector('button').onclick = () => {
+                    play({url: u});
+                    window.scrollTo({top: 0, behavior: 'smooth'});
+                };
                 document.getElementById('ch-list').appendChild(i);
             });
-            if(chs[0]) play({url: chs[0].url || chs[0].channel_url, keyId: chs[0].keyId, key: chs[0].key});
+            if(chs[0]) play({url: chs[0].url || chs[0].channel_url});
         }
 
-        document.addEventListener('DOMContentLoaded', async () => {
-            await init();
-            await loadUI();
-        });
-
+        document.addEventListener('DOMContentLoaded', loadUI);
         setInterval(() => { debugger; }, 1000);
-        document.onkeydown = (e) => {
-            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) return false;
-        };
     })();
 </script>
 </body>
