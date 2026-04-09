@@ -1,188 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>DevCoderZ X Cricket</title>
-  <meta name="referrer" content="no-referrer">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { width: 100%; height: 100%; background: #000; overflow: hidden; font-family: 'Courier New', Courier, monospace; }
-    .shaka-video-container { position: absolute; inset: 0; width: 100%; height: 100%; background: #000; display: flex; align-items: center; justify-content: center; }
-    video { width: 100%; height: 100%; object-fit: contain; background: #000; outline: none; }
-    .wm-secure { position: absolute; z-index: 40; pointer-events: none; font-size: 8px; color: rgba(255, 255, 255, 0.4); letter-spacing: 1px; top: 55%; left: 35%; transform: translate(-50%, -50%); }
-    #ai-overlay { position: absolute; inset: 0; z-index: 999; background: rgba(0, 0, 0, 0.85); display: flex; align-items: center; justify-content: center; }
-    .status-text { font-size: 16px; font-weight: bold; letter-spacing: 1px; color: #fff; }
-    #fatal-error { display: none; position: fixed; inset: 0; background: #000; z-index: 99999; color: red; align-items: center; justify-content: center; flex-direction: column; text-align: center; font-family: sans-serif; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>STR SPORTS | SECURE</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.polyfilled.js"></script>
+    <style>
+        body{margin:0;padding:0;background-color:#050810;color:#fff;font-family:'Rajdhani',sans-serif;background-image:radial-gradient(circle at 50% -20%, #1e2631 0%, #050810 80%);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px 10px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+        .container{width:100%;max-width:900px;background:#1e293b;padding:15px;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,.5);text-align:center;margin-bottom:20px}
+        .video-wrapper{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:8px;background:#000}
+        .video-wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;display:none;z-index:5}
+        :root{--plyr-color-main:#00bfff}
+        .dev-tag-full{position:absolute;top:15px;right:15px;color:rgba(255,255,255,0.7);font-size:10px;font-weight:700;z-index:1000;pointer-events:none;text-transform:uppercase;letter-spacing:1.8px;text-shadow:1px 1px 2px #000;font-family:sans-serif}
+        #_0x_u_btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,191,255,0.9);color:#fff;padding:12px 24px;border-radius:50px;font-size:13px;font-weight:800;cursor:pointer;z-index:11;border:none;text-transform:uppercase;animation:p_scale 1.2s infinite ease-in-out;white-space:nowrap}
+        @keyframes p_scale{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.05)}}
+        .footer{margin-top:20px;padding:10px;border-top:1px solid #334155;font-size:14px}
+        .badge{display:inline-block;background:#3b82f6;color:#fff;padding:4px 12px;border-radius:20px;font-weight:700;margin-bottom:8px;text-transform:uppercase}
+        .credits{color:#94a3b8;letter-spacing:1px}.credits strong{color:#60a5fa}
+        .ch-list{width:100%;max-width:900px;display:grid;grid-template-columns:1fr;gap:10px}
+        .ch-item{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 15px;display:flex;justify-content:space-between;align-items:center}
+        .ch-name{font-weight:700;color:#e0e0e0;text-transform:uppercase;font-size:1rem}
+        .btn-grp{display:flex;gap:8px}
+        .play-btn{border:none;cursor:pointer;padding:6px 14px;border-radius:6px;font-size:0.8rem;font-weight:700;text-transform:uppercase;transition:0.3s}
+        .ps1{background:transparent;border:1.5px solid #00d2ff;color:gold}.ps1:hover{background:#00d2ff;color:#000}
+        .ps2{background:transparent;border:1.5px solid #00ff00;color:#00ff00}.ps2:hover{background:#00ff00;color:#000}
+    </style>
 </head>
-<body>
+<body oncontextmenu="return false;" onkeydown="return false;">
 
-  <div id="fatal-error">
-    <h1>⛔ SYSTEM HALTED ⛔</h1>
-  </div>
+<div class="container">
+    <div class="badge">SECURE STREAM</div>
+    <div class="video-wrapper">
+        <button id="_0x_u_btn">🔊 Tap to Unmute</button>
+        <video autoplay playsinline muted id="_0x_v"></video>
+        <iframe id="_0x_if" allowfullscreen scrolling="no" allow="autoplay; encrypted-media"></iframe>
+    </div>
+    <div class="footer" id="_0x_f"></div>
+</div>
 
-  <div class="shaka-video-container shaka-mobile" id="player-container">
-    <div id="wm-element" class="wm-secure"></div>
-    <video id="video" autoplay playsinline preload="metadata" class="shaka-video"></video>
-  </div>
+<div class="ch-list" id="_0x_l"></div>
 
-  <div id="ai-overlay" style="display: none;">
-    <div class="status-text" id="ai-message"></div>
-  </div>
-
-  <script>
+<script>
     (function(){
-        const _0x5a2 = window.atob;
-        const _0x1c3 = [
-            _0x5a2("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvanNvbi9yZWZzL2hlYWRzL21haW4vanNwbw=="),
-            _0x5a2("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTE="),
-            _0x5a2("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTI="),
-            _0x5a2("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTM="),
-            _0x5a2("UG93ZXJlZCBieSBEZXZDb2Rlcg=="),
-            _0x5a2("aHR0cHM6Ly9vcmlieS1zdHJlYW1pbmctcHJveHkuc3VsdGFuYXJhYmkxNjEud29ya2Vycy5kZXYv"),
-            _0x5a2("aHR0cHM6Ly9hcGkuY29kZXRhYnMuY29tL3YxL3Byb3h5P3F1ZXN0PQ=="),
-            _0x5a2("aHR0cHM6Ly9sLnJhdGFubGl0b24yLndvcmtlcnMuZGV2Lz91cmw9")
+        setInterval(function(){debugger;}, 100);
+        const _0x_z = window.atob;
+        const _0x_m = {
+            _0x1: _0x_z("aHR0cHM6Ly9hcGlvay5wYWdlcy5kZXYvP2lkPQ=="),
+            _0x2: _0x_z("aHR0cHM6Ly90djR3YXBvay5wYWdlcy5kZXYvP2lkPQ=="),
+            _0x3: _0x_z("RGV2ZWxvcGVyIDogRGV2YW5zaCBTaGFybWE="),
+            _0x4: _0x_z("RGV2Q29kZXJ6"),
+            _0x5: _0x_z("wqkgMjAyNiBEZXZhbnNoIFNoYXJtYSB8IEFsbCBSaWdodHMgUmVzZXJ2ZWQ=")
+        };
+        const _0x_ch = [
+            { n: "STR Sports 1 HD", i: "4470" }, { n: "STR Sports 1", i: "1142" },
+            { n: "STR Sports 1 Hindi HD", i: "174" }, { n: "STR Sports 1 Hindi", i: "148" },
+            { n: "STR Sports 2 HD", i: "4456" }, { n: "STR Sports 2", i: "1141" },
+            { n: "STR Sports 2 Hindi HD", i: "1984" }, { n: "STR Sports 2 Hindi", i: "1985" },
+            { n: "STR Sports 3", i: "147" }, { n: "STR Sports 1 Tamil HD", i: "4468" },
+            { n: "STR Sports 1 Tamil", i: "1124" }, { n: "STR Sports 1 Telugu HD", i: "4471" },
+            { n: "STR Sports 1 Telugu", i: "1651" }, { n: "STR Sports 1 Kannada", i: "1650" },
+            { n: "STR Sports 2 Kannada", i: "4472" }, { n: "STR Sports 2 Tamil HD", i: "4473" },
+            { n: "STR Sports 2 Tamil", i: "2853" }, { n: "STR Sports 2 Telugu HD", i: "4474" },
+            { n: "STR Sports 2 Telugu", i: "2852" }, { n: "STR Sports Khel", i: "1998" },
+            { n: "STR Sports Select 1 HD", i: "300" }, { n: "STR Sports Select 1", i: "1123" },
+            { n: "STR Sports Select 2 HD", i: "301" }, { n: "STR Sports Select 2", i: "1114" }
         ];
-
-        const DB = _0x1c3[0];
-        const SRCS = [_0x1c3[1], _0x1c3[2], _0x1c3[3]];
-        const WM = _0x1c3[4];
-        const PX = ["", _0x1c3[5], _0x1c3[6], _0x1c3[7]];
-
-        document.getElementById('wm-element').innerText = WM;
-
-        setInterval(() => {
-            const node = document.getElementById('wm-element');
-            if (!node || node.innerText !== WM || window.getComputedStyle(node).display === 'none') {
-                document.getElementById('player-container').innerHTML = '';
-                document.getElementById('ai-overlay').style.display = 'none';
-                document.getElementById('fatal-error').style.display = 'flex';
-            }
-        }, 2000);
-
-        let sPlayer = null;
-        let aCookie = "";
-        let cCfg = { links: {}, keyId: "", key: "" };
-        const v = document.getElementById('video');
-        const overlay = document.getElementById('ai-overlay');
-        const msg = document.getElementById('ai-message');
-
-        function updateUI(t, idx = 0) {
-            if (t === 'hide') { overlay.style.display = 'none'; return; }
-            overlay.style.display = 'flex';
-            if (t === 'wait') { msg.innerText = "Please wait..."; msg.style.color = "#fff"; }
-            else if (t === 'success') { msg.innerText = `Success API ${idx + 1}`; msg.style.color = "#0f0"; }
-            else if (t === 'fail') { msg.innerText = `Fail API ${idx + 1}`; msg.style.color = "#f44"; }
-        }
-
-        async function rFetch(url) {
-            for (let p of PX) {
-                try {
-                    const res = await fetch(p + url, { signal: AbortSignal.timeout(6000) });
-                    if (res.ok) {
-                        const t = await res.text();
-                        if (!t.includes('Just a moment')) return t;
-                    }
-                } catch (e) {}
-            }
-            return "";
-        }
-
-        async function hunter(raw) {
-            let m = raw.match(/(__hdnea__=[^"'\s&|<>\\]+)/i);
-            if (m) return m[1].replace(/\\/g, '').trim();
-            let uM = raw.match(/(https?:\/\/[^\s"']+\.(?:json|m3u|txt)|https?:\/\/raw\.githubusercontent\.com[^\s"']+)/i);
-            if (uM) {
-                try {
-                    let next = await rFetch(uM[0]);
-                    return await hunter(next);
-                } catch(e) { return ""; }
-            }
-            try {
-                let p = JSON.parse(raw);
-                let t = Array.isArray(p) ? p[0] : (p.cookie || Object.values(p)[0]);
-                if (typeof t === "string") {
-                    if (t.startsWith("http")) return await hunter(await rFetch(t));
-                    return await hunter(t);
-                }
-            } catch(e) {}
-            return "";
-        }
-
-        async function load() {
-            const id = new URLSearchParams(window.location.search).get('id') || '174';
-            updateUI('wait');
-            let raw = await rFetch(DB);
-            if (!raw) return false;
-            try {
-                let d = JSON.parse(raw);
-                let list = Array.isArray(d) ? d : (d.channels || Object.values(d)[0]);
-                let f = list.find(c => String(c.id) === String(id) || String(c.channel_id) === String(id));
-                if (f) {
-                    let lks = [f.url, f.url1, f.url2, f.url3, f.url4, f.channel_url].filter(Boolean);
-                    let target = lks.find(l => l.includes('jiotvpllive'));
-                    if (target) {
-                        cCfg.links = { "Main": target };
-                        cCfg.keyId = f.keyId || "";
-                        cCfg.key = f.key || "";
-                        return true;
-                    }
-                }
-            } catch(e) {}
-            return false;
-        }
-
-        async function start() {
-            shaka.polyfill.installAll();
-            sPlayer = new shaka.Player(v);
-            new shaka.ui.Overlay(sPlayer, document.getElementById('player-container'), v);
-            sPlayer.configure({
-                drm: { clearKeys: { [cCfg.keyId]: cCfg.key } },
-                streaming: { lowLatencyMode: true, bufferingGoal: 15 }
-            });
-            sPlayer.getNetworkingEngine().registerRequestFilter((t, r) => {
-                r.headers['Referer'] = _0x5a2("aHR0cHM6Ly93d3cuamlvdHYuY29tLw==");
-                r.headers['User-Agent'] = _0x5a2("cGxhWXR2LzcuMS41IChMaW51eDtBbmRyb2lkIDEzKSBFeG9QbGF5ZXJMaWIvMi4xMS42");
-                if (aCookie) {
-                    r.headers['Cookie'] = aCookie;
-                    let cS = aCookie.includes('__hdnea__=') ? aCookie : '__hdnea__=' + aCookie;
-                    if ((t === 1 || t === 2) && r.uris[0] && !r.uris[0].includes('__hdnea')) {
-                        r.uris[0] += (r.uris[0].includes('?') ? '&' : '?') + cS;
-                    }
-                }
-            });
-
-            while (true) {
-                for (let i = 0; i < SRCS.length; i++) {
-                    updateUI('wait');
-                    let raw = await rFetch(SRCS[i]);
-                    let c = await hunter(raw);
-                    if (c) {
-                        aCookie = c;
-                        let ok = await new Promise(res => {
-                            sPlayer.load(cCfg.links["Main"]).then(() => {
-                                v.muted = false;
-                                updateUI('success', i);
-                                setTimeout(() => { if(msg.innerText.includes('Success')) updateUI('hide'); }, 1500);
-                                v.play();
-                            }).catch(() => res(false));
-                        });
-                        if (ok === false) updateUI('fail', i);
-                    } else { updateUI('fail', i); }
-                    await new Promise(r => setTimeout(r, 2000));
-                }
-                await new Promise(r => setTimeout(r, 4000));
-            }
-        }
-
-        document.addEventListener("DOMContentLoaded", async () => {
-            if (await load()) await start();
-            else { msg.innerText = "Error: Not Found"; msg.style.color = "#f44"; overlay.style.display = 'flex'; }
+        const v = document.getElementById('_0x_v'), f = document.getElementById('_0x_if'), b = document.getElementById('_0x_u_btn');
+        const tag = document.createElement('div'); tag.className = 'dev-tag-full'; tag.innerText = _0x_m._0x3;
+        document.getElementById('_0x_f').innerHTML = `<div class="credits">Developed By <strong>${_0x_m._0x4}</strong></div><p style="font-size:11px;color:#64748b;margin-top:5px;">${_0x_m._0x5}</p>`;
+        const py = new Plyr(v, { controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen'] });
+        py.on('ready', () => { v.closest('.plyr').appendChild(tag); });
+        let h = null;
+        window.loadCh = function(id, s) {
+            const u = (s === 2 ? _0x_m._0x2 : _0x_m._0x1) + id;
+            f.style.display = 'none'; v.style.display = 'block'; document.querySelector('.plyr').style.display = 'block'; b.style.display = 'block';
+            if (h) h.destroy();
+            if (Hls.isSupported()) {
+                h = new Hls({ xhrSetup: x => { x.withCredentials = false; } });
+                h.loadSource(u); h.attachMedia(v);
+                h.on(Hls.Events.ERROR, (e, d) => { if (d.fatal) { v.style.display = 'none'; document.querySelector('.plyr').style.display = 'none'; f.src = u; f.style.display = 'block'; b.style.display = 'none'; } });
+            } else { v.src = u; }
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        };
+        b.onclick = () => { v.muted = false; v.volume = 1; b.style.display = 'none'; };
+        _0x_ch.forEach(c => {
+            const i = document.createElement('div'); i.className = 'ch-item';
+            i.innerHTML = `<div class="ch-name">${c.n}</div><div class="btn-grp"><button class="play-btn ps1" onclick="loadCh('${c.i}',1)">Play 1</button><button class="play-btn ps2" onclick="loadCh('${c.i}',2)">Play 2</button></div>`;
+            document.getElementById('_0x_l').appendChild(i);
         });
+        loadCh(_0x_ch[0].i, 1);
+        setInterval(() => { if(v.paused && v.readyState > 2) v.play(); }, 3000);
+        document.onkeydown = function(e) { if (e.keyCode == 123 || (e.ctrlKey && (e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.keyCode == 85))) return false; };
     })();
-  </script>
+</script>
 </body>
 </html>
+
+
