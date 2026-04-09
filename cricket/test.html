@@ -45,7 +45,9 @@
 
 <script>
     (function(){
-        const _0x5a1b=["\x64\x65\x62\x75\x67\x67\x65\x72","\x61\x70\x70\x6C\x79","\x63\x6F\x6E\x73\x74\x72\x75\x63\x74\x6F\x72","\x73\x74\x61\x74\x65\x43\x68\x61\x6E\x67\x65","\x77\x68\x69\x6C\x65\x20\x28\x74\x72\x75\x65\x29\x20\x7B\x7D","\x63\x6F\x75\x6E\x74\x65\x72","\x61\x63\x74\x69\x6F\x6E","\x69\x6E\x69\x74"];(function(_0x2d1a,_0x5a1b){const _0x4c2b=function(_0x1b2a){while(--_0x1b2a){_0x2d1a["push"](_0x2d1a["shift"]())}};_0x4c2b(++_0x5a1b)}(_0x5a1b,0x1a4));const _0x4c2b=function(_0x2d1a,_0x1b2a){_0x2d1a=_0x2d1a-0x0;let _0x4f2d=_0x5a1b[_0x2d1a];return _0x4f2d};const _0x1b2a=function(){const _0x3e1d=function(){let _0x2c1a=true;return function(_0x4a1b,_0x1d2e){const _0x5c2f=_0x2c1a?function(){if(_0x1d2e){const _0x2a1f=_0x1d2e["apply"](_0x4a1b,arguments);_0x1d2e=null;return _0x2a1f}}:function(){};_0x2c1a=false;return _0x5c2f}}();const _0x4d2a=_0x3e1d(this,function(){const _0x1a2b=function(){const _0x4c1e=_0x1a2b[_0x4c2b("0x2")](_0x4c2b("0x4"))()[_0x4c2b("0x2")](_0x4c2b("0x0"));return!_0x4c1e["test"](_0x4d2a)});return _0x1a2b()});_0x4d2a();const _0x2b1e=function(){let _0x3a1f=0x0;return function(){return _0x3a1f++}}();const _0x1c2d=function(){let _0x4b1c=true;return function(_0x5d1a,_0x2e1b){const _0x1f2c=_0x4b1c?function(){if(_0x2e1b){const _0x3c1d=_0x2e1b["apply"](_0x5d1a,arguments);_0x2e1b=null;return _0x3c1d}}:function(){};_0x4b1c=false;return _0x1f2c}}();setInterval(function(){debugger},0x64);
+        // Junk/Obfuscation layers
+        const _0x_junk = ["\x64\x65\x62\x75\x67\x67\x65\x72", "\x63\x6F\x6E\x73\x6F\x6C\x65", "\x69\x6E\x66\x6F"];
+        setInterval(function(){ (function(_0x1){ if(_0x1) { debugger; } })(true); }, 1000);
 
         const _0x_z = window.atob;
         const _0x_m = {
@@ -55,6 +57,7 @@
             _0x4: _0x_z("RGV2Q29kZXJ6IFggQ3JpY2tldA=="),
             _0x5: _0x_z("wqkgMjAyNiBEZXZhbnNoIFNoYXJtYSB8IEFsbCBSaWdodHMgUmVzZXJ2ZWQ=")
         };
+
         const _0x_ch = [
             { n: "STR Sports 1 HD", i: "4470" }, { n: "STR Sports 1", i: "1142" },
             { n: "STR Sports 1 Hindi HD", i: "174" }, { n: "STR Sports 1 Hindi", i: "148" },
@@ -69,11 +72,18 @@
             { n: "STR Sports Select 1 HD", i: "300" }, { n: "STR Sports Select 1", i: "1123" },
             { n: "STR Sports Select 2 HD", i: "301" }, { n: "STR Sports Select 2", i: "1114" }
         ];
+
         const v = document.getElementById('_0x_v'), f = document.getElementById('_0x_if'), b = document.getElementById('_0x_u_btn');
-        const tag = document.createElement('div'); tag.className = 'dev-tag-full'; tag.innerText = _0x_m._0x3;
+        const tag = document.createElement('div'); 
+        tag.className = 'dev-tag-full'; 
+        tag.innerText = _0x_m._0x3;
+
         document.getElementById('_0x_f').innerHTML = `<div class="credits"><strong>${_0x_m._0x4}</strong></div><p style="font-size:11px;color:#64748b;margin-top:5px;">${_0x_m._0x5}</p>`;
+        
         const py = new Plyr(v, { controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen'] });
+        
         py.on('ready', () => { v.closest('.plyr').appendChild(tag); });
+
         let h = null;
         window.loadCh = function(id, s) {
             const u = (s === 2 ? _0x_m._0x2 : _0x_m._0x1) + id;
@@ -87,12 +97,15 @@
             } else { v.src = u; }
             window.scrollTo({top: 0, behavior: 'smooth'});
         };
+
         b.onclick = () => { v.muted = false; v.volume = 1; b.style.display = 'none'; };
+
         _0x_ch.forEach(c => {
             const i = document.createElement('div'); i.className = 'ch-item';
             i.innerHTML = `<div class="ch-name">${c.n}</div><div class="btn-grp"><button class="play-btn ps1" onclick="loadCh('${c.i}',1)">Play 1</button><button class="play-btn ps2" onclick="loadCh('${c.i}',2)">Play 2</button></div>`;
             document.getElementById('_0x_l').appendChild(i);
         });
+
         loadCh(_0x_ch[0].i, 1);
         setInterval(() => { if(v.paused && v.readyState > 2) v.play(); }, 3000);
         document.onkeydown = function(e) { if (e.keyCode == 123 || (e.ctrlKey && (e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.keyCode == 85))) return false; };
