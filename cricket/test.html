@@ -2,102 +2,68 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <title>Stream Player | DevCoderz</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.css">
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.polyfilled.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STR SPORTS | LIVE STREAM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        body{margin:0;padding:0;background-color:#0f172a;color:#fff;font-family:sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh}
-        .container{width:95%;max-width:900px;background:#1e293b;padding:15px;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,.5);text-align:center}
-        .video-wrapper{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:8px;background:#000}
-        :root{--plyr-color-main:#00bfff}
-        .plyr--video .plyr__controls{background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.7))!important;padding-bottom:15px!important}
-        .dev-tag-clean{position:absolute;top:15px;right:15px;color:rgba(255,255,255,0.6);font-size:10px;font-weight:700;z-index:10;pointer-events:none;text-transform:uppercase;letter-spacing:1.8px;text-shadow:1px 1px 2px #000}
-        #_0x_u_btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,191,255,0.9);color:#fff;padding:12px 24px;border-radius:50px;font-size:13px;font-weight:800;cursor:pointer;z-index:11;border:none;text-transform:uppercase;animation:p_scale 1.2s infinite ease-in-out;white-space:nowrap}
-        @keyframes p_scale{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.05)}}
-        .footer{margin-top:20px;padding:10px;border-top:1px solid #334155;font-size:14px}
-        .badge{display:inline-block;background:#3b82f6;color:#fff;padding:4px 12px;border-radius:20px;font-weight:700;margin-bottom:8px}
-        .credits{color:#94a3b8;letter-spacing:1px}.credits strong{color:#60a5fa}
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Rajdhani', sans-serif; }
+        body { background-color: #050810; color: #fff; padding: 20px 10px; background-image: radial-gradient(circle at 50% -20%, #1e2631 0%, #050810 80%); min-height: 100vh; }
+        header { text-align: center; margin-bottom: 30px; }
+        header h1 { font-size: 2.2rem; text-transform: uppercase; letter-spacing: 3px; color: #00d2ff; text-shadow: 0 0 15px rgba(0, 210, 255, 0.5); }
+        .container { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+        .channel-bar { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; transition: 0.3s; backdrop-filter: blur(10px); }
+        .channel-bar:hover { background: rgba(255, 255, 255, 0.07); border-color: #00d2ff; transform: scale(1.01); }
+        .channel-name { font-size: 1.1rem; font-weight: 700; color: #e0e0e0; text-transform: uppercase; }
+        .btn-group { display: flex; gap: 10px; }
+        .btn { text-decoration: none; padding: 8px 18px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; transition: all 0.3s ease; }
+        .s1 { background: transparent; border: 1.5px solid #00d2ff; color: gold; }
+        .s1:hover { background: #00d2ff; color: #000; box-shadow: 0 0 15px rgba(0, 210, 255, 0.6); }
+        .s0 { background: transparent; border: 1.5px solid green; color: #00ff00; }
+        .s0:hover { background: green; color: #fff; box-shadow: 0 0 15px rgba(0, 255, 0, 0.4); }
+        @media (max-width: 600px) { .channel-name { font-size: 0.9rem; } .btn { padding: 6px 10px; font-size: 0.7rem; } }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="badge" id="_0x_b1">LIVE STREAM</div>
-        <div class="video-wrapper" id="player-ui">
-            <div class="dev-tag-clean" id="_0x_dev"></div>
-            <button id="_0x_u_btn">🔊 Tap to Unmute</button>
-            <video autoplay playsinline muted id="_0x_vid"></video>
-        </div>
-        <div class="footer" id="_0x_f1"></div>
-    </div>
-
-    <script>
-        (function(){
-            const _0x_z = window.atob;
-            // Obfuscated APIs and Strings
-            const _0x_conf = {
-                s1: _0x_z("aHR0cHM6Ly9hcGlvay5wYWdlcy5kZXYvP2lkPQ=="), // apiok
-                s2: _0x_z("aHR0cHM6Ly90djR3YXBvay5wYWdlcy5kZXYvP2lkPQ=="), // tv4wapok
-                dev: _0x_z("RGV2ZWxvcGVyIDogRGV2YW5zaCBTaGFybWE="),
-                crd: _0x_z("RGV2ZWxvcGVkICYgTWFpbnRhaW5lZCBieSA="),
-                brand: _0x_z("RGV2Q29kZXJ6"),
-                copy: _0x_z("wqkgMjAyNiBEZXZhbnNoIFNoYXJtYSB8IEFsbCBSaWdodHMgUmVzZXJ2ZWQ=")
-            };
-
-            const urlParams = new URLSearchParams(window.location.search);
-            const cid = urlParams.get('id');
-            const server = urlParams.get('s') || '1';
-
-            if(!cid) {
-                document.getElementById('player-ui').innerHTML = "<div style='padding:50px'>No Channel ID Found</div>";
-                return;
-            }
-
-            // Construct Source URL
-            const finalUrl = (server === '2' ? _0x_conf.s2 : _0x_conf.s1) + cid;
-
-            const video = document.getElementById('_0x_vid');
-            const muteBtn = document.getElementById('_0x_u_btn');
-            document.getElementById('_0x_dev').innerText = _0x_conf.dev;
-            document.getElementById('_0x_f1').innerHTML = `<div class="credits">${_0x_conf.crd}<strong>${_0x_conf.brand}</strong></div><p style="font-size:11px;color:#64748b;margin-top:5px;">${_0x_conf.copy}</p>`;
-
-            // Initialize Plyr
-            const player = new Plyr(video, {
-                autoplay: true,
-                controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen']
-            });
-
-            const unmute = () => {
-                video.muted = false;
-                video.volume = 1;
-                muteBtn.style.display = 'none';
-                window.removeEventListener('click', unmute);
-            };
-            muteBtn.addEventListener('click', unmute);
-
-            if (Hls.isSupported()) {
-                const hls = new Hls();
-                hls.loadSource(finalUrl);
-                hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED, (e, data) => {
-                    const qualities = data.levels.map(l => l.height).sort((a, b) => b - a);
-                    player.config.quality = { 
-                        default: qualities[0], 
-                        options: qualities, 
-                        forced: true, 
-                        onChange: (v) => {
-                            hls.levels.forEach((l, i) => { if (l.height === v) hls.currentLevel = i; });
-                        }
-                    };
-                });
-            } else {
-                video.src = finalUrl;
-            }
-
-            // Keep playing fix
-            setInterval(() => { if(video.paused && video.readyState > 2) video.play(); }, 3000);
-        })();
-    </script>
+<header><h1>STR SPORTS LIVE</h1></header>
+<div class="container" id="list"></div>
+<script>
+    const channels = [
+        { name: "STR Sports 1 HD", id: "4470" },
+        { name: "STR Sports 1", id: "1142" },
+        { name: "STR Sports 1 Hindi HD", id: "174" },
+        { name: "STR Sports 1 Hindi", id: "148" },
+        { name: "STR Sports 2 HD", id: "4456" },
+        { name: "STR Sports 2", id: "1141" },
+        { name: "STR Sports 2 Hindi HD", id: "1984" },
+        { name: "STR Sports 2 Hindi", id: "1985" },
+        { name: "STR Sports 3", id: "147" },
+        { name: "STR Sports 1 Tamil HD", id: "4468" },
+        { name: "STR Sports 1 Tamil", id: "1124" },
+        { name: "STR Sports 1 Telugu HD", id: "4471" },
+        { name: "STR Sports 1 Telugu", id: "1651" },
+        { name: "STR Sports 1 Kannada", id: "1650" },
+        { name: "STR Sports 2 Kannada", id: "4472" },
+        { name: "STR Sports 2 Tamil HD", id: "4473" },
+        { name: "STR Sports 2 Tamil", id: "2853" },
+        { name: "STR Sports 2 Telugu HD", id: "4474" },
+        { name: "STR Sports 2 Telugu", id: "2852" },
+        { name: "STR Sports Khel", id: "1998" },
+        { name: "STR Sports Select 1 HD", id: "300" },
+        { name: "STR Sports Select 1", id: "1123" },
+        { name: "STR Sports Select 2 HD", id: "301" },
+        { name: "STR Sports Select 2", id: "1114" }
+    ];
+    const listContainer = document.getElementById('list');
+    channels.forEach(ch => {
+        listContainer.innerHTML += `
+            <div class="channel-bar">
+                <div class="channel-name">${ch.name}</div>
+                <div class="btn-group">
+                    <a href="player.html?id=${ch.id}&s=1" class="btn s1">Play 1</a>
+                    <a href="player.html?id=${ch.id}&s=2" class="btn s0">Play 2</a>
+                </div>
+            </div>`;
+    });
+</script>
 </body>
 </html>
