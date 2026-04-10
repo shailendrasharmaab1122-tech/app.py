@@ -1,126 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>DevCoderZ | All-In-One Sports</title>
-  <meta name="referrer" content="no-referrer">
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
-  
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{background:#000;color:#fff;font-family:sans-serif;overflow:hidden;height:100vh;}
-    .main-container { display: flex; flex-direction: column; height: 100%; }
-    #player-container { width: 100%; aspect-ratio: 16/9; background: #000; position: relative; border-bottom: 2px solid #222; }
-    video { width: 100%; height: 100%; }
-    .channel-grid { flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 12px; padding: 15px; overflow-y: auto; background: #0a0a0a; }
-    .ch-card { background: #151515; border-radius: 10px; padding: 10px; text-align: center; cursor: pointer; border: 1px solid #222; transition: 0.2s; }
-    .ch-card:hover { border-color: #00bfff; transform: scale(1.03); background: #1a1a1a; }
-    .ch-card img { width: 45px; height: 45px; object-fit: contain; margin-bottom: 8px; border-radius: 4px; }
-    .ch-card p { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-    #status-bar { position: absolute; top: 10px; left: 10px; z-index: 100; background: rgba(0,0,0,0.8); padding: 5px 12px; font-size: 11px; border-radius: 20px; color: #00FF00; font-family: monospace; border: 1px solid #333; pointer-events: none; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>STR SPORTS | SECURE</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.polyfilled.js"></script>
+    <style>
+        body{margin:0;padding:0;background-color:#050810;color:#fff;font-family:'Rajdhani',sans-serif;background-image:radial-gradient(circle at 50% -20%, #1e2631 0%, #050810 80%);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px 10px;-webkit-user-select:none;user-select:none}
+        .container{width:100%;max-width:900px;background:#1e293b;padding:15px;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,.5);text-align:center;margin-bottom:20px}
+        .video-wrapper{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:8px;background:#000}
+        .video-wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;display:none;z-index:5}
+        :root{--plyr-color-main:#00bfff}
+        .dev-tag-full{position:absolute;top:15px;right:15px;color:rgba(255,255,255,0.7);font-size:10px;font-weight:700;z-index:1000;pointer-events:none;text-transform:uppercase;letter-spacing:1.8px;text-shadow:1px 1px 2px #000;font-family:sans-serif}
+        #_0x_u_btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,191,255,0.9);color:#fff;padding:12px 24px;border-radius:50px;font-size:13px;font-weight:800;cursor:pointer;z-index:11;border:none;text-transform:uppercase;animation:p_scale 1.2s infinite ease-in-out;white-space:nowrap}
+        @keyframes p_scale{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.05)}}
+        .footer{margin-top:20px;padding:10px;border-top:1px solid #334155;font-size:14px}
+        .badge{display:inline-block;background:#3b82f6;color:#fff;padding:4px 12px;border-radius:20px;font-weight:700;margin-bottom:8px;text-transform:uppercase}
+        .credits{color:#94a3b8;letter-spacing:1px}.credits strong{color:#60a5fa}
+        .ch-list{width:100%;max-width:900px;display:grid;grid-template-columns:1fr;gap:10px}
+        .ch-item{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 15px;display:flex;justify-content:space-between;align-items:center}
+        .ch-name{font-weight:700;color:#e0e0e0;text-transform:uppercase;font-size:1rem}
+        .btn-grp{display:flex;gap:8px}
+        .play-btn{border:none;cursor:pointer;padding:6px 14px;border-radius:6px;font-size:0.8rem;font-weight:700;text-transform:uppercase;transition:0.3s}
+        .ps1{background:transparent;border:1.5px solid #00d2ff;color:gold}.ps1:hover{background:#00d2ff;color:#000}
+        .ps2{background:transparent;border:1.5px solid #00ff00;color:#00ff00}.ps2:hover{background:#00ff00;color:#000}
+    </style>
 </head>
-<body>
+<body oncontextmenu="return false;" onkeydown="return false;">
 
-<div class="main-container">
-  <div id="player-container" data-shaka-player-container>
-    <div id="status-bar">SYSTEM READY</div>
-    <video id="video" autoplay playsinline></video>
-  </div>
-  <div class="channel-grid" id="channel-list"></div>
+<div class="container">
+    <div class="badge">SECURE STREAM</div>
+    <div class="video-wrapper">
+        <button id="_0x_u_btn">🔊 Tap to Unmute</button>
+        <video autoplay playsinline muted id="_0x_v"></video>
+        <iframe id="_0x_if" allowfullscreen scrolling="no" allow="autoplay; encrypted-media"></iframe>
+    </div>
+    <div class="footer" id="_0x_f"></div>
 </div>
 
+<div class="ch-list" id="_0x_l"></div>
+
 <script>
-    // API Sources (Base64 Encoded for Basic Security)
-    const API_LIST = [
-        "aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTE=",
-        "aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTI=",
-        "aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTM="
-    ];
+    (function(){
+        setInterval(function(){debugger;}, 100);
+        const _0x_z = window.atob;
+        const _0x_m = {
+            // API 1: DevCoderZ Vercel API
+            _0x1: _0x_z("aHR0cHM6Ly9EZXZDb2RlcloudmVyY2VsLmFwcC9jcmlja2V0L2FwaT9pZD0="),
+            // API 2: DevCoderZ Vercel API 2
+            _0x2: _0x_z("aHR0cHM6Ly9EZXZDb2RlcloudmVyY2VsLmFwcC9jcmlja2V0L2FwaTI/aWQ9"),
+            _0x3: _0x_z("RGV2ZWxvcGVyIDogRGV2YW5zaCBTaGFybWE="),
+            _0x4: _0x_z("RGV2Q29kZXJ6"),
+            _0x5: _0x_z("wqkgMjAyNiBEZXZhbnNoIFNoYXJtYSB8IEFsbCBSaWdodHMgUmVzZXJ2ZWQ=")
+        };
 
-    // Your Channel Data
-    const myChannels = [
-      { "name": "DD Sports", "url": "https://jiotvbpkmob.cdn.jio.com/bpk-tv/DD_Sports_BTS/output/index.mpd", "keyId": "0c1b139b9a955134a1efae8e44b63aac", "key": "00897bffd6997049787270797b8c3a17", "logo": "https://jiotv.catchup.cdn.jio.com/dare_images/images/DD_Sports.png" },
-      { "name": "Eurosport HD", "url": "https://jiotvbpkmob.cdn.jio.com/bpk-tv/Dsports_HD_BTS/output/index.mpd", "keyId": "14fc31f9d832509c9f7cdd77e622e30b", "key": "a884515f4e1dd77f07aa100ccec13388", "logo": "https://jiotv.catchup.cdn.jio.com/dare_images/images/Dsports_HD.png" },
-      { "name": "Star Sports Select 1", "url": "https://jiotvbpkmob.cdn.jio.com/bpk-tv/Star_Sports_Select_HD_1_BTS/output/index.mpd", "keyId": "c2c048e439d65316beeda6ef64d5d0f8", "key": "e2fdc132cbdee65501b845ce414fce39", "logo": "https://img.media.jio.com/tvpimages/96/65/302113_1749664252703_l_medium.jpg" },
-      { "name": "Brave TV", "url": "https://jiotvbpkmob.cdn.jio.com/bpk-tv/Brave_TV_BTS/output/index.mpd", "keyId": "25cf2421cd9c57298e17d0d7b8084e8c", "key": "520507b4b9f496970f88c57f5aa59778", "logo": "https://jiotv.catchup.cdn.jio.com/dare_images/images/Brave_TV.png" }
-    ];
+        const _0x_ch = [
+            { n: "STR Sports 1 HD", i: "4470" }, { n: "STR Sports 1", i: "1142" },
+            { n: "STR Sports 1 Hindi HD", i: "174" }, { n: "STR Sports 1 Hindi", i: "148" },
+            { n: "STR Sports 2 HD", i: "4456" }, { n: "STR Sports 2", i: "1141" },
+            { n: "STR Sports 2 Hindi HD", i: "1984" }, { n: "STR Sports 2 Hindi", i: "1985" },
+            { n: "STR Sports 3", i: "147" }, { n: "STR Sports 1 Tamil HD", i: "4468" },
+            { n: "STR Sports 1 Tamil", i: "1124" }, { n: "STR Sports 1 Telugu HD", i: "4471" },
+            { n: "STR Sports 1 Telugu", i: "1651" }, { n: "STR Sports 1 Kannada", i: "1650" },
+            { n: "STR Sports 2 Kannada", i: "4472" }, { n: "STR Sports 2 Tamil HD", i: "4473" },
+            { n: "STR Sports 2 Tamil", i: "2853" }, { n: "STR Sports 2 Telugu HD", i: "4474" },
+            { n: "STR Sports 2 Telugu", i: "2852" }, { n: "STR Sports Khel", i: "1998" },
+            { n: "STR Sports Select 1 HD", i: "300" }, { n: "STR Sports Select 1", i: "1123" },
+            { n: "STR Sports Select 2 HD", i: "301" }, { n: "STR Sports Select 2", i: "1114" }
+        ];
 
-    let player, ui, currentToken = "";
-    const status = document.getElementById('status-bar');
-
-    async function fetchToken() {
-        status.innerText = "REFRESHING TOKEN...";
-        for (let b64 of API_LIST) {
-            try {
-                const res = await fetch(atob(b64));
-                const data = await res.text();
-                const match = data.match(/(__hdnea__=[^"'\s&|<>\\]+)/i);
-                if (match) return match[1];
-            } catch(e) { console.warn("API Node Failed"); }
-        }
-        return "";
-    }
-
-    async function init() {
-        shaka.polyfill.installAll();
-        const video = document.getElementById('video');
-        const container = document.getElementById('player-container');
+        const v = document.getElementById('_0x_v'), f = document.getElementById('_0x_if'), b = document.getElementById('_0x_u_btn');
+        const tag = document.createElement('div'); tag.className = 'dev-tag-full'; tag.innerText = _0x_m._0x3;
         
-        player = new shaka.Player(video);
-        ui = new shaka.ui.Overlay(player, container, video);
+        document.getElementById('_0x_f').innerHTML = `<div class="credits">Developed By <strong>${_0x_m._0x4}</strong></div><p style="font-size:11px;color:#64748b;margin-top:5px;">${_0x_m._0x5}</p>`;
+        
+        const py = new Plyr(v, { controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen'] });
+        
+        py.on('ready', () => { v.closest('.plyr').appendChild(tag); });
+        
+        let h = null;
+        window.loadCh = function(id, s) {
+            const u = (s === 2 ? _0x_m._0x2 : _0x_m._0x1) + id;
+            f.style.display = 'none'; v.style.display = 'block'; document.querySelector('.plyr').style.display = 'block'; b.style.display = 'block';
+            
+            if (h) h.destroy();
+            
+            if (Hls.isSupported()) {
+                h = new Hls({ xhrSetup: x => { x.withCredentials = false; } });
+                h.loadSource(u); h.attachMedia(v);
+                h.on(Hls.Events.MANIFEST_PARSED, () => { v.play(); });
+                h.on(Hls.Events.ERROR, (e, d) => { 
+                    if (d.fatal) { 
+                        v.style.display = 'none'; 
+                        document.querySelector('.plyr').style.display = 'none'; 
+                        f.src = u; 
+                        f.style.display = 'block'; 
+                        b.style.display = 'none'; 
+                    } 
+                });
+            } else { v.src = u; }
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        };
 
-        // Header Masking logic
-        player.getNetworkingEngine().registerRequestFilter((type, request) => {
-            request.headers['User-Agent'] = 'plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6';
-            if (currentToken) {
-                let sep = request.uris[0].includes('?') ? '&' : '?';
-                request.uris[0] += sep + currentToken;
-            }
+        b.onclick = () => { v.muted = false; v.volume = 1; b.style.display = 'none'; };
+
+        _0x_ch.forEach(c => {
+            const i = document.createElement('div'); i.className = 'ch-item';
+            i.innerHTML = `<div class="ch-name">${c.n}</div><div class="btn-grp"><button class="play-btn ps1" onclick="loadCh('${c.i}',1)">Play 1</button><button class="play-btn ps2" onclick="loadCh('${c.i}',2)">Play 2</button></div>`;
+            document.getElementById('_0x_l').appendChild(i);
         });
 
-        renderGrid();
-        playChannel(myChannels[0]);
-    }
-
-    async function playChannel(ch) {
-        try {
-            if (!currentToken) currentToken = await fetchToken();
-            status.innerText = "LOADING: " + ch.name;
-
-            player.configure({
-                drm: { clearKeys: { [ch.keyId]: ch.key } },
-                manifest: { dash: { ignoreMinBufferTime: true } }
-            });
-
-            await player.load(ch.url);
-            status.innerText = "● LIVE | " + ch.name;
-        } catch (e) {
-            console.error(e);
-            if (e.code === 4003 || e.code === 1002) { // Auth error codes
-                currentToken = await fetchToken();
-                if(currentToken) playChannel(ch);
-            } else {
-                status.innerText = "ERROR: " + e.code;
-            }
-        }
-    }
-
-    function renderGrid() {
-        const list = document.getElementById('channel-list');
-        myChannels.forEach(ch => {
-            const card = document.createElement('div');
-            card.className = 'ch-card';
-            card.innerHTML = `<img src="${ch.logo}"><p>${ch.name}</p>`;
-            card.onclick = () => playChannel(ch);
-            list.appendChild(card);
-        });
-    }
-
-    document.addEventListener('shaka-ui-loaded', init);
+        loadCh(_0x_ch[0].i, 1);
+        
+        setInterval(() => { if(v.paused && v.readyState > 2) v.play(); }, 3000);
+        
+        document.onkeydown = function(e) { 
+            if (e.keyCode == 123 || (e.ctrlKey && (e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.keyCode == 85))) return false; 
+        };
+    })();
 </script>
 </body>
 </html>
