@@ -1,126 +1,150 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <title>STR SPORTS | SECURE</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.css">
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.polyfilled.js"></script>
-    <style>
-        body{margin:0;padding:0;background-color:#050810;color:#fff;font-family:'Rajdhani',sans-serif;background-image:radial-gradient(circle at 50% -20%, #1e2631 0%, #050810 80%);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px 10px;-webkit-user-select:none;user-select:none}
-        .container{width:100%;max-width:900px;background:#1e293b;padding:15px;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,.5);text-align:center;margin-bottom:20px}
-        .video-wrapper{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:8px;background:#000}
-        .video-wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;display:none;z-index:5}
-        :root{--plyr-color-main:#00bfff}
-        .dev-tag-full{position:absolute;top:15px;right:15px;color:rgba(255,255,255,0.7);font-size:10px;font-weight:700;z-index:1000;pointer-events:none;text-transform:uppercase;letter-spacing:1.8px;text-shadow:1px 1px 2px #000;font-family:sans-serif}
-        #_0x_u_btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,191,255,0.9);color:#fff;padding:12px 24px;border-radius:50px;font-size:13px;font-weight:800;cursor:pointer;z-index:11;border:none;text-transform:uppercase;animation:p_scale 1.2s infinite ease-in-out;white-space:nowrap}
-        @keyframes p_scale{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.05)}}
-        .footer{margin-top:20px;padding:10px;border-top:1px solid #334155;font-size:14px}
-        .badge{display:inline-block;background:#3b82f6;color:#fff;padding:4px 12px;border-radius:20px;font-weight:700;margin-bottom:8px;text-transform:uppercase}
-        .credits{color:#94a3b8;letter-spacing:1px}.credits strong{color:#60a5fa}
-        .ch-list{width:100%;max-width:900px;display:grid;grid-template-columns:1fr;gap:10px}
-        .ch-item{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 15px;display:flex;justify-content:space-between;align-items:center}
-        .ch-name{font-weight:700;color:#e0e0e0;text-transform:uppercase;font-size:1rem}
-        .btn-grp{display:flex;gap:8px}
-        .play-btn{border:none;cursor:pointer;padding:6px 14px;border-radius:6px;font-size:0.8rem;font-weight:700;text-transform:uppercase;transition:0.3s}
-        .ps1{background:transparent;border:1.5px solid #00d2ff;color:gold}.ps1:hover{background:#00d2ff;color:#000}
-        .ps2{background:transparent;border:1.5px solid #00ff00;color:#00ff00}.ps2:hover{background:#00ff00;color:#000}
-    </style>
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>DevCoderZ X Cricket</title>
+  <meta name="referrer" content="no-referrer">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; background: #000; overflow: hidden; font-family: 'Courier New', Courier, monospace; }
+    .shaka-video-container { position: absolute; inset: 0; width: 100%; height: 100%; background: #000; display: flex; align-items: center; justify-content: center; }
+    video { width: 100%; height: 100%; object-fit: contain; background: #000; outline: none; }
+    .wm-secure { position: absolute; z-index: 40; pointer-events: none; font-size: 8px; color: rgba(255, 255, 255, 0.4); letter-spacing: 1px; top: 55%; left: 35%; transform: translate(-50%, -50%); }
+    #ai-overlay { position: absolute; inset: 0; z-index: 999; background: rgba(0, 0, 0, 0.85); display: flex; align-items: center; justify-content: center; }
+    .status-text { font-size: 16px; font-weight: bold; letter-spacing: 1px; color: #fff; }
+    #fatal-error { display: none; position: fixed; inset: 0; background: #000; z-index: 99999; color: red; align-items: center; justify-content: center; flex-direction: column; text-align: center; }
+  </style>
 </head>
-<body oncontextmenu="return false;" onkeydown="return false;">
+<body>
+  <div id="fatal-error"><h1>SYSTEM HALTED</h1></div>
+  <div class="shaka-video-container shaka-mobile" id="player-container">
+    <div id="wm-element" class="wm-secure"></div>
+    <video id="video" autoplay playsinline preload="metadata" class="shaka-video"></video>
+  </div>
+  <div id="ai-overlay" style="display: none;"><div class="status-text" id="ai-message"></div></div>
 
-<div class="container">
-    <div class="badge">SECURE STREAM</div>
-    <div class="video-wrapper">
-        <button id="_0x_u_btn">🔊 Tap to Unmute</button>
-        <video autoplay playsinline muted id="_0x_v"></video>
-        <iframe id="_0x_if" allowfullscreen scrolling="no" allow="autoplay; encrypted-media"></iframe>
-    </div>
-    <div class="footer" id="_0x_f"></div>
-</div>
+  <script>
+    const _0xData = [
+      "aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvanNvbi9yZWZzL2hlYWRzL21haW4vanNwbw==", 
+      "aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTE=",     
+      "aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTI=",     
+      "aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1NodWJoYW1rdXIvVHYvcmVmcy9oZWFkcy9tYWluL2FwaTM=",     
+      "UG93ZXJlZCBieSBEZXZDb2Rlclo=" 
+    ];
 
-<div class="ch-list" id="_0x_l"></div>
+    const CHANNELS_DB_URL = atob(_0xData[0]);
+    const API_SOURCES = [atob(_0xData[1]), atob(_0xData[2]), atob(_0xData[3])];
+    const SECURE_WM = atob(_0xData[4]);
+    document.getElementById('wm-element').innerText = SECURE_WM;
 
-<script>
-    (function(){
-        setInterval(function(){debugger;}, 100);
-        const _0x_z = window.atob;
-        const _0x_m = {
-            // API 1: DevCoderZ Vercel API
-            _0x1: _0x_z("aHR0cHM6Ly9EZXZDb2RlcloudmVyY2VsLmFwcC9jcmlja2V0L2FwaT9pZD0="),
-            // API 2: DevCoderZ Vercel API 2
-            _0x2: _0x_z("aHR0cHM6Ly9EZXZDb2RlcloudmVyY2VsLmFwcC9jcmlja2V0L2FwaTI/aWQ9"),
-            _0x3: _0x_z("RGV2ZWxvcGVyIDogRGV2YW5zaCBTaGFybWE="),
-            _0x4: _0x_z("RGV2Q29kZXJ6"),
-            _0x5: _0x_z("wqkgMjAyNiBEZXZhbnNoIFNoYXJtYSB8IEFsbCBSaWdodHMgUmVzZXJ2ZWQ=")
-        };
+    const PROXIES = [
+      "https://corsproxy.io/?",
+      "https://api.allorigins.win/raw?url=",
+      "https://api.codetabs.com/v1/proxy?quest=",
+      ""
+    ];
 
-        const _0x_ch = [
-            { n: "STR Sports 1 HD", i: "4470" }, { n: "STR Sports 1", i: "1142" },
-            { n: "STR Sports 1 Hindi HD", i: "174" }, { n: "STR Sports 1 Hindi", i: "148" },
-            { n: "STR Sports 2 HD", i: "4456" }, { n: "STR Sports 2", i: "1141" },
-            { n: "STR Sports 2 Hindi HD", i: "1984" }, { n: "STR Sports 2 Hindi", i: "1985" },
-            { n: "STR Sports 3", i: "147" }, { n: "STR Sports 1 Tamil HD", i: "4468" },
-            { n: "STR Sports 1 Tamil", i: "1124" }, { n: "STR Sports 1 Telugu HD", i: "4471" },
-            { n: "STR Sports 1 Telugu", i: "1651" }, { n: "STR Sports 1 Kannada", i: "1650" },
-            { n: "STR Sports 2 Kannada", i: "4472" }, { n: "STR Sports 2 Tamil HD", i: "4473" },
-            { n: "STR Sports 2 Tamil", i: "2853" }, { n: "STR Sports 2 Telugu HD", i: "4474" },
-            { n: "STR Sports 2 Telugu", i: "2852" }, { n: "STR Sports Khel", i: "1998" },
-            { n: "STR Sports Select 1 HD", i: "300" }, { n: "STR Sports Select 1", i: "1123" },
-            { n: "STR Sports Select 2 HD", i: "301" }, { n: "STR Sports Select 2", i: "1114" }
-        ];
+    let shakaPlayer = null, activeCookie = "", channelConfig = { links: {}, keyId: "", key: "" };
+    const video = document.getElementById('video'), aiOverlay = document.getElementById('ai-overlay'), aiMessage = document.getElementById('ai-message');
 
-        const v = document.getElementById('_0x_v'), f = document.getElementById('_0x_if'), b = document.getElementById('_0x_u_btn');
-        const tag = document.createElement('div'); tag.className = 'dev-tag-full'; tag.innerText = _0x_m._0x3;
-        
-        document.getElementById('_0x_f').innerHTML = `<div class="credits">Developed By <strong>${_0x_m._0x4}</strong></div><p style="font-size:11px;color:#64748b;margin-top:5px;">${_0x_m._0x5}</p>`;
-        
-        const py = new Plyr(v, { controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen'] });
-        
-        py.on('ready', () => { v.closest('.plyr').appendChild(tag); });
-        
-        let h = null;
-        window.loadCh = function(id, s) {
-            const u = (s === 2 ? _0x_m._0x2 : _0x_m._0x1) + id;
-            f.style.display = 'none'; v.style.display = 'block'; document.querySelector('.plyr').style.display = 'block'; b.style.display = 'block';
-            
-            if (h) h.destroy();
-            
-            if (Hls.isSupported()) {
-                h = new Hls({ xhrSetup: x => { x.withCredentials = false; } });
-                h.loadSource(u); h.attachMedia(v);
-                h.on(Hls.Events.MANIFEST_PARSED, () => { v.play(); });
-                h.on(Hls.Events.ERROR, (e, d) => { 
-                    if (d.fatal) { 
-                        v.style.display = 'none'; 
-                        document.querySelector('.plyr').style.display = 'none'; 
-                        f.src = u; 
-                        f.style.display = 'block'; 
-                        b.style.display = 'none'; 
-                    } 
-                });
-            } else { v.src = u; }
-            window.scrollTo({top: 0, behavior: 'smooth'});
-        };
+    function showStatus(type, apiIndex = 0) {
+      if (type === 'hide') { aiOverlay.style.display = 'none'; return; }
+      aiOverlay.style.display = 'flex';
+      if (type === 'wait') { aiMessage.innerText = "Fetching Data..."; aiMessage.style.color = "#fff"; } 
+      else if (type === 'success') { aiMessage.innerText = `Connected API ${apiIndex + 1}`; aiMessage.style.color = "#0f0"; } 
+      else if (type === 'fail') { aiMessage.innerText = `Retrying API ${apiIndex + 1}...`; aiMessage.style.color = "#ff4444"; }
+    }
 
-        b.onclick = () => { v.muted = false; v.volume = 1; b.style.display = 'none'; };
+    async function fetchRaw(url) {
+      for (let p of PROXIES) {
+        try {
+          const res = await fetch(p + encodeURIComponent(url), { signal: AbortSignal.timeout(8000) });
+          if (res.ok) return await res.text();
+        } catch (e) {}
+      }
+      return "";
+    }
 
-        _0x_ch.forEach(c => {
-            const i = document.createElement('div'); i.className = 'ch-item';
-            i.innerHTML = `<div class="ch-name">${c.n}</div><div class="btn-grp"><button class="play-btn ps1" onclick="loadCh('${c.i}',1)">Play 1</button><button class="play-btn ps2" onclick="loadCh('${c.i}',2)">Play 2</button></div>`;
-            document.getElementById('_0x_l').appendChild(i);
-        });
+    async function smartDeepHunter(rawDataOrUrl) {
+        if (!rawDataOrUrl) return "";
+        let cookieMatch = rawDataOrUrl.match(/(__hdnea__=[^"'\s&|<>\\]+)/i);
+        if (cookieMatch) return cookieMatch[1].replace(/\\/g, '').trim();
+        return "";
+    }
 
-        loadCh(_0x_ch[0].i, 1);
-        
-        setInterval(() => { if(v.paused && v.readyState > 2) v.play(); }, 3000);
-        
-        document.onkeydown = function(e) { 
-            if (e.keyCode == 123 || (e.ctrlKey && (e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.keyCode == 85))) return false; 
-        };
-    })();
-</script>
-</body>
-</html>
+    async function loadChannel() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const targetId = urlParams.get('id') || '174'; 
+      let rawJson = await fetchRaw(CHANNELS_DB_URL);
+      if (!rawJson) return false;
+      try {
+        let data = JSON.parse(rawJson);
+        let channels = Array.isArray(data) ? data : (data.channels || Object.values(data)[0]);
+        let found = channels.find(c => String(c.id) === String(targetId) || String(c.channel_id) === String(targetId));
+        if (found) {
+          channelConfig.links = { "PL-Live": found.url || found.url1 || found.channel_url };
+          channelConfig.keyId = found.keyId || "";
+          channelConfig.key = found.key || "";
+          return true;
+        }
+      } catch(e) {}
+      return false;
+    }
+
+    async function initPlayer() {
+      shaka.polyfill.installAll();
+      shakaPlayer = new shaka.Player(video);
+      const ui = new shaka.ui.Overlay(shakaPlayer, document.getElementById('player-container'), video);
+      
+      shakaPlayer.configure({
+        drm: { clearKeys: { [channelConfig.keyId]: channelConfig.key } },
+        streaming: { lowLatencyMode: true, jumpLargeGaps: true }
+      });
+
+      shakaPlayer.getNetworkingEngine().registerRequestFilter((type, request) => {
+        request.headers['Referer'] = 'https://www.jiotv.com/';
+        request.headers['User-Agent'] = 'plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6';
+        if (activeCookie) {
+          request.headers['Cookie'] = activeCookie;
+          let cookieParam = activeCookie.includes('__hdnea__=') ? activeCookie : '__hdnea__=' + activeCookie;
+          if (!request.uris[0].includes('__hdnea')) {
+            request.uris[0] += (request.uris[0].includes('?') ? '&' : '?') + cookieParam;
+          }
+        }
+      });
+    }
+
+    async function startAutoHealingCycle() {
+      while (true) {
+        for (let i = 0; i < API_SOURCES.length; i++) {
+          showStatus('wait');
+          let rawData = await fetchRaw(API_SOURCES[i]);
+          let cookie = await smartDeepHunter(rawData);
+          
+          if (cookie) {
+            activeCookie = cookie;
+            try {
+              showStatus('success', i);
+              await shakaPlayer.load(channelConfig.links["PL-Live"]);
+              setTimeout(() => showStatus('hide'), 2000);
+              return; 
+            } catch (e) { showStatus('fail', i); }
+          } else { showStatus('fail', i); }
+          await new Promise(r => setTimeout(r, 1000));
+        }
+        await new Promise(r => setTimeout(r, 5000));
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      if (await loadChannel()) { 
+        await initPlayer(); 
+        startAutoHealingCycle(); 
+      } else {
+        aiMessage.innerText = "Channel Offline or Not Found";
+        aiOverlay.style.display = 'flex';
+      }
+    });
+  </script>
+</body></html>
