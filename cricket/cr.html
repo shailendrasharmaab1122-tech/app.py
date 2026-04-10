@@ -8,21 +8,63 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { width: 100%; height: 100%; background: #000; overflow: hidden; font-family: 'Courier New', Courier, monospace; }
+    
     .shaka-video-container { position: absolute; inset: 0; width: 100%; height: 100%; background: #000; display: flex; align-items: center; justify-content: center; }
     video { width: 100%; height: 100%; object-fit: contain; background: #000; outline: none; }
-    .wm-secure { position: absolute; z-index: 40; pointer-events: none; font-size: 8px; color: rgba(255, 255, 255, 0.4); letter-spacing: 1px; top: 55%; left: 35%; transform: translate(-50%, -50%); }
-    #ai-overlay { position: absolute; inset: 0; z-index: 999; background: rgba(0, 0, 0, 0.85); display: flex; align-items: center; justify-content: center; }
-    .status-text { font-size: 16px; font-weight: bold; letter-spacing: 1px; color: #fff; }
-    #fatal-error { display: none; position: fixed; inset: 0; background: #000; z-index: 99999; color: red; align-items: center; justify-content: center; flex-direction: column; text-align: center; }
+
+    .wm-secure { 
+      position: absolute; 
+      z-index: 40; 
+      pointer-events: none; 
+      font-size: 8px; 
+      color: rgba(255, 255, 255, 0.4); 
+      letter-spacing: 1px; 
+      top: 55%; 
+      left: 35%; 
+      transform: translate(-50%, -50%);
+    }
+
+    #ai-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 999;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #0f0;
+    }
+    
+    .ai-title { font-size: 8px; font-weight: bold; margin-bottom: 10px; letter-spacing: 2px; animation: pulse 1.5s infinite; }
+    .ai-desc { font-size: 13px; color: #aaa; max-width: 80%; line-height: 1.5; }
+    .ai-action { font-size: 11px; color: #ffeb3b; margin-top: 15px; }
+    .ai-error { color: #ff4444 !important; }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+
+    #fatal-error { display: none; position: fixed; inset: 0; background: #000; z-index: 99999; color: red; align-items: center; justify-content: center; flex-direction: column; text-align: center; font-family: sans-serif; }
   </style>
 </head>
 <body>
-  <div id="fatal-error"><h1>SYSTEM HALTED</h1></div>
-  <div class="shaka-video-container shaka-mobile" id="player-container">
+
+  <div id="fatal-error"><h1>SYSTEM FAILED</h1></div>
+
+  <div class="shaka-video-container shaka-mobile" id="player-container" data-shaka-player-container="" shaka-controls="true">
     <div id="wm-element" class="wm-secure"></div>
     <video id="video" autoplay playsinline preload="metadata" class="shaka-video"></video>
   </div>
-  <div id="ai-overlay" style="display: none;"><div class="status-text" id="ai-message"></div></div>
+
+  <div id="ai-overlay">
+    <div class="ai-action" id="ai-action">Initializing...</div>
+    <div class="ai-title">SYSTEM START</div>
+    <div class="ai-desc" id="ai-message">Warming up engines</div>
+  </div>
 
   <script>
     const _0xData = [
@@ -38,113 +80,111 @@
     const SECURE_WM = atob(_0xData[4]);
     document.getElementById('wm-element').innerText = SECURE_WM;
 
-    const PROXIES = [
-      "https://corsproxy.io/?",
-      "https://api.allorigins.win/raw?url=",
-      "https://api.codetabs.com/v1/proxy?quest=",
-      ""
-    ];
+    setInterval(() => {
+        const wmNode = document.getElementById('wm-element');
+        if (!wmNode || wmNode.innerText !== SECURE_WM) {
+            document.getElementById('player-container').innerHTML = '';
+            document.getElementById('fatal-error').style.display = 'flex';
+        }
+    }, 2000);
 
+    const PROXIES = ["https://corsproxy.io/?", "https://api.allorigins.win/raw?url=", ""];
     let shakaPlayer = null, activeCookie = "", channelConfig = { links: {}, keyId: "", key: "" };
-    const video = document.getElementById('video'), aiOverlay = document.getElementById('ai-overlay'), aiMessage = document.getElementById('ai-message');
+    const video = document.getElementById('video'), aiOverlay = document.getElementById('ai-overlay'), aiMessage = document.getElementById('ai-message'), aiAction = document.getElementById('ai-action');
 
-    function showStatus(type, apiIndex = 0) {
-      if (type === 'hide') { aiOverlay.style.display = 'none'; return; }
+    function setAIStatus(msg, isError = false, action = "") {
+      if (!msg) { aiOverlay.style.display = 'none'; return; }
       aiOverlay.style.display = 'flex';
-      if (type === 'wait') { aiMessage.innerText = "Fetching Data..."; aiMessage.style.color = "#fff"; } 
-      else if (type === 'success') { aiMessage.innerText = `Connected API ${apiIndex + 1}`; aiMessage.style.color = "#0f0"; } 
-      else if (type === 'fail') { aiMessage.innerText = `Retrying API ${apiIndex + 1}...`; aiMessage.style.color = "#ff4444"; }
+      aiMessage.innerText = msg;
+      aiAction.innerText = action || (isError ? "HALTED" : "PROCESSING");
+      if (isError) {
+        document.querySelector('.ai-title').innerHTML = "⚠️ ERROR";
+        document.querySelector('.ai-title').classList.add('ai-error');
+      } else {
+        document.querySelector('.ai-title').innerHTML = "SYSTEM ACTIVE";
+        document.querySelector('.ai-title').classList.remove('ai-error');
+      }
     }
 
     async function fetchRaw(url) {
       for (let p of PROXIES) {
         try {
-          const res = await fetch(p + encodeURIComponent(url), { signal: AbortSignal.timeout(8000) });
+          const res = await fetch(p + encodeURIComponent(url));
           if (res.ok) return await res.text();
         } catch (e) {}
       }
       return "";
     }
 
-    async function smartDeepHunter(rawDataOrUrl) {
-        if (!rawDataOrUrl) return "";
-        let cookieMatch = rawDataOrUrl.match(/(__hdnea__=[^"'\s&|<>\\]+)/i);
-        if (cookieMatch) return cookieMatch[1].replace(/\\/g, '').trim();
-        return "";
-    }
-
     async function loadChannel() {
       const urlParams = new URLSearchParams(window.location.search);
       const targetId = urlParams.get('id') || '174'; 
+      setAIStatus(`Scanning Database for ID: ${targetId}...`);
+      
       let rawJson = await fetchRaw(CHANNELS_DB_URL);
       if (!rawJson) return false;
+
       try {
         let data = JSON.parse(rawJson);
-        let channels = Array.isArray(data) ? data : (data.channels || Object.values(data)[0]);
-        let found = channels.find(c => String(c.id) === String(targetId) || String(c.channel_id) === String(targetId));
+        let channels = Array.isArray(data) ? data : (data.channels || data.result || []);
+        let found = channels.find(c => String(c.id) === targetId || String(c.channel_id) === targetId);
+
         if (found) {
-          channelConfig.links = { "PL-Live": found.url || found.url1 || found.channel_url };
-          channelConfig.keyId = found.keyId || "";
-          channelConfig.key = found.key || "";
+          channelConfig.url = found.url || found.url1 || found.channel_url;
+          channelConfig.keyId = found.keyId || found.keyid || "";
+          channelConfig.key = found.key || found.keyid_key || "";
           return true;
         }
       } catch(e) {}
       return false;
     }
 
-    async function initPlayer() {
+    async function startAutoHealingCycle() {
       shaka.polyfill.installAll();
       shakaPlayer = new shaka.Player(video);
-      const ui = new shaka.ui.Overlay(shakaPlayer, document.getElementById('player-container'), video);
+      new shaka.ui.Overlay(shakaPlayer, document.getElementById('player-container'), video);
       
       shakaPlayer.configure({
         drm: { clearKeys: { [channelConfig.keyId]: channelConfig.key } },
-        streaming: { lowLatencyMode: true, jumpLargeGaps: true }
+        streaming: { lowLatencyMode: true }
       });
 
       shakaPlayer.getNetworkingEngine().registerRequestFilter((type, request) => {
         request.headers['Referer'] = 'https://www.jiotv.com/';
-        request.headers['User-Agent'] = 'plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6';
+        request.headers['User-Agent'] = 'plaYtv/7.1.5 (Linux;Android 13)';
         if (activeCookie) {
           request.headers['Cookie'] = activeCookie;
-          let cookieParam = activeCookie.includes('__hdnea__=') ? activeCookie : '__hdnea__=' + activeCookie;
+          let cStr = activeCookie.includes('=') ? activeCookie : '__hdnea__=' + activeCookie;
           if (!request.uris[0].includes('__hdnea')) {
-            request.uris[0] += (request.uris[0].includes('?') ? '&' : '?') + cookieParam;
+            request.uris[0] += (request.uris[0].includes('?') ? '&' : '?') + cStr;
           }
         }
       });
-    }
 
-    async function startAutoHealingCycle() {
       while (true) {
         for (let i = 0; i < API_SOURCES.length; i++) {
-          showStatus('wait');
+          setAIStatus(`Hunting tokens from Node [${i+1}]...`, false, "EXTRACTING");
           let rawData = await fetchRaw(API_SOURCES[i]);
-          let cookie = await smartDeepHunter(rawData);
+          let match = rawData.match(/(__hdnea__=[^"'\s&|<>\\]+)/i);
           
-          if (cookie) {
-            activeCookie = cookie;
+          if (match) {
+            activeCookie = match[1].replace(/\\/g, '').trim();
             try {
-              showStatus('success', i);
-              await shakaPlayer.load(channelConfig.links["PL-Live"]);
-              setTimeout(() => showStatus('hide'), 2000);
+              setAIStatus("Syncing stream with secure headers...", false, "WORKING");
+              await shakaPlayer.load(channelConfig.url);
+              setAIStatus(""); 
               return; 
-            } catch (e) { showStatus('fail', i); }
-          } else { showStatus('fail', i); }
-          await new Promise(r => setTimeout(r, 1000));
+            } catch (e) { setAIStatus(`Node [${i+1}] Handshake Failed`, true); }
+          }
         }
-        await new Promise(r => setTimeout(r, 5000));
+        setAIStatus("All Nodes Exhausted. Retrying Cycle...", true, "REBOOTING");
+        await new Promise(r => setTimeout(r, 4000));
       }
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
-      if (await loadChannel()) { 
-        await initPlayer(); 
-        startAutoHealingCycle(); 
-      } else {
-        aiMessage.innerText = "Channel Offline or Not Found";
-        aiOverlay.style.display = 'flex';
-      }
+      if (await loadChannel()) { await startAutoHealingCycle(); }
+      else { setAIStatus("Channel coordinates not found in DB.", true, "FATAL ERROR"); }
     });
   </script>
 </body></html>
