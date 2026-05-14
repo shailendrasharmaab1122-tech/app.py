@@ -2,157 +2,72 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="manifest" href="/manifest.json">
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DevCoderZ - PW Hub</title>
     <style>
         :root { --primary: #4f46e5; --accent: #6366f1; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: #f8fafc; color: #0f172a; overflow: hidden; }
+        body { background: #f8fafc; color: #0f172a; overflow-x: hidden; }
         .header { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         .site-brand { font-weight: 800; font-size: 20px; }
-        .credits { font-size: 11px; opacity: 0.9; text-align: right; line-height: 1.2; }
+        .credits { font-size: 11px; text-align: right; opacity: 0.9; }
         .search-section { position: fixed; top: 60px; left: 0; right: 0; padding: 12px; background: #fff; border-bottom: 1px solid #e2e8f0; z-index: 90; }
-        .search-box { width: 100%; padding: 12px 20px; border: 2px solid #e2e8f0; border-radius: 30px; outline: none; transition: 0.3s; }
-        .search-box:focus { border-color: var(--primary); }
-        .tab-nav { position: fixed; top: 125px; left: 0; right: 0; display: flex; background: #fff; border-bottom: 1px solid #e2e8f0; z-index: 90; }
-        .tab-btn { flex: 1; padding: 12px; font-weight: 700; border: none; background: none; cursor: pointer; color: #64748b; }
-        .tab-btn.active { color: var(--primary); border-bottom: 3px solid var(--primary); }
-        .content { position: absolute; top: 175px; bottom: 0; left: 0; right: 0; overflow-y: auto; padding: 20px; scroll-behavior: smooth; }
+        .search-box { width: 100%; padding: 12px 20px; border: 2px solid #e2e8f0; border-radius: 30px; outline: none; }
+        .content { margin-top: 130px; padding: 20px; overflow-y: auto; height: calc(100vh - 130px); }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .batch { background: #fff; border-radius: 20px; padding: 15px; border: 1px solid #e2e8f0; transition: 0.3s; position: relative; display: flex; flex-direction: column; }
-        .batch:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .batch-name { font-weight: 800; font-size: 16px; margin-bottom: 10px; color: #1e293b; height: 40px; overflow: hidden; }
-        .batch-thumbnail img { width: 100%; height: 160px; object-fit: contain; border-radius: 12px; background: #f1f5f9; margin-bottom: 10px; }
-        .batch-info { font-size: 13px; color: #64748b; margin-bottom: 4px; }
-        .batch-price { font-weight: 800; color: var(--primary); font-size: 18px; margin: 10px 0; }
-        .explore-btn { width: 100%; padding: 12px; border: none; border-radius: 12px; background: var(--primary); color: white; font-weight: 700; cursor: pointer; margin-top: auto; }
-        .favorite-btn { position: absolute; top: 10px; right: 10px; background: white; border: 1px solid #eee; border-radius: 50%; width: 35px; height: 35px; cursor: pointer; z-index: 10; font-size: 18px; }
-        .favorite-btn.favorited { color: #ef4444; border-color: #ef4444; }
-        .empty { text-align: center; padding: 50px; color: #94a3b8; }
-        
-        /* Skeleton */
-        .skeleton { background: #fff; border-radius: 20px; padding: 15px; border: 1px solid #e2e8f0; height: 350px; }
-        .skel-anim { background: linear-gradient(90deg, #f0f2f5 25%, #e2e8f0 50%, #f0f2f5 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 8px; }
-        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+        .batch { background: #fff; border-radius: 20px; padding: 15px; border: 1px solid #e2e8f0; position: relative; display: flex; flex-direction: column; }
+        .batch-name { font-weight: 800; font-size: 16px; margin-bottom: 10px; height: 40px; overflow: hidden; }
+        .batch-thumbnail img { width: 100%; height: 160px; object-fit: contain; border-radius: 12px; background: #f1f5f9; }
+        .explore-btn { width: 100%; padding: 12px; border: none; border-radius: 12px; background: var(--primary); color: white; font-weight: 700; cursor: pointer; margin-top: 15px; }
     </style>
 </head>
 <body>
 
 <div class="header">
     <div class="site-brand">DevCoderZ</div>
-    <div class="credits">Developed by <b>DevCoderZ</b><br>Powered by EduVibe API</div>
+    <div class="credits">Developed by <b>DevCoderZ</b></div>
 </div>
 
 <div class="search-section">
-    <input id="searchInput" class="search-box" placeholder="Search your dream batch...">
+    <input id="searchInput" class="search-box" placeholder="Search your batch...">
 </div>
 
-<div class="tab-nav">
-    <button class="tab-btn active" id="totalTab">All Batches</button>
-    <button class="tab-btn" id="favTab">My Favourites</button>
-</div>
-
-<div class="content" id="mainContent">
+<div class="content">
     <div id="total" class="grid"></div>
-    <div id="fav" class="grid" style="display: none"></div>
 </div>
 
 <script>
     let ALL = [];
-    let filtered = [];
-    let favs = JSON.parse(localStorage.getItem("favs") || "[]");
-    let cachedBatches = JSON.parse(localStorage.getItem("fav_batches") || "{}");
-
     const totalGrid = document.getElementById("total");
-    const favGrid = document.getElementById("fav");
-    const searchInput = document.getElementById("searchInput");
 
-    // Initial Loading
-    showSkeleton();
     fetch("https://eduvibe-mj.pages.dev/allbatches.json")
         .then(r => r.json())
         .then(d => {
             ALL = d.batches || [];
-            filtered = ALL;
-            render(totalGrid, filtered);
-        })
-        .catch(() => {
-            totalGrid.innerHTML = '<div class="empty">Offline Mode: Showing Cached Favourites</div>';
-            render(favGrid, Object.values(cachedBatches));
+            render(ALL);
         });
 
-    function showSkeleton() {
-        totalGrid.innerHTML = Array(6).fill(`<div class="skeleton"><div class="skel-anim" style="height:20px; width:70%; margin-bottom:15px"></div><div class="skel-anim" style="height:160px; margin-bottom:15px"></div><div class="skel-anim" style="height:40px"></div></div>`).join('');
-    }
-
-    function render(target, data) {
-        if (data.length === 0) {
-            target.innerHTML = '<div class="empty">No batches found!</div>';
-            return;
-        }
-        target.innerHTML = data.map(b => {
-            const isFav = favs.includes(b._id);
-            return `
-                <div class="batch" data-id="${b._id}">
-                    <button class="favorite-btn ${isFav ? 'favorited' : ''}" onclick="toggleFav('${b._id}')">
-                        ${isFav ? '❤️' : '♡'}
-                    </button>
-                    <div class="batch-name">${b.name}</div>
-                    <div class="batch-thumbnail">
-                        <img src="${b.previewImage || '/pwbatch.png'}" loading="lazy" onerror="this.src='/pwbatch.png'">
-                    </div>
-                    <div class="batch-info">👨‍🎓 ${b.byName || 'PW Team'}</div>
-                    <div class="batch-info">🗣️ ${b.language || 'Hinglish'}</div>
-                    <div class="batch-price">${b.feeTotal ? '₹ ' + b.feeTotal : 'FREE'}</div>
-                    <button class="explore-btn" onclick="openBatch('${b._id}')">Explore Now</button>
+    function render(data) {
+        totalGrid.innerHTML = data.map(b => `
+            <div class="batch">
+                <div class="batch-name">${b.name}</div>
+                <div class="batch-thumbnail">
+                    <img src="${b.previewImage || 'https://via.placeholder.com/300'}" onerror="this.src='https://via.placeholder.com/300'">
                 </div>
-            `;
-        }).join('');
+                <button class="explore-btn" onclick="openBatch('${b._id}')">Explore Now</button>
+            </div>
+        `).join('');
     }
-
-    window.toggleFav = (id) => {
-        const batch = ALL.find(x => x._id === id);
-        if (favs.includes(id)) {
-            favs = favs.filter(i => i !== id);
-            delete cachedBatches[id];
-        } else {
-            favs.push(id);
-            if(batch) cachedBatches[id] = batch;
-        }
-        localStorage.setItem("favs", JSON.stringify(favs));
-        localStorage.setItem("fav_batches", JSON.stringify(cachedBatches));
-        render(totalGrid, filtered);
-        if(favGrid.style.display !== 'none') render(favGrid, Object.values(cachedBatches));
-    };
 
     window.openBatch = (id) => {
-        // Redirecting to batches.html with ID
-        window.location.href = `batches.html?batch_id=${id}`;
+        // FIXED: Using ./ to stay in the same folder (/PW/)
+        window.location.href = `./batches.html?batch_id=${id}`;
     };
 
-    searchInput.oninput = (e) => {
+    document.getElementById("searchInput").oninput = (e) => {
         const q = e.target.value.toLowerCase();
-        filtered = ALL.filter(b => b.name.toLowerCase().includes(q));
-        render(totalGrid, filtered);
-    };
-
-    document.getElementById("totalTab").onclick = function() {
-        this.classList.add('active');
-        document.getElementById("favTab").classList.remove('active');
-        totalGrid.style.display = 'grid';
-        favGrid.style.display = 'none';
-    };
-
-    document.getElementById("favTab").onclick = function() {
-        this.classList.add('active');
-        document.getElementById("totalTab").classList.remove('active');
-        totalGrid.style.display = 'none';
-        favGrid.style.display = 'grid';
-        render(favGrid, Object.values(cachedBatches));
+        render(ALL.filter(b => b.name.toLowerCase().includes(q)));
     };
 </script>
-
 </body>
 </html>
