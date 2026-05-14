@@ -3,45 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lectures</title>
+    <title>Lectures - DevCoderZ</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
-        body { background: #fff; padding: 15px; }
-        .lec-card { border-bottom: 1px solid #eee; padding: 15px 0; display: flex; justify-content: space-between; align-items: center; }
-        .lec-title { font-weight: 600; font-size: 15px; color: #333; max-width: 70%; }
-        .play-btn { background: #4f46e5; color: white; padding: 8px 15px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 700; }
-        .header { font-size: 20px; font-weight: 800; margin-bottom: 20px; color: #4f46e5; }
+        :root { --primary: #4f46e5; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: #f8fafc; padding: 20px; }
+        .header { background: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: space-between; }
+        .back-btn { text-decoration: none; color: var(--primary); font-weight: bold; }
+        .lecture-card { background: white; margin-bottom: 15px; padding: 15px; border-radius: 15px; border-left: 5px solid var(--primary); display: flex; flex-direction: column; gap: 10px; }
+        .lecture-title { font-weight: 700; color: #1e293b; }
+        .play-btn { background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; text-align: center; text-decoration: none; }
+        #loader { text-align: center; padding: 50px; color: var(--primary); font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="header">Lectures</div>
-    <div id="lList">Loading Lectures...</div>
+
+    <div class="header">
+        <a href="javascript:history.back()" class="back-btn">← Back</a>
+        <div style="font-weight: 800; color: var(--primary);">DevCoderZ Player</div>
+    </div>
+
+    <div id="loader">Loading Lectures...</div>
+    <div id="lectureList"></div>
 
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const bid = params.get('batch_id');
-        const sid = params.get('subject_id');
+        const urlParams = new URLSearchParams(window.location.search);
+        const batchId = urlParams.get('batch_id');
+        const subjectId = urlParams.get('subject_id');
 
-        async function fetchLecs() {
-            // Note: EduVibe typically uses a direct call or sub-folder for lectures
-            const r = await fetch(`https://eduvibe-pw-api.wasmer.app/batch.php?batch_id=${bid}&subject_id=${sid}`);
-            const d = await r.json();
+        async function fetchLectures() {
+            try {
+                const response = await fetch(`https://eduvibe-pw-api.wasmer.app/lectures.php?batch_id=${batchId}&subject_id=${subjectId}`);
+                const data = await response.json();
 
-            // Checking if classes exist in response
-            const classes = d.classes || [];
-            if(classes.length === 0) {
-                document.getElementById('lList').innerText = "No lectures found in this subject.";
-                return;
+                document.getElementById('loader').style.display = 'none';
+                const list = document.getElementById('lectureList');
+
+                list.innerHTML = data.lectures.map(l => `
+                    <div class="lecture-card">
+                        <div class="lecture-title">${l.topic}</div>
+                        <div style="font-size: 12px; color: #64748b;">Date: ${l.date || 'N/A'}</div>
+                        <a href="player.html?video_url=${btoa(l.url)}" class="play-btn">Watch Lecture</a>
+                    </div>
+                `).join('');
+            } catch (e) {
+                document.getElementById('loader').innerHTML = "Failed to load lectures.";
             }
-
-            document.getElementById('lList').innerHTML = classes.map(l => `
-                <div class="lec-card">
-                    <div class="lec-title">${l.topic}</div>
-                    <a href="https://eduvibe-pw-api.wasmer.app/videoplayerr.php?batch_id=${bid}&subject_id=${sid}&video_id=${l._id}" class="play-btn">WATCH</a>
-                </div>
-            `).join('');
         }
-        fetchLecs();
+        fetchLectures();
     </script>
 </body>
 </html>
