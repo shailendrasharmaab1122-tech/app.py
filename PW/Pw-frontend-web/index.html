@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevCoderZ - PW Batches</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, sans-serif; }
+        body { background: #f4f7fe; color: #1a202c; }
+        .header { background: #4f46e5; color: #fff; padding: 18px; text-align: center; font-size: 22px; font-weight: 800; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .search-container { padding: 15px; background: #fff; display: flex; justify-content: center; border-bottom: 1px solid #e2e8f0; }
+        .search-bar { width: 100%; max-width: 500px; padding: 12px 20px; border-radius: 25px; border: 2px solid #e2e8f0; outline: none; font-size: 15px; transition: 0.2s; }
+        .search-bar:focus { border-color: #4f46e5; }
+        .container { padding: 20px; max-width: 1300px; margin: auto; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+        .card { background: #fff; border-radius: 20px; overflow: hidden; border: 1px solid #e2e8f0; transition: 0.3s; cursor: pointer; display: flex; flex-direction: column; position: relative; }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .thumb { width: 100%; height: 160px; object-fit: cover; background: #edf2f7; }
+        .content { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
+        .title { font-size: 16px; font-weight: 700; margin-bottom: 10px; height: 45px; overflow: hidden; line-height: 1.4; }
+        .meta { font-size: 13px; color: #718096; margin-bottom: 5px; }
+        .price { font-size: 18px; font-weight: 800; color: #4f46e5; margin-top: auto; }
+        #loading { text-align: center; padding: 50px; font-weight: 600; color: #4f46e5; }
+    </style>
+</head>
+<body>
+
+<div class="header">DevCoderZ PW</div>
+
+<div class="search-container">
+    <input type="text" id="search" class="search-bar" placeholder="Apna batch search karein...">
+</div>
+
+<div class="container">
+    <div id="loading">Loading Data...</div>
+    <div id="grid" class="grid"></div>
+</div>
+
+<script>
+    let allBatches = [];
+    const apis = [
+        "https://eduvibe-mj.pages.dev/allbatches.json",
+        "https://eduvibe-pw-api.wasmer.app/batch.php"
+    ];
+
+    async function init() {
+        try {
+            const results = await Promise.all(apis.map(url => fetch(url).then(r => r.json()).catch(() => null)));
+            results.forEach(data => {
+                if (data && data.batches) allBatches = [...allBatches, ...data.batches];
+                else if (Array.isArray(data)) allBatches = [...allBatches, ...data];
+            });
+            document.getElementById('loading').style.display = 'none';
+            render(allBatches);
+        } catch (e) {
+            document.getElementById('loading').innerText = "Fetch Error!";
+        }
+    }
+
+    function render(data) {
+        const grid = document.getElementById('grid');
+        grid.innerHTML = data.map(b => `
+            <div class="card" onclick="location.href='batches.html?batch_id=${b._id}'">
+                <img class="thumb" src="${b.previewImage || 'https://via.placeholder.com/300x160?text=PW+Batch'}" loading="lazy">
+                <div class="content">
+                    <div class="title">${b.name}</div>
+                    <div class="meta">🗣️ ${b.language || 'Hinglish'}</div>
+                    <div class="meta">👨‍🏫 ${b.byName || 'Top Faculty'}</div>
+                    <div class="price">${b.feeTotal ? '₹' + b.feeTotal : 'FREE'}</div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    document.getElementById('search').oninput = (e) => {
+        const val = e.target.value.toLowerCase();
+        render(allBatches.filter(b => b.name.toLowerCase().includes(val)));
+    };
+
+    init();
+</script>
+</body>
+</html>
