@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevCoderZ - Premium Learning</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body, html { height: 100%; overflow: hidden; background: #0f172a; }
+
+        /* Front Page UI */
+        #front-page {
+            position: absolute; width: 100%; height: 100%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: radial-gradient(circle, #1e293b 0%, #0f172a 100%);
+            z-index: 10; transition: 0.8s ease-in-out;
+        }
+        h1 { color: white; font-size: 3rem; margin-bottom: 10px; text-shadow: 0 0 20px rgba(79, 70, 229, 0.5); }
+        p { color: #94a3b8; margin-bottom: 30px; }
+        
+        .explore-btn {
+            padding: 15px 40px; font-size: 18px; font-weight: bold;
+            color: white; background: #4f46e5; border: none; border-radius: 50px;
+            cursor: pointer; box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+            transition: 0.3s;
+        }
+        .explore-btn:hover { transform: scale(1.1); background: #4338ca; }
+
+        /* Iframe Container */
+        #iframe-container {
+            width: 100%; height: 100%; display: none;
+        }
+        iframe { width: 100%; height: 100%; border: none; }
+        
+        /* Animation when clicking explore */
+        .hide-front { transform: translateY(-100%); opacity: 0; pointer-events: none; }
+    </style>
+</head>
+<body>
+
+    <!-- Section 1: Tumhara Page -->
+    <div id="front-page">
+        <h1>DevCoderZ</h1>
+        <p>Your Gateway to Premium Education</p>
+        <button class="explore-btn" onclick="startExploring()">Explore Now</button>
+    </div>
+
+    <!-- Section 2: Eduvibe Iframe -->
+    <div id="iframe-container">
+        <!-- Replace 'URL_HERE' with the actual Eduvibe domain -->
+        <iframe id="main-frame" src=""></iframe>
+    </div>
+
+    <script>
+        function startExploring() {
+            const frontPage = document.getElementById('front-page');
+            const iframeContainer = document.getElementById('iframe-container');
+            const iframe = document.getElementById('main-frame');
+
+            // 1. Eduvibe ka URL yahan dalo
+            const eduvibeUrl = "https://eduvibe-pw-api.wasmer.app/"; 
+
+            // 2. Iframe source set karo
+            iframe.src = eduvibeUrl;
+
+            // 3. UI switch karo
+            frontPage.classList.add('hide-front');
+            iframeContainer.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
