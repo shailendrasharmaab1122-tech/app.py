@@ -3,57 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subjects - DevCoderZ</title>
+    <title>Subjects</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: #f8fafc; padding: 20px; }
-        .nav { margin-bottom: 20px; }
-        .back-link { text-decoration: none; color: #4f46e5; font-weight: 700; font-size: 14px; }
-        .heading { font-size: 24px; font-weight: 800; margin-bottom: 25px; color: #1e293b; border-left: 5px solid #4f46e5; padding-left: 15px; }
-        .subject-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 15px; }
-        .subject-card { background: #fff; padding: 20px; border-radius: 16px; display: flex; align-items: center; gap: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: 0.2s; cursor: pointer; }
-        .subject-card:hover { background: #f1f5f9; transform: scale(1.02); }
-        .subject-card img { width: 55px; height: 55px; border-radius: 12px; object-fit: cover; }
-        .sub-info .name { font-weight: 700; font-size: 17px; color: #0f172a; }
-        .sub-info .count { font-size: 12px; color: #64748b; margin-top: 3px; }
-        #status { text-align: center; margin-top: 100px; font-weight: 700; color: #94a3b8; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
+        body { background: #f8fafc; padding: 15px; }
+        .back { color: #4f46e5; text-decoration: none; font-weight: 700; display: inline-block; margin-bottom: 20px; }
+        .header { font-size: 24px; font-weight: 800; margin-bottom: 20px; color: #1e293b; border-left: 5px solid #4f46e5; padding-left: 15px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
+        .sub-card { background: white; padding: 15px; border-radius: 12px; display: flex; align-items: center; gap: 15px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: 0.2s; }
+        .sub-card:hover { background: #eef2ff; transform: scale(1.02); }
+        .sub-card img { width: 55px; height: 55px; border-radius: 10px; object-fit: cover; }
+        .sub-name { font-weight: 700; color: #333; }
     </style>
 </head>
 <body>
+    <a href="index.html" class="back">← Sabhi Batches</a>
+    <div id="btitle" class="header">Loading...</div>
+    <div class="grid" id="sgrid"></div>
 
-<div class="nav"><a href="index.html" class="back-link">← Sabhi Batches</a></div>
-<div id="batchTitle" class="heading">Loading...</div>
-
-<div id="status">Subjects Load Ho Rahe Hain...</div>
-<div id="subjectGrid" class="subject-list"></div>
-
-<script>
-    const id = new URLSearchParams(window.location.search).get('batch_id');
-
-    async function load() {
-        if(!id) return;
-        try {
-            const res = await fetch(`https://eduvibe-pw-api.wasmer.app/batch.php?batch_id=${id}`);
-            const data = await res.json();
-            
-            document.getElementById('status').style.display = 'none';
-            document.getElementById('batchTitle').innerText = data.batch_title || "Batch Details";
-
-            const grid = document.getElementById('subjectGrid');
-            grid.innerHTML = data.subjects.map(s => `
-                <div class="subject-card">
-                    <img src="${s.imageId?.baseUrl + s.imageId?.key || 'https://via.placeholder.com/100'}">
-                    <div class="sub-info">
-                        <div class="name">${s.subject}</div>
-                        <div class="count">${s.lectureCount || 0} Lectures Available</div>
-                    </div>
+    <script>
+        const bid = new URLSearchParams(window.location.search).get('batch_id');
+        async function load() {
+            const r = await fetch(`https://eduvibe-pw-api.wasmer.app/batch.php?batch_id=${bid}`);
+            const d = await r.json();
+            document.getElementById('btitle').innerText = d.batch_title || "Subjects";
+            document.getElementById('sgrid').innerHTML = (d.subjects || []).map(s => `
+                <div class="sub-card" onclick="location.href='lectures.html?batch_id=${bid}&subject_id=${s._id}'">
+                    <img src="${s.imageId?.baseUrl + s.imageId?.key || 'https://via.placeholder.com/60'}">
+                    <div class="sub-name">${s.subject}</div>
                 </div>
             `).join('');
-        } catch (e) {
-            document.getElementById('status').innerText = "Data load nahi ho saka.";
         }
-    }
-    load();
-</script>
+        load();
+    </script>
 </body>
 </html>
