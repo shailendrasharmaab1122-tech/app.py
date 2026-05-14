@@ -5,81 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subjects - DevCoderZ</title>
     <style>
-        :root { --primary: #4f46e5; --accent: #6366f1; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: #f1f5f9; color: #1e293b; padding: 20px; }
-        .nav-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; background: #fff; padding: 15px 20px; border-radius: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .back-btn { text-decoration: none; color: var(--primary); font-weight: 700; display: flex; align-items: center; gap: 5px; }
-        .site-name { font-weight: 800; color: var(--primary); }
-        .batch-title { font-size: 22px; font-weight: 800; margin-bottom: 20px; color: #0f172a; padding-left: 10px; border-left: 5px solid var(--primary); }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
-        .subject-card { background: #fff; padding: 20px; border-radius: 18px; display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); cursor: pointer; transition: 0.3s; border: 1px solid transparent; }
-        .subject-card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
-        .subject-card img { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; background: #f8fafc; }
-        .subject-info .name { font-weight: 700; font-size: 17px; color: #1e293b; }
-        .subject-info .count { font-size: 13px; color: #64748b; margin-top: 4px; }
-        #loader { text-align: center; padding: 50px; font-weight: 700; color: var(--primary); }
-        .error-msg { text-align: center; padding: 50px; color: #ef4444; font-weight: 600; }
+        :root { --primary: #4f46e5; }
+        body { font-family: sans-serif; background: #f1f5f9; padding: 20px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
+        .card { background: white; padding: 20px; border-radius: 15px; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 15px; }
+        .card img { width: 50px; height: 50px; border-radius: 10px; }
+        .card h3 { font-size: 16px; margin: 0; color: #333; }
     </style>
 </head>
 <body>
 
-    <div class="nav-header">
-        <a href="index.html" class="back-btn">← Back to Home</a>
-        <div class="site-name">DevCoderZ</div>
+    <div class="header">
+        <button onclick="location.href='./index.html'">← Back</button>
+        <h2 style="color:var(--primary)">DevCoderZ Subjects</h2>
     </div>
 
-    <div id="batchHeader" class="batch-title">Loading Batch Details...</div>
-
-    <div id="loader">Fetching Subjects... Please wait...</div>
-    <div id="subjectGrid" class="grid"></div>
+    <div id="subjectGrid" class="grid">Loading...</div>
 
     <script>
-        // Get Batch ID from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const batchId = urlParams.get('batch_id');
+        const params = new URLSearchParams(window.location.search);
+        const batchId = params.get('batch_id');
 
-        async function loadSubjects() {
-            if (!batchId) {
-                document.getElementById('loader').innerHTML = '<div class="error-msg">Invalid Batch ID! Go back to home.</div>';
-                return;
-            }
-
+        async function getSubjects() {
             try {
-                // Using EduVibe Backend API
-                const response = await fetch(`https://eduvibe-pw-api.wasmer.app/batch.php?batch_id=${batchId}`);
-                const data = await response.json();
-
-                if (!data || !data.subjects) {
-                    throw new Error("No data found");
-                }
-
-                document.getElementById('loader').style.display = 'none';
-                document.getElementById('batchHeader').innerText = data.batch_title || "Subjects";
-
+                const res = await fetch(`https://eduvibe-pw-api.wasmer.app/batch.php?batch_id=${batchId}`);
+                const data = await res.json();
+                
                 const grid = document.getElementById('subjectGrid');
                 grid.innerHTML = data.subjects.map(s => `
-                    <div class="subject-card" onclick="openLectures('${s._id}')">
-                        <img src="${s.imageId?.baseUrl + s.imageId?.key || 'https://via.placeholder.com/100'}" onerror="this.src='https://via.placeholder.com/100'">
-                        <div class="subject-info">
-                            <div class="name">${s.subject}</div>
-                            <div class="count">📖 ${s.lectureCount || 0} Lectures Available</div>
+                    <div class="card" onclick="openLectures('${s._id}')">
+                        <img src="${s.imageId?.baseUrl + s.imageId?.key || 'https://via.placeholder.com/50'}">
+                        <div>
+                            <h3>${s.subject}</h3>
+                            <small>${s.lectureCount} Lectures</small>
                         </div>
                     </div>
                 `).join('');
-
-            } catch (error) {
-                console.error(error);
-                document.getElementById('loader').innerHTML = '<div class="error-msg">Failed to load subjects. The API might be down.</div>';
+            } catch(e) {
+                document.getElementById('subjectGrid').innerText = "Error loading subjects.";
             }
         }
 
         function openLectures(subjectId) {
-            // This will take user to the next page
-            window.location.href = `lectures.html?batch_id=${batchId}&subject_id=${subjectId}`;
+            // FIXED: Using ./ to stay in the /PW/ folder
+            window.location.href = `./lectures.html?batch_id=${batchId}&subject_id=${subjectId}`;
         }
 
-        loadSubjects();
+        if(batchId) getSubjects();
     </script>
 </body>
 </html>
