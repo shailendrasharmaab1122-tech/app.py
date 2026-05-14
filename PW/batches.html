@@ -6,22 +6,24 @@
     <title>Subjects - DevCoderZ</title>
     <style>
         :root { --primary: #4f46e5; }
-        body { font-family: sans-serif; background: #f1f5f9; padding: 20px; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        body { font-family: 'Inter', sans-serif; background: #f1f5f9; padding: 20px; margin: 0; }
+        .header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .back-btn { cursor: pointer; border: none; background: var(--primary); color: white; padding: 8px 15px; border-radius: 8px; font-weight: bold; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
-        .card { background: white; padding: 20px; border-radius: 15px; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 15px; }
-        .card img { width: 50px; height: 50px; border-radius: 10px; }
-        .card h3 { font-size: 16px; margin: 0; color: #333; }
+        .card { background: white; padding: 20px; border-radius: 15px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
+        .card img { width: 55px; height: 55px; border-radius: 10px; object-fit: cover; }
+        .card h3 { font-size: 16px; margin: 0; color: #1e293b; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <button onclick="location.href='./index.html'">← Back</button>
-        <h2 style="color:var(--primary)">DevCoderZ Subjects</h2>
+        <button class="back-btn" onclick="location.href='./index.html'">← Back</button>
+        <h2 style="margin:0; font-size: 20px;">Select Subject</h2>
     </div>
 
-    <div id="subjectGrid" class="grid">Loading...</div>
+    <div id="subjectGrid" class="grid"></div>
 
     <script>
         const params = new URLSearchParams(window.location.search);
@@ -34,11 +36,11 @@
                 
                 const grid = document.getElementById('subjectGrid');
                 grid.innerHTML = data.subjects.map(s => `
-                    <div class="card" onclick="openLectures('${s._id}')">
-                        <img src="${s.imageId?.baseUrl + s.imageId?.key || 'https://via.placeholder.com/50'}">
+                    <div class="card" onclick="openChapters('${s._id}')">
+                        <img src="${s.imageId?.baseUrl + s.imageId?.key || 'https://via.placeholder.com/60'}">
                         <div>
                             <h3>${s.subject}</h3>
-                            <small>${s.lectureCount} Lectures</small>
+                            <small style="color: #64748b;">📖 ${s.lectureCount} Lectures</small>
                         </div>
                     </div>
                 `).join('');
@@ -47,9 +49,9 @@
             }
         }
 
-        function openLectures(subjectId) {
-            // FIXED: Using ./ to stay in the /PW/ folder
-            window.location.href = `./lectures.html?batch_id=${batchId}&subject_id=${subjectId}`;
+        function openChapters(subjectId) {
+            // Ab ye seedhe Chapters page par jayega
+            window.location.href = `./chapters.html?batch_id=${batchId}&subject_id=${subjectId}`;
         }
 
         if(batchId) getSubjects();
