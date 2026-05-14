@@ -9,22 +9,21 @@
         body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 15px; }
         .header { background: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; display: flex; align-items: center; }
         .back-btn { border: none; background: var(--primary); color: #fff; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        .lec-card { background: #fff; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); border-left: 5px solid var(--primary); transition: 0.3s; }
-        .lec-card:hover { transform: translateY(-3px); }
+        .lec-card { background: #fff; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); border-left: 5px solid var(--primary); }
         .lec-title { font-weight: 700; color: #333; font-size: 16px; margin-bottom: 10px; }
         .watch-now { background: var(--primary); color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; display: inline-block; font-size: 14px; font-weight: 600; }
-        .error-msg { text-align: center; color: #ff4d4d; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .error-msg { text-align: center; color: #ff4d4d; background: #fff; padding: 20px; border-radius: 10px; }
     </style>
 </head>
 <body>
 
     <div class="header">
         <button class="back-btn" onclick="history.back()">← Back</button>
-        <h3 style="margin: 0 0 0 15px; font-size: 18px;">Lectures List</h3>
+        <h3 style="margin: 0 0 0 15px;">Lectures List</h3>
     </div>
 
     <div id="loader" style="text-align:center; padding:50px;">
-        <div style="font-weight:bold; color:#666;">⏳ Fetching Lectures...</div>
+        <div style="font-weight:bold; color:#666;">⏳ Fetching Lectures (Using Proxy)...</div>
     </div>
 
     <div id="lecContainer"></div>
@@ -39,34 +38,36 @@
             const container = document.getElementById('lecContainer');
             const loader = document.getElementById('loader');
 
-            // Agar topic_id missing hai, toh chapters page se aana zaroori hai
             if (!tId) {
-                loader.innerHTML = `<div class="error-msg">❌ Error: Topic ID Missing. Please go back to Chapters and select a topic.</div>`;
+                loader.innerHTML = `<div class="error-msg">❌ Error: Topic ID Missing.</div>`;
                 return;
             }
 
-            // Sabse zyada stable API endpoint use kar rahe hain
-            const apiUrl = `https://eduvibe-pw-api.wasmer.app/lectures.php?batch_id=${bId}&subject_id=${sId}&topic_id=${tId}`;
+            // --- PROXY FIX START ---
+            // Hum ek public CORS proxy use kar rahe hain taaki browser request block na kare
+            const targetApi = `https://eduvibe-pw-api.wasmer.app/lectures.php?batch_id=${bId}&subject_id=${sId}&topic_id=${tId}`;
+            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetApi)}`;
+            // --- PROXY FIX END ---
 
             try {
-                const response = await fetch(apiUrl);
-                const data = await response.json();
+                const response = await fetch(proxyUrl);
+                const proxyData = await response.json();
+                
+                // allorigins proxy mein data 'contents' string ke andar hota hai
+                const data = JSON.parse(proxyData.contents);
 
-                // Debugging: Console check karo F12 daba ke
                 console.log("Lecture Data:", data);
 
-                // Check for different API structures (data.lectures ya data.data)
                 const lectures = data.lectures || data.data || (Array.isArray(data) ? data : []);
 
                 if (lectures.length === 0) {
-                    loader.innerHTML = `<div class="error-msg">⚠️ No lectures found for this topic. API might be empty for this batch.</div>`;
+                    loader.innerHTML = `<div class="error-msg">⚠️ No lectures found for this topic. API might be empty.</div>`;
                     return;
                 }
 
                 loader.style.display = 'none';
                 
                 container.innerHTML = lectures.map(l => {
-                    // Safety check for keys
                     const mUrl = l.url || "";
                     const kId = l.keyId || "";
                     const kVal = l.key || "";
@@ -81,7 +82,7 @@
                 }).join('');
 
             } catch (err) {
-                loader.innerHTML = `<div class="error-msg">❌ API Connection Failed. Browser might be blocking the request.</div>`;
+                loader.innerHTML = `<div class="error-msg">❌ API Still Failing. The API server might be down or token expired.</div>`;
                 console.error("Fetch Error:", err);
             }
         }
