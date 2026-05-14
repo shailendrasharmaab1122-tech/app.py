@@ -6,51 +6,61 @@
     <title>Lectures - DevCoderZ</title>
     <style>
         :root { --primary: #4f46e5; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: #f8fafc; padding: 20px; }
-        .header { background: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: space-between; }
-        .back-btn { text-decoration: none; color: var(--primary); font-weight: bold; }
-        .lecture-card { background: white; margin-bottom: 15px; padding: 15px; border-radius: 15px; border-left: 5px solid var(--primary); display: flex; flex-direction: column; gap: 10px; }
-        .lecture-title { font-weight: 700; color: #1e293b; }
-        .play-btn { background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; text-align: center; text-decoration: none; }
-        #loader { text-align: center; padding: 50px; color: var(--primary); font-weight: bold; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8fafc; padding: 20px; }
+        .lec-card { background: white; padding: 15px; border-radius: 12px; margin-bottom: 12px; border-left: 5px solid var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .play-btn { background: var(--primary); color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; display: inline-block; margin-top: 10px; font-weight: 600; transition: 0.3s; }
+        .play-btn:hover { background: #4338ca; }
+        #status { padding: 20px; text-align: center; font-weight: bold; color: #64748b; }
+        .error { color: #ef4444 !important; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <a href="javascript:history.back()" class="back-btn">← Back</a>
-        <div style="font-weight: 800; color: var(--primary);">DevCoderZ Player</div>
-    </div>
-
-    <div id="loader">Loading Lectures...</div>
-    <div id="lectureList"></div>
+    <h2 style="color:var(--primary); margin-bottom: 20px;">📚 Lectures List</h2>
+    <div id="status">Connecting to Server...</div>
+    <div id="lecList"></div>
 
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const batchId = urlParams.get('batch_id');
-        const subjectId = urlParams.get('subject_id');
+        const params = new URLSearchParams(window.location.search);
+        const bId = params.get('batch_id');
+        const sId = params.get('subject_id');
+        const statusDiv = document.getElementById('status');
 
-        async function fetchLectures() {
+        async function getLectures() {
+            if(!bId || !sId) {
+                statusDiv.innerHTML = "<span class='error'>Error: Missing Batch or Subject ID!</span>";
+                return;
+            }
+
             try {
-                const response = await fetch(`https://eduvibe-pw-api.wasmer.app/lectures.php?batch_id=${batchId}&subject_id=${subjectId}`);
-                const data = await response.json();
+                // Testing with direct API first
+                const res = await fetch(`https://eduvibe-pw-api.wasmer.app/lectures.php?batch_id=${bId}&subject_id=${sId}`);
+                
+                if (!res.ok) throw new Error("Server Response Failed");
 
-                document.getElementById('loader').style.display = 'none';
-                const list = document.getElementById('lectureList');
+                const data = await res.json();
+                
+                if (!data.lectures || data.lectures.length === 0) {
+                    statusDiv.innerHTML = "No lectures found for this subject.";
+                    return;
+                }
 
-                list.innerHTML = data.lectures.map(l => `
-                    <div class="lecture-card">
-                        <div class="lecture-title">${l.topic}</div>
-                        <div style="font-size: 12px; color: #64748b;">Date: ${l.date || 'N/A'}</div>
-                        <a href="player.html?video_url=${btoa(l.url)}" class="play-btn">Watch Lecture</a>
+                statusDiv.style.display = 'none';
+                document.getElementById('lecList').innerHTML = data.lectures.map(l => `
+                    <div class="lec-card">
+                        <div style="font-size: 16px; font-weight: 700; color: #1e293b;">${l.topic}</div>
+                        <div style="font-size: 12px; color: #94a3b8; margin-top: 4px;">📅 Uploaded: ${l.date || 'N/A'}</div>
+                        <a href="${l.url}" target="_blank" class="play-btn">▶ Watch Now</a>
                     </div>
                 `).join('');
-            } catch (e) {
-                document.getElementById('loader').innerHTML = "Failed to load lectures.";
+
+            } catch(e) {
+                console.error(e);
+                statusDiv.innerHTML = `<span class='error'>Failed to load lectures.<br><small>Reason: ${e.message}</small></span>`;
             }
         }
-        fetchLectures();
+
+        getLectures();
     </script>
 </body>
 </html>
