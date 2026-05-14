@@ -8,36 +8,27 @@
     <style>
         :root{--0x3:#38bdf8;--0x2:#010409}
         body,html{margin:0;padding:0;width:100%;height:100%;background:var(--0x2);color:#fff;font-family:'Segoe UI',sans-serif;overflow-x:hidden}
-        
-        #_O0x{display:flex;flex-direction:column;align-items:center;padding:20px 10px;min-height:100vh;box-sizing:border-box}
-        
-        /* Header Fix: Responsive size */
-        .L0x{font-family:'monospace';font-weight:900;font-size:clamp(1.5rem, 8vw, 2.5rem);color:var(--0x3);margin:30px 0;text-shadow:0 0 20px rgba(56,189,248,0.5);letter-spacing:4px;text-align:center}
-
-        .G0x{width:100%;max-width:600px;display:flex;flex-direction:column;gap:20px}
-
-        /* Card Fix: Stack on mobile, side-by-side on desktop */
-        .C0x{background:rgba(22,27,34,0.9);border:1px solid #30363d;padding:20px;border-radius:20px;text-decoration:none;display:flex;align-items:center;gap:15px;transition:0.3s}
-        .C0x:hover{border-color:var(--0x3);background:rgba(56,189,248,0.05)}
-
-        .C0x img{width:60px;height:60px;min-width:60px;object-fit:contain;border-radius:10px}
-        
-        .TX0x{flex:1;min-width:0} /* min-width 0 prevents text overflow */
-        .DEVBY{font-size:10px;color:var(--0x3);font-weight:bold;margin-bottom:4px}
-        .C0x h2{margin:0;font-size:1.2rem;color:#fff;font-family:monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-        .C0x p{margin:5px 0 0 0;font-size:13px;color:#8b949e;line-height:1.4}
-
-        /* Credits Section Fix */
-        .CR0x{margin:40px 0;width:90%;max-width:400px;display:flex;justify-content:space-around;padding:15px;background:rgba(56,189,248,0.05);border:1px solid rgba(56,189,248,0.2);border-radius:50px;text-align:center}
-        .CR_NAME{font-size:13px;font-weight:bold;color:#fff}
-        .CR_TAG{font-size:9px;color:var(--0x3);text-transform:uppercase}
-
-        footer{padding-bottom:20px;font-family:monospace;font-size:11px;color:#30363d;letter-spacing:2px}
-
-        @media (max-width:400px) {
-            .C0x{padding:15px;gap:10px}
-            .C0x h2{font-size:1.1rem}
-            .C0x p{font-size:12px}
+        #_O0x{display:flex;flex-direction:column;align-items:center;padding:20px 15px;min-height:100vh;box-sizing:border-box;background:radial-gradient(circle at center, #0d1117 0%, #010409 100%)}
+        .L0x{font-family:'monospace';font-weight:900;font-size:clamp(1.8rem, 10vw, 3.2rem);color:var(--0x3);margin:40px 0;text-shadow:0 0 25px rgba(56,189,248,0.5);letter-spacing:6px;text-align:center;width:100%}
+        .G0x{width:100%;max-width:650px;display:flex;flex-direction:column;gap:25px;padding-bottom:100px}
+        .C0x{background:rgba(22,27,34,0.8);border:2px solid #30363d;padding:25px;border-radius:25px;text-decoration:none;display:flex;align-items:center;gap:20px;transition:0.4s;box-sizing:border-box}
+        .C0x:hover{border-color:var(--0x3);transform:translateY(-5px);background:rgba(56,189,248,0.08);box-shadow:0 15px 45px rgba(0,0,0,0.7)}
+        .C0x img{width:75px;height:75px;min-width:75px;object-fit:contain;filter:drop-shadow(0 0 10px rgba(56,189,248,0.3))}
+        .TX0x{flex:1;min-width:0}
+        .DEVBY{font-size:11px;color:var(--0x3);font-weight:bold;letter-spacing:1px;margin-bottom:6px;text-transform:uppercase}
+        .C0x h2{margin:0;font-size:1.5rem;color:#fff;font-family:monospace;font-weight:900;letter-spacing:1px}
+        .C0x p{margin:8px 0 0 0;font-size:14px;color:#f1f5f9;line-height:1.5;font-weight:500}
+        .CR0x{margin:30px 0;width:95%;max-width:500px;display:flex;justify-content:space-around;align-items:center;padding:20px;background:rgba(56,189,248,0.03);border:1px solid rgba(56,189,248,0.2);border-radius:60px;backdrop-filter:blur(10px)}
+        .CR_ITEM{display:flex;flex-direction:column;align-items:center}
+        .CR_NAME{font-size:14px;font-weight:900;color:#fff;letter-spacing:1px}
+        .CR_TAG{font-size:9px;color:var(--0x3);text-transform:uppercase;font-weight:bold;margin-top:3px}
+        footer{padding:20px 0;font-family:monospace;font-size:12px;color:#30363d;letter-spacing:4px;font-weight:bold}
+        @media (max-width:500px){
+            .C0x{padding:20px;gap:15px;border-radius:20px}
+            .C0x img{width:60px;height:60px;min-width:60px}
+            .C0x h2{font-size:1.2rem}
+            .C0x p{font-size:13px}
+            .L0x{margin:30px 0}
         }
     </style>
 </head>
@@ -47,7 +38,6 @@
     <div class="L0x">&lt;DevCoderZ/&gt;</div>
 
     <div class="G0x">
-        <!-- Next Toppers -->
         <a href="https://devcoderz.vercel.app/nexttoppers" class="C0x">
             <img src="nt.png" alt="NT">
             <div class="TX0x">
@@ -57,7 +47,6 @@
             </div>
         </a>
 
-        <!-- Old Batches -->
         <a href="https://devcoderz.vercel.app/nexttoppers/old-batches" class="C0x">
             <img src="nt.png" alt="NT">
             <div class="TX0x">
@@ -67,17 +56,15 @@
             </div>
         </a>
 
-        <!-- Cricket -->
         <a href="https://devcoderz.vercel.app/cricket" class="C0x">
             <img src="cricket.png" alt="IPL">
             <div class="TX0x">
                 <div class="DEVBY">Developed by DevCoderZ</div>
                 <h2>LIVE CRICKET</h2>
-                <p>Don't miss a single ball. Ultra low-latency UHD streaming.</p>
+                <p>Ultra low-latency 4K UHD streaming for all major tournaments.</p>
             </div>
         </a>
 
-        <!-- Mission Jeet -->
         <a href="https://devcoderz.vercel.app/missionjeet" class="C0x">
             <img src="missionjeet.png" alt="MJ">
             <div class="TX0x">
@@ -87,13 +74,12 @@
             </div>
         </a>
 
-        <!-- Vibrant -->
         <a href="https://devcoderz.vercel.app/vibrant" class="C0x">
             <img src="vt.png" alt="VT">
             <div class="TX0x">
                 <div class="DEVBY">Developed by DevCoderZ</div>
                 <h2>VIBRANT ACADEMY</h2>
-                <p>Top-tier Kota education optimized for your mobile screen.</p>
+                <p>Top-tier Kota education optimized for seamless streaming.</p>
             </div>
         </a>
     </div>
@@ -103,14 +89,32 @@
             <div class="CR_NAME">Devansh Sharma</div>
             <div class="CR_TAG">Lead Architect</div>
         </div>
+        <div style="width:1px;height:30px;background:rgba(56,189,248,0.2)"></div>
         <div class="CR_ITEM">
             <div class="CR_NAME">Assault Decoder</div>
             <div class="CR_TAG">Co-Founder</div>
         </div>
     </div>
 
-    <footer>DevCoderZ</footer>
+    <footer>MAIN_WEB: 3.2</footer>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const els = [document.querySelector('.L0x'), ...document.querySelectorAll('.C0x'), document.querySelector('.CR0x')];
+        els.forEach((el, i) => {
+            if(el){
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = '0.8s cubic-bezier(0.2, 0.8, 0.2, 1)';
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, 100 * i);
+            }
+        });
+    });
+</script>
 
 </body>
 </html>
