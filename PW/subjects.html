@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subjects</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
+        body { background: #f8fafc; padding: 15px; }
+        .back { color: #4f46e5; text-decoration: none; font-weight: 700; display: block; margin-bottom: 15px; }
+        .header { font-size: 22px; font-weight: 800; margin-bottom: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
+        .sub-card { background: white; padding: 15px; border-radius: 12px; display: flex; align-items: center; gap: 15px; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .sub-card img { width: 50px; height: 50px; border-radius: 8px; }
+        .sub-name { font-weight: 700; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back">← Back</a>
+    <div id="bTitle" class="header">Loading Subjects...</div>
+    <div class="grid" id="sGrid"></div>
+
+    <script>
+        const bid = new URLSearchParams(window.location.search).get('batch_id');
+        async function fetchSubs() {
+            const r = await fetch(`https://eduvibe-pw-api.wasmer.app/batch.php?batch_id=${bid}`);
+            const d = await r.json();
+            document.getElementById('bTitle').innerText = d.batch_title;
+            document.getElementById('sGrid').innerHTML = d.subjects.map(s => `
+                <div class="sub-card" onclick="location.href='lectures.html?batch_id=${bid}&subject_id=${s._id}'">
+                    <img src="${s.imageId?.baseUrl + s.imageId?.key || 'https://via.placeholder.com/50'}">
+                    <div class="sub-name">${s.subject}</div>
+                </div>
+            `).join('');
+        }
+        fetchSubs();
+    </script>
+</body>
+</html>
