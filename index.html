@@ -8,29 +8,32 @@
     <style>
         :root{--0x1:#0f172a;--0x2:#010409;--0x3:#38bdf8;--0x4:#f1f5f9;--0x5:#161b22}
         body,html{margin:0;padding:0;width:100%;height:100%;background:var(--0x2);color:var(--0x4);font-family:'Segoe UI',sans-serif;overflow:hidden}
-        #_O0x{position:fixed;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at center, #0d1117 0%, #010409 100%)}
-        .L0x{font-family:'monospace';font-weight:900;font-size:2.5rem;color:var(--0x3);margin-bottom:30px;text-shadow:0 0 25px rgba(56,189,248,0.5);letter-spacing:5px}
-        .G0x{display:flex;flex-direction:column;gap:15px;width:95%;max-width:500px;z-index:10;max-height:70vh;overflow-y:auto;padding:15px}
-        .C0x{background:rgba(22,27,34,0.8);border:1px solid #30363d;padding:25px;border-radius:20px;text-align:left;transition:0.3s;cursor:pointer;text-decoration:none;position:relative;overflow:hidden;backdrop-filter:blur(10px);display:flex;align-items:center;gap:20px}
-        .C0x:hover{border-color:var(--0x3);transform:scale(1.02);background:rgba(56,189,248,0.05);box-shadow:0 10px 40px rgba(0,0,0,0.6)}
-        .C0x img{width:65px;height:65px;object-fit:contain;filter:drop-shadow(0 0 10px rgba(56,189,248,0.3))}
-        .TX0x{display:flex;flex-direction:column}
-        .C0x h2{font-family:'monospace';letter-spacing:2px;margin:0;font-size:1.4rem;color:#fff;font-weight:900}
-        .C0x p{color:#8b949e;font-size:12px;line-height:1.4;margin:5px 0 0 0}
-        .SP0x{font-size:10px;color:var(--0x3);font-weight:bold;text-transform:uppercase;margin-top:5px;letter-spacing:1px}
-        .CR0x{margin-top:25px;display:flex;gap:25px;padding:12px 25px;background:rgba(56,189,248,0.05);border:1px solid rgba(56,189,248,0.2);border-radius:50px;backdrop-filter:blur(5px);cursor:pointer;transition:0.3s}
-        .CR0x:hover{border-color:var(--0x3);background:rgba(56,189,248,0.1)}
+        #_O0x{position:fixed;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;background:radial-gradient(circle at center, #0d1117 0%, #010409 100%);padding-top:40px}
+        .L0x{font-family:'monospace';font-weight:900;font-size:3rem;color:var(--0x3);margin-bottom:40px;text-shadow:0 0 30px rgba(56,189,248,0.6);letter-spacing:8px}
+        .G0x{display:flex;flex-direction:column;gap:25px;width:92%;max-width:700px;z-index:10;max-height:75vh;overflow-y:auto;padding:20px;box-sizing:border-box}
+        .C0x{background:rgba(22,27,34,0.85);border:2px solid #30363d;padding:35px;border-radius:24px;text-align:left;transition:0.4s;cursor:pointer;text-decoration:none;position:relative;overflow:hidden;backdrop-filter:blur(15px);display:flex;align-items:center;gap:30px}
+        .C0x:hover{border-color:var(--0x3);transform:scale(1.03);background:rgba(56,189,248,0.08);box-shadow:0 15px 50px rgba(0,0,0,0.8)}
+        .C0x img{width:80px;height:80px;object-fit:contain;filter:drop-shadow(0 0 15px rgba(56,189,248,0.4))}
+        .TX0x{display:flex;flex-direction:column;flex:1}
+        .C0x h2{font-family:'monospace';letter-spacing:3px;margin:0;font-size:1.8rem;color:#fff;font-weight:900;text-transform:uppercase}
+        .C0x p{color:#f1f5f9;font-size:15px;line-height:1.6;margin:8px 0;font-weight:500}
+        .DEVBY{font-size:11px;color:#8b949e;letter-spacing:1px;margin-bottom:5px;font-style:italic}
+        .SP0x{font-size:12px;color:var(--0x3);font-weight:bold;text-transform:uppercase;margin-top:10px;letter-spacing:2px;display:flex;align-items:center;gap:8px}
+        .CR0x{margin-top:30px;display:flex;gap:40px;padding:18px 40px;background:rgba(56,189,248,0.05);border:1px solid rgba(56,189,248,0.3);border-radius:60px;backdrop-filter:blur(5px);cursor:pointer;transition:0.3s;margin-bottom:40px}
+        .CR0x:hover{border-color:var(--0x3);background:rgba(56,189,248,0.15)}
         .CR_ITEM{display:flex;flex-direction:column;align-items:center}
-        .CR_NAME{font-size:12px;font-weight:800;color:#fff;letter-spacing:1px}
-        .CR_TAG{font-size:8px;color:var(--0x3);text-transform:uppercase;margin-top:2px}
-        .P0x{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(1,4,9,0.95);backdrop-filter:blur(15px);z-index:99999;display:none;align-items:center;justify-content:center;opacity:0;transition:0.3s}
+        .CR_NAME{font-size:15px;font-weight:900;color:#fff;letter-spacing:1px}
+        .CR_TAG{font-size:10px;color:var(--0x3);text-transform:uppercase;margin-top:4px;font-weight:bold}
+        .P0x{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(1,4,9,0.96);backdrop-filter:blur(20px);z-index:99999;display:none;align-items:center;justify-content:center;opacity:0;transition:0.3s}
         .P0x.active{display:flex;opacity:1}
-        .PC0x{background:#0d1117;width:85%;max-width:350px;padding:35px;border-radius:25px;border:1px solid #30363d;border-top:5px solid var(--0x3);text-align:center;position:relative;transform:scale(0.8);transition:0.3s}
+        .PC0x{background:#0d1117;width:90%;max-width:400px;padding:45px;border-radius:30px;border:2px solid #30363d;border-top:6px solid var(--0x3);text-align:center;position:relative;transform:scale(0.8);transition:0.3s}
         .P0x.active .PC0x{transform:scale(1)}
-        .P_BTN{display:block;background:#0088cc;color:#fff;text-decoration:none;padding:14px;border-radius:12px;font-weight:900;margin-top:20px;transition:0.2s;letter-spacing:1px}
-        .P_BTN:hover{background:#00a2f2;box-shadow:0 0 20px rgba(0,136,204,0.5)}
-        footer{position:fixed;bottom:10px;width:100%;text-align:center;font-family:monospace;font-size:10px;color:#30363d;letter-spacing:3px}
-        .G0x::-webkit-scrollbar{width:0px}
+        .P_BTN{display:block;background:#0088cc;color:#fff;text-decoration:none;padding:18px;border-radius:15px;font-weight:900;margin-top:25px;transition:0.2s;letter-spacing:2px;font-size:1.1rem}
+        .P_BTN:hover{background:#00a2f2;box-shadow:0 0 25px rgba(0,136,204,0.6)}
+        footer{position:fixed;bottom:15px;width:100%;text-align:center;font-family:monospace;font-size:12px;color:#484f58;letter-spacing:4px;font-weight:bold}
+        .G0x::-webkit-scrollbar{width:6px}
+        .G0x::-webkit-scrollbar-thumb{background:#30363d;border-radius:10px}
+        @media (max-width:600px){.C0x{padding:25px;gap:20px}.C0x h2{font-size:1.4rem}.C0x p{font-size:13px}.C0x img{width:60px;height:60px}}
     </style>
 </head>
 <body>
@@ -42,8 +45,9 @@
         <a href="https://devcoderz.vercel.app/nexttoppers" class="C0x" id="_C1">
             <img src="nt.png" alt="NT">
             <div class="TX0x">
+                <div class="DEVBY">Developed by DevCoderZ</div>
                 <h2>NEXT TOPPERS</h2>
-                <p>Advanced Educational Interface for NT Portal Access.</p>
+                <p>Advanced Educational Interface for high-speed NT Portal Access. Experience seamless learning.</p>
                 <div class="SP0x"><i class="fas fa-bolt"></i> FAST & SECURE BYPASS</div>
             </div>
         </a>
@@ -51,8 +55,9 @@
         <a href="https://devcoderz.vercel.app/nexttoppers/old-batches" class="C0x" id="_C5">
             <img src="nt.png" alt="NT">
             <div class="TX0x">
+                <div class="DEVBY">Developed by DevCoderZ</div>
                 <h2>NT OLD BATCHES</h2>
-                <p>Access Previous Year Next Toppers Archived Content.</p>
+                <p>Unlock the vault of previous year Next Toppers content. All archived batches in one place.</p>
                 <div class="SP0x"><i class="fas fa-archive"></i> COMPLETE ARCHIVE</div>
             </div>
         </a>
@@ -60,8 +65,9 @@
         <a href="https://devcoderz.vercel.app/cricket" class="C0x" id="_C3">
             <img src="cricket.png" alt="Cricket">
             <div class="TX0x">
+                <div class="DEVBY">Developed by DevCoderZ</div>
                 <h2>LIVE CRICKET</h2>
-                <p>Free Cricket Streaming Website Developed by DevCoderZ.</p>
+                <p>Don't miss a single ball. Ultra low-latency streaming for all major cricket tournaments.</p>
                 <div class="SP0x"><i class="fas fa-satellite"></i> 4K UHD STREAMING</div>
             </div>
         </a>
@@ -69,8 +75,9 @@
         <a href="https://devcoderz.vercel.app/missionjeet" class="C0x" id="_C4">
             <img src="missionjeet.png" alt="MJ">
             <div class="TX0x">
+                <div class="DEVBY">Developed by DevCoderZ</div>
                 <h2>MISSION JEET</h2>
-                <p>Mission Jeet Curriculum Portal High-Quality Stream.</p>
+                <p>Your gateway to Mission Jeet curriculum. High-definition educational streams for aspirants.</p>
                 <div class="SP0x"><i class="fas fa-graduation-cap"></i> FULL SYLLABUS</div>
             </div>
         </a>
@@ -78,8 +85,9 @@
         <a href="https://devcoderz.vercel.app/vibrant" class="C0x" id="_C2">
             <img src="vt.png" alt="VT">
             <div class="TX0x">
+                <div class="DEVBY">Developed by DevCoderZ</div>
                 <h2>VIBRANT ACADEMY</h2>
-                <p>Premium Kota Curriculum Streaming Engine.</p>
+                <p>Bring Kota's top-tier education to your screen with our optimized streaming engine.</p>
                 <div class="SP0x"><i class="fas fa-fire"></i> KOTA SPECIAL</div>
             </div>
         </a>
@@ -90,24 +98,24 @@
             <div class="CR_NAME">Devansh Sharma</div>
             <div class="CR_TAG">Lead Architect</div>
         </div>
-        <div style="width:1px;background:rgba(56,189,248,0.2);height:20px;align-self:center"></div>
+        <div style="width:2px;background:rgba(56,189,248,0.3);height:25px;align-self:center"></div>
         <div class="CR_ITEM">
             <div class="CR_NAME">Assault Decoder</div>
             <div class="CR_TAG">Co-Founder</div>
         </div>
     </div>
 
-    <footer>MAIN_WEB: 2.5</footer>
+    <footer>MAIN_WEB: 3.0</footer>
 </div>
 
 <div id="_PX" class="P0x">
     <div class="PC0x">
-        <i class="fas fa-times" style="position:absolute;top:20px;right:20px;cursor:pointer;color:#484f58" onclick="closePopup()"></i>
-        <i class="fab fa-telegram-plane" style="font-size:50px;color:#0088cc;margin-bottom:20px"></i>
-        <h2 style="margin-bottom:10px;font-size:1.5rem;color:#fff">Join Telegram</h2>
-        <p style="font-size:14px;color:#8b949e">Get latest updates, bypasses and premium tools directly on your telegram.</p>
+        <i class="fas fa-times" style="position:absolute;top:25px;right:25px;cursor:pointer;color:#484f58;font-size:1.5rem" onclick="closePopup()"></i>
+        <i class="fab fa-telegram-plane" style="font-size:60px;color:#0088cc;margin-bottom:25px"></i>
+        <h2 style="margin-bottom:15px;font-size:2rem;color:#fff;font-family:monospace">Join Telegram</h2>
+        <p style="font-size:16px;color:#8b949e;line-height:1.5">Stay updated with the latest bypasses, premium tools, and community support.</p>
         <a href="https://t.me/+8tZSJ5FyTXVjM2M1" target="_blank" class="P_BTN">OPEN CHANNEL</a>
-        <div style="font-size:11px;color:#484f58;margin-top:20px;cursor:pointer;text-decoration:underline" onclick="closePopup()">BACK TO SITE</div>
+        <div style="font-size:13px;color:#484f58;margin-top:25px;cursor:pointer;text-decoration:underline;font-weight:bold" onclick="closePopup()">BACK TO SITE</div>
     </div>
 </div>
 
@@ -131,12 +139,12 @@
         elements.forEach((el, idx) => {
             if(el) {
                 el.style.opacity = '0';
-                el.style.transform = 'translateY(30px)';
-                el.style.transition = '0.7s cubic-bezier(0.4, 0, 0.2, 1)';
+                el.style.transform = 'translateY(40px)';
+                el.style.transition = '0.8s cubic-bezier(0.2, 0.8, 0.2, 1)';
                 setTimeout(() => {
                     el.style.opacity = '1';
                     el.style.transform = 'translateY(0)';
-                }, 100 * idx);
+                }, 150 * idx);
             }
         });
     });
