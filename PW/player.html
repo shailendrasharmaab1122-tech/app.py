@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Player - DevCoderZ</title>
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css">
+    <style>
+        body { margin:0; background:#000; font-family: sans-serif; }
+        .video-container { width:100%; height:100vh; display:flex; align-items:center; background:#000; }
+        video { width:100%; }
+        .back-nav { position: absolute; top: 10px; left: 10px; z-index: 10; background: rgba(0,0,0,0.5); color: white; padding: 5px 15px; border-radius: 20px; text-decoration: none; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+<a href="javascript:history.back()" class="back-nav">← Back</a>
+
+<div class="video-container">
+    <video id="lecture-player" playsinline controls></video>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/shaka-player@4.7.11/dist/shaka-player.compiled.js"></script>
+<script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+
+<script>
+(async function() {
+    const params = new URLSearchParams(window.location.search);
+    const manifestUrl = params.get('url');
+    const keyId = params.get('keyId');
+    const keyValue = params.get('key');
+
+    if (!manifestUrl) {
+        alert("No Video URL found!");
+        return;
+    }
+
+    const videoEl = document.getElementById('lecture-player');
+    const shakaPlayer = new shaka.Player(videoEl);
+
+    // DRM Configuration
+    if (keyId && keyValue) {
+        shakaPlayer.configure({
+            drm: {
+                clearKeys: { [keyId]: keyValue }
+            }
+        });
+    }
+
+    // Signed URL Fix (For PW CDN)
+    const manifestObj = new URL(manifestUrl);
+    shakaPlayer.getNetworkingEngine().registerRequestFilter((type, request) => {
+        if (type !== shaka.net.NetworkingEngine.RequestType.SEGMENT) return;
+        manifestObj.searchParams.forEach((v, k) => {
+            const segUrl = new URL(request.uris[0]);
+            segUrl.searchParams.set(k, v);
+            request.uris[0] = segUrl.toString();
+        });
+    });
+
+    try {
+        await shakaPlayer.load(manifestUrl);
+        const tracks = shakaPlayer.getVariantTracks();
+        const resolutions = [...new Map(tracks.filter(t => t.height).map(t => [t.height, t])).values()]
+                            .sort((a,b)=>b.height - a.height).map(t => t.height);
+
+        const player = new Plyr(videoEl, {
+            settings: ['quality', 'speed'],
+            quality: {
+                default: 'Auto',
+                options: ['Auto', ...resolutions],
+                forced: true,
+                onChange: (q) => {
+                    if (q === 'Auto') { shakaPlayer.configure({ abr: { enabled: true } }); }
+                    else {
+                        const track = tracks.find(t => t.height == q);
+                        if (track) {
+                            shakaPlayer.configure({ abr: { enabled: false } });
+                            shakaPlayer.selectVariantTrack(track, true);
+                        }
+                    }
+                }
+            }
+        });
+    } catch (err) {
+        console.error("Error loading video:", err);
+    }
+})();
+</script>
+</body>
+</html>
