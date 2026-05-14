@@ -3,89 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Player - DevCoderZ</title>
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css">
+    <title>Study Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { margin:0; background:#000; font-family: sans-serif; }
-        .video-container { width:100%; height:100vh; display:flex; align-items:center; background:#000; }
-        video { width:100%; }
-        .back-nav { position: absolute; top: 10px; left: 10px; z-index: 10; background: rgba(0,0,0,0.5); color: white; padding: 5px 15px; border-radius: 20px; text-decoration: none; font-size: 14px; }
+        .lecture-card:hover { transform: scale(1.02); transition: 0.2s; }
+        .active-tab { border-bottom: 3px solid #6366f1; color: #6366f1; }
     </style>
 </head>
-<body>
+<body class="bg-gray-950 text-gray-100">
 
-<a href="javascript:history.back()" class="back-nav">← Back</a>
+    <div class="max-w-7xl mx-auto p-4">
+        <header class="mb-8 text-center">
+            <h1 id="topicName" class="text-3xl font-extrabold text-indigo-500 mb-2">Loading...</h1>
+            <p class="text-gray-400">Select a lecture to start studying</p>
+        </header>
 
-<div class="video-container">
-    <video id="lecture-player" playsinline controls></video>
-</div>
+        <div id="lectureGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </div>
 
-<script src="https://cdn.jsdelivr.net/npm/shaka-player@4.7.11/dist/shaka-player.compiled.js"></script>
-<script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const batchId = params.get("batch_id");
+        const subjectId = params.get("subject_id");
+        const topicId = params.get("topic_id");
 
-<script>
-(async function() {
-    const params = new URLSearchParams(window.location.search);
-    const manifestUrl = params.get('url');
-    const keyId = params.get('keyId');
-    const keyValue = params.get('key');
+        if (!batchId || !subjectId || !topicId) {
+            document.body.innerHTML = "<div class='text-center mt-20 text-red-500 text-xl font-bold'>Error: Missing Parameters (batch_id, subject_id, topic_id)</div>";
+        }
 
-    if (!manifestUrl) {
-        alert("No Video URL found!");
-        return;
-    }
+        const apiUrl = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}&tab=videos`;
 
-    const videoEl = document.getElementById('lecture-player');
-    const shakaPlayer = new shaka.Player(videoEl);
-
-    // DRM Configuration
-    if (keyId && keyValue) {
-        shakaPlayer.configure({
-            drm: {
-                clearKeys: { [keyId]: keyValue }
+        async function loadContent() {
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                
+                document.getElementById("topicName").innerText = data.topic_name || "Lectures";
+                render(data.lectures || []);
+            } catch (err) {
+                document.getElementById("topicName").innerText = "Failed to load lectures";
             }
-        });
-    }
+        }
 
-    // Signed URL Fix (For PW CDN)
-    const manifestObj = new URL(manifestUrl);
-    shakaPlayer.getNetworkingEngine().registerRequestFilter((type, request) => {
-        if (type !== shaka.net.NetworkingEngine.RequestType.SEGMENT) return;
-        manifestObj.searchParams.forEach((v, k) => {
-            const segUrl = new URL(request.uris[0]);
-            segUrl.searchParams.set(k, v);
-            request.uris[0] = segUrl.toString();
-        });
-    });
+        function render(lectures) {
+            const container = document.getElementById("lectureGrid");
+            container.innerHTML = lectures.map(item => `
+                <div class="lecture-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden cursor-pointer shadow-2xl" 
+                     onclick="play('${item._id}')">
+                    <div class="relative">
+                        <img src="${item.videoDetails?.image}" class="w-full aspect-video object-cover opacity-80">
+                        <div class="absolute bottom-2 right-2 bg-black/70 px-2 py-1 rounded text-xs">
+                            ${item.videoDetails?.duration}
+                        </div>
+                        <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-black/40">
+                             <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"/></svg>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-sm font-medium leading-snug line-clamp-2">${item.topic}</h3>
+                    </div>
+                </div>
+            `).join('');
+        }
 
-    try {
-        await shakaPlayer.load(manifestUrl);
-        const tracks = shakaPlayer.getVariantTracks();
-        const resolutions = [...new Map(tracks.filter(t => t.height).map(t => [t.height, t])).values()]
-                            .sort((a,b)=>b.height - a.height).map(t => t.height);
+        function play(id) {
+            window.location.href = `player.html?video_id=${id}&batch_id=${batchId}`;
+        }
 
-        const player = new Plyr(videoEl, {
-            settings: ['quality', 'speed'],
-            quality: {
-                default: 'Auto',
-                options: ['Auto', ...resolutions],
-                forced: true,
-                onChange: (q) => {
-                    if (q === 'Auto') { shakaPlayer.configure({ abr: { enabled: true } }); }
-                    else {
-                        const track = tracks.find(t => t.height == q);
-                        if (track) {
-                            shakaPlayer.configure({ abr: { enabled: false } });
-                            shakaPlayer.selectVariantTrack(track, true);
-                        }
-                    }
-                }
-            }
-        });
-    } catch (err) {
-        console.error("Error loading video:", err);
-    }
-})();
-</script>
+        loadContent();
+    </script>
 </body>
 </html>
