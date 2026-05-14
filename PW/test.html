@@ -3,69 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevCoderZ - Premium Learning</title>
+    <title>DevCoderZ - Batches</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body, html { height: 100%; overflow: hidden; background: #0f172a; }
-
-        /* Front Page UI */
-        #front-page {
-            position: absolute; width: 100%; height: 100%;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            background: radial-gradient(circle, #1e293b 0%, #0f172a 100%);
-            z-index: 10; transition: 0.8s ease-in-out;
-        }
-        h1 { color: white; font-size: 3rem; margin-bottom: 10px; text-shadow: 0 0 20px rgba(79, 70, 229, 0.5); }
-        p { color: #94a3b8; margin-bottom: 30px; }
+        :root { --primary: #4f46e5; --bg: #0f172a; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); color: white; margin: 0; }
         
-        .explore-btn {
-            padding: 15px 40px; font-size: 18px; font-weight: bold;
-            color: white; background: #4f46e5; border: none; border-radius: 50px;
-            cursor: pointer; box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
-            transition: 0.3s;
+        /* Batch Grid Section */
+        #batch-section { padding: 20px; text-align: center; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 30px; }
+        
+        .batch-card { 
+            background: #1e293b; border-radius: 15px; padding: 20px; 
+            border: 1px solid #334155; transition: 0.3s;
         }
-        .explore-btn:hover { transform: scale(1.1); background: #4338ca; }
+        .batch-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .batch-card img { width: 100%; border-radius: 10px; margin-bottom: 15px; }
+        
+        .explore-btn { 
+            background: var(--primary); color: white; border: none; 
+            padding: 10px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; 
+        }
 
-        /* Iframe Container */
-        #iframe-container {
-            width: 100%; height: 100%; display: none;
+        /* Iframe Section */
+        #iframe-container { display: none; width: 100%; height: 100vh; position: fixed; top: 0; left: 0; background: black; }
+        .back-btn { 
+            position: absolute; top: 10px; left: 10px; z-index: 100;
+            background: rgba(0,0,0,0.6); color: white; padding: 8px 15px; border-radius: 5px; border: none; cursor: pointer;
         }
         iframe { width: 100%; height: 100%; border: none; }
-        
-        /* Animation when clicking explore */
-        .hide-front { transform: translateY(-100%); opacity: 0; pointer-events: none; }
     </style>
 </head>
 <body>
 
-    <!-- Section 1: Tumhara Page -->
-    <div id="front-page">
-        <h1>DevCoderZ</h1>
-        <p>Your Gateway to Premium Education</p>
-        <button class="explore-btn" onclick="startExploring()">Explore Now</button>
+    <!-- Batches Page -->
+    <div id="batch-section">
+        <h1>DevCoderZ Batches</h1>
+        <div class="grid" id="batchGrid">
+            <!-- Batch 1 -->
+            <div class="batch-card">
+                <img src="https://pw.live/assets/batch-placeholder.png" alt="Batch">
+                <h3>Lakshya JEE 2026</h3>
+                <button class="explore-btn" onclick="openBatch('67790151518b938bc630052d')">Explore Now</button>
+            </div>
+            
+            <!-- Batch 2 -->
+            <div class="batch-card">
+                <img src="https://pw.live/assets/batch-placeholder.png" alt="Batch">
+                <h3>Arjuna NEET 2026</h3>
+                <button class="explore-btn" onclick="openBatch('BATCH_ID_HERE')">Explore Now</button>
+            </div>
+        </div>
     </div>
 
-    <!-- Section 2: Eduvibe Iframe -->
+    <!-- Iframe Viewer -->
     <div id="iframe-container">
-        <!-- Replace 'URL_HERE' with the actual Eduvibe domain -->
-        <iframe id="main-frame" src=""></iframe>
+        <button class="back-btn" onclick="closeBatch()">← Back to DevCoderZ</button>
+        <iframe id="eduFrame" src=""></iframe>
     </div>
 
     <script>
-        function startExploring() {
-            const frontPage = document.getElementById('front-page');
-            const iframeContainer = document.getElementById('iframe-container');
-            const iframe = document.getElementById('main-frame');
+        function openBatch(batchId) {
+            const baseUrl = "https://eduvibe-pw-temp.ct.ws/batch.php"; // Ya subject.php jo bhi unka link structure ho
+            const finalUrl = `${baseUrl}?batch_id=${batchId}`;
+            
+            document.getElementById('eduFrame').src = finalUrl;
+            document.getElementById('batch-section').style.display = 'none';
+            document.getElementById('iframe-container').style.display = 'block';
+        }
 
-            // 1. Eduvibe ka URL yahan dalo
-            const eduvibeUrl = "https://eduvibe-pw-api.wasmer.app/"; 
-
-            // 2. Iframe source set karo
-            iframe.src = eduvibeUrl;
-
-            // 3. UI switch karo
-            frontPage.classList.add('hide-front');
-            iframeContainer.style.display = 'block';
+        function closeBatch() {
+            document.getElementById('eduFrame').src = "about:blank";
+            document.getElementById('iframe-container').style.display = 'none';
+            document.getElementById('batch-section').style.display = 'block';
         }
     </script>
 </body>
