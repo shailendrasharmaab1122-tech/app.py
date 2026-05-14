@@ -5,62 +5,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lectures - DevCoderZ</title>
     <style>
-        :root { --primary: #4f46e5; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8fafc; padding: 20px; }
-        .lec-card { background: white; padding: 15px; border-radius: 12px; margin-bottom: 12px; border-left: 5px solid var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .play-btn { background: var(--primary); color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; display: inline-block; margin-top: 10px; font-weight: 600; transition: 0.3s; }
-        .play-btn:hover { background: #4338ca; }
-        #status { padding: 20px; text-align: center; font-weight: bold; color: #64748b; }
-        .error { color: #ef4444 !important; }
+        :root { --primary: #4f46e5; --bg: #f3f4f6; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #1f2937; padding: 15px; margin: 0; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header { background: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 10px; z-index: 10; }
+        .back-btn { text-decoration: none; color: var(--primary); font-weight: bold; font-size: 14px; }
+        .card { background: #fff; border-radius: 12px; padding: 15px; margin-bottom: 12px; border-left: 6px solid var(--primary); transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .card:hover { transform: scale(1.01); }
+        .topic { font-weight: 700; font-size: 16px; margin-bottom: 5px; color: #111827; }
+        .meta { font-size: 12px; color: #6b7280; margin-bottom: 10px; }
+        .btn { background: var(--primary); color: #fff; text-decoration: none; padding: 8px 16px; border-radius: 8px; font-size: 14px; display: inline-block; font-weight: 600; text-align: center; border: none; cursor: pointer; }
+        #msg { text-align: center; padding: 40px; color: #6b7280; font-weight: 600; }
+        .error-box { background: #fee2e2; color: #b91c1c; padding: 15px; border-radius: 8px; border: 1px solid #f87171; font-size: 13px; }
     </style>
 </head>
 <body>
 
-    <h2 style="color:var(--primary); margin-bottom: 20px;">📚 Lectures List</h2>
-    <div id="status">Connecting to Server...</div>
-    <div id="lecList"></div>
+<div class="container">
+    <div class="header">
+        <a href="javascript:history.back()" class="back-btn">← Back</a>
+        <span style="font-weight: 800; color: var(--primary);">DevCoderZ</span>
+    </div>
 
-    <script>
-        const params = new URLSearchParams(window.location.search);
-        const bId = params.get('batch_id');
-        const sId = params.get('subject_id');
-        const statusDiv = document.getElementById('status');
+    <div id="msg">🔍 Lectures Load Ho Rahi Hain...</div>
+    <div id="list"></div>
+</div>
 
-        async function getLectures() {
-            if(!bId || !sId) {
-                statusDiv.innerHTML = "<span class='error'>Error: Missing Batch or Subject ID!</span>";
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const bId = urlParams.get('batch_id');
+    const sId = urlParams.get('subject_id');
+    const msgDiv = document.getElementById('msg');
+    const listDiv = document.getElementById('list');
+
+    async function loadData() {
+        if (!bId || !sId) {
+            msgDiv.innerHTML = "<div class='error-box'>Bhai, URL mein Batch ID ya Subject ID missing hai!</div>";
+            return;
+        }
+
+        const apiUrl = `https://eduvibe-pw-api.wasmer.app/lectures.php?batch_id=${bId}&subject_id=${sId}`;
+
+        try {
+            const response = await fetch(apiUrl);
+            
+            // Check agar response 200 OK nahi hai
+            if (!response.ok) throw new Error(`HTTP Error! Status: ${response.status}`);
+
+            const data = await response.json();
+            
+            // Debugging ke liye console mein data dekho
+            console.log("API Data:", data);
+
+            // API structure check (kabhi 'lectures' hota hai, kabhi 'data')
+            const lectures = data.lectures || data.data || [];
+
+            if (lectures.length === 0) {
+                msgDiv.innerHTML = "Is subject mein koi lecture nahi mila.";
                 return;
             }
 
-            try {
-                // Testing with direct API first
-                const res = await fetch(`https://eduvibe-pw-api.wasmer.app/lectures.php?batch_id=${bId}&subject_id=${sId}`);
-                
-                if (!res.ok) throw new Error("Server Response Failed");
+            msgDiv.style.display = 'none';
+            listDiv.innerHTML = lectures.map(lec => `
+                <div class="card">
+                    <div class="topic">${lec.topic || 'Untitled Lecture'}</div>
+                    <div class="meta">📅 ${lec.date || 'No Date'}</div>
+                    <a href="${lec.url}" target="_blank" class="btn">Watch Lecture</a>
+                </div>
+            `).join('');
 
-                const data = await res.json();
-                
-                if (!data.lectures || data.lectures.length === 0) {
-                    statusDiv.innerHTML = "No lectures found for this subject.";
-                    return;
-                }
-
-                statusDiv.style.display = 'none';
-                document.getElementById('lecList').innerHTML = data.lectures.map(l => `
-                    <div class="lec-card">
-                        <div style="font-size: 16px; font-weight: 700; color: #1e293b;">${l.topic}</div>
-                        <div style="font-size: 12px; color: #94a3b8; margin-top: 4px;">📅 Uploaded: ${l.date || 'N/A'}</div>
-                        <a href="${l.url}" target="_blank" class="play-btn">▶ Watch Now</a>
-                    </div>
-                `).join('');
-
-            } catch(e) {
-                console.error(e);
-                statusDiv.innerHTML = `<span class='error'>Failed to load lectures.<br><small>Reason: ${e.message}</small></span>`;
-            }
+        } catch (err) {
+            console.error("Fetch Error:", err);
+            msgDiv.innerHTML = `
+                <div class='error-box'>
+                    <b>Failed to Load!</b><br>
+                    Possible Reason: API Server down hai ya Link block ho gaya hai.<br>
+                    <small>${err.message}</small>
+                </div>
+            `;
         }
+    }
 
-        getLectures();
-    </script>
+    loadData();
+</script>
+
 </body>
 </html>
