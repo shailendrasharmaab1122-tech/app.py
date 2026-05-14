@@ -6,49 +6,54 @@
     <title>Lectures - DevCoderZ</title>
     <style>
         :root { --primary: #4f46e5; }
-        body { font-family: sans-serif; background: #f4f7f9; padding: 15px; margin: 0; }
-        .lec-card { background: white; padding: 15px; border-radius: 15px; margin-bottom: 12px; border-left: 5px solid var(--primary); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        body { font-family: 'Inter', sans-serif; background: #f4f7f9; padding: 15px; margin: 0; }
+        .lec-card { background: white; padding: 15px; border-radius: 12px; margin-bottom: 12px; border-left: 5px solid var(--primary); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .lec-name { font-size: 16px; font-weight: 700; color: #1e293b; margin-bottom: 10px; }
         .play-btn { background: var(--primary); color: white; padding: 10px 18px; border-radius: 8px; text-decoration: none; display: inline-block; font-weight: 600; font-size: 14px; }
     </style>
 </head>
 <body>
 
-    <h3 style="color:#333; margin-bottom:15px;">▶ Available Lectures</h3>
-    <div id="lecList" style="text-align:center; padding:20px;">Loading...</div>
+    <h3 style="padding:10px;">▶ Available Lectures</h3>
+    <div id="lecList" style="text-align:center;">Loading...</div>
 
     <script>
         const params = new URLSearchParams(window.location.search);
         const bId = params.get('batch_id');
         const sId = params.get('subject_id');
-        const tId = params.get('topic_id'); // GET TOPIC ID
+        const tId = params.get('topic_id');
 
         async function getLectures() {
             try {
-                // Topic ID include karna zaroori hai
                 const res = await fetch(`https://eduvibe-pw-api.wasmer.app/lectures.php?batch_id=${bId}&subject_id=${sId}&topic_id=${tId}`);
                 const data = await res.json();
                 
                 const list = document.getElementById('lecList');
-                if(!data.lectures || data.lectures.length === 0) {
-                    list.innerText = "No lectures found in this chapter.";
+                const lectures = data.lectures || [];
+
+                if(lectures.length === 0) {
+                    list.innerText = "No lectures found.";
                     return;
                 }
 
-                list.innerHTML = data.lectures.map(l => `
-                    <div class="lec-card">
-                        <div class="lec-name">${l.topic}</div>
-                        <div style="font-size:12px; color:gray; margin-bottom:10px;">📅 Date: ${l.date || 'N/A'}</div>
-                        <a href="${l.url}" target="_blank" class="play-btn">Watch Video</a>
-                    </div>
-                `).join('');
+                list.innerHTML = lectures.map(l => {
+                    // API se aane wale data ko parameters mein convert karo
+                    const videoUrl = encodeURIComponent(l.url);
+                    const keyId = l.keyId || "";
+                    const key = l.key || "";
+                    
+                    return `
+                        <div class="lec-card">
+                            <div class="lec-name">${l.topic}</div>
+                            <a href="./player.html?url=${videoUrl}&keyId=${keyId}&key=${key}" class="play-btn">▶ Watch Video</a>
+                        </div>
+                    `;
+                }).join('');
             } catch(e) {
-                document.getElementById('lecList').innerText = "API Error: Failed to fetch lectures.";
+                document.getElementById('lecList').innerText = "Error loading lectures.";
             }
         }
-
-        if(tId) getLectures();
-        else document.getElementById('lecList').innerText = "Error: Topic ID Missing!";
+        getLectures();
     </script>
 </body>
 </html>
