@@ -5,89 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lectures - DevCoderZ</title>
     <style>
-        :root { --primary: #4f46e5; --bg: #f3f4f6; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #1f2937; padding: 15px; margin: 0; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .header { background: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 10px; z-index: 10; }
-        .back-btn { text-decoration: none; color: var(--primary); font-weight: bold; font-size: 14px; }
-        .card { background: #fff; border-radius: 12px; padding: 15px; margin-bottom: 12px; border-left: 6px solid var(--primary); transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-        .card:hover { transform: scale(1.01); }
-        .topic { font-weight: 700; font-size: 16px; margin-bottom: 5px; color: #111827; }
-        .meta { font-size: 12px; color: #6b7280; margin-bottom: 10px; }
-        .btn { background: var(--primary); color: #fff; text-decoration: none; padding: 8px 16px; border-radius: 8px; font-size: 14px; display: inline-block; font-weight: 600; text-align: center; border: none; cursor: pointer; }
-        #msg { text-align: center; padding: 40px; color: #6b7280; font-weight: 600; }
-        .error-box { background: #fee2e2; color: #b91c1c; padding: 15px; border-radius: 8px; border: 1px solid #f87171; font-size: 13px; }
+        :root { --primary: #4f46e5; }
+        body { font-family: sans-serif; background: #f4f7f9; padding: 15px; margin: 0; }
+        .lec-card { background: white; padding: 15px; border-radius: 15px; margin-bottom: 12px; border-left: 5px solid var(--primary); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .lec-name { font-size: 16px; font-weight: 700; color: #1e293b; margin-bottom: 10px; }
+        .play-btn { background: var(--primary); color: white; padding: 10px 18px; border-radius: 8px; text-decoration: none; display: inline-block; font-weight: 600; font-size: 14px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <a href="javascript:history.back()" class="back-btn">← Back</a>
-        <span style="font-weight: 800; color: var(--primary);">DevCoderZ</span>
-    </div>
+    <h3 style="color:#333; margin-bottom:15px;">▶ Available Lectures</h3>
+    <div id="lecList" style="text-align:center; padding:20px;">Loading...</div>
 
-    <div id="msg">🔍 Lectures Load Ho Rahi Hain...</div>
-    <div id="list"></div>
-</div>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const bId = params.get('batch_id');
+        const sId = params.get('subject_id');
+        const tId = params.get('topic_id'); // GET TOPIC ID
 
-<script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const bId = urlParams.get('batch_id');
-    const sId = urlParams.get('subject_id');
-    const msgDiv = document.getElementById('msg');
-    const listDiv = document.getElementById('list');
+        async function getLectures() {
+            try {
+                // Topic ID include karna zaroori hai
+                const res = await fetch(`https://eduvibe-pw-api.wasmer.app/lectures.php?batch_id=${bId}&subject_id=${sId}&topic_id=${tId}`);
+                const data = await res.json();
+                
+                const list = document.getElementById('lecList');
+                if(!data.lectures || data.lectures.length === 0) {
+                    list.innerText = "No lectures found in this chapter.";
+                    return;
+                }
 
-    async function loadData() {
-        if (!bId || !sId) {
-            msgDiv.innerHTML = "<div class='error-box'>Bhai, URL mein Batch ID ya Subject ID missing hai!</div>";
-            return;
-        }
-
-        const apiUrl = `https://eduvibe-pw-api.wasmer.app/lectures.php?batch_id=${bId}&subject_id=${sId}`;
-
-        try {
-            const response = await fetch(apiUrl);
-            
-            // Check agar response 200 OK nahi hai
-            if (!response.ok) throw new Error(`HTTP Error! Status: ${response.status}`);
-
-            const data = await response.json();
-            
-            // Debugging ke liye console mein data dekho
-            console.log("API Data:", data);
-
-            // API structure check (kabhi 'lectures' hota hai, kabhi 'data')
-            const lectures = data.lectures || data.data || [];
-
-            if (lectures.length === 0) {
-                msgDiv.innerHTML = "Is subject mein koi lecture nahi mila.";
-                return;
+                list.innerHTML = data.lectures.map(l => `
+                    <div class="lec-card">
+                        <div class="lec-name">${l.topic}</div>
+                        <div style="font-size:12px; color:gray; margin-bottom:10px;">📅 Date: ${l.date || 'N/A'}</div>
+                        <a href="${l.url}" target="_blank" class="play-btn">Watch Video</a>
+                    </div>
+                `).join('');
+            } catch(e) {
+                document.getElementById('lecList').innerText = "API Error: Failed to fetch lectures.";
             }
-
-            msgDiv.style.display = 'none';
-            listDiv.innerHTML = lectures.map(lec => `
-                <div class="card">
-                    <div class="topic">${lec.topic || 'Untitled Lecture'}</div>
-                    <div class="meta">📅 ${lec.date || 'No Date'}</div>
-                    <a href="${lec.url}" target="_blank" class="btn">Watch Lecture</a>
-                </div>
-            `).join('');
-
-        } catch (err) {
-            console.error("Fetch Error:", err);
-            msgDiv.innerHTML = `
-                <div class='error-box'>
-                    <b>Failed to Load!</b><br>
-                    Possible Reason: API Server down hai ya Link block ho gaya hai.<br>
-                    <small>${err.message}</small>
-                </div>
-            `;
         }
-    }
 
-    loadData();
-</script>
-
+        if(tId) getLectures();
+        else document.getElementById('lecList').innerText = "Error: Topic ID Missing!";
+    </script>
 </body>
 </html>
