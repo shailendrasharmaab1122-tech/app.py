@@ -5,17 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lectures - DevCoderZ</title>
     <style>
-        :root { --primary: #4f46e5; }
-        body { font-family: 'Inter', sans-serif; background: #f4f7f9; padding: 15px; margin: 0; }
-        .lec-card { background: white; padding: 15px; border-radius: 12px; margin-bottom: 12px; border-left: 5px solid var(--primary); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .lec-name { font-size: 16px; font-weight: 700; color: #1e293b; margin-bottom: 10px; }
-        .play-btn { background: var(--primary); color: white; padding: 10px 18px; border-radius: 8px; text-decoration: none; display: inline-block; font-weight: 600; font-size: 14px; }
+        :root { --primary: #5a57e6; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 15px; }
+        .header { background: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; display: flex; align-items: center; }
+        .back-btn { border: none; background: var(--primary); color: #fff; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .lec-card { background: #fff; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); border-left: 5px solid var(--primary); transition: 0.3s; }
+        .lec-card:hover { transform: translateY(-3px); }
+        .lec-title { font-weight: 700; color: #333; font-size: 16px; margin-bottom: 10px; }
+        .watch-now { background: var(--primary); color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; display: inline-block; font-size: 14px; font-weight: 600; }
+        .error-msg { text-align: center; color: #ff4d4d; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
 
-    <h3 style="padding:10px;">▶ Available Lectures</h3>
-    <div id="lecList" style="text-align:center;">Loading...</div>
+    <div class="header">
+        <button class="back-btn" onclick="history.back()">← Back</button>
+        <h3 style="margin: 0 0 0 15px; font-size: 18px;">Lectures List</h3>
+    </div>
+
+    <div id="loader" style="text-align:center; padding:50px;">
+        <div style="font-weight:bold; color:#666;">⏳ Fetching Lectures...</div>
+    </div>
+
+    <div id="lecContainer"></div>
 
     <script>
         const params = new URLSearchParams(window.location.search);
@@ -23,37 +35,58 @@
         const sId = params.get('subject_id');
         const tId = params.get('topic_id');
 
-        async function getLectures() {
-            try {
-                const res = await fetch(`https://eduvibe-pw-api.wasmer.app/lectures.php?batch_id=${bId}&subject_id=${sId}&topic_id=${tId}`);
-                const data = await res.json();
-                
-                const list = document.getElementById('lecList');
-                const lectures = data.lectures || [];
+        async function fetchLectures() {
+            const container = document.getElementById('lecContainer');
+            const loader = document.getElementById('loader');
 
-                if(lectures.length === 0) {
-                    list.innerText = "No lectures found.";
+            // Agar topic_id missing hai, toh chapters page se aana zaroori hai
+            if (!tId) {
+                loader.innerHTML = `<div class="error-msg">❌ Error: Topic ID Missing. Please go back to Chapters and select a topic.</div>`;
+                return;
+            }
+
+            // Sabse zyada stable API endpoint use kar rahe hain
+            const apiUrl = `https://eduvibe-pw-api.wasmer.app/lectures.php?batch_id=${bId}&subject_id=${sId}&topic_id=${tId}`;
+
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                // Debugging: Console check karo F12 daba ke
+                console.log("Lecture Data:", data);
+
+                // Check for different API structures (data.lectures ya data.data)
+                const lectures = data.lectures || data.data || (Array.isArray(data) ? data : []);
+
+                if (lectures.length === 0) {
+                    loader.innerHTML = `<div class="error-msg">⚠️ No lectures found for this topic. API might be empty for this batch.</div>`;
                     return;
                 }
 
-                list.innerHTML = lectures.map(l => {
-                    // API se aane wale data ko parameters mein convert karo
-                    const videoUrl = encodeURIComponent(l.url);
-                    const keyId = l.keyId || "";
-                    const key = l.key || "";
+                loader.style.display = 'none';
+                
+                container.innerHTML = lectures.map(l => {
+                    // Safety check for keys
+                    const mUrl = l.url || "";
+                    const kId = l.keyId || "";
+                    const kVal = l.key || "";
                     
                     return `
                         <div class="lec-card">
-                            <div class="lec-name">${l.topic}</div>
-                            <a href="./player.html?url=${videoUrl}&keyId=${keyId}&key=${key}" class="play-btn">▶ Watch Video</a>
+                            <div class="lec-title">${l.topic || l.name || "Untitled Lecture"}</div>
+                            <div style="font-size:12px; color:gray; margin-bottom:12px;">📅 Uploaded: ${l.date || 'N/A'}</div>
+                            <a href="./player.html?url=${encodeURIComponent(mUrl)}&keyId=${kId}&key=${kVal}" class="watch-now">▶ Watch Now</a>
                         </div>
                     `;
                 }).join('');
-            } catch(e) {
-                document.getElementById('lecList').innerText = "Error loading lectures.";
+
+            } catch (err) {
+                loader.innerHTML = `<div class="error-msg">❌ API Connection Failed. Browser might be blocking the request.</div>`;
+                console.error("Fetch Error:", err);
             }
         }
-        getLectures();
+
+        fetchLectures();
     </script>
 </body>
 </html>
