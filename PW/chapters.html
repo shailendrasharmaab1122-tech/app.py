@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapters - DevCoderZ</title>
+    <link rel="stylesheet" href="https://www.pw.live/batches-new/index.BZrLlnYz.css">
+    <style>
+        body { background: #f8f8f8; padding: 20px; font-family: sans-serif; }
+        .chapter-grid { display: grid; grid-cols: 1; gap: 15px; max-width: 900px; margin: auto; }
+        ._list-card { background: white; padding: 20px; border-radius: 12px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 5px solid #ff0000; }
+        .heading { text-align: center; margin-bottom: 30px; color: #1b2124; }
+    </style>
+</head>
+<body>
+
+    <div class="heading">
+        <h2 id="subName">Loading Chapters...</h2>
+        <button onclick="history.back()">← Back</button>
+    </div>
+
+    <div id="chaptersContainer" class="chapter-grid"></div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const bId = params.get('batch_id');
+        const sId = params.get('subject_id');
+
+        async function loadChapters() {
+            try {
+                const res = await fetch(`https://eduvibe-pw-api.wasmer.app/chapters.php?batch_id=${bId}&subject_id=${sId}`);
+                const data = await res.json();
+                
+                document.getElementById('subName').innerText = "Chapters List";
+                const container = document.getElementById('chaptersContainer');
+                
+                container.innerHTML = data.topics.map(ch => `
+                    <div class="_list-card" onclick="openLectures('${ch._id}')">
+                        <h3 style="margin:0 0 10px 0;">${ch.name}</h3>
+                        <span style="font-size:13px; color:gray;">
+                            📽️ ${ch.lectureVideos || 0} Videos | 📝 ${ch.notes || 0} Notes
+                        </span>
+                    </div>
+                `).join('');
+            } catch (e) {
+                alert("Failed to load chapters");
+            }
+        }
+
+        function openLectures(topicId) {
+            // Ab ye lectures.html par jayega topic_id ke sath
+            window.location.href = `./lectures.html?batch_id=${bId}&subject_id=${sId}&topic_id=${topicId}`;
+        }
+
+        loadChapters();
+    </script>
+</body>
+</html>
