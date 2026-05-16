@@ -12,7 +12,7 @@ export default async function handler(req, res) {
 
     try {
         // Aapka exact bina 's' wala domain clean redirect ke sath
-        return res.redirect(302, `https://eduvibe-pw.page.gd/batches/?batch_id=${batch_id}`);
+        return res.redirect(302, `https://eduvibe-pw.pages.dev/batches/?batch_id=${batch_id}`);
     } catch (error) {
         return res.status(500).json({ error: "Failed to route traffic." });
     }
