@@ -47,15 +47,14 @@
         const bId = params.get('batch_id');
         const sId = params.get('subject_id');
 
+        // Parameter Validation Safeguard
+        if (!bId || !sId) {
+            window.location.href = "./index.html";
+        }
+
         async function loadChapters() {
             const container = document.getElementById('chaptersContainer');
             const subTitle = document.getElementById('subName');
-
-            if (!bId || !sId) {
-                container.innerHTML = `<div class="text-center text-red-500 font-medium text-sm py-12">❌ Error: Missing configuration IDs.</div>`;
-                subTitle.innerText = "Error";
-                return;
-            }
 
             try {
                 const res = await fetch(`https://eduvibe-pw-api.wasmer.app/chapters.php?batch_id=${bId}&subject_id=${sId}`);
@@ -97,7 +96,7 @@
             window.location.href = `./lectures.html?batch_id=${bId}&subject_id=${sId}&topic_id=${topicId}`;
         }
 
-        loadChapters();
+        if(bId && sId) loadChapters();
     </script>
 </body>
 </html>
