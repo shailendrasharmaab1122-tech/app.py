@@ -1,243 +1,264 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DevCoderz</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-:root {
-    --desktop-trim: -70px;
-    --mobile-trim: -90px;
-}
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased}
-body{background:#f8fafc;color:#0f172a;overflow:hidden;will-change:transform}
-::-webkit-scrollbar{width:6px}
-::-webkit-scrollbar-track{background:#f8fafc}
-::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
-::-webkit-scrollbar-thumb:hover{background:#94a3b8}
-.glow-logo {
-    color: #ffffff;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.4);
-}
-.glow-text{text-shadow:0 0 8px rgba(239,68,68,0.3)}
-@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-.skel-anim{background:linear-gradient(90deg,#f1f5f9 25%,#e2e8f0 50%,#f1f5f9 75%);background-size:200% 100%;animation:shimmer 1s infinite}
-.iframe-wrapper{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;transform:translateZ(0)}
-.iframe-masked{
-    position:absolute;
-    top: var(--desktop-trim);
-    left:0;
-    width:100%;
-    height: calc(100% + -1 * var(--desktop-trim));
-    border:0;
-    will-change:transform;
-}
-@media(max-width:640px){
-    .iframe-masked{
-        top: var(--mobile-trim);
-        height: calc(100% + -1 * var(--mobile-trim));
-    }
-}
-.smooth-gpu{transform:translateZ(0);will-change:transform,opacity;transition:all 0.15s cubic-bezier(0.4,0,0.2,1)}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The DevCoderZ - Batches</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+      body { background: #f8fafc; color: #0f172a; }
+      ::-webkit-scrollbar { width: 6px; }
+      ::-webkit-scrollbar-track { background: #f8fafc; }
+      ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+      @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+      .skel-anim { background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%); background-size: 200% 100%; animation: shimmer 1.2s infinite; }
+      .glow-text { text-shadow: 0 0 8px rgba(239,68,68,0.3); }
+    </style>
 </head>
-<body class="h-screen flex flex-col">
+<body class="min-h-screen flex flex-col pb-16">
 
-<nav class="border-b border-slate-200 bg-[#4f46e5] sticky top-0 z-50 shrink-0 shadow-md smooth-gpu">
-    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+    <nav class="h-16 bg-[#4f46e5] flex items-center justify-between px-6 shadow-md sticky top-0 z-50">
         <div class="flex items-center gap-2">
-            <div class="h-9 w-9 bg-white rounded-lg flex items-center justify-center font-bold text-[#4f46e5] shadow-sm">DC</div>
-            <span class="text-xl font-black tracking-tight glow-logo">The DevCoderZ</span>
+            <div class="h-9 w-9 bg-white rounded-lg flex items-center justify-center font-bold text-[#4f46e5]">DC</div>
+            <span class="text-xl font-black tracking-tight text-white">The DevCoderZ</span>
         </div>
-        <div id="back-button-container" class="hidden">
-            <button onclick="closeIframe()" class="px-4 py-1.5 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs font-bold transition-all border border-white/20">← Back to Batches</button>
+        <div class="text-xs text-white/90 bg-white/10 px-3 py-1.5 rounded-full border border-white/20 font-medium">
+            Smart Learning Platform
+        </div>
+    </nav>
+
+    <div class="sticky top-16 z-40 bg-white border-b border-slate-200 shadow-sm">
+        <div class="max-w-md mx-auto p-4">
+            <input id="searchInput" class="w-full bg-slate-50 text-slate-800 pl-5 pr-5 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:border-[#4f46e5] transition-colors text-sm shadow-inner" placeholder="Search premium batches...">
+        </div>
+        <div class="flex max-w-7xl mx-auto">
+            <button class="flex-1 py-3 text-center text-sm font-bold border-b-2 border-[#4f46e5] text-[#4f46e5]" id="totalTab">Total</button>
+            <button class="flex-1 py-3 text-center text-sm font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-600" id="favTab">Favourites ❤️</button>
         </div>
     </div>
-</nav>
 
-<div id="main-controls" class="shrink-0 smooth-gpu">
-    <div class="bg-white p-4 border-b border-slate-200 shadow-sm">
-        <div class="max-w-md mx-auto relative">
-            <input id="searchInput" class="w-full bg-slate-50 text-slate-800 pl-4 pr-10 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:border-[#4f46e5] transition-colors text-sm shadow-inner" placeholder="Search premium batches..." autocomplete="off">
-        </div>
-    </div>
-    <div class="flex bg-white border-b border-slate-200">
-        <button class="flex-1 py-3 text-center text-sm font-bold border-b-2 border-[#4f46e5] text-[#4f46e5]" id="totalTab">All Batches</button>
-        <button class="flex-1 py-3 text-center text-sm font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-600" id="favTab">Favourites ❤️</button>
-    </div>
-</div>
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6">
+        <div id="total" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+        <div id="fav" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 hidden"></div>
+    </main>
 
-<div class="flex-1 overflow-y-auto p-4 md:p-6" id="scroll-container">
-    <div id="total" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto smooth-gpu"></div>
-    <div id="fav" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto hidden smooth-gpu"></div>
-</div>
+    <footer class="h-12 border-t border-slate-200 bg-white text-center text-xs text-slate-400 flex items-center justify-center gap-1 fixed bottom-0 inset-x-0 z-50 shadow-inner">
+        <span>© 2026 The DevCoderz. All Rights Reserved.</span>
+        <span>•</span>
+        <span>Developed by <span class="text-red-500 font-bold tracking-wide glow-text">Devansh Sharma</span></span>
+    </footer>
 
-<div id="iframe-container" class="hidden fixed inset-x-0 bottom-12 top-16 bg-white z-40 smooth-gpu">
-    <div class="iframe-wrapper">
-        <iframe id="batch-frame" src="" class="iframe-masked" loading="lazy" allowfullscreen></iframe>
-    </div>
-</div>
+    <script>
+      const DATA_SOURCE = "https://eduvibe-mj.pages.dev/allbatches.json";
+      const FALLBACK_IMG = "https://via.placeholder.com/300x200?text=No+Image";
 
-<footer class="border-t border-slate-200 bg-white py-4 fixed bottom-0 inset-x-0 h-12 z-50 text-center text-xs text-slate-400 flex items-center justify-center gap-1 shadow-inner smooth-gpu">
-    <span>© 2026 The DevCoderz. All Rights Reserved.</span>
-    <span>•</span>
-    <span>Developed by <span class="text-red-500 font-bold tracking-wide glow-text">Devansh Sharma</span></span>
-</footer>
+      let ALL = [], filtered = [];
+      let favs = JSON.parse(localStorage.getItem("favs") || "[]");
+      let cachedBatches = JSON.parse(localStorage.getItem("fav_batches") || "{}");
 
-<script>
+      let loaded = 0, LIMIT = 8, loading = false;
 
-const API_BATCHES = "https://devcoderz.vercel.app/api/PW/all-batches-api1.js";
-const API_STREAM = "https://devcoderz.vercel.app/api/PW/all-batches-api2.js";
+      const total = document.getElementById("total");
+      const fav = document.getElementById("fav");
+      const searchInput = document.getElementById("searchInput");
+      const totalTab = document.getElementById("totalTab");
+      const favTab = document.getElementById("favTab");
 
-const FALLBACK_IMG = "https://devcoderz.vercel.app/pw.png";
+      showSkeleton();
 
-let ALL = [], filtered = [], favs = JSON.parse(localStorage.getItem("favs") || "[]");
-let searchTimeout = null;
+      // FETCH DATA
+      fetch(DATA_SOURCE)
+        .then((r) => r.json())
+        .then((d) => {
+          ALL = d.batches || [];
+          filtered = ALL;
+          setTimeout(() => { loadMore(true); }, 200);
+        })
+        .catch(() => {
+          ALL = Object.values(cachedBatches);
+          filtered = ALL;
+          if (ALL.length) { loadMore(true); } 
+          else { total.innerHTML = `<div class="col-span-full text-center text-slate-400 py-12">Failed to load system database.</div>`; }
+        });
 
-const total = document.getElementById("total");
-const fav = document.getElementById("fav");
-const mainControls = document.getElementById("main-controls");
-const scrollContainer = document.getElementById("scroll-container");
-const iframeContainer = document.getElementById("iframe-container");
-const batchFrame = document.getElementById("batch-frame");
-const backButtonContainer = document.getElementById("back-button-container");
-const searchInput = document.getElementById("searchInput");
-const totalTab = document.getElementById("totalTab");
-const favTab = document.getElementById("favTab");
+      function normalizeText(t) { return (t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim(); }
+      function tokenize(t) { return normalizeText(t).split(/\s+/).map((x) => x.replace(/[^a-z0-9]+/g, "")).filter(Boolean); }
 
-showSkeleton();
-
-fetch(API_BATCHES)
-.then(r => r.json())
-.then(d => {
-    ALL = d.batches || d || [];
-    filtered = ALL;
-    renderGrid();
-})
-.catch(() => {
-    total.innerHTML = `<div class="col-span-full text-center text-slate-400 py-12 text-sm">Failed to sync data.</div>`;
-});
-
-function showSkeleton() {
-    let html = "";
-    for(let i=0; i<8; i++) {
-        html += `
-        <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col gap-3 shadow-sm">
-            <div class="skel-anim h-6 w-3/4 rounded"></div>
-            <div class="skel-anim h-40 w-full rounded-xl"></div>
-            <div class="skel-anim h-4 w-1/2 rounded"></div>
-            <div class="skel-anim h-4 w-2/3 rounded"></div>
-            <div class="skel-anim h-10 w-full rounded-xl mt-auto"></div>
-        </div>`;
-    }
-    total.innerHTML = html;
-}
-
-function card(b) {
-    let isFav = favs.includes(b._id);
-    let imgUrl = b.previewImage || FALLBACK_IMG;
-    if(imgUrl.startsWith('/') || imgUrl.includes('pwbatch.png')) {
-        imgUrl = FALLBACK_IMG;
-    }
-
-    return `
-    <div class="bg-white border border-slate-200 rounded-2xl p-4 hover:shadow-md hover:border-slate-300 transition-all duration-150 flex flex-col relative group shadow-sm smooth-gpu">
-        <button class="absolute top-6 right-6 w-8 h-8 rounded-full border border-slate-200 bg-white/80 flex items-center justify-center text-sm z-10 transition-colors hover:bg-slate-50 favorite-btn ${isFav?'text-red-500':''}" data-id="${b._id}">
-            ${isFav?'❤️':'♡'}
-        </button>
-        <h3 class="text-sm font-bold text-slate-800 mb-3 pr-8 truncate group-hover:text-[#4f46e5] transition-colors">${b.name || 'Unnamed Batch'}</h3>
-        <div class="h-36 w-full rounded-xl overflow-hidden bg-slate-100 border border-slate-100 mb-3 relative shrink-0">
-            <img class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-103" loading="lazy" src="${imgUrl}" onerror="this.src='${FALLBACK_IMG}'">
-        </div>
-        <div class="space-y-1 mb-4 text-[11px] text-slate-500">
-            <div class="truncate">👨‍🎓 ${b.byName || 'Expert Faculty'}</div>
-            <div>🗣️ ${b.language || 'Hinglish'}</div>
-            <div class="truncate text-[10px] text-slate-400">🗓️ ${b.startDate || ''} → ${b.endDate || ''}</div>
-        </div>
-        <div class="text-xs font-bold text-emerald-600 mb-3 mt-auto">${b.feeTotal ? "₹ " + b.feeTotal : "Free Resource"}</div>
-        <button class="w-full bg-[#4f46e5] hover:bg-[#4338ca] text-white text-xs font-bold py-2.5 rounded-xl transition-all duration-150 explore-btn" data-id="${b._id}">Explore Now</button>
-    </div>`;
-}
-
-function renderGrid() {
-    if(!filtered.length) {
-        total.innerHTML = `<div class="col-span-full text-center text-slate-400 py-12 text-sm">No operational streams match query.</div>`;
-        return;
-    }
-    const fragment = document.createRange().createContextualFragment(filtered.map(card).join(""));
-    total.innerHTML = "";
-    total.appendChild(fragment);
-}
-
-document.addEventListener("click", e => {
-    const target = e.target;
-    if(target.classList.contains("favorite-btn") || target.closest(".favorite-btn")) {
-        const btn = target.classList.contains("favorite-btn") ? target : target.closest(".favorite-btn");
-        let id = btn.dataset.id;
-        favs = favs.includes(id) ? favs.filter(f => f !== id) : [...favs, id];
-        localStorage.setItem("favs", JSON.stringify(favs));
-        btn.classList.toggle("text-red-500");
-        btn.innerHTML = favs.includes(id) ? "❤️" : "♡";
-        if(!fav.classList.contains("hidden")) renderFav();
-    }
-
-    if(target.classList.contains("explore-btn")) {
-        launchIframe(target.dataset.id);
-    }
-});
-
-function launchIframe(id) {
-    mainControls.classList.add("hidden");
-    scrollContainer.classList.add("hidden");
-    iframeContainer.classList.remove("hidden");
-    backButtonContainer.classList.remove("hidden");
-    batchFrame.src = API_STREAM + "?batch_id=" + id;
-}
-
-function closeIframe() {
-    iframeContainer.classList.add("hidden");
-    backButtonContainer.classList.add("hidden");
-    mainControls.classList.remove("hidden");
-    scrollContainer.classList.remove("hidden");
-    batchFrame.removeAttribute("src");
-}
-
-function setTab(active, inactive, showEl, hideEl) {
-    active.classList.remove("border-transparent", "text-slate-400");
-    active.classList.add("border-[#4f46e5]", "text-[#4f46e5]");
-    inactive.classList.remove("border-red-500", "text-[#4f46e5]");
-    inactive.classList.add("border-transparent", "text-slate-400");
-    showEl.classList.remove("hidden");
-    hideEl.classList.add("hidden");
-}
-
-totalTab.onclick = () => { setTab(totalTab, favTab, total, fav); };
-favTab.onclick = () => { setTab(favTab, total, fav, total); renderFav(); };
-
-function renderFav() {
-    let items = ALL.filter(b => favs.includes(b._id));
-    if(items.length){
-        const fragment = document.createRange().createContextualFragment(items.map(card).join(""));
-        fav.innerHTML = "";
-        fav.appendChild(fragment);
-    } else {
-        fav.innerHTML = `<div class="col-span-full text-center text-slate-400 py-12 text-sm">Bookmarks repository empty. ❤️</div>`;
-    }
-}
-
-searchInput.addEventListener("input", function() {
-    clearTimeout(searchTimeout);
-    const query = this.value.toLowerCase().trim();
-    
-    searchTimeout = setTimeout(() => {
-        filtered = ALL.filter(b => (b.name || "").toLowerCase().includes(query));
-        if(!fav.classList.contains("hidden")) {
-            setTab(totalTab, favTab, total, fav);
+      function calcLevenshtein(a, b) {
+        if (!a.length) return b.length; if (!b.length) return a.length;
+        let prev = Array(b.length + 1).fill(0).map((_, i) => i), curr = Array(b.length + 1);
+        for (let i = 0; i < a.length; i++) {
+          curr[0] = i + 1;
+          for (let j = 0; j < b.length; j++) {
+            curr[j + 1] = Math.min(curr[j] + 1, prev[j + 1] + 1, prev[j] + (a[i] === b[j] ? 0 : 1));
+          }
+          [prev, curr] = [curr, prev];
         }
-        renderGrid();
-    }, 150);
-});
-</script>
+        return prev[b.length];
+      }
+
+      // FUZZY SEARCH ENGINE
+      function performFuzzySearch(searchTerm, sourceArray) {
+        if (!searchTerm) return sourceArray.slice();
+        const normalized = normalizeText(searchTerm);
+        const tokens = tokenize(searchTerm).filter((t) => t.length >= 1);
+        const results = [];
+
+        sourceArray.forEach((batch, idx) => {
+          const batchNorm = normalizeText(batch.name);
+          let score = 0, matchType = "none";
+          if (batchNorm === normalized) { score = 1000; matchType = "exact"; } 
+          else if (batchNorm.includes(normalized)) { score = 500; matchType = "substring"; } 
+          else {
+            const batchTokens = tokenize(batch.name).filter((t) => t.length >= 1);
+            if (!batchTokens.length || !tokens.length) return;
+            let totalScore = 0, matched = 0, exactMatches = 0;
+            tokens.forEach((st) => {
+              let best = 0, foundExact = false;
+              batchTokens.forEach((bt) => {
+                if (bt === st) { best = 100; foundExact = true; } 
+                else if (bt.includes(st) && st.length >= 2) { best = Math.max(best, 85); } 
+                else if (st.includes(bt) && bt.length >= 2) { best = Math.max(best, 75); } 
+                else {
+                  const mx = Math.max(st.length, bt.length);
+                  const sim = ((mx - calcLevenshtein(st, bt)) / mx) * 100;
+                  if (sim > best) best = sim;
+                }
+              });
+              if (best >= 40) { totalScore += best; matched++; if (foundExact) exactMatches++; }
+            });
+            if (matched > 0) {
+              const avg = totalScore / tokens.length; const matchRatio = matched / tokens.length;
+              if (avg >= 55) { score = avg * matchRatio * 10; if (exactMatches > 0) score += exactMatches * 50; if (matchRatio === 1) score += 100; matchType = "fuzzy"; }
+            }
+          }
+          if (matchType !== "none") { results.push({ batch, score: Math.round(score), index: idx, matchType }); }
+        });
+        results.sort((a, b) => {
+          if (a.matchType !== b.matchType) { return { exact: 0, substring: 1, fuzzy: 2 }[a.matchType] - { exact: 0, substring: 1, fuzzy: 2 }[b.matchType]; }
+          return b.score - a.score || a.index - b.index;
+        });
+        return results.map((r) => r.batch);
+      }
+
+      function showSkeleton() {
+        let html = "";
+        for (let i = 0; i < 8; i++) {
+          html += `
+            <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col gap-3 shadow-sm">
+                <div class="skel-anim h-6 w-3/4 rounded"></div>
+                <div class="skel-anim h-40 w-full rounded-xl"></div>
+                <div class="skel-anim h-4 w-1/2 rounded"></div>
+                <div class="skel-anim h-4 w-2/3 rounded"></div>
+                <div class="skel-anim h-10 w-full rounded-xl mt-auto"></div>
+            </div>`;
+        }
+        total.innerHTML = html;
+      }
+
+      function card(b) {
+        let isFav = favs.includes(b._id);
+        let imgUrl = b.previewImage || FALLBACK_IMG;
+        if (imgUrl.startsWith('/') || imgUrl.includes('pwbatch.png')) imgUrl = FALLBACK_IMG;
+
+        return `
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 hover:shadow-md hover:border-slate-300 transition-all flex flex-col relative group shadow-sm" data-id="${b._id}">
+            <button class="absolute top-6 right-6 w-8 h-8 rounded-full border border-slate-200 bg-white/80 flex items-center justify-center text-sm z-10 favorite-btn ${isFav?'text-red-500 font-bold':''}">
+                ${isFav?'❤️':'♡'}
+            </button>
+            <h3 class="text-sm font-bold text-slate-800 mb-3 pr-8 truncate group-hover:text-[#4f46e5] transition-colors">${b.name || 'Premium Batch'}</h3>
+            <div class="h-36 w-full rounded-xl overflow-hidden bg-slate-50 border border-slate-100 mb-3 shrink-0">
+                <img class="w-full h-full object-contain p-2" loading="lazy" src="${imgUrl}" onerror="this.src='${FALLBACK_IMG}'">
+            </div>
+            <div class="space-y-1 mb-4 text-[12px] text-slate-500">
+                <div class="truncate">👨‍🎓 ${b.byName || 'Top Faculty'}</div>
+                <div>🗣️ ${b.language || 'Hinglish'}</div>
+                <div class="truncate text-[10px] text-slate-400">🗓️ ${b.startDate || ''} → ${b.endDate || ''}</div>
+            </div>
+            <div class="text-xs font-bold text-emerald-600 mb-3 mt-auto">${b.feeTotal ? "₹ " + b.feeTotal : "Free"}</div>
+            <button class="w-full bg-[#4f46e5] hover:bg-[#4338ca] text-white text-xs font-bold py-2.5 rounded-xl transition-all explore-btn" data-id="${b._id}">Explore</button>
+        </div>`;
+      }
+
+      function loadMore(reset = false) {
+        if (loading) return; loading = true;
+        if (reset) { total.innerHTML = ""; loaded = 0; }
+        let slice = filtered.slice(loaded, loaded + LIMIT);
+        if (!slice.length && loaded === 0) {
+          total.innerHTML = `<div class="col-span-full text-center text-slate-400 py-12 text-sm">No batches found.</div>`;
+          loading = false; return;
+        }
+        total.innerHTML += slice.map(card).join("");
+        loaded += LIMIT; loading = false;
+      }
+
+      window.addEventListener("scroll", () => {
+        if (total.classList.contains("hidden")) return;
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) { loadMore(); }
+      });
+
+      document.addEventListener("click", (e) => {
+        if (e.target.classList.contains("favorite-btn")) {
+          let id = e.target.closest("[data-id]").dataset.id;
+          let batch = ALL.find((b) => b._id === id);
+
+          if (favs.includes(id)) {
+            favs = favs.filter((f) => f !== id); delete cachedBatches[id];
+          } else {
+            favs.push(id); if (batch) cachedBatches[id] = batch;
+          }
+
+          localStorage.setItem("favs", JSON.stringify(favs));
+          localStorage.setItem("fav_batches", JSON.stringify(cachedBatches));
+
+          document.querySelectorAll(`[data-id="${id}"] .favorite-btn`).forEach((b) => {
+            b.classList.toggle("text-red-500", favs.includes(id));
+            b.innerHTML = favs.includes(id) ? "❤️" : "♡";
+          });
+          if (!fav.classList.contains("hidden")) renderFav();
+        }
+
+        // REDIRECTION FIXED TO BATCHES.HTML
+        if (e.target.classList.contains("explore-btn")) {
+          let id = e.target.dataset.id;
+          let batch = ALL.find((b) => b._id === id) || cachedBatches[id];
+          
+          if (batch) {
+            let startDate = new Date(batch.startDate);
+            let now = new Date();
+            if (!isNaN(startDate.getTime()) && startDate > now) {
+              let ok = confirm(`⚠️ This batch has not started yet.\n\nStart Date: ${batch.startDate}\n\nDo you still want to continue?`);
+              if (!ok) return;
+            }
+          }
+          
+          // Strict point to batches.html
+          window.location.href = "batches.html?batch_id=" + id;
+        }
+      });
+
+      function setTab(active, inactive, showEl, hideEl) {
+        active.classList.remove("border-transparent", "text-slate-400"); active.classList.add("border-[#4f46e5]", "text-[#4f46e5]");
+        inactive.classList.remove("border-[#4f46e5]", "text-[#4f46e5]"); inactive.classList.add("border-transparent", "text-slate-400");
+        showEl.classList.remove("hidden"); hideEl.classList.add("hidden");
+      }
+
+      totalTab.onclick = () => { setTab(totalTab, favTab, total, fav); };
+      favTab.onclick = () => { setTab(favTab, total, fav, total); renderFav(); };
+
+      function renderFav() {
+        let items = favs.map((id) => cachedBatches[id]).filter(Boolean);
+        fav.innerHTML = items.length ? items.map(card).join("") : `<div class="col-span-full text-center text-slate-400 py-12 text-sm">No favourites yet ❤️</div>`;
+      }
+
+      searchInput.oninput = function () {
+        let q = this.value.trim();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        filtered = performFuzzySearch(q, ALL);
+        if (!fav.classList.contains("hidden")) { setTab(totalTab, favTab, total, fav); }
+        loadMore(true);
+      };
+    </script>
 </body>
 </html>
