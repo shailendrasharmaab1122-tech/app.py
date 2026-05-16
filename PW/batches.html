@@ -54,30 +54,52 @@
                 const res = await fetch(`https://eduvibe-pw-api.wasmer.app/batch.php?batch_id=${bId}`);
                 const data = await res.json();
                 
-                const subjects = data.subjects || data.data?.subjects || [];
+                // Deep parsing fallback structures
+                const subjects = data.subjects || data.data?.subjects || data.data || (Array.isArray(data) ? data : []);
 
                 if (subjects.length === 0) {
                     container.innerHTML = `<div class="col-span-full text-center text-slate-400 py-12 text-sm">⚠️ No premium streaming feeds listed inside this channel matrix.</div>`;
                     return;
                 }
 
-                container.innerHTML = subjects.map(s => `
-                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all duration-150 cursor-pointer border-l-4 border-l-[#4f46e5] flex flex-col justify-between h-32 group" onclick="openChapters('${s._id}')">
+                container.innerHTML = subjects.map(s => {
+                    // Safe key mapping checks for Name
+                    const subjectName = s.name || s.subjectName || s.topic || s.title || "Premium Subject Channel";
+                    
+                    // Safe key mapping checks for Faculty/Teacher
+                    let facultyName = "Expert Mentor";
+                    if (s.faculties && Array.isArray(s.faculties) && s.faculties.length > 0) {
+                        facultyName = s.faculties.map(f => f.name || f.facultyName).filter(Boolean).join(', ');
+                    } else if (s.faculty || s.teacher) {
+                        facultyName = s.faculty || s.teacher;
+                    }
+
+                    // Safe ID fetch
+                    const targetId = s._id || s.id || s.subject_id;
+
+                    return `
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all duration-150 cursor-pointer border-l-4 border-l-[#4f46e5] flex flex-col justify-between h-32 group" onclick="openChapters('${targetId}')">
                         <div>
-                            <h3 class="text-sm font-bold text-slate-800 tracking-tight leading-snug group-hover:text-[#4f46e5] transition-colors truncate">${s.name}</h3>
-                            <p class="text-[11px] text-slate-400 font-medium mt-1 truncate">Teacher: ${s.faculties?.map(f=>f.name).join(', ') || 'Expert Mentor'}</p>
+                            <h3 class="text-sm font-bold text-slate-800 tracking-tight leading-snug group-hover:text-[#4f46e5] transition-colors truncate">${subjectName}</h3>
+                            <p class="text-[11px] text-slate-400 font-medium mt-1 truncate">Teacher: ${facultyName}</p>
                         </div>
                         <div class="flex items-center justify-between border-t border-slate-50 pt-3 mt-2 text-[11px] font-bold text-[#4f46e5]">
                             <span>Enter Vault →</span>
                         </div>
                     </div>
-                `).join('');
+                    `;
+                }).join('');
             } catch (e) {
+                console.error(e);
                 container.innerHTML = `<div class="col-span-full text-center text-red-500 font-medium text-sm py-12">❌ Core network connection drop. Verify cluster instance health.</div>`;
             }
         }
 
         function openChapters(subjectId) {
+            if(!subjectId || subjectId === 'undefined') {
+                alert("Error: Subject Stream Mapping ID is empty.");
+                return;
+            }
             window.location.href = `./chapters.html?batch_id=${bId}&subject_id=${subjectId}`;
         }
 
