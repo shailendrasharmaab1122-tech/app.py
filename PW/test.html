@@ -66,7 +66,10 @@ body{background:#f8fafc;color:#0f172a;overflow:hidden}
 </footer>
 
 <script>
-const FALLBACK_IMG = "https://via.placeholder.com/300x200?text=No+Thumbnail+Available";
+const _0x4d2a = "YUhSMGNITTZMeTlsWkhWMmFXSmxjaTVmYm1VdVlYQndMekZ3Y0M5aGJHeC1ZWFJsWTJobGN6MXJiV011YW5O";
+const _0x4d2b = "YUhSMGNITTZMeTlsWkhWMmFXSmxjaTVmYm1VdVlYQndMekZ3Y0M5aGJHeC1ZWFJsWTJobGN6MXlZUzVqY3c9PQ==";
+const FALLBACK_IMG = "https://via.placeholder.com/300x200?text=Dev+Coderz+Premium";
+
 let ALL = [], filtered = [], favs = JSON.parse(localStorage.getItem("favs") || "[]");
 
 const total = document.getElementById("total");
@@ -83,7 +86,9 @@ const favTab = document.getElementById("favTab");
 
 showSkeleton();
 
-fetch("https://eduvibe-mj.pages.dev/allbatches.json")
+const dU = (s) => atob(atob(s));
+
+fetch(dU(_0x4d2a))
 .then(r => r.json())
 .then(d => {
     ALL = d.batches || d || [];
@@ -112,8 +117,8 @@ function showSkeleton() {
 function card(b) {
     let isFav = favs.includes(b._id);
     let imgUrl = b.previewImage || FALLBACK_IMG;
-    if(imgUrl.startsWith('/')) {
-        imgUrl = "https://devcoderz.vercel.app" + imgUrl;
+    if(imgUrl.startsWith('/') || imgUrl.includes('pwbatch.png')) {
+        imgUrl = FALLBACK_IMG;
     }
 
     return `
@@ -165,7 +170,7 @@ function launchIframe(id) {
     scrollContainer.classList.add("hidden");
     iframeContainer.classList.remove("hidden");
     backButtonContainer.classList.remove("hidden");
-    batchFrame.src = `https://eduvibe-pw.pages.dev/batches/?batch_id=${id}`;
+    batchFrame.src = dU(_0x4d2b) + "?batch_id=" + id;
 }
 
 function closeIframe() {
