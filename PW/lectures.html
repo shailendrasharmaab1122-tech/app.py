@@ -43,6 +43,11 @@
         const sId = params.get('subject_id');
         const tId = params.get('topic_id');
 
+        // Parameter Validation Safeguard
+        if (!tId || !bId) {
+            window.location.href = "./index.html";
+        }
+
         const targetApi = `https://eduvibe-pw-api.wasmer.app/lectures.php?batch_id=${bId}&subject_id=${sId}&topic_id=${tId}`;
         
         const proxies = [
@@ -55,11 +60,6 @@
             const loader = document.getElementById('loader');
             const loaderText = document.getElementById('loaderText');
             const spinner = document.getElementById('spinner');
-
-            if (!tId) {
-                loader.innerHTML = `<div class="text-center text-red-500 font-medium text-sm">❌ Error: Missing Navigation Parameters.</div>`;
-                return;
-            }
 
             if (index >= proxies.length) {
                 spinner.classList.add('hidden');
@@ -87,7 +87,7 @@
 
             try {
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 7000);
+                const timeoutId = setTimeout(() => controller.abort(), 6000); 
 
                 const response = await fetch(currentProxy.url, { signal: controller.signal });
                 clearTimeout(timeoutId);
@@ -96,3 +96,43 @@
 
                 const resData = await response.json();
                 let data;
+
+                if (currentProxy.type === "allorigins") {
+                    data = JSON.parse(resData.contents);
+                } else {
+                    data = resData;
+                }
+
+                const lectures = data.lectures || data.data || (Array.isArray(data) ? data : []);
+
+                if (lectures.length === 0) {
+                    loader.innerHTML = `<div class="text-center text-slate-400 py-12 text-sm">⚠️ No lectures indexed for this topic ID.</div>`;
+                    return;
+                }
+
+                loader.classList.add('hidden');
+                container.classList.remove('hidden');
+
+                container.innerHTML = lectures.map(l => {
+                    return `
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md border-l-4 border-l-[#4f46e5] flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all">
+                        <div class="space-y-1">
+                            <h3 class="text-sm font-bold text-slate-800 leading-snug">${l.topic || l.name || "Untitled Lecture Stream"}</h3>
+                            <div class="text-[11px] font-medium text-slate-400">📅 Date: ${l.date || 'N/A'}</div>
+                        </div>
+                        <a href="./player.html?url=${encodeURIComponent(l.url || '')}&keyId=${l.keyId || ''}&key=${l.key || ''}" class="bg-[#4f46e5] hover:bg-[#4338ca] text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all text-center whitespace-nowrap shadow-sm">
+                            ▶ Watch Now
+                        </a>
+                    </div>`;
+                }).join('');
+
+            } catch (err) {
+                console.warn(`${currentProxy.name} failed, switching layer...`);
+                fetchWithFallback(index + 1);
+            }
+        }
+
+        if(tId && bId) fetchWithFallback();
+    </script>
+</body>
+</html>
