@@ -3,44 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DevCoderZ</title>
+<title>Dev Coderz</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
-body{background:#ffffff;color:#0f172a;overflow:hidden}
+body{background:#f8fafc;color:#0f172a;overflow:hidden}
 ::-webkit-scrollbar{width:6px}
-::-webkit-scrollbar-track{background:#ffffff}
+::-webkit-scrollbar-track{background:#f8fafc}
 ::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
 ::-webkit-scrollbar-thumb:hover{background:#94a3b8}
 .glow-text{text-shadow:0 0 8px rgba(239,68,68,0.3)}
 @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-.skel-anim{background:linear-gradient(90deg,#f1f5f9 25%,#e2e8f0 50%,#f1f5f9 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
+.skel-anim{background:linear-gradient(90deg,#f1f5f9 25%,#e2e8f0 50%,#f1f5f9 75%);background-size:200% 100%;animation:shimmer 1.2s infinite}
+.iframe-wrapper{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden}
+.iframe-masked{position:absolute;top:-260px;left:0;width:100%;height:calc(100% + 260px);border:0}
+@media(max-width:640px){.iframe-masked{top:-290px;height:calc(100% + 290px)}}
 </style>
 </head>
 <body class="h-screen flex flex-col">
 
-<nav class="border-b border-slate-200 bg-white sticky top-0 z-50 shrink-0">
+<nav class="border-b border-slate-200 bg-[#4f46e5] sticky top-0 z-50 shrink-0 shadow-md">
     <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
         <div class="flex items-center gap-2">
-            <div class="h-9 w-9 bg-gradient-to-tr from-red-600 to-amber-500 rounded-lg flex items-center justify-center font-bold text-white shadow-md shadow-red-500/10">DC</div>
-            <span class="text-xl font-extrabold tracking-tight text-slate-900">
-                Dev<span class="text-red-500">CoderZ/span>
+            <div class="h-9 w-9 bg-white rounded-lg flex items-center justify-center font-bold text-[#4f46e5] shadow-sm">DC</div>
+            <span class="text-xl font-black tracking-tight text-white">
+                Dev<span class="text-[#38bdf8]">CoderZ</span>
             </span>
         </div>
         <div id="back-button-container" class="hidden">
-            <button onclick="closeIframe()" class="px-4 py-1.5 bg-slate-100 hover:bg-red-500 hover:text-white text-slate-700 rounded-lg text-xs font-bold transition-colors">← Back to Batches</button>
+            <button onclick="closeIframe()" class="px-4 py-1.5 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs font-bold transition-all border border-white/20">← Back to Batches</button>
         </div>
     </div>
 </nav>
 
 <div id="main-controls" class="shrink-0">
-    <div class="bg-white p-4 border-b border-slate-200">
+    <div class="bg-white p-4 border-b border-slate-200 shadow-sm">
         <div class="max-w-md mx-auto relative">
-            <input id="searchInput" class="w-full bg-slate-50 text-slate-800 pl-4 pr-10 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:border-red-500 transition-colors text-sm" placeholder="Search premium batches...">
+            <input id="searchInput" class="w-full bg-slate-50 text-slate-800 pl-4 pr-10 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:border-[#4f46e5] transition-colors text-sm shadow-inner" placeholder="Search premium batches...">
         </div>
     </div>
     <div class="flex bg-white border-b border-slate-200">
-        <button class="flex-1 py-3 text-center text-sm font-bold border-b-2 border-red-500 text-red-500" id="totalTab">All Batches</button>
+        <button class="flex-1 py-3 text-center text-sm font-bold border-b-2 border-[#4f46e5] text-[#4f46e5]" id="totalTab">All Batches</button>
         <button class="flex-1 py-3 text-center text-sm font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-600" id="favTab">Favourites ❤️</button>
     </div>
 </div>
@@ -51,10 +54,12 @@ body{background:#ffffff;color:#0f172a;overflow:hidden}
 </div>
 
 <div id="iframe-container" class="hidden fixed inset-x-0 bottom-12 top-16 bg-white z-40">
-    <iframe id="batch-frame" src="" class="w-full h-full border-0" allowfullscreen></iframe>
+    <div class="iframe-wrapper">
+        <iframe id="batch-frame" src="" class="iframe-masked" allowfullscreen></iframe>
+    </div>
 </div>
 
-<footer class="border-t border-slate-200 bg-white py-4 fixed bottom-0 inset-x-0 h-12 z-50 text-center text-xs text-slate-400 flex items-center justify-center gap-1">
+<footer class="border-t border-slate-200 bg-white py-4 fixed bottom-0 inset-x-0 h-12 z-50 text-center text-xs text-slate-400 flex items-center justify-center gap-1 shadow-inner">
     <span>© 2026 Dev Coderz. All Rights Reserved.</span>
     <span>•</span>
     <span>Developed by <span class="text-red-500 font-bold tracking-wide glow-text">Devansh Sharma</span></span>
@@ -83,7 +88,7 @@ fetch("https://eduvibe-mj.pages.dev/allbatches.json")
 .then(d => {
     ALL = d.batches || d || [];
     filtered = ALL;
-    setTimeout(() => { renderGrid(); }, 400);
+    renderGrid();
 })
 .catch(() => {
     total.innerHTML = `<div class="col-span-full text-center text-slate-400 py-12 text-sm">Failed to sync data.</div>`;
@@ -93,7 +98,7 @@ function showSkeleton() {
     let html = "";
     for(let i=0; i<8; i++) {
         html += `
-        <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col gap-3">
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col gap-3 shadow-sm">
             <div class="skel-anim h-6 w-3/4 rounded"></div>
             <div class="skel-anim h-40 w-full rounded-xl"></div>
             <div class="skel-anim h-4 w-1/2 rounded"></div>
@@ -112,13 +117,13 @@ function card(b) {
     }
 
     return `
-    <div class="bg-white border border-slate-200 rounded-2xl p-4 hover:shadow-lg hover:border-slate-300 transition-all duration-300 flex flex-col relative group">
+    <div class="bg-white border border-slate-200 rounded-2xl p-4 hover:shadow-md hover:border-slate-300 transition-all duration-200 flex flex-col relative group shadow-sm">
         <button class="absolute top-6 right-6 w-8 h-8 rounded-full border border-slate-200 bg-white/80 flex items-center justify-center text-sm z-10 transition-colors hover:bg-slate-50 favorite-btn ${isFav?'text-red-500':''}" data-id="${b._id}">
             ${isFav?'❤️':'♡'}
         </button>
-        <h3 class="text-sm font-bold text-slate-800 mb-3 pr-8 truncate group-hover:text-red-500 transition-colors">${b.name || 'Unnamed Batch'}</h3>
+        <h3 class="text-sm font-bold text-slate-800 mb-3 pr-8 truncate group-hover:text-[#4f46e5] transition-colors">${b.name || 'Unnamed Batch'}</h3>
         <div class="h-36 w-full rounded-xl overflow-hidden bg-slate-100 border border-slate-100 mb-3 relative shrink-0">
-            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" src="${imgUrl}" onerror="this.src='${FALLBACK_IMG}'">
+            <img class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-103" loading="lazy" src="${imgUrl}" onerror="this.src='${FALLBACK_IMG}'">
         </div>
         <div class="space-y-1 mb-4 text-[11px] text-slate-500">
             <div class="truncate">👨‍🎓 ${b.byName || 'Expert Faculty'}</div>
@@ -126,7 +131,7 @@ function card(b) {
             <div class="truncate text-[10px] text-slate-400">🗓️ ${b.startDate || ''} → ${b.endDate || ''}</div>
         </div>
         <div class="text-xs font-bold text-emerald-600 mb-3 mt-auto">${b.feeTotal ? "₹ " + b.feeTotal : "Free Resource"}</div>
-        <button class="w-full bg-slate-900 hover:bg-red-500 text-white text-xs font-bold py-2.5 rounded-xl transition-all duration-300 explore-btn" data-id="${b._id}">Explore Now</button>
+        <button class="w-full bg-[#4f46e5] hover:bg-[#4338ca] text-white text-xs font-bold py-2.5 rounded-xl transition-all duration-200 explore-btn" data-id="${b._id}">Explore Now</button>
     </div>`;
 }
 
@@ -173,8 +178,8 @@ function closeIframe() {
 
 function setTab(active, inactive, showEl, hideEl) {
     active.classList.remove("border-transparent", "text-slate-400");
-    active.classList.add("border-red-500", "text-red-500");
-    inactive.classList.remove("border-red-500", "text-red-500");
+    active.classList.add("border-[#4f46e5]", "text-[#4f46e5]");
+    inactive.classList.remove("border-[#4f46e5]", "text-[#4f46e5]");
     inactive.classList.add("border-transparent", "text-slate-400");
     showEl.classList.remove("hidden");
     hideEl.classList.add("hidden");
