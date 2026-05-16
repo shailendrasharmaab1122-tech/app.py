@@ -66,8 +66,8 @@ body{background:#f8fafc;color:#0f172a;overflow:hidden}
 </footer>
 
 <script>
-const _0x4d2a = "YUhSMGNITTZMeTlsWkhWMmFXSmxjaTVmYm1VdVlYQndMekZ3Y0M5aGJHeC1ZWFJsWTJobGN6MXJiV011YW5O";
-const _0x4d2b = "YUhSMGNITTZMeTlsWkhWMmFXSmxjaTVmYm1VdVlYQndMekZ3Y0M5aGJHeC1ZWFJsWTJobGN6MXlZUzVqY3c9PQ==";
+const API_BATCHES = "https://devcoderz.vercel.app/api/PW/all-batches-api1.js";
+const API_STREAM = "https://devcoderz.vercel.app/api/PW/all-batches-api2.js";
 const FALLBACK_IMG = "https://via.placeholder.com/300x200?text=Dev+Coderz+Premium";
 
 let ALL = [], filtered = [], favs = JSON.parse(localStorage.getItem("favs") || "[]");
@@ -86,9 +86,7 @@ const favTab = document.getElementById("favTab");
 
 showSkeleton();
 
-const dU = (s) => atob(atob(s));
-
-fetch(dU(_0x4d2a))
+fetch(API_BATCHES)
 .then(r => r.json())
 .then(d => {
     ALL = d.batches || d || [];
@@ -170,7 +168,7 @@ function launchIframe(id) {
     scrollContainer.classList.add("hidden");
     iframeContainer.classList.remove("hidden");
     backButtonContainer.classList.remove("hidden");
-    batchFrame.src = dU(_0x4d2b) + "?batch_id=" + id;
+    batchFrame.src = API_STREAM + "?batch_id=" + id;
 }
 
 function closeIframe() {
