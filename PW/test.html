@@ -3,43 +3,42 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dev Coderz - Premium Portal</title>
+<title>Dev Coderz</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
-body{background:#020617;color:#f8fafc;overflow:hidden}
+body{background:#ffffff;color:#0f172a;overflow:hidden}
 ::-webkit-scrollbar{width:6px}
-::-webkit-scrollbar-track{background:#020617}
-::-webkit-scrollbar-thumb{background:#1e293b;border-radius:3px}
-::-webkit-scrollbar-thumb:hover{background:#334155}
-.glow-text{text-shadow:0 0 10px rgba(239,68,68,0.6),0 0 20px rgba(239,68,68,0.4)}
+::-webkit-scrollbar-track{background:#ffffff}
+::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:#94a3b8}
+.glow-text{text-shadow:0 0 8px rgba(239,68,68,0.3)}
 @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-.skel-anim{background:linear-gradient(90deg,#0f172a 25%,#1e293b 50%,#0f172a 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
+.skel-anim{background:linear-gradient(90deg,#f1f5f9 25%,#e2e8f0 50%,#f1f5f9 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
 </style>
 </head>
 <body class="h-screen flex flex-col">
 
-<nav class="border-b border-slate-900 bg-slate-950/80 backdrop-blur sticky top-0 z-50 shrink-0">
+<nav class="border-b border-slate-200 bg-white sticky top-0 z-50 shrink-0">
     <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
         <div class="flex items-center gap-2">
-            <div class="h-9 w-9 bg-gradient-to-tr from-red-600 to-amber-500 rounded-lg flex items-center justify-center font-bold text-white shadow-lg shadow-red-500/20">DC</div>
-            <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
+            <div class="h-9 w-9 bg-gradient-to-tr from-red-600 to-amber-500 rounded-lg flex items-center justify-center font-bold text-white shadow-md shadow-red-500/10">DC</div>
+            <span class="text-xl font-extrabold tracking-tight text-slate-900">
                 Dev <span class="text-red-500">Coderz</span>
             </span>
         </div>
-        <div class="text-xs font-semibold text-slate-400 bg-slate-900 px-3 py-1.5 rounded-full border border-slate-800">Smart Hub</div>
     </div>
 </nav>
 
-<div class="bg-slate-950 p-4 border-b border-slate-900 shrink-0">
+<div class="bg-white p-4 border-b border-slate-200 shrink-0">
     <div class="max-w-md mx-auto relative">
-        <input id="searchInput" class="w-full bg-slate-900 text-slate-200 pl-4 pr-10 py-2.5 rounded-full border border-slate-800 focus:outline-none focus:border-red-500 transition-colors text-sm" placeholder="Search premium batches...">
+        <input id="searchInput" class="w-full bg-slate-50 text-slate-800 pl-4 pr-10 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:border-red-500 transition-colors text-sm" placeholder="Search premium batches...">
     </div>
 </div>
 
-<div class="flex bg-slate-950 border-b border-slate-900 shrink-0">
+<div class="flex bg-white border-b border-slate-200 shrink-0">
     <button class="flex-1 py-3 text-center text-sm font-bold border-b-2 border-red-500 text-red-500" id="totalTab">All Batches</button>
-    <button class="flex-1 py-3 text-center text-sm font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200" id="favTab">Favourites ❤️</button>
+    <button class="flex-1 py-3 text-center text-sm font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-600" id="favTab">Favourites ❤️</button>
 </div>
 
 <div class="flex-1 overflow-y-auto p-4 md:p-6" id="scroll-container">
@@ -47,18 +46,18 @@ body{background:#020617;color:#f8fafc;overflow:hidden}
     <div id="fav" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto hidden"></div>
     
     <div id="iframe-container" class="max-w-5xl mx-auto hidden mt-2">
-        <div class="flex items-center justify-between p-3 bg-slate-900 border border-slate-800 rounded-t-xl">
-            <button onclick="closeIframe()" class="px-4 py-1.5 bg-slate-800 hover:bg-red-600 rounded-lg text-xs font-bold transition-colors flex items-center gap-1">← Back</button>
-            <span id="iframe-title" class="text-xs font-bold text-slate-300 tracking-wide truncate max-w-[200px] sm:max-w-md">Batch View</span>
-            <span class="text-[10px] bg-red-500/10 text-red-400 border border-red-500/20 px-2 py-0.5 rounded font-mono">Terminal Active</span>
+        <div class="flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-t-xl">
+            <button onclick="closeIframe()" class="px-4 py-1.5 bg-slate-200 hover:bg-red-600 hover:text-white text-slate-700 rounded-lg text-xs font-bold transition-colors flex items-center gap-1">← Back</button>
+            <span id="iframe-title" class="text-xs font-bold text-slate-700 tracking-wide truncate max-w-[200px] sm:max-w-md">Batch View</span>
+            <span class="text-[10px] bg-red-500/10 text-red-600 border border-red-500/20 px-2 py-0.5 rounded font-mono">Terminal Active</span>
         </div>
-        <div class="w-full bg-black rounded-b-xl overflow-hidden border-x border-b border-slate-800 aspect-[16/10] md:h-[70vh]">
+        <div class="w-full bg-black rounded-b-xl overflow-hidden border-x border-b border-slate-200 aspect-[16/10] md:h-[70vh]">
             <iframe id="batch-frame" src="" class="w-full h-full border-0" allowfullscreen></iframe>
         </div>
     </div>
 </div>
 
-<footer class="border-t border-slate-900 bg-slate-950 py-4 shrink-0 text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-center gap-1">
+<footer class="border-t border-slate-200 bg-white py-4 shrink-0 text-center text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-center gap-1">
     <span>© 2026 Dev Coderz. All Rights Reserved.</span>
     <span class="hidden sm:inline">•</span>
     <span>Developed by <span class="text-red-500 font-bold tracking-wide glow-text">Devansh Sharma</span></span>
@@ -89,14 +88,14 @@ fetch("https://eduvibe-mj.pages.dev/allbatches.json")
     setTimeout(() => { renderGrid(); }, 400);
 })
 .catch(() => {
-    total.innerHTML = `<div class="col-span-full text-center text-slate-500 py-12">Failed to sync secure repository data.</div>`;
+    total.innerHTML = `<div class="col-span-full text-center text-slate-400 py-12 text-sm">Failed to sync data.</div>`;
 });
 
 function showSkeleton() {
     let html = "";
     for(let i=0; i<8; i++) {
         html += `
-        <div class="bg-slate-900/30 border border-slate-900 rounded-2xl p-4 flex flex-col gap-3">
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col gap-3">
             <div class="skel-anim h-6 w-3/4 rounded"></div>
             <div class="skel-anim h-40 w-full rounded-xl"></div>
             <div class="skel-anim h-4 w-1/2 rounded"></div>
@@ -115,27 +114,27 @@ function card(b) {
     }
 
     return `
-    <div class="bg-slate-900/40 border border-slate-900 rounded-2xl p-4 hover:border-slate-800 transition-all duration-300 flex flex-col relative group">
-        <button class="absolute top-6 right-6 w-8 h-8 rounded-full border border-slate-800 bg-slate-950/80 flex items-center justify-center text-sm z-10 transition-colors hover:bg-slate-900 favorite-btn ${isFav?'text-red-500':''}" data-id="${b._id}">
+    <div class="bg-white border border-slate-200 rounded-2xl p-4 hover:shadow-lg hover:border-slate-300 transition-all duration-300 flex flex-col relative group">
+        <button class="absolute top-6 right-6 w-8 h-8 rounded-full border border-slate-200 bg-white/80 flex items-center justify-center text-sm z-10 transition-colors hover:bg-slate-50 favorite-btn ${isFav?'text-red-500':''}" data-id="${b._id}">
             ${isFav?'❤️':'♡'}
         </button>
-        <h3 class="text-sm font-bold text-slate-200 mb-3 pr-8 truncate group-hover:text-white">${b.name || 'Unnamed Batch'}</h3>
-        <div class="h-36 w-full rounded-xl overflow-hidden bg-slate-950 border border-slate-950 mb-3 relative shrink-0">
+        <h3 class="text-sm font-bold text-slate-800 mb-3 pr-8 truncate group-hover:text-red-500 transition-colors">${b.name || 'Unnamed Batch'}</h3>
+        <div class="h-36 w-full rounded-xl overflow-hidden bg-slate-100 border border-slate-100 mb-3 relative shrink-0">
             <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" src="${imgUrl}" onerror="this.src='${FALLBACK_IMG}'">
         </div>
-        <div class="space-y-1 mb-4 text-[11px] text-slate-400">
+        <div class="space-y-1 mb-4 text-[11px] text-slate-500">
             <div class="truncate">👨‍🎓 ${b.byName || 'Expert Faculty'}</div>
             <div>🗣️ ${b.language || 'Hinglish'}</div>
-            <div class="truncate text-[10px] text-slate-500">🗓️ ${b.startDate || ''} → ${b.endDate || ''}</div>
+            <div class="truncate text-[10px] text-slate-400">🗓️ ${b.startDate || ''} → ${b.endDate || ''}</div>
         </div>
-        <div class="text-xs font-bold text-emerald-400 mb-3 mt-auto">${b.feeTotal ? "₹ " + b.feeTotal : "Free Resource"}</div>
-        <button class="w-full bg-slate-800 hover:bg-red-600 text-slate-200 hover:text-white text-xs font-bold py-2.5 rounded-xl transition-all duration-300 explore-btn" data-id="${b._id}" data-name="${b.name}">Explore Now</button>
+        <div class="text-xs font-bold text-emerald-600 mb-3 mt-auto">${b.feeTotal ? "₹ " + b.feeTotal : "Free Resource"}</div>
+        <button class="w-full bg-slate-900 hover:bg-red-500 text-white text-xs font-bold py-2.5 rounded-xl transition-all duration-300 explore-btn" data-id="${b._id}" data-name="${b.name}">Explore Now</button>
     </div>`;
 }
 
 function renderGrid() {
     if(!filtered.length) {
-        total.innerHTML = `<div class="col-span-full text-center text-slate-500 py-12 text-sm">No operational streams match query.</div>`;
+        total.innerHTML = `<div class="col-span-full text-center text-slate-400 py-12 text-sm">No operational streams match query.</div>`;
         return;
     }
     total.innerHTML = filtered.map(card).join("");
@@ -164,7 +163,7 @@ function launchIframe(id, name) {
     fav.classList.add("hidden");
     iframeContainer.classList.remove("hidden");
     iframeTitle.innerText = name;
-    batchFrame.src = `https://devcoderz.vercel.app/PW/batch.php?batch_id=${id}`;
+    batchFrame.src = `https://eduvibe-pw-api.wasmer.app/batch.php?batch_id=${id}`;
     scrollContainer.scrollTop = 0;
 }
 
@@ -194,7 +193,7 @@ favTab.onclick = () => { setTab(favTab, total, fav, total); renderFav(); };
 
 function renderFav() {
     let items = ALL.filter(b => favs.includes(b._id));
-    fav.innerHTML = items.length ? items.map(card).join("") : `<div class="col-span-full text-center text-slate-500 py-12 text-sm">Bookmarks repository empty. ❤️</div>`;
+    fav.innerHTML = items.length ? items.map(card).join("") : `<div class="col-span-full text-center text-slate-400 py-12 text-sm">Bookmarks repository empty. ❤️</div>`;
 }
 
 searchInput.oninput = function() {
