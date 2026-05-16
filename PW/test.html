@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dev Coderz</title>
+<title>DevCoderZ</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
@@ -24,42 +24,39 @@ body{background:#ffffff;color:#0f172a;overflow:hidden}
         <div class="flex items-center gap-2">
             <div class="h-9 w-9 bg-gradient-to-tr from-red-600 to-amber-500 rounded-lg flex items-center justify-center font-bold text-white shadow-md shadow-red-500/10">DC</div>
             <span class="text-xl font-extrabold tracking-tight text-slate-900">
-                Dev <span class="text-red-500">Coderz</span>
+                Dev<span class="text-red-500">CoderZ/span>
             </span>
+        </div>
+        <div id="back-button-container" class="hidden">
+            <button onclick="closeIframe()" class="px-4 py-1.5 bg-slate-100 hover:bg-red-500 hover:text-white text-slate-700 rounded-lg text-xs font-bold transition-colors">← Back to Batches</button>
         </div>
     </div>
 </nav>
 
-<div class="bg-white p-4 border-b border-slate-200 shrink-0">
-    <div class="max-w-md mx-auto relative">
-        <input id="searchInput" class="w-full bg-slate-50 text-slate-800 pl-4 pr-10 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:border-red-500 transition-colors text-sm" placeholder="Search premium batches...">
+<div id="main-controls" class="shrink-0">
+    <div class="bg-white p-4 border-b border-slate-200">
+        <div class="max-w-md mx-auto relative">
+            <input id="searchInput" class="w-full bg-slate-50 text-slate-800 pl-4 pr-10 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:border-red-500 transition-colors text-sm" placeholder="Search premium batches...">
+        </div>
     </div>
-</div>
-
-<div class="flex bg-white border-b border-slate-200 shrink-0">
-    <button class="flex-1 py-3 text-center text-sm font-bold border-b-2 border-red-500 text-red-500" id="totalTab">All Batches</button>
-    <button class="flex-1 py-3 text-center text-sm font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-600" id="favTab">Favourites ❤️</button>
+    <div class="flex bg-white border-b border-slate-200">
+        <button class="flex-1 py-3 text-center text-sm font-bold border-b-2 border-red-500 text-red-500" id="totalTab">All Batches</button>
+        <button class="flex-1 py-3 text-center text-sm font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-600" id="favTab">Favourites ❤️</button>
+    </div>
 </div>
 
 <div class="flex-1 overflow-y-auto p-4 md:p-6" id="scroll-container">
     <div id="total" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto"></div>
     <div id="fav" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto hidden"></div>
-    
-    <div id="iframe-container" class="max-w-5xl mx-auto hidden mt-2">
-        <div class="flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-t-xl">
-            <button onclick="closeIframe()" class="px-4 py-1.5 bg-slate-200 hover:bg-red-600 hover:text-white text-slate-700 rounded-lg text-xs font-bold transition-colors flex items-center gap-1">← Back</button>
-            <span id="iframe-title" class="text-xs font-bold text-slate-700 tracking-wide truncate max-w-[200px] sm:max-w-md">Batch View</span>
-            <span class="text-[10px] bg-red-500/10 text-red-600 border border-red-500/20 px-2 py-0.5 rounded font-mono">Terminal Active</span>
-        </div>
-        <div class="w-full bg-black rounded-b-xl overflow-hidden border-x border-b border-slate-200 aspect-[16/10] md:h-[70vh]">
-            <iframe id="batch-frame" src="" class="w-full h-full border-0" allowfullscreen></iframe>
-        </div>
-    </div>
 </div>
 
-<footer class="border-t border-slate-200 bg-white py-4 shrink-0 text-center text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-center gap-1">
+<div id="iframe-container" class="hidden fixed inset-x-0 bottom-12 top-16 bg-white z-40">
+    <iframe id="batch-frame" src="" class="w-full h-full border-0" allowfullscreen></iframe>
+</div>
+
+<footer class="border-t border-slate-200 bg-white py-4 fixed bottom-0 inset-x-0 h-12 z-50 text-center text-xs text-slate-400 flex items-center justify-center gap-1">
     <span>© 2026 Dev Coderz. All Rights Reserved.</span>
-    <span class="hidden sm:inline">•</span>
+    <span>•</span>
     <span>Developed by <span class="text-red-500 font-bold tracking-wide glow-text">Devansh Sharma</span></span>
 </footer>
 
@@ -69,10 +66,11 @@ let ALL = [], filtered = [], favs = JSON.parse(localStorage.getItem("favs") || "
 
 const total = document.getElementById("total");
 const fav = document.getElementById("fav");
+const mainControls = document.getElementById("main-controls");
 const scrollContainer = document.getElementById("scroll-container");
 const iframeContainer = document.getElementById("iframe-container");
 const batchFrame = document.getElementById("batch-frame");
-const iframeTitle = document.getElementById("iframe-title");
+const backButtonContainer = document.getElementById("back-button-container");
 const searchInput = document.getElementById("searchInput");
 
 const totalTab = document.getElementById("totalTab");
@@ -128,7 +126,7 @@ function card(b) {
             <div class="truncate text-[10px] text-slate-400">🗓️ ${b.startDate || ''} → ${b.endDate || ''}</div>
         </div>
         <div class="text-xs font-bold text-emerald-600 mb-3 mt-auto">${b.feeTotal ? "₹ " + b.feeTotal : "Free Resource"}</div>
-        <button class="w-full bg-slate-900 hover:bg-red-500 text-white text-xs font-bold py-2.5 rounded-xl transition-all duration-300 explore-btn" data-id="${b._id}" data-name="${b.name}">Explore Now</button>
+        <button class="w-full bg-slate-900 hover:bg-red-500 text-white text-xs font-bold py-2.5 rounded-xl transition-all duration-300 explore-btn" data-id="${b._id}">Explore Now</button>
     </div>`;
 }
 
@@ -153,28 +151,24 @@ document.addEventListener("click", e => {
 
     if(e.target.classList.contains("explore-btn")) {
         let id = e.target.dataset.id;
-        let name = e.target.dataset.name;
-        launchIframe(id, name);
+        launchIframe(id);
     }
 });
 
-function launchIframe(id, name) {
-    total.classList.add("hidden");
-    fav.classList.add("hidden");
+function launchIframe(id) {
+    mainControls.classList.add("hidden");
+    scrollContainer.classList.add("hidden");
     iframeContainer.classList.remove("hidden");
-    iframeTitle.innerText = name;
-    batchFrame.src = `https://eduvibe-pw-api.wasmer.app/batch.php?batch_id=${id}`;
-    scrollContainer.scrollTop = 0;
+    backButtonContainer.classList.remove("hidden");
+    batchFrame.src = `https://eduvibe-pw.pages.dev/batches/?batch_id=${id}`;
 }
 
 function closeIframe() {
     iframeContainer.classList.add("hidden");
+    backButtonContainer.classList.add("hidden");
+    mainControls.classList.remove("hidden");
+    scrollContainer.classList.remove("hidden");
     batchFrame.src = "";
-    if(totalTab.classList.contains("text-red-500")) {
-        total.classList.remove("hidden");
-    } else {
-        fav.classList.remove("hidden");
-    }
 }
 
 function setTab(active, inactive, showEl, hideEl) {
@@ -182,8 +176,6 @@ function setTab(active, inactive, showEl, hideEl) {
     active.classList.add("border-red-500", "text-red-500");
     inactive.classList.remove("border-red-500", "text-red-500");
     inactive.classList.add("border-transparent", "text-slate-400");
-    iframeContainer.classList.add("hidden");
-    batchFrame.src = "";
     showEl.classList.remove("hidden");
     hideEl.classList.add("hidden");
 }
@@ -199,8 +191,6 @@ function renderFav() {
 searchInput.oninput = function() {
     let q = this.value.toLowerCase();
     filtered = ALL.filter(b => (b.name || "").toLowerCase().includes(q));
-    iframeContainer.classList.add("hidden");
-    batchFrame.src = "";
     totalTab.click();
     renderGrid();
 };
