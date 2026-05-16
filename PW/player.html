@@ -10,7 +10,6 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; }
-        /* Custom UI override adjustments for shaka layout components */
         .shaka-video-container { max-width: 100%; border-radius: 1rem; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border: 1px solid #1e293b; }
         .shaka-controls-container { background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); }
     </style>
@@ -55,11 +54,9 @@
             const video = document.getElementById('video');
             const container = video.parentElement;
             
-            // Build and link UI Overlay
             const player = new shaka.Player(video);
             const ui = new shaka.ui.Overlay(player, container, video);
 
-            // Configure dynamic DRM authentication layer using Clearkey engine parameters
             if (keyId && keyVal) {
                 player.configure({
                     drm: {
@@ -70,13 +67,11 @@
                 });
             }
 
-            // Error listener config handling
             player.addEventListener('error', (e) => {
                 console.error('Shaka Engine Core Failure:', e.detail);
             });
 
             try {
-                // Load target stream manifest URL straight inside player canvas frame
                 await player.load(manifestUrl);
                 console.log('DRM Stream Loaded Successfully via DevCoderZ Core.');
             } catch (err) {
@@ -84,7 +79,6 @@
             }
         }
 
-        // Initialize Shaka engine framework on window sequence activation
         document.addEventListener('shaka-ui-loaded-failed', () => console.error("UI bundle failure"));
         document.addEventListener('DOMContentLoaded', () => {
             shaka.polyfil.installAll();
