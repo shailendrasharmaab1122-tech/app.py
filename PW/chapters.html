@@ -4,22 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chapters - DevCoderZ</title>
-    <link rel="stylesheet" href="https://www.pw.live/batches-new/index.BZrLlnYz.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background: #f8f8f8; padding: 20px; font-family: sans-serif; }
-        .chapter-grid { display: grid; grid-cols: 1; gap: 15px; max-width: 900px; margin: auto; }
-        ._list-card { background: white; padding: 20px; border-radius: 12px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 5px solid #ff0000; }
-        .heading { text-align: center; margin-bottom: 30px; color: #1b2124; }
+      * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+      body { background: #f8fafc; color: #0f172a; }
+      .glow-text { text-shadow: 0 0 8px rgba(239,68,68,0.3); }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col pb-16">
 
-    <div class="heading">
-        <h2 id="subName">Loading Chapters...</h2>
-        <button onclick="history.back()">← Back</button>
-    </div>
+    <nav class="h-16 bg-[#4f46e5] flex items-center justify-between px-6 shadow-md sticky top-0 z-50">
+        <button onclick="history.back()" class="bg-white/20 hover:bg-white/30 text-white text-xs font-bold py-2 px-4 rounded-lg transition-all flex items-center gap-1">
+            ← Back
+        </button>
+        <div class="text-xs text-white/90 bg-white/10 px-3 py-1.5 rounded-full border border-white/20 font-medium">
+            Select Chapter
+        </div>
+    </nav>
 
-    <div id="chaptersContainer" class="chapter-grid"></div>
+    <main class="flex-1 max-w-4xl w-full mx-auto p-4 md:p-6">
+        <div class="mb-6 flex flex-col gap-1">
+            <h2 id="subName" class="text-xl font-extrabold text-slate-800 tracking-tight">Loading Chapters...</h2>
+            <p class="text-xs text-slate-400">Select a chapter topic channel to access video archives.</p>
+        </div>
+
+        <div id="chaptersContainer" class="space-y-4">
+            <div class="bg-white p-5 border border-slate-200 rounded-2xl animate-pulse flex flex-col gap-3 shadow-sm">
+                <div class="h-5 bg-slate-200 rounded w-2/3"></div>
+                <div class="h-3 bg-slate-200 rounded w-1/3"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="h-12 border-t border-slate-200 bg-white text-center text-xs text-slate-400 flex items-center justify-center gap-1 fixed bottom-0 inset-x-0 z-50 shadow-inner">
+        <span>© 2026 The DevCoderz. All Rights Reserved.</span>
+        <span>•</span>
+        <span>Developed by <span class="text-red-500 font-bold tracking-wide glow-text">Devansh Sharma</span></span>
+    </footer>
 
     <script>
         const params = new URLSearchParams(window.location.search);
@@ -27,28 +48,53 @@
         const sId = params.get('subject_id');
 
         async function loadChapters() {
+            const container = document.getElementById('chaptersContainer');
+            const subTitle = document.getElementById('subName');
+
+            if (!bId || !sId) {
+                container.innerHTML = `<div class="text-center text-red-500 font-medium text-sm py-12">❌ Error: Missing configuration IDs.</div>`;
+                subTitle.innerText = "Error";
+                return;
+            }
+
             try {
                 const res = await fetch(`https://eduvibe-pw-api.wasmer.app/chapters.php?batch_id=${bId}&subject_id=${sId}`);
                 const data = await res.json();
-                
-                document.getElementById('subName').innerText = "Chapters List";
-                const container = document.getElementById('chaptersContainer');
-                
+
+                subTitle.innerText = "Chapters & Topics";
+
+                if (!data.topics || data.topics.length === 0) {
+                    container.innerHTML = `<div class="text-center text-slate-400 py-12 text-sm">⚠️ No chapters found for this subject channel.</div>`;
+                    return;
+                }
+
                 container.innerHTML = data.topics.map(ch => `
-                    <div class="_list-card" onclick="openLectures('${ch._id}')">
-                        <h3 style="margin:0 0 10px 0;">${ch.name}</h3>
-                        <span style="font-size:13px; color:gray;">
-                            📽️ ${ch.lectureVideos || 0} Videos | 📝 ${ch.notes || 0} Notes
-                        </span>
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md border-l-4 border-l-red-500 hover:border-l-[#4f46e5] transition-all duration-150 cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-4 group" onclick="openLectures('${ch._id}')">
+                        <div class="space-y-1.5 flex-1 overflow-hidden">
+                            <h3 class="text-sm font-bold text-slate-800 tracking-tight leading-snug group-hover:text-[#4f46e5] transition-colors truncate">${ch.name}</h3>
+                            <div class="flex flex-wrap gap-2 text-[11px] font-semibold text-slate-400">
+                                <span class="bg-slate-50 border border-slate-100 px-2 py-0.5 rounded-md flex items-center gap-1">
+                                    📽️ ${ch.lectureVideos || 0} Videos
+                                </span>
+                                <span class="bg-slate-50 border border-slate-100 px-2 py-0.5 rounded-md flex items-center gap-1">
+                                    📝 ${ch.notes || 0} Notes
+                                </span>
+                            </div>
+                        </div>
+                        <div class="text-[#4f46e5] text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity hidden sm:block shrink-0">
+                            Open Room →
+                        </div>
                     </div>
                 `).join('');
+
             } catch (e) {
-                alert("Failed to load chapters");
+                container.innerHTML = `<div class="text-center text-red-500 font-medium text-sm py-12">❌ Failed to sync chapter matrix. Server could be sleeping.</div>`;
+                subTitle.innerText = "Sync Error";
             }
         }
 
+        // Routing dynamic variables to lectures.html sequence
         function openLectures(topicId) {
-            // Ab ye lectures.html par jayega topic_id ke sath
             window.location.href = `./lectures.html?batch_id=${bId}&subject_id=${sId}&topic_id=${topicId}`;
         }
 
