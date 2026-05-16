@@ -3,21 +3,46 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dev Coderz</title>
+<title>The DevCoderz</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
+:root {
+    --desktop-trim: -220px;
+    --mobile-trim: -270px;
+}
+
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased}
 body{background:#f8fafc;color:#0f172a;overflow:hidden;will-change:transform}
 ::-webkit-scrollbar{width:6px}
 ::-webkit-scrollbar-track{background:#f8fafc}
 ::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
 ::-webkit-scrollbar-thumb:hover{background:#94a3b8}
+
+.glow-logo {
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.4);
+}
 .glow-text{text-shadow:0 0 8px rgba(239,68,68,0.3)}
+
 @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
 .skel-anim{background:linear-gradient(90deg,#f1f5f9 25%,#e2e8f0 50%,#f1f5f9 75%);background-size:200% 100%;animation:shimmer 1s infinite}
+
 .iframe-wrapper{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;transform:translateZ(0)}
-.iframe-masked{position:absolute;top:-260px;left:0;width:100%;height:calc(100% + 260px);border:0;will-change:transform}
-@media(max-width:640px){.iframe-masked{top:-290px;height:calc(100% + 290px)}}
+.iframe-masked{
+    position:absolute;
+    top: var(--desktop-trim);
+    left:0;
+    width:100%;
+    height: calc(100% + -1 * var(--desktop-trim));
+    border:0;
+    will-change:transform;
+}
+@media(max-width:640px){
+    .iframe-masked{
+        top: var(--mobile-trim);
+        height: calc(100% + -1 * var(--mobile-trim));
+    }
+}
 .smooth-gpu{transform:translateZ(0);will-change:transform,opacity;transition:all 0.15s cubic-bezier(0.4,0,0.2,1)}
 </style>
 </head>
@@ -27,9 +52,7 @@ body{background:#f8fafc;color:#0f172a;overflow:hidden;will-change:transform}
     <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
         <div class="flex items-center gap-2">
             <div class="h-9 w-9 bg-white rounded-lg flex items-center justify-center font-bold text-[#4f46e5] shadow-sm">DC</div>
-            <span class="text-xl font-black tracking-tight text-white">
-                Dev<span class="text-[#38bdf8]">CoderZ</span>
-            </span>
+            <span class="text-xl font-black tracking-tight glow-logo">DevCoderZ</span>
         </div>
         <div id="back-button-container" class="hidden">
             <button onclick="closeIframe()" class="px-4 py-1.5 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs font-bold transition-all border border-white/20">← Back to Batches</button>
@@ -61,7 +84,7 @@ body{background:#f8fafc;color:#0f172a;overflow:hidden;will-change:transform}
 </div>
 
 <footer class="border-t border-slate-200 bg-white py-4 fixed bottom-0 inset-x-0 h-12 z-50 text-center text-xs text-slate-400 flex items-center justify-center gap-1 shadow-inner smooth-gpu">
-    <span>© 2026 Dev Coderz. All Rights Reserved.</span>
+    <span>© 2026 The DevCoderz. All Rights Reserved.</span>
     <span>•</span>
     <span>Developed by <span class="text-red-500 font-bold tracking-wide glow-text">Devansh Sharma</span></span>
 </footer>
@@ -69,7 +92,9 @@ body{background:#f8fafc;color:#0f172a;overflow:hidden;will-change:transform}
 <script>
 const API_BATCHES = "https://devcoderz.vercel.app/api/PW/all-batches-api1.js";
 const API_STREAM = "https://devcoderz.vercel.app/api/PW/all-batches-api2.js";
-const FALLBACK_IMG = "https://via.placeholder.com/300x200?text=Dev+Coderz+Premium";
+
+
+const FALLBACK_IMG = "https://devcoderz.vercel.app/png";
 
 let ALL = [], filtered = [], favs = JSON.parse(localStorage.getItem("favs") || "[]");
 let searchTimeout = null;
