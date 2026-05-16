@@ -3,18 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Embedded Player</title>
+    <title>The DevCoderZ - Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }
-        iframe { width: 100%; height: 100%; border: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body, html { width: 100%; height: 100%; overflow: hidden; background: #f8fafc; }
+        .glow-logo { text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.4); }
+        .glow-text { text-shadow: 0 0 8px rgba(239,68,68,0.3); }
+        .iframe-container { height: calc(100vh - 7rem); width: 100%; }
     </style>
 </head>
-<body>
+<body class="flex flex-col h-screen overflow-hidden">
 
-    <iframe 
-        src="https://corsproxy.io/?url=https%3A%2F%2Feduvibe-pw.page.gd%2F"
-        allow="autoplay; encrypted-media; fullscreen">
-    </iframe >
+    <nav class="h-16 bg-[#4f46e5] flex items-center justify-between px-6 shadow-md z-50 shrink-0">
+        <div class="flex items-center gap-2">
+            <div class="h-9 w-9 bg-white rounded-lg flex items-center justify-center font-bold text-[#4f46e5] shadow-sm">DC</div>
+            <span class="text-xl font-black tracking-tight text-white glow-logo">The DevCoderZ</span>
+        </div>
+        <div class="text-xs text-white/90 bg-white/10 px-3 py-1.5 rounded-full border border-white/20 font-medium">
+            Live Stream Portal
+        </div>
+    </nav>
+
+    <main class="iframe-container bg-white shrink-0 relative flex items-center justify-center">
+        <iframe 
+            id="bypassFrame"
+            src="https://api.allorigins.win/raw?url=https%3A%2F%2Feduvibe-pw.page.gd%2F" 
+            class="w-full h-full border-none"
+            allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy">
+        </iframe>
+    </main>
+
+    <footer class="h-12 border-t border-slate-200 bg-white text-center text-xs text-slate-400 flex items-center justify-center gap-1 shadow-inner z-50 shrink-0">
+        <span>© 2026 The DevCoderz. All Rights Reserved.</span>
+        <span>•</span>
+        <span>Developed by <span class="text-red-500 font-bold tracking-wide glow-text">Devansh Sharma</span></span>
+    </footer>
 
 </body>
 </html>
