@@ -7,15 +7,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 body,html{margin:0;padding:0;width:100%;height:100%;background:#010409;font-family:'Segoe UI',sans-serif;color:#fff;overflow:hidden}
-#_gate,#_L0x{position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle at center,#0d1117 0%,#010409 100%);display:flex;align-items:center;justify-content:center;z-index:100000}
-.box{background:#0d1117;padding:30px;border-radius:12px;border:1px solid #30363d;text-align:center;width:90%;max-width:350px}
-h2{color:#38bdf8;margin-bottom:20px;letter-spacing:1px;font-size:1.4rem}
-.btn{display:block;width:100%;padding:14px;margin:10px 0;border:none;border-radius:8px;cursor:pointer;font-weight:bold;transition:0.3s;font-size:13px;text-transform:uppercase;text-decoration:none;box-sizing:border-box;text-align:center}
-.btn-tut{background:rgba(248,113,113,0.1);color:#f87171;border:1px dashed #f87171;margin-bottom:15px}
-.btn-srv{background:#38bdf8;color:#000}.btn-srv:hover{background:#7dd3fc}
-#_L0x{background:#010409;display:none;flex-direction:column;gap:15px;z-index:100001}
-._b{width:120px;height:2px;background:#161b22;position:relative}._b::after{content:'';position:absolute;width:40%;height:100%;background:#38bdf8;animation:L 0.8s infinite}@keyframes L{0%{left:0}50%{left:60%}100%{left:0}}
-#_D0x_ROOT{display:none;width:100%;height:100vh;flex-direction:column}
+#_D0x_ROOT{display:flex;width:100%;height:100vh;flex-direction:column}
 .H0x{height:55px;background:#ffffff;display:flex;align-items:center;justify-content:space-between;padding:0 15px;border-bottom:1px solid #ddd;position:relative;z-index:100;flex-shrink:0}
 .B0x{font-family:'Space Mono';color:#000;font-weight:900;font-size:13px}
 .M0x{flex-grow:1;position:relative;overflow:hidden;background:#010409}
@@ -28,19 +20,7 @@ h2{color:#38bdf8;margin-bottom:20px;letter-spacing:1px;font-size:1.4rem}
 </style>
 </head>
 <body>
-<div id="_gate">
-<div class="box">
-<i class="fas fa-shield-alt" style="font-size:45px;color:#38bdf8;margin-bottom:15px"></i>
-<h2>SYSTEM ACCESS</h2>
-<a href="https://youtube.com/shorts/VaoPFchVn8w?si=2_r1jY9ggv1Fx_8v" target="_blank" class="btn btn-tut"><i class="fab fa-youtube"></i> HOW TO GENERATE KEY</a>
-<button class="btn btn-srv" onclick="_startSrv()"><i class="fas fa-key"></i> GENERATE ACCESS KEY</button>
-<p style="font-size:8px;color:#444;margin-top:20px;letter-spacing:2px">DEVCODERZ SECURITY SYSTEM</p>
-</div>
-</div>
-<div id="_L0x">
-<div id="status_txt" style="color:#38bdf8;font-family:monospace;font-size:14px;text-align:center">REDIRECTING...</div>
-<div class="_b"></div>
-</div>
+
 <div id="_D0x_ROOT">
 <div id="_SX" class="SD0x">
 <div style="font-size:10px;color:#38bdf8;font-family:'Space Mono';margin-bottom:10px">// CORE_CONTROL</div>
@@ -62,64 +42,18 @@ h2{color:#38bdf8;margin-bottom:20px;letter-spacing:1px;font-size:1.4rem}
 </header>
 <main class="M0x">
 <div class="BLK"></div>
-<iframe id="CF" src="about:blank" class="I0x"></iframe>
+<iframe id="CF" src="https://eduvibe-vibrant.pages.dev/new-courses/8/content/" class="I0x"></iframe>
 </main>
 </div>
+
 <script>
 (function(){
-const _v = atob;
-const _cfg = {
-_u: _v("aHR0cHM6Ly9lZHV2aWJlLXZpYnJhbnQucGFnZXMuZGV2L25ldy1jb3Vyc2VzLzgvY29udGVudC8="),
-_k: _v("YjhjYmMyYjFkMjQxNzZhOGRmZjIwMjI2MDhiZGQ1YjVjYzhmMWMyYg=="),
-_d: _v("ZGlyZWN0X2Rldl9ieXBhc3M=")
-};
-window._startSrv = async () => {
-const tk = 'dc_' + Math.random().toString(36).substring(2,12);
-localStorage.setItem("_pnd_tk", tk);
-const ret = window.location.origin + window.location.pathname + '?auth=' + tk;
-document.getElementById('_gate').style.display='none';
-document.getElementById('_L0x').style.display='flex';
-try {
-const r = await fetch(`https://indianshortner.com/api?api=${_cfg._k}&url=${encodeURIComponent(ret)}`);
-const j = await r.json();
-window.location.href = j.status === "success" ? j.shortenedUrl : ret;
-} catch(e) { window.location.href = ret; }
-};
-const _verify = () => {
-const q = new URLSearchParams(window.location.search);
-const n = new Date().getTime();
-const last = localStorage.getItem("_t_sc");
-if(q.get("access") === _cfg._d) {
-localStorage.setItem("_t_sc", n);
-window.history.replaceState({}, '', window.location.pathname);
-return true;
-}
-if(q.get("auth") && q.get("auth") === localStorage.getItem("_pnd_tk")) {
-localStorage.setItem("_t_sc", n);
-localStorage.removeItem("_pnd_tk");
-window.history.replaceState({}, '', window.location.pathname);
-return true;
-}
-return (last && (n - last < 86400000));
-};
-if(_verify()) {
-document.getElementById('_gate').style.display='none';
-document.getElementById('_L0x').style.display='flex';
-document.getElementById('status_txt').innerText = "SYSTEM_DECRYPTING_...";
-setTimeout(() => {
-document.getElementById('_L0x').style.display='none';
 document.getElementById('_D0x_ROOT').style.display='flex';
-document.getElementById('CF').src = _cfg._u;
-}, 1500);
-} else {
-document.getElementById('_gate').style.display='flex';
-}
 setInterval(() => {
 const d = new Date();
 document.getElementById('_TX').innerText = d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
 document.getElementById('_DX').innerText = d.toLocaleDateString('en-GB', {day:'2-digit', month:'short'}).toUpperCase();
 }, 1000);
-document.oncontextmenu = () => !1;
 })();
 </script>
 </body>
