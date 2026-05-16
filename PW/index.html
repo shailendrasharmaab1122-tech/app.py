@@ -3,44 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The DevCoderZ - Batches</title>
+    <title>Subjects - DevCoderZ</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
       body { background: #f8fafc; color: #0f172a; }
-      ::-webkit-scrollbar { width: 6px; }
-      ::-webkit-scrollbar-track { background: #f8fafc; }
-      ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-      @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
-      .skel-anim { background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%); background-size: 200% 100%; animation: shimmer 1.2s infinite; }
       .glow-text { text-shadow: 0 0 8px rgba(239,68,68,0.3); }
     </style>
 </head>
 <body class="min-h-screen flex flex-col pb-16">
 
     <nav class="h-16 bg-[#4f46e5] flex items-center justify-between px-6 shadow-md sticky top-0 z-50">
-        <div class="flex items-center gap-2">
-            <div class="h-9 w-9 bg-white rounded-lg flex items-center justify-center font-bold text-[#4f46e5]">DC</div>
-            <span class="text-xl font-black tracking-tight text-white">The DevCoderZ</span>
+        <button onclick="window.location.href='./index.html'" class="bg-white/20 hover:bg-white/30 text-white text-xs font-bold py-2 px-4 rounded-lg transition-all flex items-center gap-1">
+            ← Home
+        </button>
+        <div class="text-xs text-white/90 bg-white/10 px-3 py-1.5 rounded-full border border-white/20 font-medium">
+            Batch Channels
         </div>
-        <a href="./cricket/index.html" class="bg-red-500 hover:bg-red-600 text-white text-xs font-bold py-2 px-4 rounded-full animate-pulse transition-all shadow-md">
-          The DevCoderZ 
-        </a>
     </nav>
 
-    <div class="sticky top-16 z-40 bg-white border-b border-slate-200 shadow-sm">
-        <div class="max-w-md mx-auto p-4">
-            <input id="searchInput" class="w-full bg-slate-50 text-slate-800 pl-5 pr-5 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:border-[#4f46e5] transition-colors text-sm shadow-inner" placeholder="Search premium batches...">
+    <main class="flex-1 max-w-6xl w-full mx-auto p-4 md:p-6">
+        <div class="mb-6">
+            <h2 class="text-xl font-extrabold text-slate-800 tracking-tight">Select Subject Channel</h2>
+            <p class="text-xs text-slate-400">Access video archives by selecting a content branch stream.</p>
         </div>
-        <div class="flex max-w-7xl mx-auto">
-            <button class="flex-1 py-3 text-center text-sm font-bold border-b-2 border-[#4f46e5] text-[#4f46e5]" id="totalTab">Total</button>
-            <button class="flex-1 py-3 text-center text-sm font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-600" id="favTab">Favourites ❤️</button>
-        </div>
-    </div>
 
-    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6">
-        <div id="total" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
-        <div id="fav" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 hidden"></div>
+        <div id="debugBox" class="hidden mb-4 p-3 bg-slate-900 rounded-xl border border-slate-800 text-left overflow-x-auto">
+            <p class="text-emerald-400 font-mono text-[10px] mb-1">// API Structure Diagnostic Auto-Log:</p>
+            <pre id="debugRaw" class="text-slate-300 font-mono text-[11px] leading-tight"></pre>
+        </div>
+
+        <div id="subjectsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="bg-white p-5 border border-slate-200 rounded-2xl animate-pulse h-28 shadow-sm"></div>
+        </div>
     </main>
 
     <footer class="h-12 border-t border-slate-200 bg-white text-center text-xs text-slate-400 flex items-center justify-center gap-1 fixed bottom-0 inset-x-0 z-50 shadow-inner">
@@ -50,209 +45,78 @@
     </footer>
 
     <script>
-      const DATA_SOURCE = "https://eduvibe-mj.pages.dev/allbatches.json";
-      const FALLBACK_IMG = "https://via.placeholder.com/300x200?text=No+Image";
+        const params = new URLSearchParams(window.location.search);
+        const bId = params.get('batch_id');
 
-      let ALL = [], filtered = [];
-      let favs = JSON.parse(localStorage.getItem("favs") || "[]");
-      let cachedBatches = JSON.parse(localStorage.getItem("fav_batches") || "{}");
-      let loaded = 0, LIMIT = 8, loading = false;
-
-      const total = document.getElementById("total");
-      const fav = document.getElementById("fav");
-      const searchInput = document.getElementById("searchInput");
-      const totalTab = document.getElementById("totalTab");
-      const favTab = document.getElementById("favTab");
-
-      showSkeleton();
-
-      fetch(DATA_SOURCE)
-        .then((r) => r.json())
-        .then((d) => {
-          ALL = d.batches || [];
-          filtered = ALL;
-          setTimeout(() => { loadMore(true); }, 200);
-        })
-        .catch(() => {
-          ALL = Object.values(cachedBatches);
-          filtered = ALL;
-          if (ALL.length) { loadMore(true); } 
-          else { total.innerHTML = `<div class="col-span-full text-center text-slate-400 py-12">Failed to load system database.</div>`; }
-        });
-
-      function normalizeText(t) { return (t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim(); }
-      function tokenize(t) { return normalizeText(t).split(/\s+/).map((x) => x.replace(/[^a-z0-9]+/g, "")).filter(Boolean); }
-
-      function calcLevenshtein(a, b) {
-        if (!a.length) return b.length; if (!b.length) return a.length;
-        let prev = Array(b.length + 1).fill(0).map((_, i) => i), curr = Array(b.length + 1);
-        for (let i = 0; i < a.length; i++) {
-          curr[0] = i + 1;
-          for (let j = 0; j < b.length; j++) {
-            curr[j + 1] = Math.min(curr[j] + 1, prev[j + 1] + 1, prev[j] + (a[i] === b[j] ? 0 : 1));
-          }
-          [prev, curr] = [curr, prev];
+        if (!bId) {
+            window.location.href = "./index.html";
         }
-        return prev[b.length];
-      }
 
-      function performFuzzySearch(searchTerm, sourceArray) {
-        if (!searchTerm) return sourceArray.slice();
-        const normalized = normalizeText(searchTerm);
-        const tokens = tokenize(searchTerm).filter((t) => t.length >= 1);
-        const results = [];
+        async function loadSubjects() {
+            const container = document.getElementById('subjectsContainer');
+            const dBox = document.getElementById('debugBox');
+            const dRaw = document.getElementById('debugRaw');
 
-        sourceArray.forEach((batch, idx) => {
-          const batchNorm = normalizeText(batch.name);
-          let score = 0, matchType = "none";
-          if (batchNorm === normalized) { score = 1000; matchType = "exact"; } 
-          else if (batchNorm.includes(normalized)) { score = 500; matchType = "substring"; } 
-          else {
-            const batchTokens = tokenize(batch.name).filter((t) => t.length >= 1);
-            if (!batchTokens.length || !tokens.length) return;
-            let totalScore = 0, matched = 0, exactMatches = 0;
-            tokens.forEach((st) => {
-              let best = 0, foundExact = false;
-              batchTokens.forEach((bt) => {
-                if (bt === st) { best = 100; foundExact = true; } 
-                else if (bt.includes(st) && st.length >= 2) { best = Math.max(best, 85); } 
-                else if (st.includes(bt) && bt.length >= 2) { best = Math.max(best, 75); } 
-                else {
-                  const mx = Math.max(st.length, bt.length);
-                  const sim = ((mx - calcLevenshtein(st, bt)) / mx) * 100;
-                  if (sim > best) best = sim;
+            try {
+                const res = await fetch(`https://eduvibe-pw-api.wasmer.app/batch.php?batch_id=${bId}`);
+                const data = await res.json();
+                
+                // Array extraction check
+                let subjects = [];
+                if (data.subjects) subjects = data.subjects;
+                else if (data.data && data.data.subjects) subjects = data.data.subjects;
+                else if (data.data) subjects = Array.isArray(data.data) ? data.data : [data.data];
+                else subjects = Array.isArray(data) ? data : [];
+
+                if (subjects.length === 0) {
+                    container.innerHTML = `<div class="col-span-full text-center text-slate-400 py-12 text-sm">⚠️ No premium streaming feeds listed inside this channel matrix.</div>`;
+                    return;
                 }
-              });
-              if (best >= 40) { totalScore += best; matched++; if (foundExact) exactMatches++; }
-            });
-            if (matched > 0) {
-              const avg = totalScore / tokens.length; const matchRatio = matched / tokens.length;
-              if (avg >= 55) { score = avg * matchRatio * 10; if (exactMatches > 0) score += exactMatches * 50; if (matchRatio === 1) score += 100; matchType = "fuzzy"; }
+
+                // Injecting first item into visible log for inspection
+                dBox.classList.remove('hidden');
+                dRaw.innerText = JSON.stringify(subjects[0], null, 2);
+
+                container.innerHTML = subjects.map(s => {
+                    // Hyper-deep check for name strings anywhere in object keys
+                    const subjectName = s.name || s.subjectName || s.topic || s.title || s.subject_name || s.chapterName || "Premium Subject Channel";
+                    
+                    let facultyName = "Expert Mentor";
+                    if (s.faculties && Array.isArray(s.faculties) && s.faculties.length > 0) {
+                        facultyName = s.faculties.map(f => f.name || f.facultyName).filter(Boolean).join(', ');
+                    } else if (s.faculty || s.teacher || s.faculty_name) {
+                        facultyName = s.faculty || s.teacher || s.faculty_name;
+                    }
+
+                    const targetId = s._id || s.id || s.subject_id || s.slug;
+
+                    return `
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all duration-150 cursor-pointer border-l-4 border-l-[#4f46e5] flex flex-col justify-between h-32 group" onclick="openChapters('${targetId}')">
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-800 tracking-tight leading-snug group-hover:text-[#4f46e5] transition-colors truncate">${subjectName}</h3>
+                            <p class="text-[11px] text-slate-400 font-medium mt-1 truncate">Teacher: ${facultyName}</p>
+                        </div>
+                        <div class="flex items-center justify-between border-t border-slate-50 pt-3 mt-2 text-[11px] font-bold text-[#4f46e5]">
+                            <span>Enter Vault →</span>
+                        </div>
+                    </div>
+                    `;
+                }).join('');
+            } catch (e) {
+                console.error(e);
+                container.innerHTML = `<div class="col-span-full text-center text-red-500 font-medium text-sm py-12">❌ Core network connection drop. Verify cluster instance health.</div>`;
             }
-          }
-          if (matchType !== "none") { results.push({ batch, score: Math.round(score), index: idx, matchType }); }
-        });
-        results.sort((a, b) => {
-          if (a.matchType !== b.matchType) { return { exact: 0, substring: 1, fuzzy: 2 }[a.matchType] - { exact: 0, substring: 1, fuzzy: 2 }[b.matchType]; }
-          return b.score - a.score || a.index - b.index;
-        });
-        return results.map((r) => r.batch);
-      }
-
-      function showSkeleton() {
-        let html = "";
-        for (let i = 0; i < 8; i++) {
-          html += `
-            <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col gap-3 shadow-sm">
-                <div class="skel-anim h-6 w-3/4 rounded"></div>
-                <div class="skel-anim h-40 w-full rounded-xl"></div>
-                <div class="skel-anim h-4 w-1/2 rounded"></div>
-                <div class="skel-anim h-4 w-2/3 rounded"></div>
-                <div class="skel-anim h-10 w-full rounded-xl mt-auto"></div>
-            </div>`;
-        }
-        total.innerHTML = html;
-      }
-
-      function card(b) {
-        let isFav = favs.includes(b._id);
-        let imgUrl = b.previewImage || FALLBACK_IMG;
-        if (imgUrl.startsWith('/') || imgUrl.includes('pwbatch.png')) imgUrl = FALLBACK_IMG;
-
-        return `
-        <div class="bg-white border border-slate-200 rounded-2xl p-4 hover:shadow-md hover:border-slate-300 transition-all flex flex-col relative group shadow-sm" data-id="${b._id}">
-            <button class="absolute top-6 right-6 w-8 h-8 rounded-full border border-slate-200 bg-white/80 flex items-center justify-center text-sm z-10 favorite-btn ${isFav?'text-red-500 font-bold':''}">
-                ${isFav?'❤️':'♡'}
-            </button>
-            <h3 class="text-sm font-bold text-slate-800 mb-3 pr-8 truncate group-hover:text-[#4f46e5] transition-colors">${b.name || 'Premium Batch'}</h3>
-            <div class="h-36 w-full rounded-xl overflow-hidden bg-slate-50 border border-slate-100 mb-3 shrink-0">
-                <img class="w-full h-full object-contain p-2" loading="lazy" src="${imgUrl}" onerror="this.src='${FALLBACK_IMG}'">
-            </div>
-            <div class="space-y-1 mb-4 text-[12px] text-slate-500">
-                <div class="truncate">👨‍🎓 ${b.byName || 'Top Faculty'}</div>
-                <div>🗣️ ${b.language || 'Hinglish'}</div>
-                <div class="truncate text-[10px] text-slate-400">🗓️ ${b.startDate || ''} → ${b.endDate || ''}</div>
-            </div>
-            <div class="text-xs font-bold text-emerald-600 mb-3 mt-auto">${b.feeTotal ? "₹ " + b.feeTotal : "Free"}</div>
-            <button class="w-full bg-[#4f46e5] hover:bg-[#4338ca] text-white text-xs font-bold py-2.5 rounded-xl transition-all explore-btn" data-id="${b._id}">Explore</button>
-        </div>`;
-      }
-
-      function loadMore(reset = false) {
-        if (loading) return; loading = true;
-        if (reset) { total.innerHTML = ""; loaded = 0; }
-        let slice = filtered.slice(loaded, loaded + LIMIT);
-        if (!slice.length && loaded === 0) {
-          total.innerHTML = `<div class="col-span-full text-center text-slate-400 py-12 text-sm">No batches found.</div>`;
-          loading = false; return;
-        }
-        total.innerHTML += slice.map(card).join("");
-        loaded += LIMIT; loading = false;
-      }
-
-      window.addEventListener("scroll", () => {
-        if (total.classList.contains("hidden")) return;
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) { loadMore(); }
-      });
-
-      document.addEventListener("click", (e) => {
-        if (e.target.classList.contains("favorite-btn")) {
-          let id = e.target.closest("[data-id]").dataset.id;
-          let batch = ALL.find((b) => b._id === id);
-
-          if (favs.includes(id)) {
-            favs = favs.filter((f) => f !== id); delete cachedBatches[id];
-          } else {
-            favs.push(id); if (batch) cachedBatches[id] = batch;
-          }
-
-          localStorage.setItem("favs", JSON.stringify(favs));
-          localStorage.setItem("fav_batches", JSON.stringify(cachedBatches));
-
-          document.querySelectorAll(`[data-id="${id}"] .favorite-btn`).forEach((b) => {
-            b.classList.toggle("text-red-500", favs.includes(id));
-            b.innerHTML = favs.includes(id) ? "❤️" : "♡";
-          });
-          if (!fav.classList.contains("hidden")) renderFav();
         }
 
-        if (e.target.classList.contains("explore-btn")) {
-          let id = e.target.dataset.id;
-          let batch = ALL.find((b) => b._id === id) || cachedBatches[id];
-          
-          if (batch) {
-            let startDate = new Date(batch.startDate);
-            let now = new Date();
-            if (!isNaN(startDate.getTime()) && startDate > now) {
-              let ok = confirm(`⚠️ This batch has not started yet.\n\nStart Date: ${batch.startDate}\n\nDo you still want to continue?`);
-              if (!ok) return;
+        function openChapters(subjectId) {
+            if(!subjectId || subjectId === 'undefined') {
+                alert("Error: Subject Stream Mapping ID is empty.");
+                return;
             }
-          }
-          window.location.href = "PW/batches.html?batch_id=" + id;
+            window.location.href = `./chapters.html?batch_id=${bId}&subject_id=${subjectId}`;
         }
-      });
 
-      function setTab(active, inactive, showEl, hideEl) {
-        active.classList.remove("border-transparent", "text-slate-400"); active.classList.add("border-[#4f46e5]", "text-[#4f46e5]");
-        inactive.classList.remove("border-[#4f46e5]", "text-[#4f46e5]"); inactive.classList.add("border-transparent", "text-slate-400");
-        showEl.classList.remove("hidden"); hideEl.classList.add("hidden");
-      }
-
-      totalTab.onclick = () => { setTab(totalTab, favTab, total, fav); };
-      favTab.onclick = () => { setTab(favTab, total, fav, total); renderFav(); };
-
-      function renderFav() {
-        let items = favs.map((id) => cachedBatches[id]).filter(Boolean);
-        fav.innerHTML = items.length ? items.map(card).join("") : `<div class="col-span-full text-center text-slate-400 py-12 text-sm">No favourites yet ❤️</div>`;
-      }
-
-      searchInput.oninput = function () {
-        let q = this.value.trim();
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        filtered = performFuzzySearch(q, ALL);
-        if (!fav.classList.contains("hidden")) { setTab(totalTab, favTab, total, fav); }
-        loadMore(true);
-      };
+        if(bId) loadSubjects();
     </script>
 </body>
 </html>
