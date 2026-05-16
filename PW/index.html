@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dev Coderz</title>
+<title>DevCoderz</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 :root {
-    --desktop-trim: -70px;
-    --mobile-trim: -90px;
+    --desktop-trim: -260px;
+    --mobile-trim: -290px;
 }
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased}
 body{background:#f8fafc;color:#0f172a;overflow:hidden;will-change:transform}
@@ -80,17 +80,17 @@ body{background:#f8fafc;color:#0f172a;overflow:hidden;will-change:transform}
 </div>
 
 <footer class="border-t border-slate-200 bg-white py-4 fixed bottom-0 inset-x-0 h-12 z-50 text-center text-xs text-slate-400 flex items-center justify-center gap-1 shadow-inner smooth-gpu">
-    <span>© 2026 The DevCoderZ. All Rights Reserved.</span>
+    <span>© 2026 The DevCoderz. All Rights Reserved.</span>
     <span>•</span>
     <span>Developed by <span class="text-red-500 font-bold tracking-wide glow-text">Devansh Sharma</span></span>
 </footer>
 
 <script>
 
-const _0x1a2b = ["YUhSMGNITTZMeTlsWkhWMmFXSmxjaTVmYm1VdVlYQndMekZ3Y0M5UlgwOXhMekZzYEMxallYUmphR1Z6TFdGd2YVEwTVMxYW5O", "YUhSMGNITTZMeTlsWkhWMmFXSmxjaTVmYm1VdVlYQndMekZ3Y0M5UlgwOXhMekZzYEMxallYUmphR1Z6TFdGd2ZaTXlhbk49"];
-const _0x5c3d = (idx) => atob(atob(_0x1a2b[idx]));
+const API_BATCHES = "https://devcoderz.vercel.app/api/PW/all-batches-api1.js";
+const API_STREAM = "https://devcoderz.vercel.app/api/PW/all-batches-api2.js";
 
-const FALLBACK_IMG = "https://devcoderz.vercel.app/png";
+const FALLBACK_IMG = "https://devcoderz.vercel.app/pw.png";
 
 let ALL = [], filtered = [], favs = JSON.parse(localStorage.getItem("favs") || "[]");
 let searchTimeout = null;
@@ -108,7 +108,7 @@ const favTab = document.getElementById("favTab");
 
 showSkeleton();
 
-fetch(_0x5c3d(0))
+fetch(API_BATCHES)
 .then(r => r.json())
 .then(d => {
     ALL = d.batches || d || [];
@@ -192,7 +192,7 @@ function launchIframe(id) {
     scrollContainer.classList.add("hidden");
     iframeContainer.classList.remove("hidden");
     backButtonContainer.classList.remove("hidden");
-    batchFrame.src = _0x5c3d(1) + "?batch_id=" + id;
+    batchFrame.src = API_STREAM + "?batch_id=" + id;
 }
 
 function closeIframe() {
