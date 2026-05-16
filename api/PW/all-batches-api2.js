@@ -6,7 +6,7 @@ export default async function handler(req, res) {
     }
 
     try {
-        // Redirection system to bypass CORS and frame load controls directly inside the dashboard
+        
         return res.redirect(302, `https://eduvibe-pw.pages.gd/batches/?batch_id=${batch_id}`);
     } catch (error) {
         return res.status(500).json({ error: "Failed to route traffic to structural destination." });
