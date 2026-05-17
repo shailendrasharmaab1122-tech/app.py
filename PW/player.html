@@ -2,83 +2,240 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>DevCoderz Ultra Smooth Player</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Secure Lecture Player - DevCoderZ</title>
+
+<link rel="stylesheet" href="https://gray-madelina-19.tiiny.site/ogx.css">
+<link rel="stylesheet" href="https://gray-madelina-19.tiiny.site/plyrx55.css">
+
 <style>
-*{
- margin:0;
- padding:0;
- box-sizing:border-box;
- font-family:sans-serif;
- -webkit-user-select: none;
- user-select: none;
-}
-html,body{width:100%;height:100%;background:#000;overflow:hidden;}
-.player{position:fixed;inset:0;background:#000;z-index:10;}
-iframe{width:100%;height:100%;border:none;background:#000;}
+  body { margin:0; background:#000; overflow: hidden; }
+  .video-container { width:100%; height:100vh; position:relative; background:#000; }
+  video { width:100%; height:100vh; object-fit: contain; }
+  
+  /* Hamari apni custom branding jo video ke upar top corner me chamkegi */
+  .top-brand {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 999;
+    pointer-events: none;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 152, 0, 0.3);
+  }
+  .top-brand .jsr { color: #ff9800; font-weight: 700; font-size: 11px; letter-spacing: 0.5px; margin-right: 6px; }
+  .top-brand .dev { font-size: 11px; font-weight: 600; color: #00e5ff; }
 
-/* Branding ko ekdum top corner me set kiya h taaki middle ya bottom ke controls par koi rukawat na aaye */
-.top-brand{
- position:absolute;
- top:12px;
- left:15px;
- z-index:9999;
- pointer-events:none; /* Isse aap controls ko touch kar paoge, branding beech me nahi aayegi */
- background: rgba(0, 0, 0, 0.6);
- padding: 4px 10px;
- border-radius: 8px;
- border: 1px solid rgba(255,152,0,0.3);
-}
-.top-brand .jsr{color:#ff9800;font-weight:700;font-size:11px;letter-spacing: 0.5px; display: inline-block; margin-right: 6px;}
-.top-brand .dev{font-size:11px;font-weight:600;color:#00e5ff;display: inline-block;}
-
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:10000;}
-.box{width:320px;padding:26px;border-radius:22px;text-align:center;background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;box-shadow: 0 10px 25px rgba(0,0,0,0.4);}
-.tg-btn{display:block;margin-top:14px;padding:14px;border-radius:28px;font-weight:700;width:100%;cursor:pointer;text-align:center;text-decoration:none;color:#fff;transition: 0.2s;}
-.join{background:#fff;color:#1e3c72;}
-.continue{background:rgba(0,0,0,0.3);border:1px solid #fff;margin-top:10px;}
-.tg-btn:active {transform: scale(0.98);}
+  /* Telegram Popup Layer */
+  .overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); display: flex; align-items: center; justify-content: center; z-index: 10000; }
+  .box { width: 320px; padding: 26px; border-radius: 22px; text-align: center; background: linear-gradient(135deg, #1e3c72, #2a5298); color: #fff; font-family: sans-serif; box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
+  .tg-btn { display: block; margin-top: 14px; padding: 14px; border-radius: 28px; font-weight: 700; width: 100%; cursor: pointer; text-align: center; text-decoration: none; color: #fff; transition: 0.2s; font-size: 14px; }
+  .join { background: #fff; color: #1e3c72; }
+  .continue { background: rgba(0, 0, 0, 0.3); border: 1px solid #fff; margin-top: 10px; }
+  .tg-btn:active { transform: scale(0.98); }
 </style>
 </head>
+
 <body>
 
 <div class="overlay" id="tgPopup">
  <div class="box">
   <h2>Join our Telegram</h2>
-  <p style="font-size:12px; color:rgba(255,255,255,0.8); margin-top:5px;">Lectures ko bina rukawat dekhne ke liye channel join karein.</p>
+  <p style="font-size:12px; color:rgba(255,255,255,0.8); margin-top:5px; line-height: 1.4;">Lectures ko bina rukawat dekhne ke liye channel join karein.</p>
   <a class="tg-btn join" href="https://t.me/+JXdxtVzQf-NhM2Jl" target="_blank">Join Telegram</a>
   <div class="tg-btn continue" id="continueBtn">Continue to Video</div>
  </div>
 </div>
 
-<div class="player" id="player">
- <iframe id="bypassFrame" allow="autoplay; fullscreen" allowfullscreen></iframe>
- 
- <div class="top-brand">
-  <span class="jsr">🚩 Jai Shree Ram</span>
-  <span class="dev">| Devansh Sharma</span>
- </div>
+<div class="video-container">
+  <div class="top-brand">
+    <span class="jsr">🚩 Jai Shree Ram</span>
+    <span class="dev">| Devansh Sharma</span>
+  </div>
+
+  <video id="lecture-player" playsinline autoplay></video>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/shaka-player@4.7.11/dist/shaka-player.compiled.js"></script>
+<script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+
 <script>
-const tgPopup=document.getElementById("tgPopup"),continueBtn=document.getElementById("continueBtn"),iframe=document.getElementById("bypassFrame");
+(async function() {
 
-const urlParams=new URLSearchParams(window.location.search);
-const videoId = urlParams.get("video_id");
-const batchId = urlParams.get("batch_id");
-const subjectId = urlParams.get("subject_id");
-const topicId = urlParams.get("topic_id");
+  // Local Storage se tokens fetch karna
+  const manifestUrl = localStorage.getItem('current_stream_url');
+  const keyId       = localStorage.getItem('current_key_id');
+  const keyValue    = localStorage.getItem('current_key_val');
 
-if(videoId && batchId) {
-    iframe.src = `https://eduvibe-pw.page.gd/videoplayerr.php?video_id=${videoId}&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}`;
-} else {
-    iframe.src = "about:blank";
-}
+  const videoEl = document.getElementById('lecture-player');
+  const videoContainer = videoEl.parentElement;
 
-continueBtn.onclick=e=>{
-    e.preventDefault();
-    tgPopup.style.display="none";
-};
+  if (!manifestUrl || manifestUrl.trim() === "" || manifestUrl === "undefined") {
+      console.error("❌ No Stream URL found in memory.");
+      return;
+  }
+
+  /* ================= SHAKA ENGINE INIT ================= */
+  const shakaPlayer = new shaka.Player(videoEl);
+
+  // DRM ClearKey Configuration
+  if (keyId && keyValue && keyId !== "undefined" && keyValue !== "undefined") {
+    shakaPlayer.configure({
+      drm: {
+        clearKeys: {
+          [keyId]: keyValue
+        }
+      }
+    });
+  }
+
+  /* ================= SEGMENT TOKEN HOOK (THE JADU) ================= */
+  const manifestObj = new URL(manifestUrl);
+
+  shakaPlayer.getNetworkingEngine().registerRequestFilter((type, request) => {
+    if (type !== shaka.net.NetworkingEngine.RequestType.SEGMENT) return;
+
+    manifestObj.searchParams.forEach((v, k) => {
+      const segUrl = new URL(request.uris[0]);
+      segUrl.searchParams.set(k, v);
+      request.uris[0] = segUrl.toString();
+    });
+  });
+
+  /* ================= STREAM INITIAL LOAD ================= */
+  let tracks = [];
+
+  try {
+    await shakaPlayer.load(manifestUrl);
+    console.log("✅ Stream successfully loaded into core engine");
+    tracks = shakaPlayer.getVariantTracks();
+  } catch (err) {
+    console.error("❌ SHAKA LOAD FAILED:", err);
+    return;
+  }
+
+  /* ================= EXTRACTING AVAILABLE QUALITIES ================= */
+  const resolutions = [...new Map(
+    tracks.filter(t => t.height)
+      .map(t => [t.height, t])
+  ).values()]
+  .sort((a,b)=>b.height - a.height)
+  .map(t => t.height);
+
+  /* ================= PLYR PREMIUM UI WRAPPER ================= */
+  const player = new Plyr(videoEl, {
+    controls: [
+      'play-large','rewind','play','fast-forward',
+      'progress','current-time','duration',
+      'mute','volume','settings','fullscreen'
+    ],
+    settings: ['quality','speed'],
+    quality: {
+      default: 'Auto',
+      options: ['Auto', ...resolutions],
+      forced: true,
+      onChange: (q) => {
+        if (q === 'Auto') {
+          shakaPlayer.configure({ abr: { enabled: true } });
+          return;
+        }
+        const track = tracks.find(t => t.height == q);
+        if (track) {
+          shakaPlayer.configure({ abr: { enabled: false } });
+          shakaPlayer.selectVariantTrack(track, true);
+        }
+      }
+    },
+    speed: { selected:1, options:[0.5,0.75,1,1.25,1.5,1.75,2,2.5,3] },
+    autoplay: true
+  });
+
+  /* ================= BLOCK DEFAULT CONTROLS GESTURES ================= */
+  videoContainer.addEventListener("dblclick", e=>{ e.stopPropagation(); e.preventDefault(); }, true);
+  ['touchstart','touchmove','touchend','click'].forEach(ev=>{
+      videoEl.addEventListener(ev, e=>e.stopImmediatePropagation(), true);
+  });
+
+  /* ================= MOBILE TOUCH GESTURES (10s Seek & Speed Hold) ================= */
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  let holdTimeout=null, speedHeld=false, lastTap=0;
+
+  videoEl.addEventListener("touchstart", ()=>{
+    if(!isMobile) return;
+    holdTimeout = setTimeout(()=>{
+      if(!speedHeld){ speedHeld=true; player.speed=2; }
+    },1000);
+  });
+
+  videoEl.addEventListener("touchend", ()=>{
+    if(!isMobile) return;
+    clearTimeout(holdTimeout);
+    if(speedHeld){ player.speed=1; speedHeld=false; }
+  });
+
+  videoContainer.addEventListener("touchend",(e)=>{
+    if(!isMobile) return;
+
+    const now = Date.now();
+    const gap = now-lastTap;
+    lastTap = now;
+
+    const {clientX} = e.changedTouches[0];
+    const {left,width} = videoContainer.getBoundingClientRect();
+    const x = clientX-left;
+
+    if(gap<300){
+      if(x<width/3) player.currentTime-=10;
+      else if(x>2*width/3) player.currentTime+=10;
+      else player.togglePlay();
+    }
+  });
+
+  /* ================= PC PROFESSIONAL HOTKEYS ================= */
+  document.addEventListener("keydown", (e) => {
+    const tag = document.activeElement.tagName.toLowerCase();
+    if (tag === "input" || tag === "textarea") return;
+
+    switch (e.key.toLowerCase()) {
+      case " ":
+      case "k":
+        e.preventDefault();
+        player.togglePlay();
+        break;
+      case "arrowright":
+        player.currentTime += 10;
+        break;
+      case "arrowleft":
+        player.currentTime -= 10;
+        break;
+      case "arrowup":
+        e.preventDefault();
+        player.volume = Math.min(1, player.volume + 0.1);
+        break;
+      case "arrowdown":
+        e.preventDefault();
+        player.volume = Math.max(0, player.volume - 0.1);
+        break;
+      case "m":
+        player.muted = !player.muted;
+        break;
+      case "f":
+        player.fullscreen.toggle();
+        break;
+      case "c":
+        player.speed = player.speed === 1 ? 2 : 1;
+        break;
+    }
+  });
+
+  // Popup closer trigger
+  document.getElementById("continueBtn").onclick = () => {
+    document.getElementById("tgPopup").style.display = "none";
+  }
+
+})();
 </script>
 </body>
 </html>
