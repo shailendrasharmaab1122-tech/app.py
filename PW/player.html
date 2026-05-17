@@ -2,187 +2,81 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Secure Lecture Player - DevCoderz</title>
-
-<link rel="stylesheet" href="https://gray-madelina-19.tiiny.site/ogx.css">
-<link rel="stylesheet" href="https://gray-madelina-19.tiiny.site/plyrx55.css">
-
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Premium Player - DevCoderz</title>
 <style>
-  body { margin:0; background:#000; overflow: hidden; font-family: sans-serif; }
-  .video-container { width:100%; height:100vh; position:relative; background:#000; }
-  video { width:100%; height:100vh; object-fit: contain; }
-  
-  /* Watermark branding */
-  .top-brand {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    z-index: 999;
-    pointer-events: none;
-    background: rgba(0, 0, 0, 0.6);
-    padding: 6px 12px;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 152, 0, 0.3);
-  }
-  .top-brand .jsr { color: #ff9800; font-weight: 700; font-size: 11px; letter-spacing: 0.5px; margin-right: 6px; }
-  .top-brand .dev { font-size: 11px; font-weight: 600; color: #00e5ff; }
+*{
+ margin:0;
+ padding:0;
+ box-sizing:border-box;
+ font-family:sans-serif;
+ -webkit-user-select: none;
+ user-select: none;
+}
+html,body{width:100%;height:100%;background:#000;overflow:hidden;}
+.player-screen{position:fixed;inset:0;background:#000;z-index:10;}
+iframe{width:100%;height:100%;border:none;background:#000;}
 
-  /* High Priority Overlay Layer - Isko sabse top par rakha hai (z-index: 200000) */
-  .overlay { 
-    position: fixed; 
-    inset: 0; 
-    background: rgba(15, 23, 42, 0.95); 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    z-index: 200000 !important; 
-  }
-  .box { width: 320px; padding: 26px; border-radius: 22px; text-align: center; background: linear-gradient(135deg, #1e3c72, #2a5298); color: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); }
-  .tg-btn { display: block; margin-top: 14px; padding: 14px; border-radius: 28px; font-weight: 700; width: 100%; cursor: pointer; text-align: center; text-decoration: none; color: #fff; transition: 0.2s; font-size: 14px; }
-  .join { background: #fff; color: #1e3c72; box-shadow: 0 4px 12px rgba(255,255,255,0.15); }
-  .continue { background: #ff9800; color: #fff; margin-top: 15px; box-shadow: 0 4px 12px rgba(255,152,0,0.3); border: none; }
-  .tg-btn:active { transform: scale(0.98); }
+/* Custom Branding overlay jo unke player ke controls ko block nahi karega */
+.top-brand{
+ position:absolute;
+ top:12px;
+ left:15px;
+ z-index:9999;
+ pointer-events:none; 
+ background: rgba(0, 0, 0, 0.6);
+ padding: 5px 12px;
+ border-radius: 8px;
+ border: 1px solid rgba(255,152,0,0.3);
+}
+.top-brand .jsr{color:#ff9800;font-weight:700;font-size:11px;letter-spacing: 0.5px; display: inline-block; margin-right: 6px;}
+.top-brand .dev{font-size:11px;font-weight:600;color:#00e5ff;display: inline-block;}
+
+/* Premium Telegram Lock UI */
+.overlay{position:fixed;inset:0;background:rgba(15, 23, 42, 0.98);display:flex;align-items:center;justify-content:center;z-index:100000;}
+.box{width:320px;padding:26px;border-radius:22px;text-align:center;background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;box-shadow: 0 10px 25px rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1);}
+.tg-btn{display:block;margin-top:14px;padding:14px;border-radius:28px;font-weight:700;width:100%;cursor:pointer;text-align:center;text-decoration:none;color:#fff;transition: 0.2s;font-size:14px;}
+.join{background:#fff;color:#1e3c72;box-shadow:0 4px 12px rgba(255,255,255,0.15);}
+.continue{background:#ff9800;color:#fff;margin-top:15px;box-shadow:0 4px 12px rgba(255,152,0,0.3);border:none;}
+.tg-btn:active {transform: scale(0.98);}
 </style>
 </head>
-
 <body>
 
 <div class="overlay" id="tgPopup">
  <div class="box">
-  <h2>Join our Telegram</h2>
-  <p style="font-size:12px; color:rgba(255,255,255,0.8); margin-top:5px; line-height: 1.4;">Lectures ko bina rukawat dekhne ke liye channel join karne ke baad 'Continue' karein.</p>
+  <h2>🚩 Jai Shree Ram 🚩</h2>
+  <p style="font-size:12px; color:rgba(255,255,255,0.8); margin-top:6px; line-height:1.4;">Premium Lectures bina kisi rukawat ke dekhne ke liye channel join karke Continue karein.</p>
   <a class="tg-btn join" href="https://t.me/+JXdxtVzQf-NhM2Jl" target="_blank">Join Telegram</a>
   <button class="tg-btn continue" onclick="document.getElementById('tgPopup').style.setProperty('display','none','important');">Continue to Video</button>
  </div>
 </div>
 
-<div class="video-container">
-  <div class="top-brand">
-    <span class="jsr">🚩 Jai Shree Ram</span>
-    <span class="dev">| Devansh Sharma</span>
-  </div>
-
-  <video id="lecture-player" playsinline autoplay></video>
+<div class="player-screen">
+ <iframe id="streamFrame" allow="autoplay; fullscreen" allowfullscreen></iframe>
+ 
+ <div class="top-brand">
+  <span class="jsr">🚩 Jai Shree Ram</span>
+  <span class="dev">| Devansh Sharma</span>
+ </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/shaka-player@4.7.11/dist/shaka-player.compiled.js"></script>
-<script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
-
 <script>
-(async function() {
-  const manifestUrl = localStorage.getItem('current_stream_url');
-  const keyId       = localStorage.getItem('current_key_id');
-  const keyValue    = localStorage.getItem('current_key_val');
+// URL se dynamic params nikal kar player load karna
+const urlParams = new URLSearchParams(window.location.search);
+const videoId = urlParams.get("video_id");
+const batchId = urlParams.get("batch_id");
+const subjectId = urlParams.get("subject_id");
+const topicId = urlParams.get("topic_id");
 
-  const videoEl = document.getElementById('lecture-player');
-  const videoContainer = videoEl.parentElement;
+const iframe = document.getElementById("streamFrame");
 
-  if (!manifestUrl || manifestUrl.trim() === "" || manifestUrl === "undefined") {
-      console.error("❌ No Stream URL in memory.");
-      return;
-  }
-
-  /* ================= SHAKA ENGINE ================= */
-  const shakaPlayer = new shaka.Player(videoEl);
-
-  if (keyId && keyValue && keyId !== "undefined" && keyValue !== "undefined") {
-    shakaPlayer.configure({ drm: { clearKeys: { [keyId]: keyValue } } });
-  }
-
-  /* ================= SEGMENT TOKEN HOOK ================= */
-  const manifestObj = new URL(manifestUrl);
-  shakaPlayer.getNetworkingEngine().registerRequestFilter((type, request) => {
-    if (type !== shaka.net.NetworkingEngine.RequestType.SEGMENT) return;
-    manifestObj.searchParams.forEach((v, k) => {
-      const segUrl = new URL(request.uris[0]);
-      segUrl.searchParams.set(k, v);
-      request.uris[0] = segUrl.toString();
-    });
-  });
-
-  /* ================= LOAD STREAM ================= */
-  let tracks = [];
-  try {
-    await shakaPlayer.load(manifestUrl);
-    tracks = shakaPlayer.getVariantTracks();
-  } catch (err) {
-    console.error("❌ LOAD FAILED:", err);
-    return;
-  }
-
-  const resolutions = [...new Map(tracks.filter(t => t.height).map(t => [t.height, t])).values()].sort((a,b)=>b.height - a.height).map(t => t.height);
-
-  /* ================= PLYR WRAPPER ================= */
-  const player = new Plyr(videoEl, {
-    controls: ['play-large','rewind','play','fast-forward','progress','current-time','duration','mute','volume','settings','fullscreen'],
-    settings: ['quality','speed'],
-    quality: {
-      default: 'Auto',
-      options: ['Auto', ...resolutions],
-      forced: true,
-      onChange: (q) => {
-        if (q === 'Auto') { shakaPlayer.configure({ abr: { enabled: true } }); return; }
-        const track = tracks.find(t => t.height == q);
-        if (track) { shakaPlayer.configure({ abr: { enabled: false } }); shakaPlayer.selectVariantTrack(track, true); }
-      }
-    },
-    speed: { selected:1, options:[0.5,0.75,1,1.25,1.5,1.75,2,2.5,3] },
-    autoplay: true
-  });
-
-  /* ================= GESTURES BLOCK & OVERWRITE ================= */
-  videoContainer.addEventListener("dblclick", e=>{ e.stopPropagation(); e.preventDefault(); }, true);
-  ['touchstart','touchmove','touchend','click'].forEach(ev=>{
-      videoEl.addEventListener(ev, e=>e.stopImmediatePropagation(), true);
-  });
-
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-  let holdTimeout=null, speedHeld=false, lastTap=0;
-
-  videoEl.addEventListener("touchstart", ()=>{
-    if(!isMobile) return;
-    holdTimeout = setTimeout(()=>{ if(!speedHeld){ speedHeld=true; player.speed=2; } },1000);
-  });
-
-  videoEl.addEventListener("touchend", ()=>{
-    if(!isMobile) return;
-    clearTimeout(holdTimeout);
-    if(speedHeld){ player.speed=1; speedHeld=false; }
-  });
-
-  videoContainer.addEventListener("touchend",(e)=>{
-    if(!isMobile) return;
-    const now = Date.now();
-    const gap = now-lastTap;
-    lastTap = now;
-    const {clientX} = e.changedTouches[0];
-    const {left,width} = videoContainer.getBoundingClientRect();
-    const x = clientX-left;
-    if(gap<300){
-      if(x<width/3) player.currentTime-=10;
-      else if(x>2*width/3) player.currentTime+=10;
-      else player.togglePlay();
-    }
-  });
-
-  /* ================= PC HOTKEYS ================= */
-  document.addEventListener("keydown", (e) => {
-    const tag = document.activeElement.tagName.toLowerCase();
-    if (tag === "input" || tag === "textarea") return;
-    switch (e.key.toLowerCase()) {
-      case " ": case "k": e.preventDefault(); player.togglePlay(); break;
-      case "arrowright": player.currentTime += 10; break;
-      case "arrowleft": player.currentTime -= 10; break;
-      case "arrowup": e.preventDefault(); player.volume = Math.min(1, player.volume + 0.1); break;
-      case "arrowdown": e.preventDefault(); player.volume = Math.max(0, player.volume - 0.1); break;
-      case "m": player.muted = !player.muted; break;
-      case "f": player.fullscreen.toggle(); break;
-      case "c": player.speed = player.speed === 1 ? 2 : 1; break;
-    }
-  });
-
-})();
+if(videoId && batchId) {
+    // Unka source automatic embed format me load hoga
+    iframe.src = `https://eduvibe-pw.page.gd/videoplayerr.php?video_id=${videoId}&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}`;
+} else {
+    iframe.src = "about:blank";
+}
 </script>
 </body>
 </html>
