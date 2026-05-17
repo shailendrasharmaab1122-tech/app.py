@@ -63,31 +63,17 @@ startBtn.onclick = async () => {
   const topicId = urlParams.get("topic_id");
 
   try {
-    const targetUrl = `https://eduvibe-pw.page.gd/videoplayerr.php?video_id=${videoId}&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}`;
-    
-    // Yeh line automatic target website ki request ko proxy ke throug ghumayegi taaki CORS bypass ho sake
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}&_=` + Date.now();
-    
-    const response = await fetch(proxyUrl);
-    const result = await response.json();
-    const htmlContent = result.contents; 
+    // Vercel backend API endpoint call
+    const res = await fetch(`/api/stream?video_id=${videoId}&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}`);
+    const data = await res.json();
 
-    const manifestUrl = htmlContent.match(/manifestUrl\s*=\s*["']([^"']+)["']/)?.[1];
-    const keyId = htmlContent.match(/keyId\s*=\s*["']([^"']+)["']/)?.[1];
-    const keyValue = htmlContent.match(/keyValue\s*=\s*["']([^"']+)["']/)?.[1];
-
-    if (!manifestUrl || !keyId || !keyValue) {
-      alert("Stream Error: Token expired or source layout modified.");
-      startBtn.style.display = "block";
-      loader.style.display = "none";
-      return;
-    }
+    if(data.error) { alert("Stream Error: " + data.error); startBtn.style.display = "block"; loader.style.display = "none"; return; }
 
     document.getElementById("tgPopup").style.setProperty('display','none','important');
-    initializePlayer(manifestUrl, keyId, keyValue);
+    initializePlayer(data.manifestUrl, data.keyId, data.keyValue);
 
   } catch (err) {
-    alert("Proxy handshake failed! Server temporarily busy.");
+    alert("Server Connection Failed!");
     startBtn.style.display = "block";
     loader.style.display = "none";
   }
