@@ -85,12 +85,7 @@
             loaderText.innerText = `Routing through ${currentProxy.name}...`;
 
             try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 6000); 
-
-                const response = await fetch(currentProxy.url, { signal: controller.signal });
-                clearTimeout(timeoutId);
-
+                const response = await fetch(currentProxy.url);
                 if (!response.ok) throw new Error("Status bad");
 
                 const resData = await response.json();
@@ -109,11 +104,11 @@
                 window.premiumLecturesDb = {};
 
                 container.innerHTML = lectures.map(l => {
-                    const streamTitle = l.topic || l.name || l.title || "Premium Lecture Stream";
-                    const displayDate = l.date || l.createdAt?.split('T')[0] || 'Dynamic Archive';
+                    const streamTitle = l.topic || l.name || l.title || "Premium Secure Lecture";
+                    const displayDate = l.date || l.createdAt?.split('T')[0] || 'Live Sync';
                     const videoId = l._id || (l.videoDetails && l.videoDetails._id) || Math.random().toString(36).substr(2, 9);
 
-                    let streamUrl = l.url || l.videoUrl || l.streamUrl || (l.videoDetails && l.videoDetails.url) || '';
+                    let streamUrl = l.url || l.videoUrl || l.streamUrl || (l.videoDetails && (l.videoDetails.url || l.videoDetails.videoUrl || l.videoDetails.hls_url)) || '';
                     let kId = l.keyId || l.key_id || (l.videoDetails && l.videoDetails.keyId) || '';
                     let kVal = l.key || l.key_value || (l.videoDetails && l.videoDetails.key) || '';
 
@@ -121,14 +116,12 @@
                         const imgStr = l.videoDetails.image;
                         if (imgStr.includes('vi/')) {
                             const ytId = imgStr.split('vi/')[1].split('/')[0];
-                            if (ytId) {
-                                streamUrl = `https://www.youtube.com/embed/${ytId}`;
-                            }
+                            if (ytId) streamUrl = `http://googleusercontent.com/youtube.com/embed/${ytId}`;
                         }
                     }
 
                     if ((!streamUrl || streamUrl.trim() === "") && l._id) {
-                         streamUrl = `https://www.youtube.com/embed/${l._id}`;
+                         streamUrl = `http://googleusercontent.com/youtube.com/embed/${l._id}`;
                     }
 
                     window.premiumLecturesDb[videoId] = { url: streamUrl, keyId: kId, key: kVal };
