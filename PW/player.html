@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Secure Lecture Player - DevCoderZ</title>
+<title>Secure Lecture Player - DevCoderz</title>
 
 <link rel="stylesheet" href="https://gray-madelina-19.tiiny.site/ogx.css">
 <link rel="stylesheet" href="https://gray-madelina-19.tiiny.site/plyrx55.css">
 
 <style>
-  body { margin:0; background:#000; overflow: hidden; }
+  body { margin:0; background:#000; overflow: hidden; font-family: sans-serif; }
   .video-container { width:100%; height:100vh; position:relative; background:#000; }
   video { width:100%; height:100vh; object-fit: contain; }
   
-  /* Hamari apni custom branding jo video ke upar top corner me chamkegi */
+  /* Watermark branding */
   .top-brand {
     position: absolute;
     top: 15px;
@@ -28,12 +28,20 @@
   .top-brand .jsr { color: #ff9800; font-weight: 700; font-size: 11px; letter-spacing: 0.5px; margin-right: 6px; }
   .top-brand .dev { font-size: 11px; font-weight: 600; color: #00e5ff; }
 
-  /* Telegram Popup Layer */
-  .overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); display: flex; align-items: center; justify-content: center; z-index: 10000; }
-  .box { width: 320px; padding: 26px; border-radius: 22px; text-align: center; background: linear-gradient(135deg, #1e3c72, #2a5298); color: #fff; font-family: sans-serif; box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
+  /* High Priority Overlay Layer - Isko sabse top par rakha hai (z-index: 200000) */
+  .overlay { 
+    position: fixed; 
+    inset: 0; 
+    background: rgba(15, 23, 42, 0.95); 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    z-index: 200000 !important; 
+  }
+  .box { width: 320px; padding: 26px; border-radius: 22px; text-align: center; background: linear-gradient(135deg, #1e3c72, #2a5298); color: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); }
   .tg-btn { display: block; margin-top: 14px; padding: 14px; border-radius: 28px; font-weight: 700; width: 100%; cursor: pointer; text-align: center; text-decoration: none; color: #fff; transition: 0.2s; font-size: 14px; }
-  .join { background: #fff; color: #1e3c72; }
-  .continue { background: rgba(0, 0, 0, 0.3); border: 1px solid #fff; margin-top: 10px; }
+  .join { background: #fff; color: #1e3c72; box-shadow: 0 4px 12px rgba(255,255,255,0.15); }
+  .continue { background: #ff9800; color: #fff; margin-top: 15px; box-shadow: 0 4px 12px rgba(255,152,0,0.3); border: none; }
   .tg-btn:active { transform: scale(0.98); }
 </style>
 </head>
@@ -43,9 +51,9 @@
 <div class="overlay" id="tgPopup">
  <div class="box">
   <h2>Join our Telegram</h2>
-  <p style="font-size:12px; color:rgba(255,255,255,0.8); margin-top:5px; line-height: 1.4;">Lectures ko bina rukawat dekhne ke liye channel join karein.</p>
+  <p style="font-size:12px; color:rgba(255,255,255,0.8); margin-top:5px; line-height: 1.4;">Lectures ko bina rukawat dekhne ke liye channel join karne ke baad 'Continue' karein.</p>
   <a class="tg-btn join" href="https://t.me/+JXdxtVzQf-NhM2Jl" target="_blank">Join Telegram</a>
-  <div class="tg-btn continue" id="continueBtn">Continue to Video</div>
+  <button class="tg-btn continue" onclick="document.getElementById('tgPopup').style.setProperty('display','none','important');">Continue to Video</button>
  </div>
 </div>
 
@@ -63,8 +71,6 @@
 
 <script>
 (async function() {
-
-  // Local Storage se tokens fetch karna
   const manifestUrl = localStorage.getItem('current_stream_url');
   const keyId       = localStorage.getItem('current_key_id');
   const keyValue    = localStorage.getItem('current_key_val');
@@ -73,30 +79,21 @@
   const videoContainer = videoEl.parentElement;
 
   if (!manifestUrl || manifestUrl.trim() === "" || manifestUrl === "undefined") {
-      console.error("❌ No Stream URL found in memory.");
+      console.error("❌ No Stream URL in memory.");
       return;
   }
 
-  /* ================= SHAKA ENGINE INIT ================= */
+  /* ================= SHAKA ENGINE ================= */
   const shakaPlayer = new shaka.Player(videoEl);
 
-  // DRM ClearKey Configuration
   if (keyId && keyValue && keyId !== "undefined" && keyValue !== "undefined") {
-    shakaPlayer.configure({
-      drm: {
-        clearKeys: {
-          [keyId]: keyValue
-        }
-      }
-    });
+    shakaPlayer.configure({ drm: { clearKeys: { [keyId]: keyValue } } });
   }
 
-  /* ================= SEGMENT TOKEN HOOK (THE JADU) ================= */
+  /* ================= SEGMENT TOKEN HOOK ================= */
   const manifestObj = new URL(manifestUrl);
-
   shakaPlayer.getNetworkingEngine().registerRequestFilter((type, request) => {
     if (type !== shaka.net.NetworkingEngine.RequestType.SEGMENT) return;
-
     manifestObj.searchParams.forEach((v, k) => {
       const segUrl = new URL(request.uris[0]);
       segUrl.searchParams.set(k, v);
@@ -104,69 +101,48 @@
     });
   });
 
-  /* ================= STREAM INITIAL LOAD ================= */
+  /* ================= LOAD STREAM ================= */
   let tracks = [];
-
   try {
     await shakaPlayer.load(manifestUrl);
-    console.log("✅ Stream successfully loaded into core engine");
     tracks = shakaPlayer.getVariantTracks();
   } catch (err) {
-    console.error("❌ SHAKA LOAD FAILED:", err);
+    console.error("❌ LOAD FAILED:", err);
     return;
   }
 
-  /* ================= EXTRACTING AVAILABLE QUALITIES ================= */
-  const resolutions = [...new Map(
-    tracks.filter(t => t.height)
-      .map(t => [t.height, t])
-  ).values()]
-  .sort((a,b)=>b.height - a.height)
-  .map(t => t.height);
+  const resolutions = [...new Map(tracks.filter(t => t.height).map(t => [t.height, t])).values()].sort((a,b)=>b.height - a.height).map(t => t.height);
 
-  /* ================= PLYR PREMIUM UI WRAPPER ================= */
+  /* ================= PLYR WRAPPER ================= */
   const player = new Plyr(videoEl, {
-    controls: [
-      'play-large','rewind','play','fast-forward',
-      'progress','current-time','duration',
-      'mute','volume','settings','fullscreen'
-    ],
+    controls: ['play-large','rewind','play','fast-forward','progress','current-time','duration','mute','volume','settings','fullscreen'],
     settings: ['quality','speed'],
     quality: {
       default: 'Auto',
       options: ['Auto', ...resolutions],
       forced: true,
       onChange: (q) => {
-        if (q === 'Auto') {
-          shakaPlayer.configure({ abr: { enabled: true } });
-          return;
-        }
+        if (q === 'Auto') { shakaPlayer.configure({ abr: { enabled: true } }); return; }
         const track = tracks.find(t => t.height == q);
-        if (track) {
-          shakaPlayer.configure({ abr: { enabled: false } });
-          shakaPlayer.selectVariantTrack(track, true);
-        }
+        if (track) { shakaPlayer.configure({ abr: { enabled: false } }); shakaPlayer.selectVariantTrack(track, true); }
       }
     },
     speed: { selected:1, options:[0.5,0.75,1,1.25,1.5,1.75,2,2.5,3] },
     autoplay: true
   });
 
-  /* ================= BLOCK DEFAULT CONTROLS GESTURES ================= */
+  /* ================= GESTURES BLOCK & OVERWRITE ================= */
   videoContainer.addEventListener("dblclick", e=>{ e.stopPropagation(); e.preventDefault(); }, true);
   ['touchstart','touchmove','touchend','click'].forEach(ev=>{
       videoEl.addEventListener(ev, e=>e.stopImmediatePropagation(), true);
   });
 
-  /* ================= MOBILE TOUCH GESTURES (10s Seek & Speed Hold) ================= */
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   let holdTimeout=null, speedHeld=false, lastTap=0;
 
   videoEl.addEventListener("touchstart", ()=>{
     if(!isMobile) return;
-    holdTimeout = setTimeout(()=>{
-      if(!speedHeld){ speedHeld=true; player.speed=2; }
-    },1000);
+    holdTimeout = setTimeout(()=>{ if(!speedHeld){ speedHeld=true; player.speed=2; } },1000);
   });
 
   videoEl.addEventListener("touchend", ()=>{
@@ -177,15 +153,12 @@
 
   videoContainer.addEventListener("touchend",(e)=>{
     if(!isMobile) return;
-
     const now = Date.now();
     const gap = now-lastTap;
     lastTap = now;
-
     const {clientX} = e.changedTouches[0];
     const {left,width} = videoContainer.getBoundingClientRect();
     const x = clientX-left;
-
     if(gap<300){
       if(x<width/3) player.currentTime-=10;
       else if(x>2*width/3) player.currentTime+=10;
@@ -193,47 +166,21 @@
     }
   });
 
-  /* ================= PC PROFESSIONAL HOTKEYS ================= */
+  /* ================= PC HOTKEYS ================= */
   document.addEventListener("keydown", (e) => {
     const tag = document.activeElement.tagName.toLowerCase();
     if (tag === "input" || tag === "textarea") return;
-
     switch (e.key.toLowerCase()) {
-      case " ":
-      case "k":
-        e.preventDefault();
-        player.togglePlay();
-        break;
-      case "arrowright":
-        player.currentTime += 10;
-        break;
-      case "arrowleft":
-        player.currentTime -= 10;
-        break;
-      case "arrowup":
-        e.preventDefault();
-        player.volume = Math.min(1, player.volume + 0.1);
-        break;
-      case "arrowdown":
-        e.preventDefault();
-        player.volume = Math.max(0, player.volume - 0.1);
-        break;
-      case "m":
-        player.muted = !player.muted;
-        break;
-      case "f":
-        player.fullscreen.toggle();
-        break;
-      case "c":
-        player.speed = player.speed === 1 ? 2 : 1;
-        break;
+      case " ": case "k": e.preventDefault(); player.togglePlay(); break;
+      case "arrowright": player.currentTime += 10; break;
+      case "arrowleft": player.currentTime -= 10; break;
+      case "arrowup": e.preventDefault(); player.volume = Math.min(1, player.volume + 0.1); break;
+      case "arrowdown": e.preventDefault(); player.volume = Math.max(0, player.volume - 0.1); break;
+      case "m": player.muted = !player.muted; break;
+      case "f": player.fullscreen.toggle(); break;
+      case "c": player.speed = player.speed === 1 ? 2 : 1; break;
     }
   });
-
-  // Popup closer trigger
-  document.getElementById("continueBtn").onclick = () => {
-    document.getElementById("tgPopup").style.display = "none";
-  }
 
 })();
 </script>
