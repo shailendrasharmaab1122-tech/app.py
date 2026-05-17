@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>DevCoderz Ultra Smooth DRM Player</title>
+<title>DevCoderz Ultra Smooth Player</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/shaka-player.ui.min.js"></script>
 <style>
 *{
@@ -97,17 +97,15 @@ video{width:100%;height:100%;object-fit:contain;}
 const playerElement=document.getElementById("player"),v=document.getElementById("video"),playBtn=document.getElementById("play"),back=document.getElementById("back"),fwd=document.getElementById("fwd"),fs=document.getElementById("fs"),controls=document.getElementById("controls"),centerPlay=document.getElementById("centerPlay"),progress=document.getElementById("progress"),bar=document.getElementById("bar"),thumb=document.getElementById("thumb"),tgPopup=document.getElementById("tgPopup"),continueBtn=document.getElementById("continueBtn"),timeDisplay=document.getElementById("time"),settings=document.getElementById("settings"),settingsBtn=document.getElementById("settingsBtn"),speed=document.getElementById("speed"),quality=document.getElementById("quality");
 let drag=false,hideTimer,shakaPlayer;
 
-const urlParams=new URLSearchParams(window.location.search);
-let manifestUrl=urlParams.get("url") || urlParams.get("Url");
-const keyId=urlParams.get("keyId");
-const keyVal=urlParams.get("key");
+let manifestUrl = localStorage.getItem('current_stream_url');
+const keyId = localStorage.getItem('current_key_id');
+const keyVal = localStorage.getItem('current_key_val');
 
+const urlParams=new URLSearchParams(window.location.search);
 if(!manifestUrl || manifestUrl.trim()==="" || manifestUrl==="undefined"){
-    const rawBatchId=urlParams.get("batch_id");
-    const rawSubjectId=urlParams.get("subject_id");
     const rawTopicId=urlParams.get("topic_id");
     if(rawTopicId){
-        manifestUrl=`http://googleusercontent.com/youtube.com/youtube.com/1${rawTopicId}`;
+        manifestUrl=`https://www.youtube.com/embed/${rawTopicId}`;
     }else{
         manifestUrl="https://dash.akamaized.net/akamai/test/isofund.mpd";
     }
@@ -123,7 +121,7 @@ async function initShakaPlayer(){
     if(!shaka.Player.isBrowserSupported()) return;
     shakaPlayer=new shaka.Player(v);
 
-    if(keyId && keyVal && keyId!=="undefined" && keyVal!=="undefined"){
+    if(keyId && keyVal && keyId!=="undefined" && keyVal!=="undefined" && keyId.trim()!=="" && keyVal.trim()!==""){
         shakaPlayer.configure({
             drm: { clearKeys: { [keyId]: keyVal } }
         });
