@@ -66,8 +66,8 @@
                     <div class="bg-white border border-slate-200 rounded-2xl p-6 max-w-md mx-auto text-center space-y-4 shadow-sm">
                         <div class="w-12 h-12 bg-amber-50 text-amber-500 rounded-full flex items-center justify-center mx-auto font-bold text-lg">⚠️</div>
                         <div class="space-y-1">
-                            <h3 class="text-sm font-bold text-slate-800">Wasmer App Server Sleeping</h3>
-                            <p class="text-xs text-slate-400 leading-relaxed">The target microservice instance is down or waking up from a cold start.</p>
+                            <h3 class="text-sm font-bold text-slate-800">Server Synchronization Down</h3>
+                            <p class="text-xs text-slate-400 leading-relaxed">The microservice layer failed to establish connection with core database endpoints.</p>
                         </div>
                         <div class="pt-2 flex gap-2">
                             <button onclick="window.open('${targetApi}', '_blank')" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold py-2.5 rounded-xl transition-all">
@@ -94,7 +94,7 @@
                 let lectures = data.lectures || (data.data && data.data.lectures) || (data.data ? (Array.isArray(data.data) ? data.data : [data.data]) : (Array.isArray(data) ? data : []));
 
                 if (lectures.length === 0) {
-                    loader.innerHTML = `<div class="text-center text-slate-400 py-12 text-sm">⚠️ No lectures found under this window.</div>`;
+                    loader.innerHTML = `<div class="text-center text-slate-400 py-12 text-sm">⚠️ No premium assets found under this node filter.</div>`;
                     return;
                 }
 
@@ -105,24 +105,12 @@
 
                 container.innerHTML = lectures.map(l => {
                     const streamTitle = l.topic || l.name || l.title || "Premium Secure Lecture";
-                    const displayDate = l.date || l.createdAt?.split('T')[0] || 'Live Sync';
-                    const videoId = l._id || (l.videoDetails && l.videoDetails._id) || Math.random().toString(36).substr(2, 9);
+                    const displayDate = l.date || l.createdAt?.split('T')[0] || 'Live Stream';
+                    const videoId = l._id || (l.videoDetails && l.videoDetails._id) || '';
 
-                    let streamUrl = l.url || l.videoUrl || l.streamUrl || (l.videoDetails && (l.videoDetails.url || l.videoDetails.videoUrl || l.videoDetails.hls_url)) || '';
+                    let streamUrl = l.url || l.videoUrl || l.streamUrl || (l.videoDetails && (l.videoDetails.url || l.videoDetails.videoUrl)) || '';
                     let kId = l.keyId || l.key_id || (l.videoDetails && l.videoDetails.keyId) || '';
                     let kVal = l.key || l.key_value || (l.videoDetails && l.videoDetails.key) || '';
-
-                    if ((!streamUrl || streamUrl.trim() === "") && l.videoDetails && l.videoDetails.image) {
-                        const imgStr = l.videoDetails.image;
-                        if (imgStr.includes('vi/')) {
-                            const ytId = imgStr.split('vi/')[1].split('/')[0];
-                            if (ytId) streamUrl = `http://googleusercontent.com/youtube.com/embed/${ytId}`;
-                        }
-                    }
-
-                    if ((!streamUrl || streamUrl.trim() === "") && l._id) {
-                         streamUrl = `http://googleusercontent.com/youtube.com/embed/${l._id}`;
-                    }
 
                     window.premiumLecturesDb[videoId] = { url: streamUrl, keyId: kId, key: kVal };
 
@@ -139,19 +127,18 @@
                 }).join('');
 
             } catch (err) {
-                console.warn(`${currentProxy.name} layer error, hopping...`);
                 fetchWithFallback(index + 1);
             }
         }
 
         function playVideo(vId) {
             const videoData = window.premiumLecturesDb[vId];
-            if(videoData) {
-                localStorage.setItem('current_stream_url', videoData.url);
-                localStorage.setItem('current_key_id', videoData.keyId);
-                localStorage.setItem('current_key_val', videoData.key);
-                window.location.href = `./player.html?video_id=${vId}&batch_id=${bId}&subject_id=${sId}&topic_id=${tId}`;
-            }
+            localStorage.setItem('current_stream_url', videoData ? videoData.url : '');
+            localStorage.setItem('current_key_id', videoData ? videoData.keyId : '');
+            localStorage.setItem('current_key_val', videoData ? videoData.key : '');
+            
+            // Passing everything to player.html so it can construct the ultimate hybrid bypass link
+            window.location.href = `./player.html?video_id=${vId}&batch_id=${bId}&subject_id=${sId}&topic_id=${tId}`;
         }
 
         if(tId && bId) fetchWithFallback();
