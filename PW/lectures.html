@@ -67,7 +67,7 @@
                         <div class="w-12 h-12 bg-amber-50 text-amber-500 rounded-full flex items-center justify-center mx-auto font-bold text-lg">⚠️</div>
                         <div class="space-y-1">
                             <h3 class="text-sm font-bold text-slate-800">Wasmer App Server Sleeping</h3>
-                            <p class="text-xs text-slate-400 leading-relaxed">The target microservice instance is down or waking up from a cold start. Your frontend code is 100% fine.</p>
+                            <p class="text-xs text-slate-400 leading-relaxed">The target microservice instance is down or waking up from a cold start.</p>
                         </div>
                         <div class="pt-2 flex gap-2">
                             <button onclick="window.open('${targetApi}', '_blank')" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold py-2.5 rounded-xl transition-all">
@@ -94,35 +94,28 @@
                 if (!response.ok) throw new Error("Status bad");
 
                 const resData = await response.json();
-                let data;
+                let data = currentProxy.type === "allorigins" ? JSON.parse(resData.contents) : resData;
 
-                if (currentProxy.type === "allorigins") {
-                    data = JSON.parse(resData.contents);
-                } else {
-                    data = resData;
-                }
-
-                let lectures = [];
-                if (data.lectures) lectures = data.lectures;
-                else if (data.data && data.data.lectures) lectures = data.data.lectures;
-                else if (data.data) lectures = Array.isArray(data.data) ? data.data : [data.data];
-                else lectures = Array.isArray(data) ? data : [];
+                let lectures = data.lectures || (data.data && data.data.lectures) || (data.data ? (Array.isArray(data.data) ? data.data : [data.data]) : (Array.isArray(data) ? data : []));
 
                 if (lectures.length === 0) {
-                    loader.innerHTML = `<div class="text-center text-slate-400 py-12 text-sm">⚠️ No premium video streams found under this filter tab.</div>`;
+                    loader.innerHTML = `<div class="text-center text-slate-400 py-12 text-sm">⚠️ No lectures found under this window.</div>`;
                     return;
                 }
 
                 loader.classList.add('hidden');
                 container.classList.remove('hidden');
 
+                window.premiumLecturesDb = {};
+
                 container.innerHTML = lectures.map(l => {
-                    const streamTitle = l.topic || l.name || l.title || "Untitled Premium Lecture Stream";
+                    const streamTitle = l.topic || l.name || l.title || "Premium Lecture Stream";
                     const displayDate = l.date || l.createdAt?.split('T')[0] || 'Dynamic Archive';
+                    const videoId = l._id || (l.videoDetails && l.videoDetails._id) || Math.random().toString(36).substr(2, 9);
 
                     let streamUrl = l.url || l.videoUrl || l.streamUrl || (l.videoDetails && l.videoDetails.url) || '';
-                    let keyId = l.keyId || l.key_id || (l.videoDetails && l.videoDetails.keyId) || '';
-                    let keyVal = l.key || l.key_value || (l.videoDetails && l.videoDetails.key) || '';
+                    let kId = l.keyId || l.key_id || (l.videoDetails && l.videoDetails.keyId) || '';
+                    let kVal = l.key || l.key_value || (l.videoDetails && l.videoDetails.key) || '';
 
                     if ((!streamUrl || streamUrl.trim() === "") && l.videoDetails && l.videoDetails.image) {
                         const imgStr = l.videoDetails.image;
@@ -134,9 +127,11 @@
                         }
                     }
 
-                    if ((!streamUrl || streamUrl.trim() === "") && l.lectureType === "RECORDED" && l._id) {
+                    if ((!streamUrl || streamUrl.trim() === "") && l._id) {
                          streamUrl = `https://www.youtube.com/embed/${l._id}`;
                     }
+
+                    window.premiumLecturesDb[videoId] = { url: streamUrl, keyId: kId, key: kVal };
 
                     return `
                     <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md border-l-4 border-l-[#4f46e5] flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all">
@@ -144,15 +139,25 @@
                             <h3 class="text-sm font-bold text-slate-800 leading-snug">${streamTitle}</h3>
                             <div class="text-[11px] font-medium text-slate-400">📅 Sync: ${displayDate}</div>
                         </div>
-                        <a href="./player.html?url=${encodeURIComponent(streamUrl)}&keyId=${encodeURIComponent(keyId)}&key=${encodeURIComponent(keyVal)}" class="bg-[#4f46e5] hover:bg-[#4338ca] text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all text-center whitespace-nowrap shadow-sm">
+                        <button onclick="playVideo('${videoId}')" class="bg-[#4f46e5] hover:bg-[#4338ca] text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all text-center whitespace-nowrap shadow-sm">
                             ▶ Watch Now
-                        </a>
+                        </button>
                     </div>`;
                 }).join('');
 
             } catch (err) {
-                console.warn(`${currentProxy.name} failed, switching layer...`);
+                console.warn(`${currentProxy.name} layer error, hopping...`);
                 fetchWithFallback(index + 1);
+            }
+        }
+
+        function playVideo(vId) {
+            const videoData = window.premiumLecturesDb[vId];
+            if(videoData) {
+                localStorage.setItem('current_stream_url', videoData.url);
+                localStorage.setItem('current_key_id', videoData.keyId);
+                localStorage.setItem('current_key_val', videoData.key);
+                window.location.href = `./player.html?video_id=${vId}&batch_id=${bId}&subject_id=${sId}&topic_id=${tId}`;
             }
         }
 
