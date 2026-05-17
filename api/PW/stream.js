@@ -18,22 +18,40 @@ export default async function handler(req, res) {
         
         const response = await fetch(targetUrl, {
             headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.5'
             }
         });
 
         const htmlContent = await response.text();
 
-        const manifestRegex = /const manifestUrl\s*=\s*["']([^"']+)["']/;
-        const keyIdRegex = /const keyId\s*=\s*["']([^"']+)["']/;
-        const keyValueRegex = /const keyValue\s*=\s*["']([^"']+)["']/;
+        let manifestUrl = htmlContent.match(/const manifestUrl\s*=\s*["']([^"']+)["']/)?.[1] || 
+                          htmlContent.match(/manifestUrl\s*=\s*["']([^"']+)["']/)?.[1];
+                          
+        let keyId = htmlContent.match(/const keyId\s*=\s*["']([^"']+)["']/)?.[1] || 
+                    htmlContent.match(/keyId\s*=\s*["']([^"']+)["']/)?.[1];
+                    
+        let keyValue = htmlContent.match(/const keyValue\s*=\s*["']([^"']+)["']/)?.[1] || 
+                       htmlContent.match(/keyValue\s*=\s*["']([^"']+)["']/)?.[1];
 
-        const manifestUrl = htmlContent.match(manifestRegex)?.[1];
-        const keyId = htmlContent.match(keyIdRegex)?.[1];
-        const keyValue = htmlContent.match(keyValueRegex)?.[1];
+        if (!manifestUrl && htmlContent.includes("initPlayer")) {
+            const jsonParams = htmlContent.match(/initPlayer\(([^)]+)\)/)?.[1];
+            if (jsonParams) {
+                const parts = jsonParams.split(',').map(p => p.trim().replace(/['"]/g, ''));
+                if (parts.length >= 3) {
+                    manifestUrl = parts[0];
+                    keyId = parts[1];
+                    keyValue = parts[2];
+                }
+            }
+        }
 
         if (!manifestUrl) {
-            return res.status(500).json({ error: "Failed to extract live stream tokens" });
+            if (htmlContent.includes("Cookies are not enabled") || htmlContent.includes("Cloudflare")) {
+                return res.status(500).json({ error: "Target protected by security wall. Handshake blocked." });
+            }
+            return res.status(500).json({ error: "Source format changed or stream expired." });
         }
 
         return res.status(200).json({ manifestUrl, keyId, keyValue });
