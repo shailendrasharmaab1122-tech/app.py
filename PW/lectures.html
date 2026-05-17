@@ -48,7 +48,8 @@
             window.location.href = "./index.html";
         }
 
-        const targetApi = `https://eduvibe-pw-api.wasmer.app/lectures.php?batch_id=${bId}&subject_id=${sId}&topic_id=${tId}`;
+        // Tumhari Nayi get-lectures API with Tab Parameters
+        const targetApi = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${bId}&subject_id=${sId}&topic_id=${tId}&tab=videos`;
         
         const proxies = [
             { name: "Global Proxy Bridge", url: `https://api.allorigins.win/get?url=${encodeURIComponent(targetApi)}`, type: "allorigins" },
@@ -103,10 +104,15 @@
                     data = resData;
                 }
 
-                const lectures = data.lectures || data.data || (Array.isArray(data) ? data : []);
+                // Upgraded mapping fallback to extract content lists from multiple data nodes
+                let lectures = [];
+                if (data.lectures) lectures = data.lectures;
+                else if (data.data && data.data.lectures) lectures = data.data.lectures;
+                else if (data.data) lectures = Array.isArray(data.data) ? data.data : [data.data];
+                else lectures = Array.isArray(data) ? data : [];
 
                 if (lectures.length === 0) {
-                    loader.innerHTML = `<div class="text-center text-slate-400 py-12 text-sm">⚠️ No lectures indexed for this topic ID.</div>`;
+                    loader.innerHTML = `<div class="text-center text-slate-400 py-12 text-sm">⚠️ No premium video streams found under this filter tab.</div>`;
                     return;
                 }
 
@@ -114,13 +120,20 @@
                 container.classList.remove('hidden');
 
                 container.innerHTML = lectures.map(l => {
+                    // Safe string parsing for dynamic variables
+                    const streamTitle = l.topic || l.name || l.title || "Untitled Premium Lecture Stream";
+                    const streamUrl = l.url || l.videoUrl || l.streamUrl || '';
+                    const keyId = l.keyId || l.key_id || '';
+                    const keyVal = l.key || l.key_value || '';
+                    const displayDate = l.date || l.createdAt?.split('T')[0] || 'Dynamic Archive';
+
                     return `
                     <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md border-l-4 border-l-[#4f46e5] flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all">
                         <div class="space-y-1">
-                            <h3 class="text-sm font-bold text-slate-800 leading-snug">${l.topic || l.name || "Untitled Lecture Stream"}</h3>
-                            <div class="text-[11px] font-medium text-slate-400">📅 Date: ${l.date || 'N/A'}</div>
+                            <h3 class="text-sm font-bold text-slate-800 leading-snug">${streamTitle}</h3>
+                            <div class="text-[11px] font-medium text-slate-400">📅 Sync: ${displayDate}</div>
                         </div>
-                        <a href="./player.html?url=${encodeURIComponent(l.url || '')}&keyId=${l.keyId || ''}&key=${l.key || ''}" class="bg-[#4f46e5] hover:bg-[#4338ca] text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all text-center whitespace-nowrap shadow-sm">
+                        <a href="./player.html?url=${encodeURIComponent(streamUrl)}&keyId=${keyId}&key=${keyVal}" class="bg-[#4f46e5] hover:bg-[#4338ca] text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all text-center whitespace-nowrap shadow-sm">
                             ▶ Watch Now
                         </a>
                     </div>`;
