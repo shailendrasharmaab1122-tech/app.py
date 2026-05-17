@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Premium Player - DevCoderz</title>
+<title>Premium Player Gateway - DevCoderz</title>
 <style>
 *{
  margin:0;
@@ -13,32 +13,16 @@
  -webkit-user-select: none;
  user-select: none;
 }
-html,body{width:100%;height:100%;background:#000;overflow:hidden;}
-.player-screen{position:fixed;inset:0;background:#000;z-index:10;}
-iframe{width:100%;height:100%;border:none;background:#000;}
-
-/* Custom Branding overlay jo unke player ke controls ko block nahi karega */
-.top-brand{
- position:absolute;
- top:12px;
- left:15px;
- z-index:9999;
- pointer-events:none; 
- background: rgba(0, 0, 0, 0.6);
- padding: 5px 12px;
- border-radius: 8px;
- border: 1px solid rgba(255,152,0,0.3);
-}
-.top-brand .jsr{color:#ff9800;font-weight:700;font-size:11px;letter-spacing: 0.5px; display: inline-block; margin-right: 6px;}
-.top-brand .dev{font-size:11px;font-weight:600;color:#00e5ff;display: inline-block;}
-
-/* Premium Telegram Lock UI */
-.overlay{position:fixed;inset:0;background:rgba(15, 23, 42, 0.98);display:flex;align-items:center;justify-content:center;z-index:100000;}
-.box{width:320px;padding:26px;border-radius:22px;text-align:center;background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;box-shadow: 0 10px 25px rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1);}
-.tg-btn{display:block;margin-top:14px;padding:14px;border-radius:28px;font-weight:700;width:100%;cursor:pointer;text-align:center;text-decoration:none;color:#fff;transition: 0.2s;font-size:14px;}
+html,body{width:100%;height:100%;background:#0f172a;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.overlay{position:fixed;inset:0;background:rgba(15, 23, 42, 0.98);display:flex;align-items:center;justify-content:center;z-index:100;}
+.box{width:340px;padding:30px;border-radius:24px;text-align:center;background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;box-shadow:0 10px 25px rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1);}
+h2 {font-size:22px;margin-bottom:10px;font-weight:700;letter-spacing: 0.5px;}
+p {font-size:13px;color:rgba(255,255,255,0.85);margin-bottom:24px;line-height:1.5;}
+.tg-btn{display:block;margin-top:12px;padding:15px;border-radius:28px;font-weight:700;font-size:14px;width:100%;cursor:pointer;text-align:center;text-decoration:none;transition:all 0.2s;}
+.tg-btn:active {transform:scale(0.98);}
 .join{background:#fff;color:#1e3c72;box-shadow:0 4px 12px rgba(255,255,255,0.15);}
-.continue{background:#ff9800;color:#fff;margin-top:15px;box-shadow:0 4px 12px rgba(255,152,0,0.3);border:none;}
-.tg-btn:active {transform: scale(0.98);}
+.continue{background:#ff9800;color:#fff;box-shadow:0 4px 12px rgba(255,152,0,0.3);margin-top:20px;border:none;}
+.dev-credit {font-size:11px;color:rgba(255,255,255,0.5);margin-top:22px;font-weight:500;letter-spacing: 0.5px;}
 </style>
 </head>
 <body>
@@ -46,37 +30,37 @@ iframe{width:100%;height:100%;border:none;background:#000;}
 <div class="overlay" id="tgPopup">
  <div class="box">
   <h2>🚩 Jai Shree Ram 🚩</h2>
-  <p style="font-size:12px; color:rgba(255,255,255,0.8); margin-top:6px; line-height:1.4;">Premium Lectures bina kisi rukawat ke dekhne ke liye channel join karke Continue karein.</p>
-  <a class="tg-btn join" href="https://t.me/+JXdxtVzQf-NhM2Jl" target="_blank">Join Telegram</a>
-  <button class="tg-btn continue" onclick="document.getElementById('tgPopup').style.setProperty('display','none','important');">Continue to Video</button>
- </div>
-</div>
-
-<div class="player-screen">
- <iframe id="streamFrame" allow="autoplay; fullscreen" allowfullscreen></iframe>
- 
- <div class="top-brand">
-  <span class="jsr">🚩 Jai Shree Ram</span>
-  <span class="dev">| Devansh Sharma</span>
+  <p>Premium stream access karne ke liye niche join karein aur 'Watch Video' par click karein.</p>
+  
+  <a class="tg-btn join" href="https://t.me/+JXdxtVzQf-NhM2Jl" target="_blank">Join Telegram Channel</a>
+  
+  <button class="tg-btn continue" id="continueBtn">▶ Watch Video Now</button>
+  
+  <div class="dev-credit">Developed by - Devansh Sharma</div>
  </div>
 </div>
 
 <script>
-// URL se dynamic params nikal kar player load karna
+const continueBtn = document.getElementById("continueBtn");
+
+// URL se parameters read karna
 const urlParams = new URLSearchParams(window.location.search);
 const videoId = urlParams.get("video_id");
 const batchId = urlParams.get("batch_id");
 const subjectId = urlParams.get("subject_id");
 const topicId = urlParams.get("topic_id");
 
-const iframe = document.getElementById("streamFrame");
-
-if(videoId && batchId) {
-    // Unka source automatic embed format me load hoga
-    iframe.src = `https://eduvibe-pw.page.gd/videoplayerr.php?video_id=${videoId}&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}`;
-} else {
-    iframe.src = "about:blank";
-}
+continueBtn.onclick = e => {
+    e.preventDefault();
+    
+    if (videoId && batchId) {
+        // Iframe ka jhanjhat khatam, direct new tab me load hoga taaki browser cookies accept kare aur video chal jaye
+        const targetBypassUrl = `https://eduvibe-pw.page.gd/videoplayerr.php?video_id=${videoId}&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}`;
+        window.open(targetBypassUrl, '_blank');
+    } else {
+        alert("Error: Video parameters missing or dynamic stream expired.");
+    }
+};
 </script>
 </body>
 </html>
