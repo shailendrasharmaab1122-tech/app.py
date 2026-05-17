@@ -1,93 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stream Player - DevCoderZ</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/shaka-player.ui.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/controls.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; }
-        .shaka-video-container { max-width: 100%; border-radius: 1rem; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border: 1px solid #1e293b; }
-        .shaka-controls-container { background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>DevCoderz Ultra Smooth DRM Player</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/shaka-player.ui.min.js"></script>
+<style>
+*{
+ margin:0;
+ padding:0;
+ box-sizing:border-box;
+ font-family:sans-serif;
+ -webkit-user-select: none;
+ -moz-user-select: none;
+ -ms-user-select: none;
+ user-select: none;
+ -webkit-touch-callout: none;
+ -webkit-tap-highlight-color: transparent;
+}
+html,body{width:100%;height:100%;background:#000;overflow:hidden;touch-action: none;}
+.player{position:fixed;inset:0;background:#000;pointer-events:auto;touch-action: manipulation;}
+video{width:100%;height:100%;object-fit:contain;}
+.top-brand{position:absolute;top:6px;left:50%;transform:translateX(-50%);z-index:40;text-align:center;pointer-events:none;}
+.top-brand .jsr{color:#ff9800;font-weight:700;font-size:14px;}
+.top-brand .dev{margin-top:4px;font-size:12px;font-weight:600;color:#00e5ff;text-shadow:0 0 6px #00e5ff, 0 0 12px #00e5ff;}
+.center-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:30;cursor:pointer}
+.center-play.hide{display:none}
+.center-play span{width:90px;height:90px;background:rgba(255,255,255,.25);backdrop-filter:blur(5px);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:40px;color:#fff}
+.controls{position:absolute;bottom:0;width:100%;padding:10px;background:linear-gradient(transparent,rgba(0,0,0,.9));transition:.3s;z-index:35;touch-action: none;}
+.controls.hide{transform:translateY(100%);opacity:0;}
+.progress{height:7px;background:#555;border-radius:10px;position:relative;margin-bottom:6px;touch-action:none;cursor:pointer;}
+.progress-fill{height:100%;width:0;background:#2196f3;border-radius:10px;}
+.thumb{position:absolute;top:50%;width:18px;height:18px;background:#fff;border-radius:50%;transform:translate(-50%,-50%);left:0;pointer-events:none;}
+.time{color:#fff;font-size:11px;text-align:right;margin-bottom:4px;}
+.row{display:flex;align-items:center;gap:6px;justify-content:space-between;color:#fff;}
+.btn{width:40px;height:40px;border:1.5px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+#play{font-size:0;}
+#play::before{content:"▶";font-size:16px;}
+#play.pause::before{content:"❚❚";font-size:14px;}
+.settings{position:absolute;bottom:70px;right:10px;background:#111;border-radius:12px;padding:12px;width:160px;display:none;z-index:50;}
+.settings label{color:#aaa;font-size:10px;display:block;margin-bottom:4px;}
+.settings select{width:100%;background:#000;color:#fff;border:1px solid #555;border-radius:4px;height:24px;margin-bottom:10px;}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:100;}
+.box{width:320px;padding:26px;border-radius:22px;text-align:center;background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;}
+.tg-btn{display:block;margin-top:14px;padding:14px;border-radius:28px;font-weight:700;width:100%;cursor:pointer;text-align:center;text-decoration:none;color:#fff;}
+.join{background:#fff;color:#1e3c72;}
+.continue{background:rgba(0,0,0,.25);border:1px solid #fff;}
+</style>
 </head>
-<body class="min-h-screen flex flex-col justify-between">
+<body>
 
-    <nav class="h-16 border-b border-slate-800 bg-slate-900/50 backdrop-blur flex items-center px-6 justify-between">
-        <button onclick="history.back()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold py-2 px-4 rounded-lg transition-all">
-            ← Back to Room
-        </button>
-        <span class="text-xs text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-3 py-1 rounded-full font-bold">
-            Secure DRM Stream
-        </span>
-    </nav>
+<div class="overlay" id="tgPopup">
+ <div class="box">
+  <h2>Join our Telegram</h2>
+  <a class="tg-btn join" href="https://t.me/+JXdxtVzQf-NhM2Jl" target="_blank">Join Telegram</a>
+  <div class="tg-btn continue" id="continueBtn">Continue to Video</div>
+ </div>
+</div>
 
-    <main class="flex-1 flex items-center justify-center p-4">
-        <div class="w-full max-w-4xl mx-auto">
-            
-            <div data-shaka-player-container class="shaka-video-container w-full aspect-video bg-black">
-                <video data-shaka-player id="video" class="w-full h-full" autoplay playsinline></video>
-            </div>
+<div class="player" id="player">
+ <video id="video" playsinline></video>
+ <div class="top-brand">
+  <div class="jsr">🚩 Jai Shree Ram 🚩</div>
+  <div class="dev">Developed by - Devansh Sharma</div>
+ </div>
+ <div class="center-play" id="centerPlay"><span>▶</span></div>
+ <div class="controls hide" id="controls">
+  <div class="progress" id="progress"><div class="progress-fill" id="bar"></div><div class="thumb" id="thumb"></div></div>
+  <div class="time" id="time">00:00:00 / 00:00:00</div>
+  <div class="row">
+   <div class="btn" id="back">⟲10</div>
+   <div class="btn" id="play"></div>
+   <div class="btn" id="fwd">10⟳</div>
+   <div class="btn" id="settingsBtn">⚙️</div>
+   <div class="btn" id="fs">⛶</div>
+  </div>
+ </div>
+ <div class="settings" id="settings">
+  <label>Speed</label>
+  <select id="speed">
+   <option value="1" selected>1x</option>
+   <option value="1.25">1.25x</option>
+   <option value="1.5">1.5x</option>
+   <option value="1.75">1.75x</option>
+   <option value="2">2x</option>
+   <option value="2.25">2.25x</option>
+   <option value="2.5">2.5x</option>
+   <option value="3">3x</option>
+  </select>
+  <label>Quality</label>
+  <select id="quality"><option value="-1" selected>AUTO</option></select>
+ </div>
+</div>
 
-            <div class="mt-4 p-4 bg-slate-900 border border-slate-800 rounded-2xl">
-                <h2 class="text-sm font-bold text-slate-200">Playing Encrypted Lecture Channel</h2>
-                <p class="text-[11px] text-slate-500 mt-1">If streaming gets stuck, make sure encryption variables or keys from root node aren't expired.</p>
-            </div>
+<script>
+const playerElement=document.getElementById("player"),v=document.getElementById("video"),playBtn=document.getElementById("play"),back=document.getElementById("back"),fwd=document.getElementById("fwd"),fs=document.getElementById("fs"),controls=document.getElementById("controls"),centerPlay=document.getElementById("centerPlay"),progress=document.getElementById("progress"),bar=document.getElementById("bar"),thumb=document.getElementById("thumb"),tgPopup=document.getElementById("tgPopup"),continueBtn=document.getElementById("continueBtn"),timeDisplay=document.getElementById("time"),settings=document.getElementById("settings"),settingsBtn=document.getElementById("settingsBtn"),speed=document.getElementById("speed"),quality=document.getElementById("quality");
+let drag=false,hideTimer,shakaPlayer;
 
-        </div>
-    </main>
+const urlParams=new URLSearchParams(window.location.search);
+let manifestUrl=urlParams.get("url") || urlParams.get("Url");
+const keyId=urlParams.get("keyId");
+const keyVal=urlParams.get("key");
 
-    <footer class="h-12 border-t border-slate-800 bg-slate-900/30 text-center text-[11px] text-slate-600 flex items-center justify-center">
-        <span>© 2026 The DevCoderz • Engine Secure Terminal Configured</span>
-    </footer>
+if(!manifestUrl || manifestUrl.trim()==="" || manifestUrl==="undefined"){
+    const rawBatchId=urlParams.get("batch_id");
+    const rawSubjectId=urlParams.get("subject_id");
+    const rawTopicId=urlParams.get("topic_id");
+    if(rawTopicId){
+        manifestUrl=`http://googleusercontent.com/youtube.com/youtube.com/1${rawTopicId}`;
+    }else{
+        manifestUrl="https://dash.akamaized.net/akamai/test/isofund.mpd";
+    }
+}
 
-    <script>
-        const params = new URLSearchParams(window.location.search);
-        const manifestUrl = params.get('url');
-        const keyId = params.get('keyId');
-        const keyVal = params.get('key');
+function fmt(t){if(!t||isNaN(t)||t===Infinity)return"00:00:00";let h=Math.floor(t/3600),m=Math.floor((t%3600)/60),s=Math.floor(t%60);return[h,m,s].map(n=>String(n).padStart(2,"0")).join(":");}
+function safePlay(){v.play().catch(()=>{v.muted=true;v.play();});}
+function show(f=false){controls.classList.remove("hide");clearTimeout(hideTimer);if(!f)hideTimer=setTimeout(()=>controls.classList.add("hide"),3000);}
+function updateProgress(p){bar.style.width=thumb.style.left=p+"%";timeDisplay.textContent=`${fmt(v.currentTime)} / ${fmt(v.duration)}`;}
 
-        async function initPlayer() {
-            const video = document.getElementById('video');
-            const container = video.parentElement;
-            
-            const player = new shaka.Player(video);
-            const ui = new shaka.ui.Overlay(player, container, video);
+async function initShakaPlayer(){
+    shaka.polyfil.installAll();
+    if(!shaka.Player.isBrowserSupported()) return;
+    shakaPlayer=new shaka.Player(v);
 
-            if (keyId && keyVal) {
-                player.configure({
-                    drm: {
-                        clearKeys: {
-                            [keyId]: keyVal
-                        }
-                    }
-                });
-            }
+    if(keyId && keyVal && keyId!=="undefined" && keyVal!=="undefined"){
+        shakaPlayer.configure({
+            drm: { clearKeys: { [keyId]: keyVal } }
+        });
+    }
 
-            player.addEventListener('error', (e) => {
-                console.error('Shaka Engine Core Failure:', e.detail);
-            });
-
-            try {
-                await player.load(manifestUrl);
-                console.log('DRM Stream Loaded Successfully via DevCoderZ Core.');
-            } catch (err) {
-                console.error('Streaming Load Interrupted:', err);
-            }
-        }
-
-        document.addEventListener('shaka-ui-loaded-failed', () => console.error("UI bundle failure"));
-        document.addEventListener('DOMContentLoaded', () => {
-            shaka.polyfil.installAll();
-            if (shaka.Player.isBrowserSupported()) {
-                initPlayer();
-            } else {
-                alert("Browser architecture does not support premium DRM streaming setups.");
+    shakaPlayer.addEventListener('variantchanged',()=>{
+        const tracks=shakaPlayer.getVariantTracks();
+        quality.innerHTML='<option value="-1">AUTO</option>';
+        const seenHeights=new Set();
+        tracks.forEach(t=>{
+            if(t.height && !seenHeights.has(t.height)){
+                seenHeights.add(t.height);
+                let o=document.createElement("option");
+                o.value=t.height;
+                o.text=t.height+"p";
+                quality.appendChild(o);
             }
         });
-    </script>
+    });
+
+    try{
+        await shakaPlayer.load(manifestUrl);
+    }catch(e){
+        console.error(e);
+    }
+}
+
+continueBtn.onclick=e=>{e.preventDefault();e.stopPropagation();tgPopup.style.display="none";centerPlay.classList.remove("hide");controls.classList.remove("hide");show();};
+centerPlay.onclick=e=>{e.preventDefault();e.stopPropagation();safePlay();};
+playBtn.onclick=e=>{e.preventDefault();e.stopPropagation();v.paused?safePlay():v.pause();};
+back.onclick=e=>{e.preventDefault();e.stopPropagation();v.currentTime=Math.max(0,v.currentTime-10);show(true);};
+fwd.onclick=e=>{e.preventDefault();e.stopPropagation();v.currentTime=Math.min(v.duration,v.currentTime+10);show(true);};
+settingsBtn.onclick=e=>{e.preventDefault();e.stopPropagation();settings.style.display=(settings.style.display==="block"?"none":"block");show(true);};
+speed.onchange=e=>{v.playbackRate=parseFloat(speed.value);};
+
+quality.onchange=e=>{
+    if(!shakaPlayer)return;
+    const val=parseInt(quality.value);
+    if(val===-1){
+        shakaPlayer.configure({abr:{enabled:true}});
+    }else{
+        shakaPlayer.configure({abr:{enabled:false}});
+        const tracks=shakaPlayer.getVariantTracks().filter(t=>t.height===val);
+        if(tracks.length>0) shakaPlayer.selectVariantTrack(tracks[0],true);
+    }
+};
+
+fs.onclick=e=>{
+ e.preventDefault();e.stopPropagation();
+ if(!document.fullscreenElement){playerElement.requestFullscreen().then(()=>{if(screen.orientation)screen.orientation.lock('landscape').catch(()=>{});}).catch(()=>{});}
+ else{document.exitFullscreen();if(screen.orientation)screen.orientation.unlock();}
+};
+
+progress.onpointerdown=e=>{e.preventDefault();e.stopPropagation();drag=true;progress.setPointerCapture(e.pointerId);v.pause();const s=(e.clientX-progress.getBoundingClientRect().left)/progress.offsetWidth;v.currentTime=s*v.duration;updateProgress(s*100);};
+progress.onpointermove=e=>{if(drag){e.preventDefault();e.stopPropagation();const s=Math.max(0,Math.min(1,(e.clientX-progress.getBoundingClientRect().left)/progress.offsetWidth));v.currentTime=s*v.duration;updateProgress(s*100);}};
+progress.onpointerup=e=>{e.preventDefault();e.stopPropagation();drag=false;safePlay();};
+
+v.ontimeupdate=()=>{if(!drag&&v.duration){updateProgress((v.currentTime/v.duration)*100);}};
+v.onplay=()=>{playBtn.classList.add("pause");centerPlay.classList.add("hide");show();};
+v.onpause=()=>{playBtn.classList.remove("pause");centerPlay.classList.remove("hide");show(true);};
+
+playerElement.onclick=e=>{
+ e.preventDefault();
+ if(tgPopup.style.display!=="none")return;
+ if(e.target===v||e.target===playerElement){
+  if(controls.classList.contains("hide"))show();else{controls.classList.add("hide");settings.style.display="none";}
+ }
+};
+
+document.addEventListener('DOMContentLoaded',initShakaPlayer);
+</script>
 </body>
 </html>
