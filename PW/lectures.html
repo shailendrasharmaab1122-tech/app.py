@@ -124,7 +124,6 @@
                     let keyId = l.keyId || l.key_id || (l.videoDetails && l.videoDetails.keyId) || '';
                     let keyVal = l.key || l.key_value || (l.videoDetails && l.videoDetails.key) || '';
 
-                    // Safe Fallback Trigger for YouTube stream mapping
                     if ((!streamUrl || streamUrl.trim() === "") && l.videoDetails && l.videoDetails.image) {
                         const imgStr = l.videoDetails.image;
                         if (imgStr.includes('vi/')) {
@@ -135,9 +134,8 @@
                         }
                     }
 
-                    // Agar fir bhi blank reh jaye toh dynamic query safety checks lagayein
-                    if (!streamUrl && l.urlType === "youtube" && l.videoDetails) {
-                         streamUrl = `https://www.youtube.com/embed/${l.videoDetails.findKey || ''}`;
+                    if ((!streamUrl || streamUrl.trim() === "") && l.lectureType === "RECORDED" && l._id) {
+                         streamUrl = `https://www.youtube.com/embed/${l._id}`;
                     }
 
                     return `
