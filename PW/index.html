@@ -50,7 +50,7 @@
     </footer>
 
     <script>
-      // Tumhari Dono Custom Dynamic APIs
+     
       const API_SOURCE_1 = "https://devcoderz.vercel.app/api/PW/all-batches-api1.json";
       const API_SOURCE_2 = "https://devcoderz.vercel.app/api/PW/all-batches-api2.json";
       const FALLBACK_IMG = "https://via.placeholder.com/300x200?text=No+Image";
@@ -69,7 +69,7 @@
 
       showSkeleton();
 
-      // Parallel Data Aggregation Logic (Dono APIs ko ek sath load karne ke liye)
+     
       Promise.allSettled([
         fetch(API_SOURCE_1).then(r => r.json()),
         fetch(API_SOURCE_2).then(r => r.json())
@@ -83,7 +83,7 @@
           }
         });
 
-        // Unique Mapping to clean overlapping database array items
+        
         const uniqueMap = new Map();
         combinedBatches.forEach(b => {
           if (b && (b._id || b.id)) {
