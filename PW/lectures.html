@@ -120,9 +120,25 @@
                     const streamTitle = l.topic || l.name || l.title || "Untitled Premium Lecture Stream";
                     const displayDate = l.date || l.createdAt?.split('T')[0] || 'Dynamic Archive';
 
-                    const streamUrl = l.url || l.videoUrl || l.streamUrl || (l.videoDetails && l.videoDetails.url) || '';
-                    const keyId = l.keyId || l.key_id || (l.videoDetails && l.videoDetails.keyId) || '';
-                    const keyVal = l.key || l.key_value || (l.videoDetails && l.videoDetails.key) || '';
+                    let streamUrl = l.url || l.videoUrl || l.streamUrl || (l.videoDetails && l.videoDetails.url) || '';
+                    let keyId = l.keyId || l.key_id || (l.videoDetails && l.videoDetails.keyId) || '';
+                    let keyVal = l.key || l.key_value || (l.videoDetails && l.videoDetails.key) || '';
+
+                    // Safe Fallback Trigger for YouTube stream mapping
+                    if ((!streamUrl || streamUrl.trim() === "") && l.videoDetails && l.videoDetails.image) {
+                        const imgStr = l.videoDetails.image;
+                        if (imgStr.includes('vi/')) {
+                            const ytId = imgStr.split('vi/')[1].split('/')[0];
+                            if (ytId) {
+                                streamUrl = `https://www.youtube.com/embed/${ytId}`;
+                            }
+                        }
+                    }
+
+                    // Agar fir bhi blank reh jaye toh dynamic query safety checks lagayein
+                    if (!streamUrl && l.urlType === "youtube" && l.videoDetails) {
+                         streamUrl = `https://www.youtube.com/embed/${l.videoDetails.findKey || ''}`;
+                    }
 
                     return `
                     <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md border-l-4 border-l-[#4f46e5] flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all">
@@ -130,7 +146,7 @@
                             <h3 class="text-sm font-bold text-slate-800 leading-snug">${streamTitle}</h3>
                             <div class="text-[11px] font-medium text-slate-400">📅 Sync: ${displayDate}</div>
                         </div>
-                        <a href="./player.html?url=${encodeURIComponent(streamUrl)}&keyId=${keyId}&key=${keyVal}" class="bg-[#4f46e5] hover:bg-[#4338ca] text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all text-center whitespace-nowrap shadow-sm">
+                        <a href="./player.html?url=${encodeURIComponent(streamUrl)}&keyId=${encodeURIComponent(keyId)}&key=${encodeURIComponent(keyVal)}" class="bg-[#4f46e5] hover:bg-[#4338ca] text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all text-center whitespace-nowrap shadow-sm">
                             ▶ Watch Now
                         </a>
                     </div>`;
