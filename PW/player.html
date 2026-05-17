@@ -16,10 +16,23 @@
 html,body{width:100%;height:100%;background:#000;overflow:hidden;}
 .player{position:fixed;inset:0;background:#000;z-index:10;}
 iframe{width:100%;height:100%;border:none;background:#000;}
-.top-brand{position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:40;text-align:center;pointer-events:none;}
-.top-brand .jsr{color:#ff9800;font-weight:700;font-size:14px;letter-spacing: 1px;}
-.top-brand .dev{margin-top:4px;font-size:11px;font-weight:600;color:#00e5ff;text-shadow:0 0 6px #00e5ff;}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:100;}
+
+/* Branding ko ekdum top corner me set kiya h taaki middle ya bottom ke controls par koi rukawat na aaye */
+.top-brand{
+ position:absolute;
+ top:12px;
+ left:15px;
+ z-index:9999;
+ pointer-events:none; /* Isse aap controls ko touch kar paoge, branding beech me nahi aayegi */
+ background: rgba(0, 0, 0, 0.6);
+ padding: 4px 10px;
+ border-radius: 8px;
+ border: 1px solid rgba(255,152,0,0.3);
+}
+.top-brand .jsr{color:#ff9800;font-weight:700;font-size:11px;letter-spacing: 0.5px; display: inline-block; margin-right: 6px;}
+.top-brand .dev{font-size:11px;font-weight:600;color:#00e5ff;display: inline-block;}
+
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:10000;}
 .box{width:320px;padding:26px;border-radius:22px;text-align:center;background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;box-shadow: 0 10px 25px rgba(0,0,0,0.4);}
 .tg-btn{display:block;margin-top:14px;padding:14px;border-radius:28px;font-weight:700;width:100%;cursor:pointer;text-align:center;text-decoration:none;color:#fff;transition: 0.2s;}
 .join{background:#fff;color:#1e3c72;}
@@ -42,8 +55,8 @@ iframe{width:100%;height:100%;border:none;background:#000;}
  <iframe id="bypassFrame" allow="autoplay; fullscreen" allowfullscreen></iframe>
  
  <div class="top-brand">
-  <div class="jsr">🚩 Jai Shree Ram 🚩</div>
-  <div class="dev">Developed by - Devansh Sharma</div>
+  <span class="jsr">🚩 Jai Shree Ram</span>
+  <span class="dev">| Devansh Sharma</span>
  </div>
 </div>
 
@@ -57,7 +70,6 @@ const subjectId = urlParams.get("subject_id");
 const topicId = urlParams.get("topic_id");
 
 if(videoId && batchId) {
-    // Direct link mapping without proxy layer interference
     iframe.src = `https://eduvibe-pw.page.gd/videoplayerr.php?video_id=${videoId}&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}`;
 } else {
     iframe.src = "about:blank";
