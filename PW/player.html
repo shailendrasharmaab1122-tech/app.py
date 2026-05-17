@@ -104,16 +104,13 @@ const batchId = urlParams.get("batch_id");
 const subjectId = urlParams.get("subject_id");
 const topicId = urlParams.get("topic_id");
 
-// Ultimate Smart Setup: Checking if it's a direct stream or needs the live signature pool
 if (!manifestUrl || manifestUrl.trim() === "" || manifestUrl === "undefined") {
     if (videoId && batchId) {
-        // Direct Bypass Routing into masked player frame seamlessly
         isIframeMode = true;
         v.style.display = "none";
         iframe.style.display = "block";
         iframe.src = `https://eduvibe-pw.page.gd/videoplayerr.php?video_id=${videoId}&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}`;
         
-        // Hide standard local controllers since iframe contains its native video control bar
         controls.style.display = "none";
         centerPlay.style.display = "none";
     } else {
@@ -188,7 +185,7 @@ fs.onclick=e=>{
 };
 
 progress.onpointerdown=e=>{if(isIframeMode)return;e.preventDefault();e.stopPropagation();drag=true;progress.setPointerCapture(e.pointerId);v.pause();const s=(e.clientX-progress.getBoundingClientRect().left)/progress.offsetWidth;v.currentTime=s*v.duration;updateProgress(s*100);};
-progress.onpointermove=e=>{if(drag){const s=Math.max(0,Math.min(1,(e.clientX-progress.getBoundingClientRect().left)/progress.offsetWidth)));v.currentTime=s*v.duration;updateProgress(s*100);}};
+progress.onpointermove=e=>{if(drag){const s=Math.max(0,Math.min(1,(e.clientX-progress.getBoundingClientRect().left)/progress.offsetWidth));v.currentTime=s*v.duration;updateProgress(s*100);}};
 progress.onpointerup=e=>{drag=false;safePlay();};
 
 v.ontimeupdate=()=>{if(!drag&&v.duration){updateProgress((v.currentTime/v.duration)*100);}};
