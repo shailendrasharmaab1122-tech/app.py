@@ -65,15 +65,19 @@ startBtn.onclick = async () => {
   try {
     const targetUrl = `https://eduvibe-pw.page.gd/videoplayerr.php?video_id=${videoId}&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}`;
     
-    const response = await fetch(targetUrl);
-    const htmlContent = await response.text();
+    // Yeh line automatic target website ki request ko proxy ke throug ghumayegi taaki CORS bypass ho sake
+    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}&_=` + Date.now();
+    
+    const response = await fetch(proxyUrl);
+    const result = await response.json();
+    const htmlContent = result.contents; 
 
     const manifestUrl = htmlContent.match(/manifestUrl\s*=\s*["']([^"']+)["']/)?.[1];
     const keyId = htmlContent.match(/keyId\s*=\s*["']([^"']+)["']/)?.[1];
     const keyValue = htmlContent.match(/keyValue\s*=\s*["']([^"']+)["']/)?.[1];
 
     if (!manifestUrl || !keyId || !keyValue) {
-      alert("Stream Error: Source format changed or blocked by CORS.");
+      alert("Stream Error: Token expired or source layout modified.");
       startBtn.style.display = "block";
       loader.style.display = "none";
       return;
@@ -83,7 +87,7 @@ startBtn.onclick = async () => {
     initializePlayer(manifestUrl, keyId, keyValue);
 
   } catch (err) {
-    alert("CORS Blocked or Network Error! Target domain restricted direct access.");
+    alert("Proxy handshake failed! Server temporarily busy.");
     startBtn.style.display = "block";
     loader.style.display = "none";
   }
