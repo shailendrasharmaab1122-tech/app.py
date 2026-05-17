@@ -63,16 +63,27 @@ startBtn.onclick = async () => {
   const topicId = urlParams.get("topic_id");
 
   try {
-    const res = await fetch(`/api/PW/stream?video_id=${videoId}&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}`);
-    const data = await res.json();
+    const targetUrl = `https://eduvibe-pw.page.gd/videoplayerr.php?video_id=${videoId}&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}`;
+    
+    const response = await fetch(targetUrl);
+    const htmlContent = await response.text();
 
-    if(data.error) { alert("Stream Error: " + data.error); return; }
+    const manifestUrl = htmlContent.match(/manifestUrl\s*=\s*["']([^"']+)["']/)?.[1];
+    const keyId = htmlContent.match(/keyId\s*=\s*["']([^"']+)["']/)?.[1];
+    const keyValue = htmlContent.match(/keyValue\s*=\s*["']([^"']+)["']/)?.[1];
+
+    if (!manifestUrl || !keyId || !keyValue) {
+      alert("Stream Error: Source format changed or blocked by CORS.");
+      startBtn.style.display = "block";
+      loader.style.display = "none";
+      return;
+    }
 
     document.getElementById("tgPopup").style.setProperty('display','none','important');
-    initializePlayer(data.manifestUrl, data.keyId, data.keyValue);
+    initializePlayer(manifestUrl, keyId, keyValue);
 
   } catch (err) {
-    alert("Server Connection Failed!");
+    alert("CORS Blocked or Network Error! Target domain restricted direct access.");
     startBtn.style.display = "block";
     loader.style.display = "none";
   }
