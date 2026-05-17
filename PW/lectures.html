@@ -43,12 +43,10 @@
         const sId = params.get('subject_id');
         const tId = params.get('topic_id');
 
-        // Parameter Validation Safeguard
         if (!tId || !bId) {
             window.location.href = "./index.html";
         }
 
-        // Tumhari Nayi get-lectures API with Tab Parameters
         const targetApi = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${bId}&subject_id=${sId}&topic_id=${tId}&tab=videos`;
         
         const proxies = [
@@ -104,7 +102,6 @@
                     data = resData;
                 }
 
-                // Upgraded mapping fallback to extract content lists from multiple data nodes
                 let lectures = [];
                 if (data.lectures) lectures = data.lectures;
                 else if (data.data && data.data.lectures) lectures = data.data.lectures;
@@ -120,12 +117,12 @@
                 container.classList.remove('hidden');
 
                 container.innerHTML = lectures.map(l => {
-                    // Safe string parsing for dynamic variables
                     const streamTitle = l.topic || l.name || l.title || "Untitled Premium Lecture Stream";
-                    const streamUrl = l.url || l.videoUrl || l.streamUrl || '';
-                    const keyId = l.keyId || l.key_id || '';
-                    const keyVal = l.key || l.key_value || '';
                     const displayDate = l.date || l.createdAt?.split('T')[0] || 'Dynamic Archive';
+
+                    const streamUrl = l.url || l.videoUrl || l.streamUrl || (l.videoDetails && l.videoDetails.url) || '';
+                    const keyId = l.keyId || l.key_id || (l.videoDetails && l.videoDetails.keyId) || '';
+                    const keyVal = l.key || l.key_value || (l.videoDetails && l.videoDetails.key) || '';
 
                     return `
                     <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md border-l-4 border-l-[#4f46e5] flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all">
