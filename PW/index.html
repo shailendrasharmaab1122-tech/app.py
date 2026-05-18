@@ -23,8 +23,8 @@
             <div class="h-9 w-9 bg-white rounded-lg flex items-center justify-center font-bold text-[#4f46e5]">DC</div>
             <span class="text-xl font-black tracking-tight text-white">The DevCoderZ</span>
         </div>
-        <div class="text-xs text-white/90 bg-white/10 px-3 py-1.5 rounded-full border border-white/20 font-medium">
-            Dual API Core Active
+        <div id="coreStatus" class="text-xs text-white/90 bg-white/10 px-3 py-1.5 rounded-full border border-white/20 font-medium">
+            Syncing Clusters...
         </div>
     </nav>
 
@@ -50,13 +50,21 @@
     </footer>
 
     <script>
-      const API_SOURCE_1 = "https://devcoderz.vercel.app/api/PW/all-batches-api1.js";
-      const API_SOURCE_2 = "https://devcoderz.vercel.app/api/PW/all-batches-api2.js";
+      const API_1 = "https://devcoderz.vercel.app/api/PW/all-batches-api1.js";
+      const API_2 = "https://devcoderz.vercel.app/api/PW/all-batches-api2.js";
       const FALLBACK_IMG = "https://via.placeholder.com/300x200?text=No+Image";
+
+      // Array sets for multiple proxy fail-safes
+      const proxySets = [
+        { name: "Core Direct", urls: [API_1, API_2], type: "direct" },
+        { name: "Bridge Alpha", urls: [`https://api.allorigins.win/get?url=${encodeURIComponent(API_1)}`, `https://api.allorigins.win/get?url=${encodeURIComponent(API_2)}`], type: "allorigins" },
+        { name: "Backup Node", urls: [`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(API_1)}`, `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(API_2)}`], type: "codetabs" }
+      ];
 
       let ALL = [], filtered = [];
       let favs = JSON.parse(localStorage.getItem("favs") || "[]");
       let cachedBatches = JSON.parse(localStorage.getItem("fav_batches") || "{}");
+
       let loaded = 0, LIMIT = 8, loading = false;
 
       const total = document.getElementById("total");
@@ -64,46 +72,66 @@
       const searchInput = document.getElementById("searchInput");
       const totalTab = document.getElementById("totalTab");
       const favTab = document.getElementById("favTab");
+      const coreStatus = document.getElementById("coreStatus");
 
       showSkeleton();
 
-      Promise.allSettled([
-        fetch(API_SOURCE_1).then(r => r.json()),
-        fetch(API_SOURCE_2).then(r => r.json())
-      ]).then((results) => {
-        let combinedBatches = [];
-        results.forEach((result) => {
-          if (result.status === "fulfilled" && result.value) {
-            const batchList = result.value.batches || result.value.data?.batches || result.value.data || (Array.isArray(result.value) ? result.value : []);
-            combinedBatches = combinedBatches.concat(batchList);
-          }
-        });
-
-        const uniqueMap = new Map();
-        combinedBatches.forEach(b => {
-          if (b && (b._id || b.id)) {
-            uniqueMap.set(b._id || b.id, b);
-          }
-        });
-
-        ALL = Array.from(uniqueMap.values());
-        filtered = ALL;
-
-        if (ALL.length > 0) {
-          setTimeout(() => { loadMore(true); }, 200);
-        } else {
-          throw new Error("Empty feeds from both cloud arrays");
+      // Proxy-enabled network fetching engine
+      async function syncClusterStreams(setIndex = 0) {
+        if (setIndex >= proxySets.length) {
+            console.warn("All proxy arrays depleted. Falling back to local hardware backup node.");
+            coreStatus.innerText = "Local Backup Active";
+            ALL = Object.values(cachedBatches);
+            filtered = ALL;
+            if (ALL.length) { 
+                loadMore(true); 
+            } else { 
+                total.innerHTML = `<div class="col-span-full text-center text-slate-400 py-12 text-sm">❌ Failed to load both cloud clusters. Local database node is empty.</div>`; 
+            }
+            return;
         }
-      }).catch((err) => {
-        console.warn("Using system recovery local cache architecture:", err);
-        ALL = Object.values(cachedBatches);
-        filtered = ALL;
-        if (ALL.length) { 
-            loadMore(true); 
-        } else { 
-            total.innerHTML = `<div class="col-span-full text-center text-slate-400 py-12 text-sm">❌ Failed to load both cloud clusters. Local database node is empty.</div>`; 
+
+        const activeSet = proxySets[setIndex];
+        coreStatus.innerText = `Sync: ${activeSet.name}`;
+
+        try {
+            const results = await Promise.allSettled(activeSet.urls.map(url => fetch(url).then(r => {
+                if(!r.ok) throw new Error("Network status invalid");
+                return r.json();
+            })));
+
+            let combinedBatches = [];
+            results.forEach((result) => {
+              if (result.status === "fulfilled" && result.value) {
+                let resData = result.value;
+                if (activeSet.type === "allorigins") {
+                    resData = JSON.parse(resData.contents);
+                }
+                const batchList = resData.batches || resData.data?.batches || resData.data || (Array.isArray(resData) ? resData : []);
+                combinedBatches = combinedBatches.concat(batchList);
+              }
+            });
+
+            const uniqueMap = new Map();
+            combinedBatches.forEach(b => {
+              if (b && (b._id || b.id)) { uniqueMap.set(b._id || b.id, b); }
+            });
+
+            ALL = Array.from(uniqueMap.values());
+            filtered = ALL;
+
+            if (ALL.length > 0) {
+              coreStatus.innerText = "Dual API Core Active";
+              setTimeout(() => { loadMore(true); }, 200);
+            } else {
+              throw new Error("Feeds extracted are empty");
+            }
+
+        } catch (err) {
+            console.warn(`Cluster set [${activeSet.name}] dropped out. Moving to next array layer...`);
+            syncClusterStreams(setIndex + 1);
         }
-      });
+      }
 
       function normalizeText(t) { return (t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim(); }
       function tokenize(t) { return normalizeText(t).split(/\s+/).map((x) => x.replace(/[^a-z0-9]+/g, "")).filter(Boolean); }
@@ -259,6 +287,7 @@
               if (!ok) return;
             }
           }
+          // Path se PW/ hata kar clean routing framework update kar diya hai
           window.location.href = "./batches.html?batch_id=" + id;
         }
       });
@@ -284,6 +313,9 @@
         if (!fav.classList.contains("hidden")) { setTab(totalTab, favTab, total, fav); }
         loadMore(true);
       };
+
+      // Triggering proxy execution initialization
+      syncClusterStreams();
     </script>
 </body>
 </html>
