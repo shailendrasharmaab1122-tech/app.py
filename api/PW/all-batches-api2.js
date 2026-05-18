@@ -16,8 +16,10 @@ export default async function handler(req, res) {
     }
 
     try {
-        // Naye solid wasmer endpoints par dynamic mapping fetch call
-        const response = await fetch(`https://eduvibe-pw-api.wasmer.app`, {
+        // FIXED: Base URL ke aage route /batch.php aur query parameter dono add kar diye hain
+        const targetUrl = `https://eduvibe-pw-api.wasmer.app/batch.php?batch_id=${encodeURIComponent(batch_id)}`;
+        
+        const response = await fetch(targetUrl, {
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
             }
@@ -27,7 +29,7 @@ export default async function handler(req, res) {
 
         const data = await response.json();
         return res.status(200).json(data);
-        
+
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: "Failed to fetch stream data securely from core network." });
