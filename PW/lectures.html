@@ -70,7 +70,7 @@
          window.location.href = `./chapters.html?batch_id=${batchId}&subject_id=${subjectId}`;
       };
 
-      const targetApiUrl = `https://devcoderz.vercel.app/api/PW/all-batches-api4.js/get-lectures.php?batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}&tab=${activeTab}`;
+      const targetApiUrl = `https://devcoderz.vercel.app/api/PW/batches3/get-lectures.php?batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}&tab=${activeTab}`;
       const proxyUrl = `/api/stream.js?url=${encodeURIComponent(targetApiUrl)}`;
 
       fetch(proxyUrl)
