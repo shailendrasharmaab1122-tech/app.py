@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,7 +42,6 @@
         const params = new URLSearchParams(window.location.search);
         const bId = params.get('batch_id');
 
-        // Parameter Validation Safeguard
         if (!bId) {
             window.location.href = "./index.html";
         }
@@ -51,10 +49,9 @@
         async function loadSubjects() {
             const container = document.getElementById('subjectsContainer');
             try {
-                const res = await fetch(`https://eduvibe-pw-api.wasmer.app/batch.php?batch_id=${bId}`);
+                const res = await fetch(`https://devcoderz.vercel.app/api/PW/all-batches-api2.js?batch_id=${bId}`);
                 const data = await res.json();
-                
-                // Deep parsing fallback structures
+
                 const subjects = data.subjects || data.data?.subjects || data.data || (Array.isArray(data) ? data : []);
 
                 if (subjects.length === 0) {
@@ -63,18 +60,17 @@
                 }
 
                 container.innerHTML = subjects.map(s => {
-                    // Safe key mapping checks for Name
                     const subjectName = s.name || s.subjectName || s.topic || s.title || "Premium Subject Channel";
-                    
-                    // Safe key mapping checks for Faculty/Teacher
                     let facultyName = "Expert Mentor";
+
                     if (s.faculties && Array.isArray(s.faculties) && s.faculties.length > 0) {
                         facultyName = s.faculties.map(f => f.name || f.facultyName).filter(Boolean).join(', ');
-                    } else if (s.faculty || s.teacher) {
-                        facultyName = s.faculty || s.teacher;
+                    } else if (s.faculty && typeof s.faculty === 'object') {
+                        facultyName = s.faculty.name || facultyName;
+                    } else if (s.teacher || s.faculty || s.teacherName) {
+                        facultyName = s.teacher || s.faculty || s.teacherName;
                     }
 
-                    // Safe ID fetch
                     const targetId = s._id || s.id || s.subject_id;
 
                     return `
