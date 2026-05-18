@@ -1,42 +1,52 @@
-<!DOCTYPE html><html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="pageTitle">The DevCoderz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://www.pw.live/batches-new/index.BZrLlnYz.css" rel="stylesheet" type="text/css">
     <style>
         body { background-color: #f1f5f9; font-family: sans-serif; margin: 0; padding: 0; }
-        .brand-header { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); padding: 24px 16px; text-align: center; color: white; box-shadow: 0 4px 20px rgba(0,0,0,0.15); border-bottom: 4px solid #10b981; }
-        .brand-title { font-size: 26px; font-weight: 800; tracking: 2px; text-transform: uppercase; margin: 0; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.4); font-family: system-ui, -apple-system, sans-serif; }
-        .brand-subtitle { font-size: 11px; color: #34d399; margin-top: 6px; letter-spacing: 3px; font-weight: 600; }
         
         .custom-tabs-container { display: flex; gap: 8px; overflow-x: auto; padding: 12px 4px; margin-bottom: 16px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
         .custom-tabs-container::-webkit-scrollbar { display: none; }
-        
+
         .tab-btn { background: #ffffff; color: #475569; border: 1px solid #e2e8f0; padding: 10px 18px; font-size: 13px; font-weight: 600; border-radius: 30px; white-space: nowrap; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-        .tab-btn.active-tab { background: #1e1b4b; color: #ffffff; border-color: #1e1b4b; box-shadow: 0 4px 10px rgba(30,27,75,0.25); }
-        
+        .tab-btn.active-tab { background: #4f46e5; color: #ffffff; border-color: #4f46e5; box-shadow: 0 4px 10px rgba(79,70,229,0.25); }
+
         .main-wrapper { max-width: 800px; margin: auto; padding: 16px; }
-        .topic-header-title { color: #0f172a; font-size: 20px; font-weight: 700; margin: 8px 0 16px 4px; font-family: system-ui, sans-serif; border-left: 4px solid #1e1b4b; padding-left: 10px; }
-        
+        .topic-header-title { color: #0f172a; font-size: 20px; font-weight: 700; margin: 8px 0 16px 4px; font-family: system-ui, sans-serif; border-left: 4px solid #4f46e5; padding-left: 10px; }
+
         .completed-lecture { border: 2px solid #10b981 !important; border-radius: 12px; box-shadow: 0 0 12px rgba(16,185,129,0.15); }
         .dropdown-item:hover { background: #f1f5f9; }
-        
+
         #loadingScreen { position: fixed; inset: 0; background: #fff; display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 99999; }
-        .spinner { width: 45px; height: 45px; border: 4px solid #f1f5f9; border-top: 4px solid #1e1b4b; border-radius: 50%; animation: spin 1s linear infinite; }
+        .spinner { width: 45px; height: 45px; border: 4px solid #f1f5f9; border-top: 4px solid #4f46e5; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
         * { user-select: auto !important; -webkit-user-select: auto !important; }
     </style>
 </head>
-<body>
+<body class="pb-16">
     <div id="loadingScreen" style="display: flex;">
       <div class="spinner"></div>
-      <p style="margin-top: 14px; font-weight: 600; color: #1e1b4b; font-family: sans-serif;">Loading Channels...</p>
+      <p style="margin-top: 14px; font-weight: 600; color: #4f46e5; font-family: sans-serif;">Loading Channels...</p>
     </div>
 
-    <div class="brand-header">
-        <h1 class="brand-title">The DevCoderz</h1>
-        <div class="brand-subtitle">BYPASS ENGINE MULTI-STREAM</div>
-    </div>
+    <nav class="h-16 bg-[#4f46e5] flex items-center justify-between px-6 shadow-md sticky top-0 z-50">
+        <div class="flex items-center gap-4">
+            <button id="backToChaptersBtn" class="bg-white/20 hover:bg-white/30 text-white text-xs font-bold py-2 px-4 rounded-lg transition-all">
+                ← Back
+            </button>
+            <div class="hidden sm:flex items-center gap-2">
+                <div class="h-9 w-9 bg-white rounded-lg flex items-center justify-center font-bold text-[#4f46e5]">TDC</div>
+                <span class="text-xl font-black tracking-tight text-white">The DevCoderZ</span>
+            </div>
+        </div>
+        <div class="text-xs text-white/90 bg-white/10 px-3 py-1.5 rounded-full border border-white/20 font-medium">
+            Multi-Stream Hub
+        </div>
+    </nav>
 
     <div class="main-wrapper">
         <h3 class="topic-header-title" id="topicName">Loading Topic...</h3>
@@ -56,7 +66,11 @@
         throw new Error();
       }
 
-      const targetApiUrl = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}&tab=${activeTab}`;
+      document.getElementById('backToChaptersBtn').onclick = () => {
+         window.location.href = `./chapters.html?batch_id=${batchId}&subject_id=${subjectId}`;
+      };
+
+      const targetApiUrl = `https://devcoderz.vercel.app/api/PW/all-batches-api2.js/get-lectures.php?batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}&tab=${activeTab}`;
       const proxyUrl = `/api/stream.js?url=${encodeURIComponent(targetApiUrl)}`;
 
       fetch(proxyUrl)
