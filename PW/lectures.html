@@ -78,7 +78,7 @@
             const pageTitle = document.getElementById('pageTitle');
             const statusText = document.getElementById('statusText');
 
-            const rawApiUrl = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${bId}&subject_id=${sId}&topic_id=${cId}&tab=${activeTab}`;
+            const rawApiUrl = `https://eduvibe-pw.page.gd/pwl/?batch_id=${bId}&subject_id=${sId}&topic_id=${cId}&tab=${activeTab}`;
             const proxyApiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(rawApiUrl)}`;
 
             try {
