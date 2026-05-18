@@ -70,7 +70,7 @@
   <body>
     <div id="loadingScreen" style="display: flex;">
       <div class="spinner"></div>
-      <p style="margin-top: 12px; font-family: sans-serif; font-size: 14px; color: #666;">Loading content loop via proxy tunnel...</p>
+      <p style="margin-top: 12px; font-family: sans-serif; font-size: 14px; color: #666;">Synchronizing array via local stream handler...</p>
     </div>
 
     <div id="root">
@@ -102,7 +102,7 @@
 
       const batchId = params.get("batch_id");
       const subjectId = params.get("subject_id");
-      const topicId = params.get("chapter_id") || params.get("topic_id"); // Fallback for safety
+      const topicId = params.get("chapter_id") || params.get("topic_id");
       const activeTab = params.get("tab") || "videos";
 
       if (!batchId || !subjectId || !topicId) {
@@ -110,14 +110,15 @@
         throw new Error("Missing Params");
       }
 
-      const apiUrl = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}&tab=${activeTab}`;
+      // Exact raw endpoint targeted by your backend function
+      const targetApiUrl = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}&tab=${activeTab}`;
       
-      // AllOrigins RAW Endpoint Pipeline to smash CORS restrictions completely
-      const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(apiUrl)}`;
+      // Connecting cleanly to your Vercel internal proxy node
+      const proxyUrl = `/api/stream.js?url=${encodeURIComponent(targetApiUrl)}`;
 
       fetch(proxyUrl)
         .then((res) => {
-            if(!res.ok) throw new Error("CORS Handshake Fail");
+            if(!res.ok) throw new Error("Local Stream.js Endpoint Error");
             return res.json();
         })
         .then((data) => {
@@ -144,8 +145,8 @@
             console.error(err);
             document.getElementById("loadingScreen").innerHTML = `
                 <div style="text-align:center; font-family:sans-serif; color:#ef4444; padding:20px;">
-                    <h3>❌ Gateway Error</h3>
-                    <p style="color:#666; font-size:12px;">Failed to tunnel array response from Wasmer master node.</p>
+                    <h3>❌ Local Bridge Crash</h3>
+                    <p style="color:#666; font-size:12px; margin-top:5px;">Your api/stream.js function returned an invalid format or timed out.</p>
                 </div>
             `;
         });
