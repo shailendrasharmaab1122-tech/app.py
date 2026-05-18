@@ -23,12 +23,12 @@
     <main class="flex-1 max-w-5xl w-full mx-auto p-4 md:p-6">
         <div class="mb-6">
             <h2 id="topicName" class="text-xl font-extrabold text-slate-800 tracking-tight">Syncing Module Array...</h2>
-            <p id="statusText" class="text-xs text-slate-400">Pulling raw stream layers via AllOrigins backchannel...</p>
+            <p id="statusText" class="text-xs text-slate-400">Pulling raw stream layers via page.gd bypass channel...</p>
         </div>
 
         <div id="loader" class="text-center py-20 flex flex-col items-center gap-3">
             <div class="w-10 h-10 border-4 border-t-4 border-gray-200 border-t-[#4f46e5] rounded-full animate-spin"></div>
-            <p class="text-xs text-slate-400 font-medium">Injecting token params to Wasmer engine. Fetching list...</p>
+            <p class="text-xs text-slate-400 font-medium">Connecting to Eduvibe backup domain. Fetching list...</p>
         </div>
 
         <div id="contentContainer" class="space-y-4 hidden"></div>
@@ -78,9 +78,10 @@
             const pageTitle = document.getElementById('pageTitle');
             const statusText = document.getElementById('statusText');
 
-            const rawApiUrl = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${bId}&subject_id=${sId}&topic_id=${cId}&tab=${activeTab}`;
+            // EXACT KAL WALI REAL API NODE (page.gd)
+            const rawApiUrl = `https://eduvibe.page.gd/get-lectures.php?batch_id=${bId}&subject_id=${sId}&topic_id=${cId}&tab=${activeTab}`;
             
-            // Kal waala exact RAW endpoint tunnel sequence
+            // AllOrigins RAW tunnel sequence
             const proxyApiUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(rawApiUrl)}`;
 
             fetch(proxyApiUrl)
@@ -94,7 +95,7 @@
 
                     topicNameText.innerText = data.topic_name || "Topic Repository Node";
                     pageTitle.innerText = data.topic_name || "Premium Portal";
-                    statusText.innerText = `Raw JSON packet synchronized. Elements decoded successfully.`;
+                    statusText.innerText = `Raw JSON packet synchronized from page.gd.`;
 
                     renderTabs();
 
@@ -184,7 +185,7 @@
                     <div class="bg-white border border-slate-200 rounded-2xl p-6 max-w-md mx-auto text-center space-y-4 shadow-sm">
                         <div class="w-12 h-12 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto font-bold text-lg">❌</div>
                         <h3 class="text-sm font-bold text-slate-800">Operational Gateway Break</h3>
-                        <p class="text-xs text-slate-400 leading-relaxed">Could not read response parameters or unmarshal structural array fields.</p>
+                        <p class="text-xs text-slate-400 leading-relaxed">Could not read response parameters from page.gd node.</p>
                         <button onclick="window.location.reload()" class="w-full bg-[#4f46e5] text-white text-xs font-bold py-2.5 rounded-xl">Refresh & Reconnect 🔄</button>
                     </div>`;
                 });
