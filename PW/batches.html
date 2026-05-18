@@ -5,24 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subjects - DevCoderZ</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+      body { background: #f8fafc; color: #0f172a; }
+      .glow-text { text-shadow: 0 0 8px rgba(239,68,68,0.3); }
+    </style>
 </head>
-<body class="bg-slate-50 min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col pb-16">
 
-    <nav class="h-16 bg-[#4f46e5] flex items-center justify-between px-6 shadow-md">
-        <button onclick="window.location.href='./index.html'" class="bg-white/20 hover:bg-white/30 text-white text-xs font-bold py-2 px-4 rounded-lg transition-all">
+    <nav class="h-16 bg-[#4f46e5] flex items-center justify-between px-6 shadow-md sticky top-0 z-50">
+        <button onclick="window.location.href='./index.html'" class="bg-white/20 hover:bg-white/30 text-white text-xs font-bold py-2 px-4 rounded-lg transition-all flex items-center gap-1">
             ← Home
         </button>
         <div class="text-xs text-white/90 bg-white/10 px-3 py-1.5 rounded-full border border-white/20 font-medium">
-            Subject Channel
+            Subject Channels
         </div>
     </nav>
 
-    <main id="mainContainer" class="flex-1 p-4 max-w-6xl w-full mx-auto">
-        <div id="loader" class="text-center py-20 space-y-4">
-            <div class="w-10 h-10 border-4 border-[#4f46e5] border-t-transparent rounded-full animate-spin mx-auto"></div>
-            <p class="text-xs text-slate-400 font-medium">Bypassing restrictions & decrypting subject vault...</p>
+    <main class="flex-1 max-w-6xl w-full mx-auto p-4 md:p-6">
+        <div class="mb-6">
+            <h2 class="text-xl font-extrabold text-slate-800 tracking-tight">Select Subject Channel</h2>
+            <p id="statusText" class="text-xs text-slate-400">Access video archives by selecting a content branch stream.</p>
+        </div>
+
+        <div id="subjectsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="bg-white p-5 border border-slate-200 rounded-2xl animate-pulse h-28 shadow-sm"></div>
+            <div class="bg-white p-5 border border-slate-200 rounded-2xl animate-pulse h-28 shadow-sm hidden sm:block"></div>
+            <div class="bg-white p-5 border border-slate-200 rounded-2xl animate-pulse h-28 shadow-sm hidden lg:block"></div>
         </div>
     </main>
+
+    <footer class="h-12 border-t border-slate-200 bg-white text-center text-xs text-slate-400 flex items-center justify-center gap-1 fixed bottom-0 inset-x-0 z-50 shadow-inner">
+        <span>© 2026 The DevCoderz. All Rights Reserved.</span>
+        <span>•</span>
+        <span>Developed by <span class="text-red-500 font-bold tracking-wide glow-text">Devansh Sharma</span></span>
+    </footer>
 
     <script>
         const params = new URLSearchParams(window.location.search);
@@ -32,40 +49,83 @@
             window.location.href = "./index.html";
         }
 
-        async function renderDirectHTML() {
-            const container = document.getElementById('mainContainer');
-            const targetUrl = `https://devcoderz.vercel.app/api/PW/all-batches-api2.js?batch_id=${bId}`;
+        async function loadSubjects() {
+            const container = document.getElementById('subjectsContainer');
+            const statusText = document.getElementById('statusText');
+            
+            // Hitting your updated secure Vercel API
+            const targetApi = `https://devcoderz.vercel.app/api/PW/all-batches-api2.js?batch_id=${bId}`;
 
             try {
-                // Bina kisi proxy ke seedha direct fetch hit karo
-                const res = await fetch(targetUrl);
-                
-                if (!res.ok) throw new Error("Server response error");
-                
-                // Response ko JSON nahi, sirf raw string/text mein uthao
-                const htmlText = await res.text();
+                statusText.innerText = "Synchronizing stream tokens...";
+                const res = await fetch(targetApi);
+                if (!res.ok) throw new Error("API handshake failed");
 
-                if (!htmlText || htmlText.trim() === "") {
-                    container.innerHTML = `<div class="text-center text-slate-400 py-12 text-sm">⚠️ Backend sent an empty response room.</div>`;
+                const resData = await res.json();
+
+                // Parsing logic handles nested structure safely
+                const subjects = resData.subjects || resData.data?.subjects || resData.data || (Array.isArray(resData) ? resData : []);
+
+                if (subjects.length === 0) {
+                    container.innerHTML = `<div class="col-span-full text-center text-slate-400 py-12 text-sm">⚠️ No premium streaming feeds listed inside this channel matrix.</div>`;
+                    statusText.innerText = "Vault is empty.";
                     return;
                 }
 
-                // Poore container ka loader hatao aur direct server ka banaya HTML inject karo
-                container.innerHTML = htmlText;
+                statusText.innerText = "Premium Vault Decrypted Successfully.";
+                container.innerHTML = subjects.map(s => {
+                    const subjectName = s.name || s.subjectName || s.topic || s.title || "Premium Subject Channel";
+                    let facultyName = "Expert Mentor";
 
-            } catch (err) {
-                console.error("Fetch layout crashed:", err);
+                    if (s.faculties && Array.isArray(s.faculties) && s.faculties.length > 0) {
+                        facultyName = s.faculties.map(f => f.name || f.facultyName).filter(Boolean).join(', ');
+                    } else if (s.faculty && typeof s.faculty === 'object') {
+                        facultyName = s.faculty.name || facultyName;
+                    } else if (s.teacher || s.faculty || s.teacherName) {
+                        facultyName = s.teacher || s.faculty || s.teacherName;
+                    }
+
+                    // Target ID Extraction for transition to chapters mapping room
+                    const targetId = s._id || s.id || s.subject_id;
+
+                    return `
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all duration-150 cursor-pointer border-l-4 border-l-[#4f46e5] flex flex-col justify-between h-32 group" onclick="openChapters('${targetId}')">
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-800 tracking-tight leading-snug group-hover:text-[#4f46e5] transition-colors truncate">${subjectName}</h3>
+                            <p class="text-[11px] text-slate-400 font-medium mt-1 truncate">Teacher: ${facultyName}</p>
+                        </div>
+                        <div class="flex items-center justify-between border-t border-slate-50 pt-3 mt-2 text-[11px] font-bold text-[#4f46e5]">
+                            <span>Enter Vault →</span>
+                        </div>
+                    </div>
+                    `;
+                }).join('');
+
+            } catch (e) {
+                console.error("Layout crash log:", e);
                 container.innerHTML = `
-                    <div class="text-center py-12 max-w-md mx-auto space-y-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm mt-10">
-                        <div class="w-12 h-12 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto font-bold text-lg">❌</div>
-                        <h3 class="text-sm font-bold text-slate-800">CORS or Network Block</h3>
-                        <p class="text-xs text-slate-400 leading-relaxed">Browser blocked the stream or the API is down. Check your browser console network tab.</p>
-                        <button onclick="window.location.reload()" class="bg-[#4f46e5] text-white text-xs font-bold py-2 px-6 rounded-xl">Retry Stream 🔄</button>
+                    <div class="col-span-full text-center py-12 max-w-md mx-auto space-y-4">
+                        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+                            <div class="w-12 h-12 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto font-bold text-lg mb-3">❌</div>
+                            <h3 class="text-sm font-bold text-slate-800">Core Network Connection Drop</h3>
+                            <p class="text-xs text-slate-400 mt-1 leading-relaxed">Failed to establish handshake with API Core. Double-check your Vercel deployment status.</p>
+                            <button onclick="window.location.reload()" class="mt-4 bg-[#4f46e5] hover:bg-[#4338ca] text-white text-xs font-bold py-2 px-6 rounded-xl transition-all shadow-sm">
+                                Retry Connection 🔄
+                            </button>
+                        </div>
                     </div>`;
             }
         }
 
-        if (bId) renderDirectHTML();
+        function openChapters(subjectId) {
+            if(!subjectId || subjectId === 'undefined') {
+                alert("Error: Subject Stream Mapping ID is empty.");
+                return;
+            }
+            window.location.href = "./chapters.html?batch_id=" + bId + "&subject_id=" + subjectId;
+        }
+
+        if(bId) loadSubjects();
     </script>
 </body>
 </html>
