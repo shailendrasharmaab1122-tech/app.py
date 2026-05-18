@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Video Streaming Player</title>
+    <title>Player</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/shaka-player.compiled.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/controls.css">
@@ -16,8 +16,8 @@
 <body class="min-h-screen flex flex-col justify-center items-center p-4">
 
     <div class="w-full max-w-4xl flex items-center justify-between mb-4">
-        <button onclick="history.back()" class="bg-slate-800 hover:bg-slate-700 text-sm font-bold px-4 py-2 rounded-xl transition-all">← Back to Branch</button>
-        <span class="text-xs text-indigo-400 font-mono tracking-widest bg-indigo-950/50 px-3 py-1.5 rounded-lg border border-indigo-500/20">PREMIUM DECRYPT CHANNEL</span>
+        <button onclick="history.back()" class="bg-slate-800 hover:bg-slate-700 text-sm font-bold px-4 py-2 rounded-xl transition-all">← Back</button>
+        <span class="text-xs text-indigo-400 font-mono tracking-widest bg-indigo-950/50 px-3 py-1.5 rounded-lg border border-indigo-500/20">SECURE CHANNEL</span>
     </div>
 
     <div class="video-container">
@@ -27,16 +27,15 @@
     </div>
 
     <div id="playerStatus" class="mt-4 text-center text-xs text-slate-400">
-        Initiating stream layers and extracting keys...
+        Loading stream layers...
     </div>
 
     <script>
         async function initApp() {
-            // Install built-in polyfills to handle old device protocols
-            shaka.polyfil.installAll();
+            shaka.polyfill.installAll();
 
             if (!shaka.Player.isBrowserSupported()) {
-                document.getElementById('playerStatus').innerText = 'Browser does not support core streaming elements.';
+                document.getElementById('playerStatus').innerText = 'Unsupported Browser.';
                 return;
             }
 
@@ -45,16 +44,14 @@
             const batchId = params.get('batch_id');
 
             if (!videoId) {
-                document.getElementById('playerStatus').innerText = 'Missing Video Target Parameters.';
+                document.getElementById('playerStatus').innerText = 'Missing Parameters.';
                 return;
             }
 
             const video = document.getElementById('video');
             const ui = video['ui'];
-            const controls = ui ? ui.getControls() : null;
             const player = ui ? ui.getPlayer() : new shaka.Player(video);
 
-            // Constructing internal fetch pipeline route targeting your api
             const keyFetcherUrl = `/api/stream.js?video_id=${videoId}&batch_id=${batchId || ''}`;
 
             try {
@@ -62,12 +59,9 @@
                 const data = await response.json();
 
                 if (!data.success || !data.manifestUrl) {
-                    throw new Error("Unable to read streaming properties from api response");
+                    throw new Error();
                 }
 
-                document.getElementById('playerStatus').innerText = 'Keys injected. Handshaking manifest stream...';
-
-                // Configure DRM ClearKey Parameters if present inside object array
                 if (data.keyId && data.keyValue && data.keyId !== "auto-sync") {
                     player.configure({
                         drm: {
@@ -78,18 +72,16 @@
                     });
                 }
 
-                // Append stream source url structure safely
                 await player.load(data.manifestUrl);
-                document.getElementById('playerStatus').innerText = 'Streaming Stabilized. Playing...';
+                document.getElementById('playerStatus').innerText = 'Playing...';
 
             } catch (error) {
-                console.error("Player Initialization Pipeline Failure:", error);
-                document.getElementById('playerStatus').innerText = 'Stream error or token authentication barrier hit.';
+                console.error(error);
+                document.getElementById('playerStatus').innerText = 'Error loading stream.';
             }
         }
 
         document.addEventListener('shaka-ui-loaded', initApp);
-        // Fallback for browsers that process framework loading natively without events
         document.addEventListener('DOMContentLoaded', () => {
             if (!window['shaka-ui-loaded-event-fired']) {
                 setTimeout(initApp, 1000);
