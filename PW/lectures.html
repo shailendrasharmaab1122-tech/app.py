@@ -1,34 +1,43 @@
 <!DOCTYPE html><html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">Topic</title>
+    <title id="pageTitle">The DevCoderz</title>
     <link href="https://www.pw.live/batches-new/index.BZrLlnYz.css" rel="stylesheet" type="text/css">
     <style>
-      .completed-lecture { border: 2px solid #22c55e !important; border-radius: 12px; }
-      .dropdown-item:hover { background: #f3f4f6; }
-      #loadingScreen { position: fixed; inset: 0; background: #fff; display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 99999; }
-      .spinner { width: 40px; height: 40px; border: 4px solid #ddd; border-top: 4px solid #22c55e; border-radius: 50%; animation: spin 1s linear infinite; }
-      @keyframes spin { 100% { transform: rotate(360deg); } }
-      * { user-select: auto !important; -webkit-user-select: auto !important; }
+        body { background-color: #f8fafc; font-family: sans-serif; }
+        .brand-header { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); padding: 20px; text-align: center; color: white; box-shadow: 0 4px 20px rgba(0,0,0,0.15); border-bottom: 3px solid #22c55e; }
+        .brand-title { font-size: 24px; font-weight: 800; tracking: 1.5px; text-transform: uppercase; margin: 0; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .brand-subtitle { font-size: 11px; color: #a5b4fc; margin-top: 4px; letter-spacing: 2px; }
+        .completed-lecture { border: 2px solid #22c55e !important; border-radius: 12px; box-shadow: 0 0 10px rgba(34,197,94,0.2); }
+        .dropdown-item:hover { background: #f3f4f6; }
+        #loadingScreen { position: fixed; inset: 0; background: #fff; display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 99999; }
+        .spinner { width: 45px; height: 45px; border: 4px solid #e2e8f0; border-top: 4px solid #312e81; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        * { user-select: auto !important; -webkit-user-select: auto !important; }
     </style>
 </head>
 <body>
     <div id="loadingScreen" style="display: flex;">
       <div class="spinner"></div>
-      <p style="margin-top: 12px; font-family: sans-serif; font-size: 14px; color: #666;">Loading...</p>
+      <p style="margin-top: 14px; font-weight: 600; color: #1e1b4b;">Fetching Secure Clusters...</p>
+    </div>
+
+    <div class="brand-header">
+        <h1 class="brand-title">The DevCoderz</h1>
+        <div class="brand-subtitle">BYPASS ENGINE MULTI-STREAM</div>
     </div>
 
     <div id="root">
       <div class="wrapper-fOD1sd">
-        <div class="layout-rbPRWR">
+        <div class="layout-rbPRWR" style="max-width: 1200px; margin: auto; padding: 10px;">
           <section id="pw-container" class="pwContainer-oQpUPM">
             <div class="index_class_1-FuYGeK">
               <div class="wrapper-C0ts2n">
                 <div class="wrapper-R2wcqK undefined">
                   <div class="wrapper-aukBDk">
                     <div class="content_wrapper-rmMzBM">
-                      <h3 class="topic_name-E3X8eg" id="topicName">Topic</h3>
-                      <section class="index_class_1-CoB5Zo exam_tabs_mf_container-xQLnhO" id="tabsContainer"></section>
+                      <h3 class="topic_name-E3X8eg" id="topicName" style="color:#1e1b4b; font-weight:700;">Topic</h3>
+                      <section class="index_class_1-CoB5Zo exam_tabs_mf_container-xQLnhO" id="tabsContainer" style="margin-bottom:20px; border-bottom:1px solid #e2e8f0;"></section>
                       <div class="index_class_2-nA57WL" id="contentContainer"></div>
                     </div>
                   </div>
@@ -48,37 +57,31 @@
       const activeTab = params.get("tab") || "videos";
 
       if (!batchId || !subjectId || !topicId) {
-        document.body.innerHTML = "<div style='padding:50px; text-align:center; font-family:sans-serif;'>Invalid Request Parameters</div>";
-        throw new Error("Missing Params");
+        document.body.innerHTML = "<div style='padding:50px; text-align:center;'>Invalid Request Parameters</div>";
+        throw new Error();
       }
 
       const targetApiUrl = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}&tab=${activeTab}`;
       const proxyUrl = `/api/stream.js?url=${encodeURIComponent(targetApiUrl)}`;
 
       fetch(proxyUrl)
-        .then((res) => {
-            if(!res.ok) throw new Error();
-            return res.json();
-        })
-        .then((data) => {
+        .then(res => { if(!res.ok) throw new Error(); return res.json(); })
+        .then(data => {
           document.getElementById("loadingScreen").style.display = "none";
           document.getElementById("topicName").innerText = data.topic_name || "Topic";
-          document.getElementById("pageTitle").innerText = data.topic_name || "Topic";
           renderTabs();
-
           if (activeTab === "videos" || activeTab === "DppVideos") renderLectures(data.lectures || []);
           if (activeTab === "notes" || activeTab === "DppNotes") renderNotes(data.lectures || []);
           if (activeTab === "dppQuiz") renderQuizzes(data.dpp_quizzes || []);
         })
         .catch(err => {
-            console.error(err);
-            document.getElementById("loadingScreen").innerHTML = `<div style="text-align:center; font-family:sans-serif; color:#ef4444; padding:20px;"><h3>❌ Error Loading Data</h3></div>`;
+            document.getElementById("loadingScreen").innerHTML = `<div style="text-align:center; color:#ef4444; padding:20px;"><h3>❌ Security Tunnel Error</h3></div>`;
         });
 
       function renderTabs() {
         const tabs = [["videos", "Lectures"], ["notes", "Notes"], ["dppQuiz", "DPP Quiz"], ["DppNotes", "DPP PDF"], ["DppVideos", "DPP Solutions"]];
         let html = "";
-        tabs.forEach((t) => {
+        tabs.forEach(t => {
           html += `<button onclick="changeTab('${t[0]}')" class="index_class_2-xQMaV5 ${activeTab === t[0] ? "active-Wkjz3n" : ""}">${t[1]}</button>`;
         });
         document.getElementById("tabsContainer").innerHTML = html;
@@ -87,16 +90,16 @@
       function renderLectures(lectures) {
         let html = "";
         if (lectures.length === 0) {
-            document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#999;'>No Lectures Available</div>";
+            document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#64748b;'>No Lectures Online</div>";
             return;
         }
-        lectures.forEach((item) => {
+        lectures.forEach(item => {
           if (!item) return;
           const lectureId = item._id || (item.videoDetails && item.videoDetails._id);
           if (!lectureId) return;
 
           html += `
-        <div class="index_class_3-FAUYHF lecture-card" data-id="${lectureId}" style="position:relative;" onclick="openLecture('${lectureId}')">
+        <div class="index_class_3-FAUYHF lecture-card" data-id="${lectureId}" style="position:relative; margin-bottom:12px; cursor:pointer;" onclick="openLecture('${lectureId}')">
         <div class="index_class_1-MVi_no">
         <div class="index_class_3-bfYHa0">
         <img src="${item.videoDetails?.image || "https://static.pw.live/react-batches/assets/study/blue-play-icon.svg"}" class="index_class_4-h3krT0">
@@ -104,14 +107,14 @@
         </div>
         <section class="card_details-jhfM5S">
         <div class="index_class_5-jpm8N4"><div class="index_class_7-QWiBzJ"><img class="index_class_8-c71iDH" src="https://static.pw.live/react-batches/assets/study/clock.svg"><span>${item.videoDetails?.duration || "00:00"}</span></div></div>
-        <div class="index_class_9-MwVgjv"><p class="index_class_10-F64Ile">${item.topic || item.videoDetails?.name || "Untitled Lecture"}</p></div>
+        <div class="index_class_9-MwVgjv"><p class="index_class_10-F64Ile" style="color:#1e293b; font-weight:600;">${item.topic || item.videoDetails?.name || "Untitled Lecture"}</p></div>
         <div class="index_class_12-Cq8EEY" onclick="event.stopPropagation();">
             <div class="dropdown-wrapper" style="position:relative;">
-                <div class="three-dot-btn" onclick="event.stopPropagation(); toggleDropdown('${lectureId}', event)" style="cursor:pointer;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis-vertical moreVerticalIcon-zDj749"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                <div class="three-dot-btn" onclick="event.stopPropagation(); toggleDropdown('${lectureId}', event)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="moreVerticalIcon-zDj749"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
                 </div>
                 <div class="dropdown-menu" id="dropdown-${lectureId}" style="display:none; position:absolute; right:0; top:28px; background:#fff; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.15); padding:8px 0; min-width:180px; z-index:1000;">
-                    <div onclick="event.stopPropagation(); toggleComplete('${lectureId}')" class="dropdown-item" style="padding:10px 14px; cursor:pointer; font-size:14px; color:#333;">
+                    <div onclick="event.stopPropagation(); toggleComplete('${lectureId}')" class="dropdown-item" style="padding:10px 14px; font-size:14px; color:#333;">
                         <span id="dropdown-text-${lectureId}">Mark as complete</span>
                     </div>
                 </div>
@@ -127,22 +130,52 @@
 
       function renderNotes(lectures) {
         let html = "";
-        if (lectures.length === 0) { html = "<div style='text-align:center; padding:40px; color:#999;'>No Notes Available</div>"; }
-        lectures.forEach((item) => {
+        if (lectures.length === 0) {
+            document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#64748b;'>No Material Available</div>";
+            return;
+        }
+        lectures.forEach(item => {
           if (!item || !item.download_url) return;
-          html += `<div class="index_class_3-FAUYHF" onclick="window.open('${item.download_url}', '_blank')"><div class="index_class_1-MVi_no"><section class="card_details-jhfM5S"><div class="index_class_9-MwVgjv"><p class="index_class_10-F64Ile">📄 ${item.title || "PDF Notes"}</p></div></section></div></div>`;
+          html += `
+        <div class="index_class_3-FAUYHF" style="margin-bottom:12px; cursor:pointer;" onclick="window.open('${item.download_url}', '_blank')">
+            <div class="index_class_1-MVi_no">
+                <div class="index_class_3-bfYHa0" style="background:#fff1f2; display:flex; align-items:center; justify-content:center;">
+                    <span style="font-size:30px;">📄</span>
+                </div>
+                <section class="card_details-jhfM5S">
+                    <div class="index_class_9-MwVgjv">
+                        <p class="index_class_10-F64Ile" style="color:#1e293b; font-weight:600;">${item.title || "PDF Resource File"}</p>
+                    </div>
+                </section>
+            </div>
+        </div>`;
         });
         document.getElementById("contentContainer").innerHTML = html;
       }
 
       function renderQuizzes(quizzes) {
         let html = "";
-        if (quizzes.length === 0) { html = "<div style='text-align:center; padding:40px; color:#999;'>No Quizzes Available</div>"; }
-        quizzes.forEach((quiz) => {
+        if (quizzes.length === 0) {
+            document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#64748b;'>No Quiz Modules Found</div>";
+            return;
+        }
+        quizzes.forEach(quiz => {
           const test = quiz.dppQuizDetails?.test || {};
           const scheduleId = quiz.dppQuizDetails?.scheduleId;
           if (!test._id || !scheduleId) return;
-          html += `<div class="index_class_3-FAUYHF" onclick="openDpp('${test._id}','${scheduleId}')"><div class="index_class_1-MVi_no"><section class="card_details-jhfM5S"><div class="index_class_9-MwVgjv"><p class="index_class_10-F64Ile">📝 ${test.name || "DPP Quiz"}</p></div></section></div></div>`;
+          html += `
+        <div class="index_class_3-FAUYHF" style="margin-bottom:12px; cursor:pointer;" onclick="openDpp('${test._id}','${scheduleId}')">
+            <div class="index_class_1-MVi_no">
+                <div class="index_class_3-bfYHa0" style="background:#f0fdf4; display:flex; align-items:center; justify-content:center;">
+                    <span style="font-size:30px;">📝</span>
+                </div>
+                <section class="card_details-jhfM5S">
+                    <div class="index_class_9-MwVgjv">
+                        <p class="index_class_10-F64Ile" style="color:#1e293b; font-weight:600;">${test.name || "DPP Practice Set"}</p>
+                    </div>
+                </section>
+            </div>
+        </div>`;
         });
         document.getElementById("contentContainer").innerHTML = html;
       }
@@ -162,13 +195,13 @@
       }
 
       let openDropdownId = null;
-      function closeAllDropdowns() { document.querySelectorAll(".dropdown-menu").forEach((menu) => { menu.style.display = "none"; }); openDropdownId = null; }
+      function closeAllDropdowns() { document.querySelectorAll(".dropdown-menu").forEach(menu => { menu.style.display = "none"; }); openDropdownId = null; }
       function toggleDropdown(id, e) { e.stopPropagation(); if (openDropdownId === id) { closeAllDropdowns(); return; } closeAllDropdowns(); const menu = document.getElementById("dropdown-" + id); if (menu) { menu.style.display = "block"; openDropdownId = id; } }
-      document.addEventListener("click", () => { document.querySelectorAll(".dropdown-menu").forEach((m) => (m.style.display = "none")); });
+      document.addEventListener("click", () => { document.querySelectorAll(".dropdown-menu").forEach(m => m.style.display = "none"); });
 
       function toggleComplete(id) {
         let arr = JSON.parse(localStorage.getItem("completedLectures")) || [];
-        if (arr.includes(id)) { arr = arr.filter((x) => x !== id); applyUI(id, false); } else { arr.push(id); applyUI(id, true); }
+        if (arr.includes(id)) { arr = arr.filter(x => x !== id); applyUI(id, false); } else { arr.push(id); applyUI(id, true); }
         localStorage.setItem("completedLectures", JSON.stringify(arr));
       }
 
@@ -178,7 +211,7 @@
         if (!card) return;
         if (state) { card.classList.add("completed-lecture"); if (text) text.innerText = "Undo completion"; } else { card.classList.remove("completed-lecture"); if (text) text.innerText = "Mark as complete"; }
       }
-      function restoreCompletedLectures() { let arr = JSON.parse(localStorage.getItem("completedLectures")) || []; arr.forEach((id) => applyUI(id, true)); }
+      function restoreCompletedLectures() { let arr = JSON.parse(localStorage.getItem("completedLectures")) || []; arr.forEach(id => applyUI(id, true)); }
     </script>
 </body>
 </html>
