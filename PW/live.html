@@ -3,34 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirecting to Classroom...</title>
+    <title>Connecting to Live Lecture...</title>
     <style>
-        body {
-            background-color: #0b0f19;
-            color: #f3f4f6;
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .loader-container {
-            text-align: center;
-        }
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255, 255, 255, 0.1);
-            border-top: 5px solid #22c55e;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        body { background-color: #0b0f19; color: #f3f4f6; font-family: 'Inter', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .loader-container { text-align: center; }
+        .spinner { width: 50px; height: 50px; border: 5px solid rgba(255, 255, 255, 0.1); border-top: 5px solid #ef4444; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         h2 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
         p { color: #9ca3af; font-size: 14px; }
     </style>
@@ -39,38 +17,33 @@
 
     <div class="loader-container">
         <div class="spinner"></div>
-        <h2>Opening EduVibe Portal...</h2>
+        <h2>Opening Live Classroom Node...</h2>
         <p>Connecting secure database node, please wait.</p>
     </div>
 
     <script>
-        // 1. URL se saare parameters (batch_id, subject_id, video_id, start) nikalna
+        // URL se parameters extract karna
         const urlParams = new URLSearchParams(window.location.search);
         const batchId = urlParams.get('batch_id');
         const subjectId = urlParams.get('subject_id');
         const videoId = urlParams.get('video_id');
         const startTime = urlParams.get('start');
 
-        // 2. EduVibe ka main dynamic targeting URL build karna
-        // Agar parameters available hain, toh unhe format me attach karo
         if (batchId && videoId) {
-            let targetRedirectUrl = `https://eduvibe-pw-api.wasmer.app/video-details.php?video_id=${encodeURIComponent(videoId)}&batch_id=${encodeURIComponent(batchId)}`;
+            // EduVibe Live PHP Portal Targeting Link Construction
+            let targetRedirectUrl = `https://eduvibe-pw.page.gd/live.php?batch_id=${encodeURIComponent(batchId)}&video_id=${encodeURIComponent(videoId)}`;
             
-            // Agar subject_id aur start time bhi link me pass karna ho
             if (subjectId) targetRedirectUrl += `&subject_id=${encodeURIComponent(subjectId)}`;
             if (startTime) targetRedirectUrl += `&start=${encodeURIComponent(startTime)}`;
 
-            // 3. User ko direct EduVibe platform link par phenk do
+            // Direct Routing Execution
             setTimeout(() => {
                 window.location.href = targetRedirectUrl;
-            }, 800); // 0.8 second ka smooth layout transition delay
+            }, 600); 
         } else {
-            // Safe fallback agar dashboard se correct ID pass na ho rhi ho
             document.querySelector('h2').innerText = "Routing Parameters Missing";
             document.querySelector('p').innerText = "Redirecting back to dashboard...";
-            setTimeout(() => {
-                window.location.href = "/";
-            }, 2000);
+            setTimeout(() => { window.location.href = "/"; }, 2000);
         }
     </script>
 </body>
