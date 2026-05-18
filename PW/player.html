@@ -65,12 +65,20 @@ video { width: 100%; height: auto; aspect-ratio: 16/9; }
   let manifestUrl, keyId, keyValue;
 
   try {
-    statusEl.innerText = "Fetching decrypted keys from secure tunnel...";
+    statusEl.innerText = "Connecting to tunnel and decoding master streams...";
     const response = await fetch(keyFetcherUrl);
-    const apiData = await response.json();
+    
+    const textData = await response.text();
+    let apiData;
+    
+    try {
+        apiData = JSON.parse(textData);
+    } catch(e) {
+        throw new Error("HTML_RESPONSE");
+    }
 
     if (!apiData.success || !apiData.manifestUrl) {
-        throw new Error("Invalid API structure");
+        throw new Error("INVALID_PAYLOAD");
     }
 
     manifestUrl = apiData.manifestUrl;
@@ -78,7 +86,7 @@ video { width: 100%; height: auto; aspect-ratio: 16/9; }
     keyValue = apiData.keyValue;
 
   } catch (err) {
-    statusEl.innerText = "API Handshake failed. Trying raw fallback...";
+    statusEl.innerText = "Redirecting matrix pipeline to fallback sync...";
     manifestUrl = `https://sec-prod-mediacdn.pw.live/files/${videoId}/master.mpd`;
     keyId = null;
     keyValue = null;
@@ -96,17 +104,17 @@ video { width: 100%; height: auto; aspect-ratio: 16/9; }
       });
   }
 
-  try {
-    const manifestObj = new URL(manifestUrl);
-    shakaPlayer.getNetworkingEngine().registerRequestFilter((type, request) => {
-        if (type !== shaka.net.NetworkingEngine.RequestType.SEGMENT) return;
-        manifestObj.searchParams.forEach((v, k) => {
-          const segUrl = new URL(request.uris[0]);
-          segUrl.searchParams.set(k, v);
-          request.uris[0] = segUrl.toString();
-        });
-    });
-  } catch(e){}
+  shakaPlayer.getNetworkingEngine().registerRequestFilter((type, request) => {
+      if (type !== shaka.net.NetworkingEngine.RequestType.SEGMENT) return;
+      try {
+          const manifestObj = new URL(manifestUrl);
+          manifestObj.searchParams.forEach((v, k) => {
+            const segUrl = new URL(request.uris[0]);
+            segUrl.searchParams.set(k, v);
+            request.uris[0] = segUrl.toString();
+          });
+      } catch(e){}
+  });
 
   let tracks = [];
   try {
@@ -114,9 +122,20 @@ video { width: 100%; height: auto; aspect-ratio: 16/9; }
     statusEl.innerText = "✅ Pipeline Connected. Stream matrix active.";
     tracks = shakaPlayer.getVariantTracks();
   } catch (err) {
-    statusEl.innerHTML = `<span style="color:#f43f5e; font-weight:bold;">❌ Stream Blocked!</span><br><span style="color:#64748b; font-size:11px;">Shaka Error Code: ${err.code} | Category: ${err.category}</span>`;
-    console.error("Shaka Player Error:", err);
-    return;
+    if(err.code == 1002) {
+        statusEl.innerText = "Re-routing network tokens due to source error. Please wait...";
+        try {
+            await shakaPlayer.load(`https://sec-prod-mediacdn.pw.live/files/${videoId}/master.mpd`);
+            statusEl.innerText = "✅ Fallback tunnel sync connected successfully.";
+            tracks = shakaPlayer.getVariantTracks();
+        } catch(fallbackErr) {
+            statusEl.innerHTML = `<span style="color:#f43f5e; font-weight:bold;">❌ Stream Blocked!</span><br><span style="color:#64748b; font-size:11px;">Source token expired or layout altered.</span>`;
+            return;
+        }
+    } else {
+        statusEl.innerHTML = `<span style="color:#f43f5e; font-weight:bold;">❌ Stream Error!</span><br><span style="color:#64748b; font-size:11px;">Code: ${err.code}</span>`;
+        return;
+    }
   }
 
   const resolutions = [...new Map(
