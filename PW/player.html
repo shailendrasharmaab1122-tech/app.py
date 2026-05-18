@@ -3,54 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Player</title>
+    <title>The DevCoderz Player</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/shaka-player.compiled.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/controls.css">
     <style>
-        body { background-color: #0f172a; color: white; font-family: sans-serif; }
-        .video-container { max-width: 900px; width: 100%; margin: auto; background: black; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        body { background-color: #0b0f19; color: white; font-family: sans-serif; }
+        .brand-header { background: linear-gradient(135deg, #111827 0%, #1f2937 100%); width: 100%; padding: 15px; text-align: center; border-bottom: 2px solid #22c55e; box-shadow: 0 4px 15px rgba(0,0,0,0.4); margin-bottom: 24px; }
+        .brand-title { font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #ffffff; }
+        .video-container { max-width: 960px; width: 100%; margin: auto; background: black; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.7); border: 1px solid #374151; }
         video { width: 100%; height: 100%; aspect-ratio: 16/9; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-center items-center p-4">
+<body class="min-h-screen flex flex-col items-center pb-8">
 
-    <div class="w-full max-w-4xl flex items-center justify-between mb-4">
-        <button onclick="history.back()" class="bg-slate-800 hover:bg-slate-700 text-sm font-bold px-4 py-2 rounded-xl transition-all">← Back</button>
-        <span class="text-xs text-indigo-400 font-mono tracking-widest bg-indigo-950/50 px-3 py-1.5 rounded-lg border border-indigo-500/20">SECURE CHANNEL</span>
+    <div class="brand-header">
+        <h1 class="brand-title">The DevCoderz</h1>
+    </div>
+
+    <div class="w-full max-w-4xl flex items-center justify-between mb-4 px-4">
+        <button onclick="history.back()" class="bg-gray-800 hover:bg-gray-700 text-xs font-bold px-4 py-2 rounded-lg transition-all border border-gray-700">← Back</button>
+        <span class="text-[10px] text-green-400 font-mono bg-green-950/40 px-2.5 py-1 rounded border border-green-500/30">SECURE SHELL</span>
     </div>
 
     <div class="video-container">
         <div data-shaka-player-container style="width:100%; height:100%;">
-            <video data-shaka-player id="video" autoplay></video>
+            <video data-shaka-player id="video" autoplay controls></video>
         </div>
     </div>
 
-    <div id="playerStatus" class="mt-4 text-center text-xs text-slate-400">
-        Loading stream layers...
+    <div id="playerStatus" class="mt-4 text-center text-xs text-gray-500 font-mono">
+        Connecting to core engine...
     </div>
 
     <script>
         async function initApp() {
-            shaka.polyfill.installAll();
-
-            if (!shaka.Player.isBrowserSupported()) {
-                document.getElementById('playerStatus').innerText = 'Unsupported Browser.';
-                return;
-            }
+            try { shaka.polyfil.installAll(); } catch(e) { try { shaka.polyfill.installAll(); } catch(err){} }
+            
+            const video = document.getElementById('video');
+            const ui = video['ui'];
+            const player = ui ? ui.getPlayer() : new shaka.Player(video);
 
             const params = new URLSearchParams(window.location.search);
             const videoId = params.get('video_id');
             const batchId = params.get('batch_id');
 
             if (!videoId) {
-                document.getElementById('playerStatus').innerText = 'Missing Parameters.';
+                document.getElementById('playerStatus').innerText = 'Missing Address Parameters.';
                 return;
             }
-
-            const video = document.getElementById('video');
-            const ui = video['ui'];
-            const player = ui ? ui.getPlayer() : new shaka.Player(video);
 
             const keyFetcherUrl = `/api/stream.js?video_id=${videoId}&batch_id=${batchId || ''}`;
 
@@ -58,9 +59,7 @@
                 const response = await fetch(keyFetcherUrl);
                 const data = await response.json();
 
-                if (!data.success || !data.manifestUrl) {
-                    throw new Error();
-                }
+                if (!data.success || !data.manifestUrl) throw new Error();
 
                 if (data.keyId && data.keyValue && data.keyId !== "auto-sync") {
                     player.configure({
@@ -73,11 +72,15 @@
                 }
 
                 await player.load(data.manifestUrl);
-                document.getElementById('playerStatus').innerText = 'Playing...';
-
+                document.getElementById('playerStatus').innerText = 'Stream Matrix Connected.';
             } catch (error) {
-                console.error(error);
-                document.getElementById('playerStatus').innerText = 'Error loading stream.';
+                document.getElementById('playerStatus').innerText = 'Handshake failed. Retrying auto-sync mode...';
+                try {
+                    await player.load(`https://sec-prod-mediacdn.pw.live/files/${videoId}/master.mpd`);
+                    document.getElementById('playerStatus').innerText = 'Fallback Sync Active.';
+                } catch(err) {
+                    document.getElementById('playerStatus').innerText = 'Stream Decryption Blocked.';
+                }
             }
         }
 
