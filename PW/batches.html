@@ -51,9 +51,9 @@
             window.location.href = "./index.html";
         }
 
-        const targetApi = `https://devcoderz.vercel.app/api/PW/all-batches-api2.js?batch_id=${bId}`;
+        // Bina parameters ke clean target endpoint
+        const targetApi = `https://devcoderz.vercel.app/api/PW/all-batches-api2.js`;
 
-        // Cluster Fallback Networks
         const proxies = [
             { name: "Direct Cloud Core", url: targetApi, type: "direct" },
             { name: "Proxy Bridge Alpha", url: `https://api.allorigins.win/get?url=${encodeURIComponent(targetApi)}`, type: "allorigins" },
@@ -94,7 +94,20 @@
                     resData = await response.json();
                 }
 
-                const subjects = resData.subjects || resData.data?.subjects || resData.data || (Array.isArray(resData) ? resData : []);
+                // Pure pool se saare batches nikalna
+                let batchesPool = resData.batches || resData.data?.batches || resData.data || (Array.isArray(resData) ? resData : []);
+                
+                // Apne matching batch_id wale node ko dhoondhna
+                let activeBatch = batchesPool.find(b => b && ((b._id || b.id) == bId));
+
+                // Agar subjects direct root par na ho kar batch ke andar hain
+                let subjects = [];
+                if (activeBatch) {
+                    subjects = activeBatch.subjects || activeBatch.data?.subjects || [];
+                } else {
+                    // Fallback filtering check agar json schema flat structure ho
+                    subjects = resData.subjects || resData.data?.subjects || [];
+                }
 
                 if (subjects.length === 0) {
                     container.innerHTML = `<div class="col-span-full text-center text-slate-400 py-12 text-sm">⚠️ No premium streaming feeds listed inside this channel matrix.</div>`;
