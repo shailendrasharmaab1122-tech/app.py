@@ -7,9 +7,8 @@ export default async function handler(req, res) {
         return res.status(200).end();
     }
 
-    const { url, video_id, batch_id } = req.query;
+    const { url, video_id, batch_id, subjectSlug, topicSlug } = req.query;
 
-    // --- 1. TABS AND LECTURES DATA FETCH ---
     if (url) {
         try {
             const response = await fetch(url, {
@@ -25,18 +24,45 @@ export default async function handler(req, res) {
             const data = await response.json();
             return res.status(200).json(data);
         } catch (error) {
-            return res.status(500).json({ error: "Failed to fetch channel index" });
+            return res.status(500).json({ error: "Failed to fetch structured layout" });
         }
     }
 
-    // --- 2. VIDEO STREAM DECRYPTION TUNNEL ---
     if (!video_id) {
-        return res.status(400).json({ error: "Missing parameters" });
+        return res.status(400).json({ error: "Missing core parameter: video_id" });
     }
 
-    const bId = batch_id || "321850";
+    const bId = batch_id || "698ad3519549b300a5e1cc6a"; 
 
-    // METHOD A: EDUVIBE API TUNNEL (HIGH PRIORITY BYPASS)
+    if (subjectSlug && topicSlug) {
+        try {
+            const deltaDataServer = `https://apiserver.deltastudy.site/api/pw/datacontent?batchId=${bId}&subjectSlug=${subjectSlug}&topicSlug=${topicSlug}&contentType=videos`;
+            
+            const dResponse = await fetch(deltaDataServer, {
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (dResponse.ok) {
+                const responseData = await dResponse.json();
+                const videosList = responseData.data || responseData;
+                const matchVideo = videosList.find(v => v.videoDetails?._id === video_id || v._id === video_id);
+
+                if (matchVideo && matchVideo.videoDetails?.manifestUrl) {
+                    return res.status(200).json({
+                        success: true,
+                        manifestUrl: matchVideo.videoDetails.manifestUrl,
+                        keyId: matchVideo.videoDetails.keyId || "",
+                        keyValue: matchVideo.videoDetails.keyValue || "",
+                        source: "Delta-Internal-API"
+                    });
+                }
+            }
+        } catch (err) {}
+    }
+
     try {
         const eduVibeApi = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${bId}&video_id=${video_id}&tab=videos`;
         const vResponse = await fetch(eduVibeApi, {
@@ -48,7 +74,6 @@ export default async function handler(req, res) {
         
         if (vResponse.ok) {
             const vData = await vResponse.json();
-            // Finding the exact lecture match for dynamic token keys
             const lecture = vData.lectures?.find(l => l?.videoDetails?._id === video_id || l?._id === video_id);
             
             if (lecture && lecture.videoDetails?.manifestUrl) {
@@ -63,40 +88,11 @@ export default async function handler(req, res) {
         }
     } catch (err) {}
 
-    // METHOD B: DELTA STUDY SCRAPER FALLBACK
-    try {
-        const targetUrl = `https://deltastudy.site/study-v2/batches/${bId}?video_id=${video_id}`;
-        const response = await fetch(targetUrl, {
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36',
-                'Accept': 'text/html'
-            }
-        });
-
-        if (response.ok) {
-            const html = await response.text();
-            const manifestUrl = html.match(/["'](https:\/\/sec-prod-mediacdn\.pw\.live\/[^"']+\.(?:mpd|m3u8)[^"']*)["']/)?.[1];
-            const keyId = html.match(/["']keyId["']\s*:\s*["']([^"']+)["']/)?.[1] || html.match(/["']key_id["']\s*:\s*["']([^"']+)["']/)?.[1];
-            const keyValue = html.match(/["']keyValue["']\s*:\s*["']([^"']+)["']/)?.[1] || html.match(/["']key_value["']\s*:\s*["']([^"']+)["']/)?.[1];
-
-            if (manifestUrl && keyId && keyValue) {
-                return res.status(200).json({
-                    success: true,
-                    manifestUrl: manifestUrl,
-                    keyId: keyId,
-                    keyValue: keyValue,
-                    source: "Delta-Scraper-V2"
-                });
-            }
-        }
-    } catch (error) {}
-
-    // METHOD C: LAST RESORT RAW LINK
     return res.status(200).json({
         success: true,
         manifestUrl: `https://sec-prod-mediacdn.pw.live/files/${video_id}/master.mpd`,
         keyId: "auto-sync",
         keyValue: "auto-sync",
-        source: "Raw-Unsigned-Fallback"
+        source: "Unsigned-Raw-Tunnel"
     });
 }
