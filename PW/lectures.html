@@ -1,73 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="pageTitle">Topic</title>
-
     <link href="https://www.pw.live/batches-new/index.BZrLlnYz.css" rel="stylesheet" type="text/css">
-    <link id="pw-auth-web-sdk-style" rel="stylesheet" href="https://static.pw.live/web/sdk/auth/v1.1.64/pw-auth-web-sdk.style.css">
-    <link rel="stylesheet" type="text/css" href="/study-v2/static/css/async/185.8ace8ad6.css">
-    <link rel="stylesheet" type="text/css" href="/study-v2/static/css/async/47.42b6faaa.css">
-    <link href="https://pw-batches-mfe.pw.live/static/css/async/pw-package.01fd1956.css" rel="stylesheet" type="text/css">
-    <link href="https://pw-batches-mfe.pw.live/static/css/async/pw-tech-packages.813dc8f0.css" rel="stylesheet" type="text/css">
-    <link href="https://pw-batches-mfe.pw.live/static/css/async/452.5ab7b86a.css" rel="stylesheet" type="text/css">
-    <link href="https://pw-batches-mfe.pw.live/static/css/async/8974.5ef14210.css" rel="stylesheet" type="text/css">
-    <link href="https://pw-batches-mfe.pw.live/static/css/async/6659.57c9663f.css" rel="stylesheet" type="text/css">
-    <link href="https://pw-batches-mfe.pw.live/static/css/async/7679.6a392745.css" rel="stylesheet" type="text/css">
-    <link href="https://pw-batches-mfe.pw.live/static/css/async/5693.249e7439.css" rel="stylesheet" type="text/css">
-    <link href="https://pw-batches-mfe.pw.live/static/css/async/991.b618784a.css" rel="stylesheet" type="text/css">
-    <link href="https://pw-batches-mfe.pw.live/static/css/async/8164.1ef779d4.css" rel="stylesheet" type="text/css">
-    <link href="https://pw-batches-mfe.pw.live/static/css/async/8765.0426e8ab.css" rel="stylesheet" type="text/css">
-    <link href="https://pw-batches-mfe.pw.live/static/css/async/5202.b583f24e.css" rel="stylesheet" type="text/css">
-    <link href="https://pw-batches-mfe.pw.live/static/css/async/6872.ffe39eaf.css" rel="stylesheet" type="text/css">
-    <link href="https://pw-batches-mfe.pw.live/static/css/async/7161.8f71865f.css" rel="stylesheet" type="text/css">
-    <link href="https://pw-batches-mfe.pw.live/static/css/async/6876.79201b7c.css" rel="stylesheet" type="text/css">
-    <link href="https://pw-batches-mfe.pw.live/static/css/async/6797.77969eb3.css" rel="stylesheet" type="text/css">
-    <link href="https://pw-batches-mfe.pw.live/static/css/async/2036.e24bd4cf.css" rel="stylesheet" type="text/css">
-    <link href="https://pw-batches-mfe.pw.live/static/css/async/4603.7247e9be.css" rel="stylesheet" type="text/css">
-    <link href="https://pw-batches-mfe.pw.live/static/css/async/7923.f3d87fc8.css" rel="stylesheet" type="text/css">
-    <link href="https://pw-batches-mfe.pw.live/static/css/async/8902.0fca1556.css" rel="stylesheet" type="text/css">
-    <link href="https://pw-batches-mfe.pw.live/static/css/async/723.9e5f4773.css" rel="stylesheet" type="text/css">
-    <link href="https://pw-learn-to-earn-mfe.pw.live/static/css/async/__federation_expose_Learn2Earn.150f6681.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" type="text/css" href="https://pw-learn-to-earn-mfe.pw.live/static/css/async/397.cd5f4749.css">
-    <link rel="stylesheet" type="text/css" href="https://test-series-mf.pw.live/_next/static/chunks/../../static/css/02534381fb3cf900.css">
-    <link rel="stylesheet" type="text/css" href="https://test-series-mf.pw.live/_next/static/chunks/../../static/css/8de4268ed3f2a50c.css">
-    <link rel="stylesheet" type="text/css" href="https://pw-batches-mfe.pw.live/static/css/async/1800.e8765dc1.css">
-    <link rel="stylesheet" type="text/css" href="https://pw-batches-mfe.pw.live/static/css/async/3130.30ec8bab.css">
-
     <style>
-      .completed-lecture {
-        border: 2px solid #22c55e !important;
-        border-radius: 12px;
-      }
-      .dropdown-item:hover {
-        background: #f3f4f6;
-      }
-      #loadingScreen {
-        position: fixed;
-        inset: 0;
-        background: #fff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        z-index: 99999;
-      }
-      .spinner {
-        width: 40px;
-        height: 40px;
-        border: 4px solid #ddd;
-        border-top: 4px solid #22c55e;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-      }
+      .completed-lecture { border: 2px solid #22c55e !important; border-radius: 12px; }
+      .dropdown-item:hover { background: #f3f4f6; }
+      #loadingScreen { position: fixed; inset: 0; background: #fff; display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 99999; }
+      .spinner { width: 40px; height: 40px; border: 4px solid #ddd; border-top: 4px solid #22c55e; border-radius: 50%; animation: spin 1s linear infinite; }
       @keyframes spin { 100% { transform: rotate(360deg); } }
       * { user-select: auto !important; -webkit-user-select: auto !important; }
     </style>
 </head>
-
-  <body>
+<body>
     <div id="loadingScreen" style="display: flex;">
       <div class="spinner"></div>
       <p style="margin-top: 12px; font-family: sans-serif; font-size: 14px; color: #666;">Synchronizing array via local stream handler...</p>
@@ -83,9 +28,7 @@
                   <div class="wrapper-aukBDk">
                     <div class="content_wrapper-rmMzBM">
                       <h3 class="topic_name-E3X8eg" id="topicName">Topic</h3>
-
                       <section class="index_class_1-CoB5Zo exam_tabs_mf_container-xQLnhO" id="tabsContainer"></section>
-
                       <div class="index_class_2-nA57WL" id="contentContainer"></div>
                     </div>
                   </div>
@@ -99,7 +42,6 @@
 
     <script>
       const params = new URLSearchParams(window.location.search);
-
       const batchId = params.get("batch_id");
       const subjectId = params.get("subject_id");
       const topicId = params.get("chapter_id") || params.get("topic_id");
@@ -110,10 +52,7 @@
         throw new Error("Missing Params");
       }
 
-      // Exact raw endpoint targeted by your backend function
       const targetApiUrl = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}&tab=${activeTab}`;
-      
-      // Connecting cleanly to your Vercel internal proxy node
       const proxyUrl = `/api/stream.js?url=${encodeURIComponent(targetApiUrl)}`;
 
       fetch(proxyUrl)
@@ -123,269 +62,90 @@
         })
         .then((data) => {
           document.getElementById("loadingScreen").style.display = "none";
-
           document.getElementById("topicName").innerText = data.topic_name || "Topic";
           document.getElementById("pageTitle").innerText = data.topic_name || "Topic";
-
           renderTabs();
 
-          if (activeTab === "videos" || activeTab === "DppVideos") {
-            renderLectures(data.lectures || []);
-          }
-
-          if (activeTab === "notes" || activeTab === "DppNotes") {
-            renderNotes(data.lectures || []);
-          }
-
-          if (activeTab === "dppQuiz") {
-            renderQuizzes(data.dpp_quizzes || []);
-          }
+          if (activeTab === "videos" || activeTab === "DppVideos") renderLectures(data.lectures || []);
+          if (activeTab === "notes" || activeTab === "DppNotes") renderNotes(data.lectures || []);
+          if (activeTab === "dppQuiz") renderQuizzes(data.dpp_quizzes || []);
         })
         .catch(err => {
             console.error(err);
-            document.getElementById("loadingScreen").innerHTML = `
-                <div style="text-align:center; font-family:sans-serif; color:#ef4444; padding:20px;">
-                    <h3>❌ Local Bridge Crash</h3>
-                    <p style="color:#666; font-size:12px; margin-top:5px;">Your api/stream.js function returned an invalid format or timed out.</p>
-                </div>
-            `;
+            document.getElementById("loadingScreen").innerHTML = `<div style="text-align:center; font-family:sans-serif; color:#ef4444; padding:20px;"><h3>❌ Local Bridge Crash</h3><p style="color:#666; font-size:12px;">Proxy function returned invalid data or timed out.</p></div>`;
         });
 
-      // ================= TABS (FULL ORIGINAL CLASS STYLE) =================
       function renderTabs() {
-        const tabs = [
-          ["videos", "Lectures"],
-          ["notes", "Notes"],
-          ["dppQuiz", "DPP Quiz"],
-          ["DppNotes", "DPP PDF"],
-          ["DppVideos", "DPP Solutions"],
-        ];
-
+        const tabs = [["videos", "Lectures"], ["notes", "Notes"], ["dppQuiz", "DPP Quiz"], ["DppNotes", "DPP PDF"], ["DppVideos", "DPP Solutions"]];
         let html = "";
         tabs.forEach((t) => {
-          html += `
-        <button onclick="changeTab('${t[0]}')"
-        class="index_class_2-xQMaV5 ${activeTab === t[0] ? "active-Wkjz3n" : ""}">
-            ${t[1]}
-        </button>`;
+          html += `<button onclick="changeTab('${t[0]}')" class="index_class_2-xQMaV5 ${activeTab === t[0] ? "active-Wkjz3n" : ""}">${t[1]}</button>`;
         });
-
         document.getElementById("tabsContainer").innerHTML = html;
       }
 
-      // ================= LECTURES (100% SAME STRUCTURE) =================
       function renderLectures(lectures) {
         let html = "";
         if (lectures.length === 0) {
-            document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#999; font-family:sans-serif;'>No Lectures Available</div>";
+            document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#999;'>No Lectures Available</div>";
             return;
         }
-
         lectures.forEach((item) => {
           if (!item) return;
           const lectureId = item._id || (item.videoDetails && item.videoDetails._id);
           if (!lectureId) return;
 
           html += `
-        <div class="index_class_3-FAUYHF lecture-card"
-             data-id="${lectureId}"
-             style="position:relative;"
-             onclick="openLecture('${lectureId}')">
-
+        <div class="index_class_3-FAUYHF lecture-card" data-id="${lectureId}" style="position:relative;" onclick="openLecture('${lectureId}')">
         <div class="index_class_1-MVi_no">
-
         <div class="index_class_3-bfYHa0">
-
-        <img src="${item.videoDetails?.image || "https://static.pw.live/react-batches/assets/study/blue-play-icon.svg"}"
-             class="index_class_4-h3krT0">
-
-        <img src="https://static.pw.live/react-batches/assets/study/blue-play-icon.svg"
-             class="play-icon-WPnSAT">
-
+        <img src="${item.videoDetails?.image || "https://static.pw.live/react-batches/assets/study/blue-play-icon.svg"}" class="index_class_4-h3krT0">
+        <img src="https://static.pw.live/react-batches/assets/study/blue-play-icon.svg" class="play-icon-WPnSAT">
         </div>
-
         <section class="card_details-jhfM5S">
-
-        <div class="index_class_5-jpm8N4">
-
-        <div class="index_class_7-QWiBzJ">
-
-        <img class="index_class_8-c71iDH"
-        src="https://static.pw.live/react-batches/assets/study/clock.svg">
-
-        <span>${item.videoDetails?.duration || "00:00"}</span>
-
-        </div>
-        </div>
-
-        <div class="index_class_9-MwVgjv">
-        <p class="index_class_10-F64Ile">
-        ${item.topic || item.videoDetails?.name || "Untitled Lecture"}
-        </p>
-        </div>
-
+        <div class="index_class_5-jpm8N4"><div class="index_class_7-QWiBzJ"><img class="index_class_8-c71iDH" src="https://static.pw.live/react-batches/assets/study/clock.svg"><span>${item.videoDetails?.duration || "00:00"}</span></div></div>
+        <div class="index_class_9-MwVgjv"><p class="index_class_10-F64Ile">${item.topic || item.videoDetails?.name || "Untitled Lecture"}</p></div>
         <div class="index_class_12-Cq8EEY" onclick="event.stopPropagation();">
             <div class="dropdown-wrapper" style="position:relative;">
-                <div class="three-dot-btn"
-                     onclick="event.stopPropagation(); toggleDropdown('${lectureId}', event)"
-                     style="cursor:pointer;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis-vertical moreVerticalIcon-zDj749">
-                        <circle cx="12" cy="12" r="1"></circle>
-                        <circle cx="12" cy="5" r="1"></circle>
-                        <circle cx="12" cy="19" r="1"></circle>
-                    </svg>
+                <div class="three-dot-btn" onclick="event.stopPropagation(); toggleDropdown('${lectureId}', event)" style="cursor:pointer;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis-vertical moreVerticalIcon-zDj749"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
                 </div>
                 <div class="dropdown-menu" id="dropdown-${lectureId}" style="display:none; position:absolute; right:0; top:28px; background:#fff; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.15); padding:8px 0; min-width:180px; z-index:1000;">
-                    <div onclick="event.stopPropagation(); toggleComplete('${lectureId}')" class="dropdown-item" style="padding:10px 14px; cursor:pointer; font-size:14px; color:#333; font-family:sans-serif;">
+                    <div onclick="event.stopPropagation(); toggleComplete('${lectureId}')" class="dropdown-item" style="padding:10px 14px; cursor:pointer; font-size:14px; color:#333;">
                         <span id="dropdown-text-${lectureId}">Mark as complete</span>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="index_class_12-Cq8EEY"></div>
-
         </section>
         </div>
         </div>`;
         });
-
         document.getElementById("contentContainer").innerHTML = html;
         restoreCompletedLectures();
       }
 
-      // ================= NOTES (UNCHANGED STRUCTURE) =================
       function renderNotes(lectures) {
         let html = "";
-        if (lectures.length === 0) {
-            document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#999; font-family:sans-serif;'>No Notes Available</div>";
-            return;
-        }
-
+        if (lectures.length === 0) { html = "<div style='text-align:center; padding:40px; color:#999;'>No Notes Available</div>"; }
         lectures.forEach((item) => {
           if (!item || !item.download_url) return;
-
-          html += `
-        <div class="index_class_3-FAUYHF"
-             onclick="window.open('${item.download_url}', '_blank')">
-            <div class="index_class_1-MVi_no">
-                <section class="card_details-jhfM5S">
-                    <div class="index_class_9-MwVgjv">
-                        <p class="index_class_10-F64Ile">
-                            📄 ${item.title || "PDF Notes"}
-                        </p>
-                    </div>
-                </section>
-            </div>
-        </div>`;
+          html += `<div class="index_class_3-FAUYHF" onclick="window.open('${item.download_url}', '_blank')"><div class="index_class_1-MVi_no"><section class="card_details-jhfM5S"><div class="index_class_9-MwVgjv"><p class="index_class_10-F64Ile">📄 ${item.title || "PDF Notes"}</p></div></section></div></div>`;
         });
-
         document.getElementById("contentContainer").innerHTML = html;
       }
 
-      // ================= QUIZ (UNCHANGED STRUCTURE) =================
       function renderQuizzes(quizzes) {
         let html = "";
-        if (quizzes.length === 0) {
-            document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#999; font-family:sans-serif;'>No Quizzes Available</div>";
-            return;
-        }
-
+        if (quizzes.length === 0) { html = "<div style='text-align:center; padding:40px; color:#999;'>No Quizzes Available</div>"; }
         quizzes.forEach((quiz) => {
           const test = quiz.dppQuizDetails?.test || {};
           const scheduleId = quiz.dppQuizDetails?.scheduleId;
-
           if (!test._id || !scheduleId) return;
-
-          html += `
-        <div class="index_class_3-FAUYHF"
-             onclick="openDpp('${test._id}','${scheduleId}')">
-            <div class="index_class_1-MVi_no">
-                <section class="card_details-jhfM5S">
-                    <div class="index_class_9-MwVgjv">
-                        <p class="index_class_10-F64Ile">
-                            📝 ${test.name || "DPP Quiz"}
-                        </p>
-                    </div>
-                </section>
-            </div>
-        </div>`;
+          html += `<div class="index_class_3-FAUYHF" onclick="openDpp('${test._id}','${scheduleId}')"><div class="index_class_1-MVi_no"><section class="card_details-jhfM5S"><div class="index_class_9-MwVgjv"><p class="index_class_10-F64Ile">📝 ${test.name || "DPP Quiz"}</p></div></section></div></div>`;
         });
-
         document.getElementById("contentContainer").innerHTML = html;
       }
 
-      // ================= NAVIGATION LOGIC =================
       function changeTab(tab) {
-        const url = new URL(window.location.href);
-        url.searchParams.set("tab", tab);
-        window.location.href = url.toString();
-      }
-
-      function openLecture(id) {
-        window.location.href = `/videoplayerr.php?video_id=${id}&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}`;
-      }
-
-      function openDpp(testId, scheduleId) {
-        window.location.href = `/dpp.php?batch_id=${batchId}&schedule_id=${scheduleId}&test_id=${testId}`;
-      }
-
-      let openDropdownId = null;
-      function closeAllDropdowns() {
-        document.querySelectorAll(".dropdown-menu").forEach((menu) => {
-          menu.style.display = "none";
-        });
-        openDropdownId = null;
-      }
-
-      function toggleDropdown(id, e) {
-        e.stopPropagation();
-        if (openDropdownId === id) {
-          closeAllDropdowns();
-          return;
-        }
-        closeAllDropdowns();
-
-        const menu = document.getElementById("dropdown-" + id);
-        if (menu) {
-          menu.style.display = "block";
-          openDropdownId = id;
-        }
-      }
-
-      document.addEventListener("click", () => {
-        document.querySelectorAll(".dropdown-menu").forEach((m) => (m.style.display = "none"));
-      });
-
-      function toggleComplete(id) {
-        let arr = JSON.parse(localStorage.getItem("completedLectures")) || [];
-        if (arr.includes(id)) {
-          arr = arr.filter((x) => x !== id);
-          applyUI(id, false);
-        } else {
-          arr.push(id);
-          applyUI(id, true);
-        }
-        localStorage.setItem("completedLectures", JSON.stringify(arr));
-      }
-
-      function applyUI(id, state) {
-        let card = document.querySelector(`.lecture-card[data-id="${id}"]`);
-        let text = document.getElementById("dropdown-text-" + id);
-        if (!card) return;
-
-        if (state) {
-          card.classList.add("completed-lecture");
-          if (text) text.innerText = "Undo completion";
-        } else {
-          card.classList.remove("completed-lecture");
-          if (text) text.innerText = "Mark as complete";
-        }
-      }
-
-      function restoreCompletedLectures() {
-        let arr = JSON.parse(localStorage.getItem("completedLectures")) || [];
-        arr.forEach((id) => applyUI(id, true));
-      }
-    </script>
-  </body>
-</html>
+        const url = new URL(window.location.href
