@@ -53,7 +53,6 @@
             const container = document.getElementById('subjectsContainer');
             const statusText = document.getElementById('statusText');
             
-            // Hitting your updated secure Vercel API
             const targetApi = `https://devcoderz.vercel.app/api/PW/all-batches-api2.js?batch_id=${bId}`;
 
             try {
@@ -63,8 +62,17 @@
 
                 const resData = await res.json();
 
-                // Parsing logic handles nested structure safely
-                const subjects = resData.subjects || resData.data?.subjects || resData.data || (Array.isArray(resData) ? resData : []);
+                // Naye wasmer response array ko dynamically extract karna
+                let subjects = [];
+                if (Array.isArray(resData)) {
+                    subjects = resData;
+                } else if (resData.subjects) {
+                    subjects = resData.subjects;
+                } else if (resData.data && Array.isArray(resData.data)) {
+                    subjects = resData.data;
+                } else if (resData.data?.subjects) {
+                    subjects = resData.data.subjects;
+                }
 
                 if (subjects.length === 0) {
                     container.innerHTML = `<div class="col-span-full text-center text-slate-400 py-12 text-sm">⚠️ No premium streaming feeds listed inside this channel matrix.</div>`;
@@ -74,19 +82,22 @@
 
                 statusText.innerText = "Premium Vault Decrypted Successfully.";
                 container.innerHTML = subjects.map(s => {
-                    const subjectName = s.name || s.subjectName || s.topic || s.title || "Premium Subject Channel";
+                    
+                    // New Wasmer Object keys mappings target matrix
+                    const subjectName = s.subjectName || s.subject_name || s.name || s.topic || s.title || "Premium Subject Channel";
+                    
+                    // Teacher Name extraction handles flat parameters strings as well as nested layers
                     let facultyName = "Expert Mentor";
-
-                    if (s.faculties && Array.isArray(s.faculties) && s.faculties.length > 0) {
-                        facultyName = s.faculties.map(f => f.name || f.facultyName).filter(Boolean).join(', ');
+                    if (s.teacherName || s.teacher_name || s.teacher || s.facultyName) {
+                        facultyName = s.teacherName || s.teacher_name || s.teacher || s.facultyName;
+                    } else if (s.faculties && Array.isArray(s.faculties) && s.faculties.length > 0) {
+                        facultyName = s.faculties.map(f => f.name || f.facultyName || f.teacherName).filter(Boolean).join(', ');
                     } else if (s.faculty && typeof s.faculty === 'object') {
-                        facultyName = s.faculty.name || facultyName;
-                    } else if (s.teacher || s.faculty || s.teacherName) {
-                        facultyName = s.teacher || s.faculty || s.teacherName;
+                        facultyName = s.faculty.name || s.faculty.facultyName || facultyName;
                     }
 
-                    // Target ID Extraction for transition to chapters mapping room
-                    const targetId = s._id || s.id || s.subject_id;
+                    // Strict Id filter mapping
+                    const targetId = s.subjectId || s.subject_id || s._id || s.id;
 
                     return `
                     <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all duration-150 cursor-pointer border-l-4 border-l-[#4f46e5] flex flex-col justify-between h-32 group" onclick="openChapters('${targetId}')">
@@ -108,7 +119,7 @@
                         <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
                             <div class="w-12 h-12 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto font-bold text-lg mb-3">❌</div>
                             <h3 class="text-sm font-bold text-slate-800">Core Network Connection Drop</h3>
-                            <p class="text-xs text-slate-400 mt-1 leading-relaxed">Failed to establish handshake with API Core. Double-check your Vercel deployment status.</p>
+                            <p class="text-xs text-slate-400 mt-1 leading-relaxed">Failed to map system array configurations. Reload or check console.</p>
                             <button onclick="window.location.reload()" class="mt-4 bg-[#4f46e5] hover:bg-[#4338ca] text-white text-xs font-bold py-2 px-6 rounded-xl transition-all shadow-sm">
                                 Retry Connection 🔄
                             </button>
