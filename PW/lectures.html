@@ -9,7 +9,6 @@
       * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
       body { background: #f8fafc; color: #0f172a; }
       .glow-text { text-shadow: 0 0 8px rgba(239,68,68,0.3); }
-      .completed-lecture { border: 2px solid #22c55e !important; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col pb-16">
@@ -18,20 +17,18 @@
         <button id="backBtn" class="bg-white/20 hover:bg-white/30 text-white text-xs font-bold py-2 px-4 rounded-lg transition-all flex items-center gap-1">
             ← Back
         </button>
-        
-        <div id="tabsContainer" class="flex bg-white/10 p-1 rounded-xl border border-white/20 gap-1">
-            </div>
+        <div id="tabsContainer" class="flex bg-white/10 p-1 rounded-xl border border-white/20 gap-1"></div>
     </nav>
 
     <main class="flex-1 max-w-5xl w-full mx-auto p-4 md:p-6">
         <div class="mb-6">
             <h2 id="topicName" class="text-xl font-extrabold text-slate-800 tracking-tight">Loading Node...</h2>
-            <p id="statusText" class="text-xs text-slate-400">Synchronizing database channel clusters...</p>
+            <p id="statusText" class="text-xs text-slate-400">Extracting stream pipelines & dynamic keys...</p>
         </div>
 
         <div id="loader" class="text-center py-20 flex flex-col items-center gap-3">
             <div class="w-10 h-10 border-4 border-t-4 border-gray-200 border-t-[#4f46e5] rounded-full animate-spin"></div>
-            <p class="text-xs text-slate-400 font-medium">Extracting data records from Eduvibe server node...</p>
+            <p class="text-xs text-slate-400 font-medium">Bypassing filter tokens. Mapping cloud stream arrays...</p>
         </div>
 
         <div id="contentContainer" class="space-y-4 hidden"></div>
@@ -54,12 +51,10 @@
             window.location.href = "./index.html";
         }
 
-        // Handle navigation fallback channel back safely
         document.getElementById('backBtn').onclick = () => {
             window.location.href = `./chapters.html?batch_id=${bId}&subject_id=${sId}`;
         };
 
-        // Render Navigation Tab Array matching exactly with Eduvibe Core Map
         function renderTabs() {
             const tabs = [
                 ["videos", "Lectures"],
@@ -68,19 +63,14 @@
                 ["DppNotes", "DPP PDF"],
                 ["DppVideos", "DPP Solutions"]
             ];
-
-            const tabsContainer = document.getElementById('tabsContainer');
-            tabsContainer.innerHTML = tabs.map(t => {
+            document.getElementById('tabsContainer').innerHTML = tabs.map(t => {
                 const isActive = activeTab === t[0];
-                return `
-                <button onclick="changeTab('${t[0]}')" 
-                        class="text-xs font-bold px-3 py-1.5 rounded-lg transition-all ${isActive ? 'bg-white text-[#4f46e5]' : 'text-white hover:bg-white/10'}">
-                    ${t[1]}
-                </button>`;
+                return `<button onclick="changeTab('${t[0]}')" class="text-xs font-bold px-3 py-1.5 rounded-lg transition-all ${isActive ? 'bg-white text-[#4f46e5]' : 'text-white hover:bg-white/10'}">${t[1]}</button>`;
             }).join('');
         }
 
-        // Main Sync Pipeline
+        window.premiumLecturesDb = {}; // Global database buffer matrix
+
         async function fetchContentCluster() {
             const container = document.getElementById('contentContainer');
             const loader = document.getElementById('loader');
@@ -88,25 +78,26 @@
             const pageTitle = document.getElementById('pageTitle');
             const statusText = document.getElementById('statusText');
 
-            const apiUrl = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${bId}&subject_id=${sId}&topic_id=${cId}&tab=${activeTab}`;
+            const rawApiUrl = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${bId}&subject_id=${sId}&topic_id=${cId}&tab=${activeTab}`;
+            const proxyApiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(rawApiUrl)}`;
 
             try {
-                const res = await fetch(apiUrl, { credentials: "include" });
-                if (!res.ok) throw new Error("Server communication break");
+                const res = await fetch(proxyApiUrl);
+                if (!res.ok) throw new Error("Proxy response error");
 
-                const data = await res.json();
+                const proxyData = await res.json();
+                const data = JSON.parse(proxyData.contents);
                 
                 loader.classList.add('hidden');
                 container.classList.remove('hidden');
 
-                // Bind Document Identities
-                topicNameText.innerText = data.topic_name || "Topic Vault Folder";
-                pageTitle.innerText = data.topic_name || "Premium Vault";
-                statusText.innerText = `Displaying cluster records for [${activeTab}] node successfully.`;
+                topicNameText.innerText = data.topic_name || "Physics Class Module";
+                pageTitle.innerText = data.topic_name || "Study Vault";
+                statusText.innerText = `Proxy handshake verified. Processing streaming arrays.`;
 
                 renderTabs();
 
-                // 1. VIDEOS OR DPP SOLUTIONS RENDER MATRIX
+                // 1. VIDEOS OR DPP SOLUTIONS (UPGRADED EXTRACTION MATRICES)
                 if (activeTab === "videos" || activeTab === "DppVideos") {
                     let lectures = data.lectures || [];
                     if (lectures.length === 0) {
@@ -115,29 +106,45 @@
                     }
 
                     container.innerHTML = lectures.map(item => {
-                        if (!item || !item._id) return '';
-                        const title = item.topic || "Untitled Premium Stream";
+                        if (!item) return '';
+                        
+                        // ID extraction resolution rule
+                        const id = item._id || item.id || item.videoDetails?._id || Math.random().toString(36).substr(2, 9);
+                        
+                        // Title extraction matching both payload types
+                        const title = item.topic || item.videoDetails?.name || "Premium Dynamic Secure Lecture";
                         const duration = item.videoDetails?.duration || "00:00";
-                        const id = item._id;
+                        const posterImage = item.videoDetails?.image || "https://static.pw.live/react-batches/assets/study/blue-play-icon.svg";
+
+                        // URL and Key mapping logic matching the JSON layout
+                        let streamUrl = item.url || item.videoDetails?.videoUrl || item.videoDetails?.hls_url || '';
+                        let keyId = item.videoDetails?.findKey || item.keyId || '';
+                        let keyValue = item.key || '';
+
+                        // Storing tokens deep inside cache object memory bank
+                        window.premiumLecturesDb[id] = { url: streamUrl, keyId: keyId, key: keyValue };
 
                         return `
-                        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md border-l-4 border-l-[#4f46e5] flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all lecture-card" data-id="${id}">
-                            <div class="space-y-1 truncate flex-1">
-                                <h3 class="text-sm font-bold text-slate-800 leading-snug truncate" title="${title}">${title}</h3>
-                                <div class="flex items-center gap-3 text-[11px] font-medium text-slate-400">
-                                    <span>⏱️ Duration: ${duration}</span>
+                        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md border-l-4 border-l-[#4f46e5] flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all">
+                            <div class="flex items-center gap-4 truncate flex-1">
+                                <img src="${posterImage}" class="w-16 h-10 object-cover rounded-lg border border-slate-100 hidden sm:block shadow-sm">
+                                <div class="space-y-1 truncate flex-1">
+                                    <h3 class="text-sm font-bold text-slate-800 leading-snug truncate" title="${title}">${title}</h3>
+                                    <div class="flex items-center gap-2 text-[11px] font-medium text-slate-400">
+                                        <span>⏱️ Duration: ${duration}</span>
+                                        <span>•</span>
+                                        <span class="text-indigo-500 font-semibold">${keyId ? '🔒 DRM Protected' : '⚡ Stream Ready'}</span>
+                                    </div>
                                 </div>
                             </div>
-                            <button onclick="playVideo('${id}')" class="bg-[#4f46e5] hover:bg-[#4338ca] text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all shadow-sm shrink-0">
-                                ▶ Watch Now
-                            </button>
+                            <button onclick="playVideo('${id}')" class="bg-[#4f46e5] hover:bg-[#4338ca] text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all shadow-sm shrink-0">▶ Watch Now</button>
                         </div>`;
                     }).join('');
                 }
 
-                // 2. NOTES OR DPP PDF ATTACHMENTS RENDER MATRIX
+                // 2. NOTES OR DPP PDF
                 else if (activeTab === "notes" || activeTab === "DppNotes") {
-                    let notes = data.lectures || []; // FIX: Eduvibe passes note streams inside data.lectures object key
+                    let notes = data.lectures || [];
                     if (notes.length === 0) {
                         container.innerHTML = `<div class="text-center text-slate-400 py-12 text-sm">⚠️ No premium PDF reference documents attached inside this slot.</div>`;
                         return;
@@ -145,22 +152,18 @@
 
                     container.innerHTML = notes.map(item => {
                         if (!item || !item.download_url) return '';
-                        const title = item.title || "Premium Attached Reference PDF";
-
                         return `
                         <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md border-l-4 border-l-emerald-500 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all">
                             <div class="space-y-1 truncate flex-1">
-                                <h3 class="text-sm font-bold text-slate-800 leading-snug truncate" title="${title}">${title}</h3>
+                                <h3 class="text-sm font-bold text-slate-800 leading-snug truncate" title="${item.title}">${item.title || "PDF Document"}</h3>
                                 <p class="text-[11px] text-slate-400 font-medium">Document Vault Archive Resource</p>
                             </div>
-                            <button onclick="window.open('${item.download_url}', '_blank')" class="bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all shadow-sm shrink-0">
-                                📄 Open PDF
-                            </button>
+                            <button onclick="window.open('${item.download_url}', '_blank')" class="bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all shadow-sm shrink-0">📄 Open PDF</button>
                         </div>`;
                     }).join('');
                 }
 
-                // 3. DPP INTERACTIVE QUIZZES RENDER MATRIX
+                // 3. DPP INTERACTIVE QUIZZES
                 else if (activeTab === "dppQuiz") {
                     let quizzes = data.dpp_quizzes || [];
                     if (quizzes.length === 0) {
@@ -172,29 +175,25 @@
                         const test = quiz.dppQuizDetails?.test || {};
                         const scheduleId = quiz.dppQuizDetails?.scheduleId;
                         if (!test._id || !scheduleId) return '';
-                        const title = test.name || "Premium Dynamic CBT Quiz Portal";
-
                         return `
                         <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md border-l-4 border-l-amber-500 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all">
                             <div class="space-y-1 truncate flex-1">
-                                <h3 class="text-sm font-bold text-slate-800 leading-snug truncate" title="${title}">${title}</h3>
+                                <h3 class="text-sm font-bold text-slate-800 leading-snug truncate" title="${test.name}">${test.name || "CBT Quiz"}</h3>
                                 <p class="text-[11px] text-slate-400 font-medium">Computer Based Test Matrix Grid</p>
                             </div>
-                            <button onclick="openDpp('${test._id}', '${scheduleId}')" class="bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all shadow-sm shrink-0">
-                                📝 Start Quiz
-                            </button>
+                            <button onclick="openDpp('${test._id}', '${scheduleId}')" class="bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all shadow-sm shrink-0">📝 Start Quiz</button>
                         </div>`;
                     }).join('');
                 }
 
             } catch (err) {
-                console.error("System Pipeline Core Crash Log:", err);
+                console.error(err);
                 loader.innerHTML = `
                 <div class="bg-white border border-slate-200 rounded-2xl p-6 max-w-md mx-auto text-center space-y-4 shadow-sm">
                     <div class="w-12 h-12 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto font-bold text-lg">❌</div>
-                    <h3 class="text-sm font-bold text-slate-800">Operational Gateway Timeout</h3>
-                    <p class="text-xs text-slate-400 leading-relaxed">Could not establish structural mapping array feed from Wasmer cluster endpoint.</p>
-                    <button onclick="window.location.reload()" class="w-full bg-[#4f46e5] text-white text-xs font-bold py-2.5 rounded-xl">Re-establish Connection Node 🔄</button>
+                    <h3 class="text-sm font-bold text-slate-800">Operational Proxy Timeout</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">CORS proxy connection dropped or JSON response invalid.</p>
+                    <button onclick="window.location.reload()" class="w-full bg-[#4f46e5] text-white text-xs font-bold py-2.5 rounded-xl">Retry Tunneling 🔄</button>
                 </div>`;
             }
         }
@@ -206,7 +205,10 @@
         }
 
         function playVideo(id) {
-            // Forward safely matching player query mapping configs
+            const videoData = window.premiumLecturesDb[id];
+            localStorage.setItem('current_stream_url', videoData ? videoData.url : '');
+            localStorage.setItem('current_key_id', videoData ? videoData.keyId : '');
+            localStorage.setItem('current_key_val', videoData ? videoData.key : '');
             window.location.href = `./player.html?video_id=${id}&batch_id=${bId}&subject_id=${sId}&topic_id=${cId}`;
         }
 
@@ -214,7 +216,6 @@
             window.location.href = `./dpp.html?batch_id=${bId}&schedule_id=${scheduleId}&test_id=${testId}`;
         }
 
-        // Initialize execution on load
         if (bId && cId) fetchContentCluster();
     </script>
 </body>
