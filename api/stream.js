@@ -7,19 +7,45 @@ export default async function handler(req, res) {
         return res.status(200).end();
     }
 
-    const { video_id, batch_id } = req.query;
+    const { url, video_id, batch_id } = req.query;
 
-    if (!video_id) {
-        return res.status(400).json({ error: "Bhai, video_id bhejni zaroori hai!" });
+    // =================================================================
+    // CASE 1: AGAR FRONTEND SE LECTURE LIST KA URL AAYA HAI (Bypass Mode)
+    // =================================================================
+    if (url) {
+        try {
+            const response = await fetch(url, {
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+                    'Accept': 'application/json, text/plain, */*',
+                    'Origin': 'https://eduvibe-pw-api.wasmer.app',
+                    'Referer': 'https://eduvibe-pw-api.wasmer.app/'
+                }
+            });
+
+            if (!response.ok) throw new Error("Wasmer cluster rejected backend request");
+            
+            const data = await response.json();
+            return res.status(200).json(data); // Seedhe pure json array response frontend ko pass kiya
+
+        } catch (error) {
+            console.error("Lecture List Proxy Mode Failed:", error);
+            return res.status(500).json({ error: "Bhai, Wasmer backend fetch fail ho gaya proxy par!" });
+        }
     }
 
-    const bId = batch_id || "321850"; // Tumhara fallback NEET batch ID
+    // =================================================================
+    // CASE 2: AGAR VIDEO_ID AAYI HAI (Delta Scraping Mode for Player)
+    // =================================================================
+    if (!video_id) {
+        return res.status(400).json({ error: "Bhai, url ya video_id me se kuch ek bhej na!" });
+    }
+
+    const bId = batch_id || "321850"; // Fallback NEET Batch ID
 
     try {
-        // STEP 1: Delta ke public web page ko direct hit maarenge bina iframe ke
-        // Hum v2 batches wale route ko target kar rahe hain jahan video render hoti hai
         const targetUrl = `https://deltastudy.site/study-v2/batches/${bId}?video_id=${video_id}`;
-        
+
         const response = await fetch(targetUrl, {
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36',
@@ -30,21 +56,16 @@ export default async function handler(req, res) {
 
         const html = await response.text();
 
-        // STEP 2: Ab HTML ke ando jo Next.js ke state hydration chunks (__next_f.push) hain, usme se regex se data nikalenge
-        // Delta jab page render karta hai, toh video link aur keys HTML ke andar plaintext mein hoti hain
-        
-        // 1. MPD ya M3U8 Url extract karne ke liye flexible regex
+        // Regex thoda update kiya taaki quotes ya brackets ke beech ka clear raw link nikle
         const manifestUrl = html.match(/["'](https:\/\/sec-prod-mediacdn\.pw\.live\/[^"']+\.(?:mpd|m3u8)[^"']*)["']/)?.[1] || 
                             html.match(/["'](https:\/\/[^"']+\.(?:mpd|m3u8)\?[^"']*)["']/)?.[1];
 
-        // 2. ClearKey patterns ko target karna (keyId aur keyValue)
         const keyId = html.match(/["']keyId["']\s*:\s*["']([^"']+)["']/)?.[1] || 
                       html.match(/["']key_id["']\s*:\s*["']([^"']+)["']/)?.[1];
-                      
+
         const keyValue = html.match(/["']keyValue["']\s*:\s*["']([^"']+)["']/)?.[1] || 
                         html.match(/["']key_value["']\s*:\s*["']([^"']+)["']/)?.[1];
 
-        // STEP 3: Agar link mil gaya toh maze se response bhej do
         if (manifestUrl) {
             return res.status(200).json({
                 success: true,
@@ -59,9 +80,7 @@ export default async function handler(req, res) {
         console.error("Delta Main Scraper Layer Failed:", error);
     }
 
-    // STEP 4: Ultimate Safe Fallback Channel
-    // Agar Delta block ho jaye ya uska server down ho, toh player blank na dikhe
-    // PW ka standard CDN pattern auto-generate karke bhej denge
+    // Ultimate Safe Fallback Channel for Video Player
     return res.status(200).json({
         success: true,
         manifestUrl: `https://sec-prod-mediacdn.pw.live/files/${video_id}/master.mpd`,
