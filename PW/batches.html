@@ -62,7 +62,7 @@
 
                 const resData = await res.json();
 
-                // Naye wasmer response array ko dynamically extract karna
+                // Array extraction based on response format
                 let subjects = [];
                 if (Array.isArray(resData)) {
                     subjects = resData;
@@ -83,29 +83,33 @@
                 statusText.innerText = "Premium Vault Decrypted Successfully.";
                 container.innerHTML = subjects.map(s => {
                     
-                    // New Wasmer Object keys mappings target matrix
-                    const subjectName = s.subjectName || s.subject_name || s.name || s.topic || s.title || "Premium Subject Channel";
+                    // 1. Core Subject Name Extraction from JSON data response
+                    const subjectName = s.subject || s.subjectName || s.subject_name || s.name || "Premium Subject Channel";
                     
-                    // Teacher Name extraction handles flat parameters strings as well as nested layers
+                    // 2. Dynamic Teacher Name Extraction from nested teacherIds array
                     let facultyName = "Expert Mentor";
-                    if (s.teacherName || s.teacher_name || s.teacher || s.facultyName) {
-                        facultyName = s.teacherName || s.teacher_name || s.teacher || s.facultyName;
-                    } else if (s.faculties && Array.isArray(s.faculties) && s.faculties.length > 0) {
-                        facultyName = s.faculties.map(f => f.name || f.facultyName || f.teacherName).filter(Boolean).join(', ');
-                    } else if (s.faculty && typeof s.faculty === 'object') {
-                        facultyName = s.faculty.name || s.faculty.facultyName || facultyName;
+                    if (s.teacherIds && Array.isArray(s.teacherIds) && s.teacherIds.length > 0) {
+                        facultyName = s.teacherIds.map(t => {
+                            const first = t.firstName || '';
+                            const last = t.lastName || '';
+                            return `${first} ${last}`.trim();
+                        }).filter(Boolean).join(', ');
+                    } else if (s.teacherName || s.teacher_name || s.teacher) {
+                        facultyName = s.teacherName || s.teacher_name || s.teacher;
                     }
 
-                    // Strict Id filter mapping
-                    const targetId = s.subjectId || s.subject_id || s._id || s.id;
+                    // 3. Extraction of ID to prevent broken navigation down the path
+                    const targetId = s.subjectId || s._id || s.id || s.subject_id;
+                    const totalLectures = s.lectureCount !== undefined ? s.lectureCount : 0;
 
                     return `
                     <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all duration-150 cursor-pointer border-l-4 border-l-[#4f46e5] flex flex-col justify-between h-32 group" onclick="openChapters('${targetId}')">
                         <div>
-                            <h3 class="text-sm font-bold text-slate-800 tracking-tight leading-snug group-hover:text-[#4f46e5] transition-colors truncate">${subjectName}</h3>
+                            <h3 class="text-sm font-bold text-slate-800 tracking-tight leading-snug group-hover:text-[#4f46e5] transition-colors truncate" title="${subjectName}">${subjectName}</h3>
                             <p class="text-[11px] text-slate-400 font-medium mt-1 truncate">Teacher: ${facultyName}</p>
                         </div>
-                        <div class="flex items-center justify-between border-t border-slate-50 pt-3 mt-2 text-[11px] font-bold text-[#4f46e5]">
+                        <div class="flex items-center justify-between border-t border-slate-50 pt-2 mt-2 text-[11px] font-bold text-[#4f46e5]">
+                            <span class="text-slate-400 font-medium">Lectures: ${totalLectures}</span>
                             <span>Enter Vault →</span>
                         </div>
                     </div>
@@ -119,7 +123,7 @@
                         <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
                             <div class="w-12 h-12 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto font-bold text-lg mb-3">❌</div>
                             <h3 class="text-sm font-bold text-slate-800">Core Network Connection Drop</h3>
-                            <p class="text-xs text-slate-400 mt-1 leading-relaxed">Failed to map system array configurations. Reload or check console.</p>
+                            <p class="text-xs text-slate-400 mt-1 leading-relaxed">Failed to build subject elements from response payload.</p>
                             <button onclick="window.location.reload()" class="mt-4 bg-[#4f46e5] hover:bg-[#4338ca] text-white text-xs font-bold py-2 px-6 rounded-xl transition-all shadow-sm">
                                 Retry Connection 🔄
                             </button>
