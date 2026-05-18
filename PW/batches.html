@@ -382,7 +382,7 @@
 
         // Extract action logic and set bypass dynamic variables
         if (status === "LIVE") {
-          link = `/live.php?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&video_id=${videoId}&start=${unixStart}`;
+          link = `/PW/live.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&video_id=${videoId}&start=${unixStart}`;
         } else if (isNote) {
           let noteId = live.homeworkIds[0]?._id || videoId;
           link = `/view?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&note=${noteId}`;
