@@ -1,7 +1,6 @@
 export default async function handler(req, res) {
     const { batch_id } = req.query;
 
-    // CORS aur Security Headers Setup
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -16,7 +15,6 @@ export default async function handler(req, res) {
     }
 
     try {
-        // FIXED: Base URL ke aage route /batch.php aur query parameter dono add kar diye hain
         const targetUrl = `https://eduvibe-pw-api.wasmer.app/batch.php?batch_id=${encodeURIComponent(batch_id)}`;
         
         const response = await fetch(targetUrl, {
