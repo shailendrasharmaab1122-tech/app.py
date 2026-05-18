@@ -14,7 +14,7 @@ body { margin:0; background:#0b0f19; font-family: sans-serif; display: flex; fle
 .secure-badge { font-size: 10px; color: #34d399; font-family: monospace; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); padding: 4px 10px; border-radius: 4px; letter-spacing: 1px; }
 .video-container { width: 100%; max-width: 960px; height: auto; position: relative; background: #000; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.6); border: 1px solid #1e293b; }
 video { width: 100%; height: auto; aspect-ratio: 16/9; }
-#playerStatus { margin-top: 16px; text-align: center; font-size: 12px; color: #64748b; font-family: monospace; }
+#playerStatus { margin-top: 16px; text-align: center; font-size: 13px; color: #94a3b8; font-family: monospace; padding: 0 20px; line-height: 1.5; }
 </style>
 <style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style>
 </head>
@@ -65,12 +65,12 @@ video { width: 100%; height: auto; aspect-ratio: 16/9; }
   let manifestUrl, keyId, keyValue;
 
   try {
-    statusEl.innerText = "Fetching decrypted keys...";
+    statusEl.innerText = "Fetching decrypted keys from secure tunnel...";
     const response = await fetch(keyFetcherUrl);
     const apiData = await response.json();
 
     if (!apiData.success || !apiData.manifestUrl) {
-        throw new Error("Invalid API payload");
+        throw new Error("Invalid API structure");
     }
 
     manifestUrl = apiData.manifestUrl;
@@ -78,15 +78,15 @@ video { width: 100%; height: auto; aspect-ratio: 16/9; }
     keyValue = apiData.keyValue;
 
   } catch (err) {
-    statusEl.innerText = "API Layer failed. Engaging emergency auto-sync fallback...";
+    statusEl.innerText = "API Handshake failed. Trying raw fallback...";
     manifestUrl = `https://sec-prod-mediacdn.pw.live/files/${videoId}/master.mpd`;
-    keyId = "auto-sync";
-    keyValue = "auto-sync";
+    keyId = null;
+    keyValue = null;
   }
 
   const shakaPlayer = new shaka.Player(videoEl);
 
-  if (keyId && keyValue && keyId !== "auto-sync") {
+  if (keyId && keyValue) {
       shakaPlayer.configure({
         drm: {
           clearKeys: {
@@ -114,8 +114,8 @@ video { width: 100%; height: auto; aspect-ratio: 16/9; }
     statusEl.innerText = "✅ Pipeline Connected. Stream matrix active.";
     tracks = shakaPlayer.getVariantTracks();
   } catch (err) {
-    statusEl.innerText = "❌ Critical Decryption Error (Stream Blocked)";
-    console.error(err);
+    statusEl.innerHTML = `<span style="color:#f43f5e; font-weight:bold;">❌ Stream Blocked!</span><br><span style="color:#64748b; font-size:11px;">Shaka Error Code: ${err.code} | Category: ${err.category}</span>`;
+    console.error("Shaka Player Error:", err);
     return;
   }
 
