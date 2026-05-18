@@ -3,131 +3,256 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subjects - DevCoderZ</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>My Batches & Live Classes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-      body { background: #f8fafc; color: #0f172a; }
-      .glow-text { text-shadow: 0 0 8px rgba(239,68,68,0.3); }
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #151c2c;
+            --text-color: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --live-color: #ff3b30;
+            --primary-blue: #2563eb;
+            --border-color: #1e293b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        header h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        /* Grid Layout for Batch/Subject Cards */
+        .batches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .batch-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .batch-card:hover {
+            transform: translateY(-2px);
+            border-color: #334155;
+        }
+
+        /* Container specifically reserved above teacher's name */
+        .live-status-container {
+            min-height: 26px; /* Prevents layout shifting when live badge shows up */
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        /* ================= LIVE BADGE STYLE ================= */
+        .live-badge {
+            background: rgba(255, 59, 48, 0.15);
+            color: var(--live-color);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid rgba(255, 59, 48, 0.25);
+        }
+
+        .pulse-dot {
+            width: 7px;
+            height: 7px;
+            background-color: var(--live-color);
+            border-radius: 50%;
+            animation: livePulse 1.2s infinite ease-in-out;
+        }
+
+        @keyframes livePulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.4); opacity: 0.4; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Static/Recorded Class State placeholder */
+        .recorded-badge {
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Details */
+        .teacher-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .topic-title {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        /* Watch / Join Button */
+        .action-btn {
+            width: 100%;
+            padding: 10px;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            transition: background 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* Live state design for the button */
+        .action-btn.live-btn {
+            background: var(--live-color);
+        }
+        .action-btn.live-btn:hover {
+            background: #e02e24;
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col pb-16">
+<body>
 
-    <nav class="h-16 bg-[#4f46e5] flex items-center justify-between px-6 shadow-md sticky top-0 z-50">
-        <button onclick="window.location.href='./index.html'" class="bg-white/20 hover:bg-white/30 text-white text-xs font-bold py-2 px-4 rounded-lg transition-all flex items-center gap-1">
-            ← Home
-        </button>
-        <div class="text-xs text-white/90 bg-white/10 px-3 py-1.5 rounded-full border border-white/20 font-medium">
-            Subject Channels
+<div class="container">
+    <header>
+        <h1>My Dashboard</h1>
+        <p>Select a lecture to start studying</p>
+    </header>
+
+    <div class="batches-grid" id="batchesContainer">
         </div>
-    </nav>
+</div>
 
-    <main class="flex-1 max-w-6xl w-full mx-auto p-4 md:p-6">
-        <div class="mb-6">
-            <h2 class="text-xl font-extrabold text-slate-800 tracking-tight">Select Subject Channel</h2>
-            <p id="statusText" class="text-xs text-slate-400">Access video archives by selecting a content branch stream.</p>
-        </div>
-
-        <div id="subjectsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div class="bg-white p-5 border border-slate-200 rounded-2xl animate-pulse h-28 shadow-sm"></div>
-            <div class="bg-white p-5 border border-slate-200 rounded-2xl animate-pulse h-28 shadow-sm hidden sm:block"></div>
-            <div class="bg-white p-5 border border-slate-200 rounded-2xl animate-pulse h-28 shadow-sm hidden lg:block"></div>
-        </div>
-    </main>
-
-    <footer class="h-12 border-t border-slate-200 bg-white text-center text-xs text-slate-400 flex items-center justify-center gap-1 fixed bottom-0 inset-x-0 z-50 shadow-inner">
-        <span>© 2026 The DevCoderz. All Rights Reserved.</span>
-        <span>•</span>
-        <span>Developed by <span class="text-red-500 font-bold tracking-wide glow-text">Devansh Sharma</span></span>
-    </footer>
-
-    <script>
-        const params = new URLSearchParams(window.location.search);
-        const bId = params.get('batch_id');
-
-        if (!bId) {
-            window.location.href = "./index.html";
+<script>
+    // 1. DATA: Aapka dynamic backend data ya API response yahan aayega
+    // Jis class me isLive: true hoga, wahan automatically Teachers ke upar Badge show ho jayega.
+    const lecturesData = [
+        {
+            id: "class_01",
+            teacherName: "Alakh Pandey Sir",
+            topic: "Physics: Kinematics - Lecture 04",
+            isLive: true, 
+            playerUrl: "player.html?id=6a0a03fe0c69de2d061ed0c6" // Aapka main player page
+        },
+        {
+            id: "class_02",
+            teacherName: "Dear Sir",
+            topic: "Mathematics: Matrices & Determinants",
+            isLive: false,
+            playerUrl: "player.html?id=recorded_math_02"
+        },
+        {
+            id: "class_03",
+            teacherName: "MSM Sir",
+            topic: "Chemistry: Chemical Bonding L-02",
+            isLive: true,
+            playerUrl: "player.html?id=6a0a03fe0c69de2d061ed0c6"
         }
+    ];
 
-        async function loadSubjects() {
-            const container = document.getElementById('subjectsContainer');
-            const statusText = document.getElementById('statusText');
-            
-            const targetApi = `https://devcoderz.vercel.app/api/PW/all-batches-api2.js?batch_id=${bId}`;
+    // 2. RENDER LOGIC: JavaScript se components dynamically generate ho rhe hain
+    function renderBatches() {
+        const container = document.getElementById('batchesContainer');
+        container.innerHTML = ''; // purana content clear karne ke liye
 
-            try {
-                statusText.innerText = "Synchronizing stream tokens...";
-                const res = await fetch(targetApi);
-                if (!res.ok) throw new Error("API handshake failed");
+        lecturesData.forEach(lecture => {
+            // Card Structure Element
+            const card = document.createElement('div');
+            card.className = 'batch-card';
 
-                const resData = await res.json();
+            // Top Status Area (Teachers Name Ke Theek Upar)
+            let liveStatusHtml = '';
+            let buttonClass = 'action-btn';
+            let buttonText = 'Watch Recorded';
 
-                let subjects = [];
-                if (Array.isArray(resData)) {
-                    subjects = resData;
-                } else if (resData.subjects) {
-                    subjects = resData.subjects;
-                } else if (resData.data && Array.isArray(resData.data)) {
-                    subjects = resData.data;
-                } else if (resData.data?.subjects) {
-                    subjects = resData.data.subjects;
-                }
-
-                if (subjects.length === 0) {
-                    container.innerHTML = `<div class="col-span-full text-center text-slate-400 py-12 text-sm">⚠️ No premium streaming feeds listed inside this channel matrix.</div>`;
-                    statusText.innerText = "Vault is empty.";
-                    return;
-                }
-
-                statusText.innerText = "Premium Vault Decrypted Successfully.";
-                container.innerHTML = subjects.map(s => {
-                    
-                    const subjectName = s.subject || s.subjectName || s.subject_name || s.name || "Premium Subject Channel";
-                    
-                    let facultyName = "Expert Mentor";
-                    if (s.teacherIds && Array.isArray(s.teacherIds) && s.teacherIds.length > 0) {
-                        facultyName = s.teacherIds.map(t => {
-                            const first = t.firstName || '';
-                            const last = t.lastName || '';
-                            return `${first} ${last}`.trim();
-                        }).filter(Boolean).join(', ');
-                    } else if (s.teacherName || s.teacher_name || s.teacher) {
-                        facultyName = s.teacherName || s.teacher_name || s.teacher;
-                    }
-
-                    // CRITICAL FIX: Wasmer demands the primary block '_id' (e.g. 69b5698ee506a608ee297ed1)
-                    const targetId = s._id || s.id || s.subjectId || s.subject_id;
-                    const totalLectures = s.lectureCount !== undefined ? s.lectureCount : 0;
-
-                    return `
-                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all duration-150 cursor-pointer border-l-4 border-l-[#4f46e5] flex flex-col justify-between h-32 group" onclick="openChapters('${targetId}')">
-                        <div>
-                            <h3 class="text-sm font-bold text-slate-800 tracking-tight leading-snug group-hover:text-[#4f46e5] transition-colors truncate" title="${subjectName}">${subjectName}</h3>
-                            <p class="text-[11px] text-slate-400 font-medium mt-1 truncate">Teacher: ${facultyName}</p>
-                        </div>
-                        <div class="flex items-center justify-between border-t border-slate-50 pt-2 mt-2 text-[11px] font-bold text-[#4f46e5]">
-                            <span class="text-slate-400 font-medium">Lectures: ${totalLectures}</span>
-                            <span>Enter Vault →</span>
-                        </div>
+            if (lecture.isLive) {
+                // Agar class live h, toh live badge append karo
+                liveStatusHtml = `
+                    <div class="live-badge">
+                        <span class="pulse-dot"></span> LIVE CLASS
                     </div>
-                    `;
-                }).join('');
-
-            } catch (e) {
-                console.error("Layout crash log:", e);
-                container.innerHTML = `<div class="col-span-full text-center py-12 text-sm text-red-500">❌ Failed to build subject nodes.</div>`;
+                `;
+                buttonClass = 'action-btn live-btn';
+                buttonText = 'Join Live Class';
+            } else {
+                // Optional placeholder jab live na ho
+                liveStatusHtml = `<span class="recorded-badge">Recorded Class</span>`;
             }
-        }
 
-        function openChapters(subjectId) {
-            if(!subjectId || subjectId === 'undefined') {
-                alert("Error: Subject Stream Mapping ID is empty.");
-                return;
-            }
-            window.location.href = "./chapters.html?batch_id=" + bId + "&subject_id=" + subjectId;
-        }
+            // Poora Card Data Framework
+            card.innerHTML = `
+                <div>
+                    <div class="live-status-container">
+                        ${liveStatusHtml}
+                    </div>
+                    <div class="teacher-name">${lecture.teacherName}</div>
+                    <div class="topic-title">${lecture.topic}</div>
+                </div>
+                <a href="${lecture.playerUrl}" class="${buttonClass}">${buttonText}</a>
+            `;
 
-        if(bId) loadSubjects();
-    </script>
+            container.appendChild(card);
+        });
+    }
+
+    // Initialize rendering when window loads
+    window.onload = renderBatches;
+</script>
+
 </body>
 </html>
