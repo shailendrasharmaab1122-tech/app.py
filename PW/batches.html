@@ -62,7 +62,6 @@
 
                 const resData = await res.json();
 
-                // Array extraction based on response format
                 let subjects = [];
                 if (Array.isArray(resData)) {
                     subjects = resData;
@@ -83,10 +82,8 @@
                 statusText.innerText = "Premium Vault Decrypted Successfully.";
                 container.innerHTML = subjects.map(s => {
                     
-                    // 1. Core Subject Name Extraction from JSON data response
                     const subjectName = s.subject || s.subjectName || s.subject_name || s.name || "Premium Subject Channel";
                     
-                    // 2. Dynamic Teacher Name Extraction from nested teacherIds array
                     let facultyName = "Expert Mentor";
                     if (s.teacherIds && Array.isArray(s.teacherIds) && s.teacherIds.length > 0) {
                         facultyName = s.teacherIds.map(t => {
@@ -98,8 +95,8 @@
                         facultyName = s.teacherName || s.teacher_name || s.teacher;
                     }
 
-                    // 3. Extraction of ID to prevent broken navigation down the path
-                    const targetId = s.subjectId || s._id || s.id || s.subject_id;
+                    // CRITICAL FIX: Wasmer demands the primary block '_id' (e.g. 69b5698ee506a608ee297ed1)
+                    const targetId = s._id || s.id || s.subjectId || s.subject_id;
                     const totalLectures = s.lectureCount !== undefined ? s.lectureCount : 0;
 
                     return `
@@ -118,17 +115,7 @@
 
             } catch (e) {
                 console.error("Layout crash log:", e);
-                container.innerHTML = `
-                    <div class="col-span-full text-center py-12 max-w-md mx-auto space-y-4">
-                        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
-                            <div class="w-12 h-12 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto font-bold text-lg mb-3">❌</div>
-                            <h3 class="text-sm font-bold text-slate-800">Core Network Connection Drop</h3>
-                            <p class="text-xs text-slate-400 mt-1 leading-relaxed">Failed to build subject elements from response payload.</p>
-                            <button onclick="window.location.reload()" class="mt-4 bg-[#4f46e5] hover:bg-[#4338ca] text-white text-xs font-bold py-2 px-6 rounded-xl transition-all shadow-sm">
-                                Retry Connection 🔄
-                            </button>
-                        </div>
-                    </div>`;
+                container.innerHTML = `<div class="col-span-full text-center py-12 text-sm text-red-500">❌ Failed to build subject nodes.</div>`;
             }
         }
 
