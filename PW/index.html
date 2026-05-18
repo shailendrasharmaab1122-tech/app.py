@@ -50,7 +50,6 @@
     </footer>
 
     <script>
-     
       const API_SOURCE_1 = "https://devcoderz.vercel.app/api/PW/all-batches-api1.js";
       const API_SOURCE_2 = "https://devcoderz.vercel.app/api/PW/all-batches-api2.js";
       const FALLBACK_IMG = "https://via.placeholder.com/300x200?text=No+Image";
@@ -58,7 +57,6 @@
       let ALL = [], filtered = [];
       let favs = JSON.parse(localStorage.getItem("favs") || "[]");
       let cachedBatches = JSON.parse(localStorage.getItem("fav_batches") || "{}");
-
       let loaded = 0, LIMIT = 8, loading = false;
 
       const total = document.getElementById("total");
@@ -69,13 +67,11 @@
 
       showSkeleton();
 
-     
       Promise.allSettled([
         fetch(API_SOURCE_1).then(r => r.json()),
         fetch(API_SOURCE_2).then(r => r.json())
       ]).then((results) => {
         let combinedBatches = [];
-
         results.forEach((result) => {
           if (result.status === "fulfilled" && result.value) {
             const batchList = result.value.batches || result.value.data?.batches || result.value.data || (Array.isArray(result.value) ? result.value : []);
@@ -83,7 +79,6 @@
           }
         });
 
-        
         const uniqueMap = new Map();
         combinedBatches.forEach(b => {
           if (b && (b._id || b.id)) {
@@ -255,7 +250,7 @@
         if (e.target.classList.contains("explore-btn")) {
           let id = e.target.dataset.id;
           let batch = ALL.find((b) => (b._id || b.id) == id) || cachedBatches[id];
-          
+
           if (batch && batch.startDate) {
             let startDate = new Date(batch.startDate);
             let now = new Date();
@@ -264,7 +259,7 @@
               if (!ok) return;
             }
           }
-          window.location.href = "PW/batches.html?batch_id=" + id;
+          window.location.href = "./PW/batches.html?batch_id=" + id;
         }
       });
 
