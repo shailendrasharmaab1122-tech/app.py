@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chapters Debugger - DevCoderZ</title>
+    <title>Chapters - DevCoderZ</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
       body { background: #f8fafc; color: #0f172a; }
+      .glow-text { text-shadow: 0 0 8px rgba(239,68,68,0.3); }
     </style>
 </head>
 <body class="min-h-screen flex flex-col pb-16">
 
     <nav class="h-16 bg-[#4f46e5] flex items-center justify-between px-6 shadow-md sticky top-0 z-50">
-        <button onclick="window.location.href='./batches.html?batch_id=' + bId" class="bg-white/20 hover:bg-white/30 text-white text-xs font-bold py-2 px-4 rounded-lg transition-all">
+        <button id="backBtn" class="bg-white/20 hover:bg-white/30 text-white text-xs font-bold py-2 px-4 rounded-lg transition-all">
             ← Back to Subjects
         </button>
         <div class="text-xs text-white/90 bg-white/10 px-3 py-1.5 rounded-full border border-white/20 font-medium">
@@ -22,78 +23,87 @@
     </nav>
 
     <main class="flex-1 max-w-5xl w-full mx-auto p-4 md:p-6">
-        <div class="mb-4">
-            <h2 class="text-xl font-extrabold text-slate-800 tracking-tight">Select Chapter Node</h2>
+        <div class="mb-6">
+            <h2 id="pageTitle" class="text-xl font-extrabold text-slate-800 tracking-tight">Select Chapter Node</h2>
             <p id="statusText" class="text-xs text-slate-400">Loading listed chapters for this stream branch...</p>
-        </div>
-
-        <div class="mb-4 bg-slate-900 text-green-400 p-4 rounded-xl font-mono text-xs overflow-x-auto shadow-inner">
-            <p class="text-slate-400 font-bold mb-1">// API Debug Logs:</p>
-            <div id="debugLog">Initializing core bridge handshake...</div>
         </div>
 
         <div id="chaptersContainer" class="space-y-3">
             <div class="bg-white p-5 border border-slate-200 rounded-2xl animate-pulse h-16 shadow-sm"></div>
+            <div class="bg-white p-5 border border-slate-200 rounded-2xl animate-pulse h-16 shadow-sm"></div>
         </div>
     </main>
+
+    <footer class="h-12 border-t border-slate-200 bg-white text-center text-xs text-slate-400 flex items-center justify-center gap-1 fixed bottom-0 inset-x-0 z-50 shadow-inner">
+        <span>© 2026 The DevCoderz. All Rights Reserved.</span>
+        <span>•</span>
+        <span>Developed by <span class="text-red-500 font-bold tracking-wide glow-text">Devansh Sharma</span></span>
+    </footer>
 
     <script>
         const params = new URLSearchParams(window.location.search);
         const bId = params.get('batch_id');
         const sId = params.get('subject_id');
 
-        const debugLog = document.getElementById('debugLog');
-        const container = document.getElementById('chaptersContainer');
-        const statusText = document.getElementById('statusText');
-
         if (!bId || !sId) {
-            debugLog.innerText = "Error: Parameters missing in URL string.";
             window.location.href = "./index.html";
         }
 
-        async function loadChapters() {
-            // Hum multiple URL patterns try karenge jo unka server accept kar sakta hai
-            // Pattern 1: chapters.php, Pattern 2: chapter.php (bina s ke)
-            const targetApi = `https://eduvibe-pw-api.wasmer.app/chapters.php?batch_id=${bId}&subject_id=${sId}`;
+        document.getElementById('backBtn').onclick = () => {
+            window.location.href = `./batches.html?batch_id=${bId}`;
+        };
+
+        async function fetchChaptersFallback() {
+            const container = document.getElementById('chaptersContainer');
+            const statusText = document.getElementById('statusText');
+            const pageTitle = document.getElementById('pageTitle');
+
+            // Strategy A: Phle target dynamic chapters script hit karte hain
+            let targetApi = `https://eduvibe-pw-api.wasmer.app/chapters.php?batch_id=${bId}&subject_id=${sId}`;
             
-            debugLog.innerHTML = `Sending request to:<br>${targetApi}`;
-
             try {
-                statusText.innerText = "Connecting secure channel stream...";
-                const res = await fetch(targetApi);
-                
-                debugLog.innerHTML += `<br><br>Response Status: ${res.status} ${res.statusText}`;
-                
-                if (!res.ok) throw new Error(`Network returned code ${res.status}`);
+                statusText.innerText = "Connecting master branch stream...";
+                let res = await fetch(targetApi);
+                let resData = await res.json();
 
-                const resData = await res.json();
-                
-                // Pure JSON response ko screen par print karwa lo dekhne ke liye
-                debugLog.innerHTML += `<br><br>Received JSON Data Structure:<br>${JSON.stringify(resData, null, 2)}`;
+                // Wasmer target response mapping array for 'topics' or 'chapters'
+                let chapters = resData.topics || resData.chapters || resData.data?.topics || resData.data || [];
 
-                // Dynamic extraction handle parameters
-                let chapters = [];
-                if (Array.isArray(resData)) {
-                    chapters = resData;
-                } else if (resData.chapters) {
-                    chapters = resData.chapters;
-                } else if (resData.data && Array.isArray(resData.data)) {
-                    chapters = resData.data;
-                } else if (resData.data?.chapters) {
-                    chapters = resData.data.chapters;
+                if (resData.subject_name) {
+                    pageTitle.innerText = resData.subject_name;
+                }
+
+                // Strategy B: Agar Strategy A blank screen (empty list) deti hai, toh batch endpoints se filter lagayenge
+                if (chapters.length === 0) {
+                    statusText.innerText = "Route A empty. Activating Matrix Filter Fallback...";
+                    
+                    const batchBackupApi = `https://devcoderz.vercel.app/api/PW/all-batches-api2.js?batch_id=${bId}`;
+                    const backupRes = await fetch(batchBackupApi);
+                    const backupData = await backupRes.json();
+
+                    let subjectsPool = backupData.subjects || backupData.data?.subjects || backupData || [];
+                    
+                    // Match current subject node out of the root batch configuration pool
+                    let currentSubject = subjectsPool.find(sub => (sub.subjectId || sub._id || sub.id || sub.subject_id) === sId);
+                    
+                    if (currentSubject) {
+                        chapters = currentSubject.chapters || currentSubject.topics || currentSubject.data || [];
+                        if (currentSubject.subject) pageTitle.innerText = currentSubject.subject;
+                    }
                 }
 
                 if (chapters.length === 0) {
-                    container.innerHTML = `<div class="text-center text-slate-400 py-12 text-sm">⚠️ No chapters found for this subject channel node inside the stream.</div>`;
-                    statusText.innerText = "Empty folder node.";
+                    container.innerHTML = `<div class="text-center text-slate-400 py-12 text-sm">⚠️ No chapters listed under this subject repository node.</div>`;
+                    statusText.innerText = "Folder payload empty.";
                     return;
                 }
 
                 statusText.innerText = "Chapters Decrypted Successfully.";
                 container.innerHTML = chapters.map(c => {
-                    const chapterName = c.chapterName || c.chapter_name || c.name || c.title || "Premium Chapter Node";
-                    const chapterId = c.chapterId || c.chapter_id || c._id || c.id;
-                    const lecturesCount = c.lectureCount || c.lectures || 0;
+                    // Mapping for both 'topicName' and 'chapterName' structures
+                    const chapterName = c.topicName || c.chapterName || c.chapter_name || c.name || c.title || "Premium Chapter Node";
+                    const chapterId = c.topicId || c.chapterId || c.chapter_id || c._id || c.id;
+                    const lecturesCount = c.lectureCount || c.lectures || c.lessons || 0;
 
                     return `
                     <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-150 cursor-pointer flex items-center justify-between group" onclick="openLectures('${chapterId}')">
@@ -110,14 +120,16 @@
                 }).join('');
 
             } catch (e) {
-                debugLog.innerHTML += `<br><br><span class="text-red-400">Crash Log: ${e.message}</span>`;
-                console.error(e);
-                
-                // Fallback attempt: Agar unka url literal bina 's' ke ho (chapter.php)
-                if(!targetApi.includes('chapter.php?')) {
-                    debugLog.innerHTML += `<br><br><span class="text-amber-400">Retrying via alternate endpoint template (chapter.php)...</span>`;
-                    // Alternate logic retry logic goes here if needed
-                }
+                console.error("System structural block error:", e);
+                container.innerHTML = `
+                    <div class="text-center py-12 max-w-md mx-auto space-y-4">
+                        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+                            <div class="w-12 h-12 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto font-bold text-lg mb-3">❌</div>
+                            <h3 class="text-sm font-bold text-slate-800">Decryption Error</h3>
+                            <p class="text-xs text-slate-400 mt-1 leading-relaxed">Failed to establish sync with the network cluster node.</p>
+                            <button onclick="window.location.reload()" class="mt-4 bg-[#4f46e5] text-white text-xs font-bold py-2 px-6 rounded-xl">Retry 🔄</button>
+                        </div>
+                    </div>`;
             }
         }
 
@@ -125,7 +137,7 @@
             window.location.href = "./lectures.html?batch_id=" + bId + "&subject_id=" + sId + "&chapter_id=" + chapterId;
         }
 
-        if (bId && sId) loadChapters();
+        if (bId && sId) fetchChaptersFallback();
     </script>
 </body>
 </html>
