@@ -3,200 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lectures & Notes - DevCoderZ</title>
+    <title>Lectures Debugger - DevCoderZ</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
       body { background: #f8fafc; color: #0f172a; }
-      .glow-text { text-shadow: 0 0 8px rgba(239,68,68,0.3); }
     </style>
 </head>
 <body class="min-h-screen flex flex-col pb-16">
 
     <nav class="h-16 bg-[#4f46e5] flex items-center justify-between px-6 shadow-md sticky top-0 z-50">
-        <button id="backBtn" class="bg-white/20 hover:bg-white/30 text-white text-xs font-bold py-2 px-4 rounded-lg transition-all flex items-center gap-1">
+        <button onclick="history.back()" class="bg-white/20 hover:bg-white/30 text-white text-xs font-bold py-2 px-4 rounded-lg transition-all flex items-center gap-1">
             ← Back
         </button>
-        <div class="flex bg-white/10 p-1 rounded-xl border border-white/20">
-            <button id="tabVideos" onclick="switchTab('videos')" class="bg-white text-[#4f46e5] text-xs font-bold px-4 py-1.5 rounded-lg transition-all">Videos</button>
-            <button id="tabNotes" onclick="switchTab('notes')" class="text-white text-xs font-bold px-4 py-1.5 rounded-lg transition-all">Notes</button>
+        <div class="text-xs text-white/90 bg-white/10 px-3 py-1.5 rounded-full border border-white/20 font-medium">
+            Lectures Node Diagnostics
         </div>
     </nav>
 
     <main class="flex-1 max-w-5xl w-full mx-auto p-4 md:p-6">
-        <div id="loader" class="text-center py-20 flex flex-col items-center gap-3">
-            <div id="spinner" class="w-10 h-10 border-4 border-t-4 border-gray-200 border-t-[#4f46e5] rounded-full animate-spin"></div>
-            <p id="loaderText" class="text-xs text-slate-400 font-medium">Waking up master instance container stream...</p>
+        <div class="mb-4">
+            <h2 class="text-xl font-extrabold text-slate-800 tracking-tight">Lectures Content Monitor</h2>
+            <p id="statusText" class="text-xs text-slate-400">Sniffing dynamic token arrays from Wasmer master storage...</p>
         </div>
 
-        <div id="lecContainer" class="space-y-4 hidden"></div>
-        <div id="notesContainer" class="space-y-4 hidden"></div>
+        <div class="mb-4 bg-slate-900 text-green-400 p-4 rounded-xl font-mono text-xs overflow-x-auto shadow-inner">
+            <p class="text-slate-400 font-bold mb-1">// Lectures API Log Trace:</p>
+            <div id="debugLog">Initializing network sync handshake...</div>
+        </div>
+
+        <div id="lecContainer" class="space-y-4">
+            <div class="bg-white p-5 border border-slate-200 rounded-2xl animate-pulse h-16 shadow-sm"></div>
+        </div>
     </main>
 
     <footer class="h-12 border-t border-slate-200 bg-white text-center text-xs text-slate-400 flex items-center justify-center gap-1 fixed bottom-0 inset-x-0 z-50 shadow-inner">
         <span>© 2026 The DevCoderz. All Rights Reserved.</span>
         <span>•</span>
-        <span>Developed by <span class="text-red-500 font-bold tracking-wide glow-text">Devansh Sharma</span></span>
+        <span>Developed by <span class="text-red-500 font-bold tracking-wide">Devansh Sharma</span></span>
     </footer>
 
     <script>
         const params = new URLSearchParams(window.location.search);
         const bId = params.get('batch_id');
         const sId = params.get('subject_id');
-        
-        // FIX 1: URL se dono parameters check karenge taaki redirect loop na bane
         const cId = params.get('chapter_id') || params.get('topic_id');
 
+        const debugLog = document.getElementById('debugLog');
+        const container = document.getElementById('lecContainer');
+        const statusText = document.getElementById('statusText');
+
         if (!cId || !bId) {
-            window.location.href = "./index.html";
+            debugLog.innerText = "Critical Stop: URL Query items are incomplete.";
         }
 
-        // Back button function to head back safely to chapters matrix
-        document.getElementById('backBtn').onclick = () => {
-            window.location.href = `./chapters.html?batch_id=${bId}&subject_id=${sId}`;
-        };
-
-        let currentTab = 'videos';
-        
-        // FIX 2: Target Endpoint updated to verified Wasmer structure room
-        let targetApi = `https://eduvibe-pw-api.wasmer.app/lectures.php?batch_id=${bId}&subject_id=${sId}&chapter_id=${cId}`;
-
-        async function fetchContent() {
-            const lecContainer = document.getElementById('lecContainer');
-            const notesContainer = document.getElementById('notesContainer');
-            const loader = document.getElementById('loader');
-            const loaderText = document.getElementById('loaderText');
-
-            loader.classList.remove('hidden');
-            lecContainer.classList.add('hidden');
-            notesContainer.classList.add('hidden');
-            loaderText.innerText = "Fetching structural resources from node...";
+        async function testLecturesStream() {
+            // Hum unka standard API endpoint route define kar rhe h check krne ke liye
+            let targetApi = `https://eduvibe-pw-api.wasmer.app/lectures.php?batch_id=${bId}&subject_id=${sId}&chapter_id=${cId}`;
+            
+            debugLog.innerHTML = `Requesting Payload From:<br>${targetApi}`;
 
             try {
-                const response = await fetch(targetApi);
-                if (!response.ok) throw new Error("API status failure");
+                const res = await fetch(targetApi);
+                debugLog.innerHTML += `<br><br>Server Response Code: ${res.status} ${res.statusText}`;
 
-                const data = await response.json();
-
-                // Extraction rules mapping across array structures
-                let lectures = data.lectures || data.data?.lectures || [];
-                let notes = data.notes || data.data?.notes || data.attachments || data.data?.attachments || [];
-
-                // Fallback catch all for flat JSON variations
-                if (lectures.length === 0 && notes.length === 0) {
-                    let directArray = Array.isArray(data) ? data : (Array.isArray(data.data) ? data.data : (data.contents || []));
-                    lectures = directArray.filter(item => item.contentType === 'video' || item.videoDetails || item.url?.includes('.m3u8'));
-                    notes = directArray.filter(item => item.contentType === 'notes' || item.attachmentDetails || item.ext === 'pdf');
+                if (!res.ok) {
+                    throw new Error(`HTTP Error Status: ${res.status}`);
                 }
 
-                window.premiumLecturesDb = {};
+                const resData = await res.json();
+                
+                // Pure JSON string data structure dump
+                debugLog.innerHTML += `<br><br>Dumped JSON Response Payload:<br>${JSON.stringify(resData, null, 2)}`;
+                statusText.innerText = "Data successfully fetched. Inspect the keys inside trace log above.";
 
-                // Render Videos Block
-                if (lectures.length === 0) {
-                    lecContainer.innerHTML = `<div class="text-center text-slate-400 py-12 text-sm">⚠️ No premium videos found under this node.</div>`;
-                } else {
-                    lecContainer.innerHTML = lectures.map(l => {
-                        const streamTitle = l.topic || l.name || l.title || "Premium Secure Lecture";
-                        const displayDate = l.date || l.createdAt?.split('T')[0] || 'Live Stream';
-                        const videoId = l._id || l.id || l.videoDetails?._id || Math.random().toString(36).substr(2, 9);
-
-                        let streamUrl = l.url || l.videoUrl || l.streamUrl || l.videoDetails?.url || '';
-                        let kId = l.keyId || l.key_id || l.videoDetails?.keyId || '';
-                        let kVal = l.key || l.keyValue || l.key_value || l.videoDetails?.key || '';
-
-                        window.premiumLecturesDb[videoId] = { url: streamUrl, keyId: kId, key: kVal };
-
-                        return `
-                        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md border-l-4 border-l-[#4f46e5] flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all">
-                            <div class="space-y-1 truncate">
-                                <h3 class="text-sm font-bold text-slate-800 leading-snug truncate" title="${streamTitle}">${streamTitle}</h3>
-                                <div class="text-[11px] font-medium text-slate-400">📅 Sync: ${displayDate}</div>
-                            </div>
-                            <button onclick="playVideo('${videoId}')" class="bg-[#4f46e5] hover:bg-[#4338ca] text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all text-center whitespace-nowrap shadow-sm">
-                                ▶ Watch Now
-                            </button>
-                        </div>`;
-                    }).join('');
-                }
-
-                // Render Notes Block
-                if (notes.length === 0) {
-                    notesContainer.innerHTML = `<div class="text-center text-slate-400 py-12 text-sm">⚠️ No premium notes found under this node.</div>`;
-                } else {
-                    notesContainer.innerHTML = notes.map(n => {
-                        const noteTitle = n.topic || n.name || n.title || "Premium Lecture Notes";
-                        const displayDate = n.date || n.createdAt?.split('T')[0] || 'Available';
-
-                        let docUrl = '';
-                        if (n.attachmentDetails) {
-                            docUrl = n.attachmentDetails.baseUrl || n.attachmentDetails.url || '';
-                        } else {
-                            docUrl = n.url || n.documentUrl || n.fileUrl || '';
-                        }
-
-                        if (docUrl && !docUrl.startsWith('http')) {
-                            docUrl = 'https://static.pw.live/' + docUrl;
-                        }
-
-                        return `
-                        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md border-l-4 border-l-emerald-500 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all">
-                            <div class="space-y-1 truncate">
-                                <h3 class="text-sm font-bold text-slate-800 leading-snug truncate" title="${noteTitle}">${noteTitle}</h3>
-                                <div class="text-[11px] font-medium text-slate-400">📅 Sync: ${displayDate}</div>
-                            </div>
-                            <button onclick="window.open('${docUrl}', '_blank')" class="bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all text-center whitespace-nowrap shadow-sm">
-                                📄 Open PDF
-                            </button>
-                        </div>`;
-                    }).join('');
-                }
-
-                loader.classList.add('hidden');
-                switchTab(currentTab);
-
-            } catch (err) {
-                console.error(err);
-                loader.innerHTML = `
-                    <div class="bg-white border border-slate-200 rounded-2xl p-6 max-w-md mx-auto text-center space-y-4 shadow-sm">
-                        <div class="w-12 h-12 bg-amber-50 text-amber-500 rounded-full flex items-center justify-center mx-auto font-bold text-lg">⚠️</div>
-                        <div class="space-y-1">
-                            <h3 class="text-sm font-bold text-slate-800">Server Sync Error</h3>
-                            <p class="text-xs text-slate-400 leading-relaxed">Failed to fetch contents from Wasmer API endpoint.</p>
-                        </div>
-                        <button onclick="window.location.reload()" class="w-full bg-[#4f46e5] text-white text-xs font-bold py-2.5 rounded-xl">Retry Connection 🔄</button>
-                    </div>`;
+            } catch (e) {
+                debugLog.innerHTML += `<br><br><span class="text-red-400">Network Exception Break: ${e.message}</span>`;
+                debugLog.innerHTML += `<br><br><span class="text-amber-400">Suggestion: Check if lectures.php throws 404. If yes, the script name is different.</span>`;
+                statusText.innerText = "Process halted due to connection error.";
             }
         }
 
-        function switchTab(tab) {
-            currentTab = tab;
-            const tabVideos = document.getElementById('tabVideos');
-            const tabNotes = document.getElementById('tabNotes');
-            const lecContainer = document.getElementById('lecContainer');
-            const notesContainer = document.getElementById('notesContainer');
-
-            if (tab === 'videos') {
-                tabVideos.className = "bg-white text-[#4f46e5] text-xs font-bold px-4 py-1.5 rounded-lg transition-all";
-                tabNotes.className = "text-white text-xs font-bold px-4 py-1.5 rounded-lg transition-all";
-                lecContainer.classList.remove('hidden');
-                notesContainer.classList.add('hidden');
-            } else {
-                tabNotes.className = "bg-white text-[#4f46e5] text-xs font-bold px-4 py-1.5 rounded-lg transition-all";
-                tabVideos.className = "text-white text-xs font-bold px-4 py-1.5 rounded-lg transition-all";
-                notesContainer.classList.remove('hidden');
-                lecContainer.classList.add('hidden');
-            }
-        }
-
-        function playVideo(vId) {
-            const videoData = window.premiumLecturesDb[vId];
-            localStorage.setItem('current_stream_url', videoData ? videoData.url : '');
-            localStorage.setItem('current_key_id', videoData ? videoData.keyId : '');
-            localStorage.setItem('current_key_val', videoData ? videoData.key : '');
-            window.location.href = `./player.html?video_id=${vId}&batch_id=${bId}&subject_id=${sId}&chapter_id=${cId}`;
-        }
-
-        if (cId && bId) fetchContent();
+        if (bId && cId) testLecturesStream();
     </script>
 </body>
 </html>
