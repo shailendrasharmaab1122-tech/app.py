@@ -22,13 +22,13 @@
 
     <main class="flex-1 max-w-5xl w-full mx-auto p-4 md:p-6">
         <div class="mb-6">
-            <h2 id="topicName" class="text-xl font-extrabold text-slate-800 tracking-tight">Syncing Node...</h2>
-            <p id="statusText" class="text-xs text-slate-400">Verifying session token clusters...</p>
+            <h2 id="topicName" class="text-xl font-extrabold text-slate-800 tracking-tight">Routing Tunnel...</h2>
+            <p id="statusText" class="text-xs text-slate-400">Bypassing origin restrictions via security proxy array...</p>
         </div>
 
         <div id="loader" class="text-center py-20 flex flex-col items-center gap-3">
             <div class="w-10 h-10 border-4 border-t-4 border-gray-200 border-t-[#4f46e5] rounded-full animate-spin"></div>
-            <p class="text-xs text-slate-400 font-medium">Connecting directly to Wasmer core container...</p>
+            <p class="text-xs text-slate-400 font-medium">Decoding master payload objects. Please wait...</p>
         </div>
 
         <div id="contentContainer" class="space-y-4 hidden"></div>
@@ -78,21 +78,30 @@
             const pageTitle = document.getElementById('pageTitle');
             const statusText = document.getElementById('statusText');
 
-            const apiUrl = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${bId}&subject_id=${sId}&topic_id=${cId}&tab=${activeTab}`;
+            const rawApiUrl = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${bId}&subject_id=${sId}&topic_id=${cId}&tab=${activeTab}`;
+            
+            // Re-routing through AllOrigins string-content engine to break CORS boundaries
+            const proxyApiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(rawApiUrl)}&nocache=${Date.now()}`;
 
-            // Exact original fetch syntax with credentials header matrix inclusion
-            fetch(apiUrl, { credentials: "include" })
-                .then((res) => {
-                    if (!res.ok) throw new Error("CORS or Network Authentication Drop");
+            fetch(proxyApiUrl)
+                .then(res => {
+                    if (!res.ok) throw new Error("Proxy node offline");
                     return res.json();
                 })
-                .then((data) => {
+                .then(proxyData => {
+                    if (!proxyData || !proxyData.contents) {
+                        throw new Error("Cluster returned an empty string buffer");
+                    }
+                    
+                    // Parse the raw text contents manually into clean JSON layout
+                    const data = JSON.parse(proxyData.contents);
+
                     loader.classList.add('hidden');
                     container.classList.remove('hidden');
 
-                    topicNameText.innerText = data.topic_name || "Topic Archive Node";
-                    pageTitle.innerText = data.topic_name || "Premium Portal";
-                    statusText.innerText = `Pipeline established. Mapping matrix elements for [${activeTab}].`;
+                    topicNameText.innerText = data.topic_name || "Study Folder Archive";
+                    pageTitle.innerText = data.topic_name || "DevCoderZ Premium";
+                    statusText.innerText = `Tunnel verified. Displaying decoupled structural grids.`;
 
                     renderTabs();
 
@@ -100,7 +109,7 @@
                     if (activeTab === "videos" || activeTab === "DppVideos") {
                         let lectures = data.lectures || [];
                         if (lectures.length === 0) {
-                            container.innerHTML = `<div class="text-center text-slate-400 py-12 text-sm">⚠️ No lectures or video feeds under this tab.</div>`;
+                            container.innerHTML = `<div class="text-center text-slate-400 py-12 text-sm">⚠️ No premium streaming feeds listed under this branch channel.</div>`;
                             return;
                         }
 
@@ -176,14 +185,14 @@
                         }).join('');
                     }
                 })
-                .catch((err) => {
+                .catch(err => {
                     console.error(err);
                     loader.innerHTML = `
                     <div class="bg-white border border-slate-200 rounded-2xl p-6 max-w-md mx-auto text-center space-y-4 shadow-sm">
                         <div class="w-12 h-12 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto font-bold text-lg">❌</div>
-                        <h3 class="text-sm font-bold text-slate-800">Operational Gateway Break</h3>
-                        <p class="text-xs text-slate-400 leading-relaxed">Failed native handshake loop. Secure credentials matrix mismatch.</p>
-                        <button onclick="window.location.reload()" class="w-full bg-[#4f46e5] text-white text-xs font-bold py-2.5 rounded-xl">Refresh & Reconnect 🔄</button>
+                        <h3 class="text-sm font-bold text-slate-800">Operational Proxy Timeout</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">CORS tunnel dropped. Server returned non-parseable stream blocks.</p>
+                        <button onclick="window.location.reload()" class="w-full bg-[#4f46e5] text-white text-xs font-bold py-2.5 rounded-xl">Retry Tunneling 🔄</button>
                     </div>`;
                 });
         }
@@ -205,7 +214,4 @@
             window.location.href = `./dpp.html?batch_id=${bId}&schedule_id=${scheduleId}&test_id=${testId}`;
         }
 
-        if (bId && cId) fetchContentCluster();
-    </script>
-</body>
-</html>
+        if (bId && cId
