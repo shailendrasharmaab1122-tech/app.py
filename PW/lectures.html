@@ -22,13 +22,13 @@
 
     <main class="flex-1 max-w-5xl w-full mx-auto p-4 md:p-6">
         <div class="mb-6">
-            <h2 id="topicName" class="text-xl font-extrabold text-slate-800 tracking-tight">Routing Tunnel...</h2>
-            <p id="statusText" class="text-xs text-slate-400">Bypassing origin restrictions via security proxy array...</p>
+            <h2 id="topicName" class="text-xl font-extrabold text-slate-800 tracking-tight">Syncing Stream Cluster...</h2>
+            <p id="statusText" class="text-xs text-slate-400">Resolving multi-origin handshake tokens...</p>
         </div>
 
         <div id="loader" class="text-center py-20 flex flex-col items-center gap-3">
             <div class="w-10 h-10 border-4 border-t-4 border-gray-200 border-t-[#4f46e5] rounded-full animate-spin"></div>
-            <p class="text-xs text-slate-400 font-medium">Decoding master payload objects. Please wait...</p>
+            <p class="text-xs text-slate-400 font-medium">Extracting response components from Wasmer node...</p>
         </div>
 
         <div id="contentContainer" class="space-y-4 hidden"></div>
@@ -80,28 +80,21 @@
 
             const rawApiUrl = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${bId}&subject_id=${sId}&topic_id=${cId}&tab=${activeTab}`;
             
-            // Re-routing through AllOrigins string-content engine to break CORS boundaries
-            const proxyApiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(rawApiUrl)}&nocache=${Date.now()}`;
+            // High-speed, seamless proxy routing via corsproxy.io
+            const proxyApiUrl = `https://corsproxy.io/?${encodeURIComponent(rawApiUrl)}`;
 
             fetch(proxyApiUrl)
                 .then(res => {
-                    if (!res.ok) throw new Error("Proxy node offline");
+                    if (!res.ok) throw new Error("CorsProxy routing restriction");
                     return res.json();
                 })
-                .then(proxyData => {
-                    if (!proxyData || !proxyData.contents) {
-                        throw new Error("Cluster returned an empty string buffer");
-                    }
-                    
-                    // Parse the raw text contents manually into clean JSON layout
-                    const data = JSON.parse(proxyData.contents);
-
+                .then(data => {
                     loader.classList.add('hidden');
                     container.classList.remove('hidden');
 
-                    topicNameText.innerText = data.topic_name || "Study Folder Archive";
-                    pageTitle.innerText = data.topic_name || "DevCoderZ Premium";
-                    statusText.innerText = `Tunnel verified. Displaying decoupled structural grids.`;
+                    topicNameText.innerText = data.topic_name || "Topic Repository Node";
+                    pageTitle.innerText = data.topic_name || "Premium Portal";
+                    statusText.innerText = `Secure mapping established for [${activeTab}] pipeline loops.`;
 
                     renderTabs();
 
@@ -154,64 +147,4 @@
                             return `
                             <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm border-l-4 border-l-emerald-500 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                                 <div class="space-y-1 truncate flex-1">
-                                    <h3 class="text-sm font-bold text-slate-800 truncate" title="${item.title}">📄 ${item.title || "Notes Document"}</h3>
-                                    <p class="text-[11px] text-slate-400">PDF Document Vault Resource</p>
-                                </div>
-                                <button onclick="window.open('${item.download_url}', '_blank')" class="bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-sm">📄 Open PDF</button>
-                            </div>`;
-                        }).join('');
-                    }
-
-                    // 3. DPP INTERACTIVE QUIZZES
-                    else if (activeTab === "dppQuiz") {
-                        let quizzes = data.dpp_quizzes || [];
-                        if (quizzes.length === 0) {
-                            container.innerHTML = `<div class="text-center text-slate-400 py-12 text-sm">⚠️ No interactive quiz sets configured for this topic.</div>`;
-                            return;
-                        }
-
-                        container.innerHTML = quizzes.map(quiz => {
-                            const test = quiz.dppQuizDetails?.test || {};
-                            const scheduleId = quiz.dppQuizDetails?.scheduleId;
-                            if (!test._id || !scheduleId) return '';
-                            return `
-                            <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm border-l-4 border-l-amber-500 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                                <div class="space-y-1 truncate flex-1">
-                                    <h3 class="text-sm font-bold text-slate-800 truncate" title="${test.name}">📝 ${test.name || "CBT Quiz"}</h3>
-                                    <p class="text-[11px] text-slate-400">Online Computer Based Test</p>
-                                </div>
-                                <button onclick="openDpp('${test._id}', '${scheduleId}')" class="bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-sm">📝 Start Quiz</button>
-                            </div>`;
-                        }).join('');
-                    }
-                })
-                .catch(err => {
-                    console.error(err);
-                    loader.innerHTML = `
-                    <div class="bg-white border border-slate-200 rounded-2xl p-6 max-w-md mx-auto text-center space-y-4 shadow-sm">
-                        <div class="w-12 h-12 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto font-bold text-lg">❌</div>
-                        <h3 class="text-sm font-bold text-slate-800">Operational Proxy Timeout</h3>
-                        <p class="text-xs text-slate-400 leading-relaxed">CORS tunnel dropped. Server returned non-parseable stream blocks.</p>
-                        <button onclick="window.location.reload()" class="w-full bg-[#4f46e5] text-white text-xs font-bold py-2.5 rounded-xl">Retry Tunneling 🔄</button>
-                    </div>`;
-                });
-        }
-
-        function changeTab(tab) {
-            const url = new URL(window.location.href);
-            url.searchParams.set("tab", tab);
-            window.location.href = url.toString();
-        }
-
-        function playVideo(id) {
-            const videoData = window.premiumLecturesDb[id];
-            localStorage.setItem('current_stream_url', videoData ? videoData.url : '');
-            localStorage.setItem('current_key_id', videoData ? videoData.keyId : '');
-            window.location.href = `./player.html?video_id=${id}&batch_id=${bId}&subject_id=${sId}&topic_id=${cId}`;
-        }
-
-        function openDpp(testId, scheduleId) {
-            window.location.href = `./dpp.html?batch_id=${bId}&schedule_id=${scheduleId}&test_id=${testId}`;
-        }
-
-        if (bId && cId
+                                    <h3 class="text-sm font-bold text-slate-8
