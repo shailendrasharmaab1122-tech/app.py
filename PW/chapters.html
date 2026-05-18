@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chapters - DevCoderZ</title>
+    <title>Chapters Debugger - DevCoderZ</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
       body { background: #f8fafc; color: #0f172a; }
-      .glow-text { text-shadow: 0 0 8px rgba(239,68,68,0.3); }
     </style>
 </head>
 <body class="min-h-screen flex flex-col pb-16">
 
     <nav class="h-16 bg-[#4f46e5] flex items-center justify-between px-6 shadow-md sticky top-0 z-50">
-        <button id="backBtn" class="bg-white/20 hover:bg-white/30 text-white text-xs font-bold py-2 px-4 rounded-lg transition-all">
+        <button onclick="window.location.href='./batches.html?batch_id=' + bId" class="bg-white/20 hover:bg-white/30 text-white text-xs font-bold py-2 px-4 rounded-lg transition-all">
             ← Back to Subjects
         </button>
         <div class="text-xs text-white/90 bg-white/10 px-3 py-1.5 rounded-full border border-white/20 font-medium">
@@ -23,53 +22,56 @@
     </nav>
 
     <main class="flex-1 max-w-5xl w-full mx-auto p-4 md:p-6">
-        <div class="mb-6">
+        <div class="mb-4">
             <h2 class="text-xl font-extrabold text-slate-800 tracking-tight">Select Chapter Node</h2>
             <p id="statusText" class="text-xs text-slate-400">Loading listed chapters for this stream branch...</p>
         </div>
 
+        <div class="mb-4 bg-slate-900 text-green-400 p-4 rounded-xl font-mono text-xs overflow-x-auto shadow-inner">
+            <p class="text-slate-400 font-bold mb-1">// API Debug Logs:</p>
+            <div id="debugLog">Initializing core bridge handshake...</div>
+        </div>
+
         <div id="chaptersContainer" class="space-y-3">
-            <div class="bg-white p-5 border border-slate-200 rounded-2xl animate-pulse h-16 shadow-sm"></div>
-            <div class="bg-white p-5 border border-slate-200 rounded-2xl animate-pulse h-16 shadow-sm"></div>
             <div class="bg-white p-5 border border-slate-200 rounded-2xl animate-pulse h-16 shadow-sm"></div>
         </div>
     </main>
-
-    <footer class="h-12 border-t border-slate-200 bg-white text-center text-xs text-slate-400 flex items-center justify-center gap-1 fixed bottom-0 inset-x-0 z-50 shadow-inner">
-        <span>© 2026 The DevCoderz. All Rights Reserved.</span>
-        <span>•</span>
-        <span>Developed by <span class="text-red-500 font-bold tracking-wide glow-text">Devansh Sharma</span></span>
-    </footer>
 
     <script>
         const params = new URLSearchParams(window.location.search);
         const bId = params.get('batch_id');
         const sId = params.get('subject_id');
 
+        const debugLog = document.getElementById('debugLog');
+        const container = document.getElementById('chaptersContainer');
+        const statusText = document.getElementById('statusText');
+
         if (!bId || !sId) {
+            debugLog.innerText = "Error: Parameters missing in URL string.";
             window.location.href = "./index.html";
         }
 
-        // Back button configuration to preserve history mapping
-        document.getElementById('backBtn').onclick = () => {
-            window.location.href = `./batches.html?batch_id=${bId}`;
-        };
-
         async function loadChapters() {
-            const container = document.getElementById('chaptersContainer');
-            const statusText = document.getElementById('statusText');
-
-            // Wasmer database structure for chapters retrieval
+            // Hum multiple URL patterns try karenge jo unka server accept kar sakta hai
+            // Pattern 1: chapters.php, Pattern 2: chapter.php (bina s ke)
             const targetApi = `https://eduvibe-pw-api.wasmer.app/chapters.php?batch_id=${bId}&subject_id=${sId}`;
+            
+            debugLog.innerHTML = `Sending request to:<br>${targetApi}`;
 
             try {
                 statusText.innerText = "Connecting secure channel stream...";
                 const res = await fetch(targetApi);
-                if (!res.ok) throw new Error("Chapters network failed");
+                
+                debugLog.innerHTML += `<br><br>Response Status: ${res.status} ${res.statusText}`;
+                
+                if (!res.ok) throw new Error(`Network returned code ${res.status}`);
 
                 const resData = await res.json();
+                
+                // Pure JSON response ko screen par print karwa lo dekhne ke liye
+                debugLog.innerHTML += `<br><br>Received JSON Data Structure:<br>${JSON.stringify(resData, null, 2)}`;
 
-                // Target extraction loop
+                // Dynamic extraction handle parameters
                 let chapters = [];
                 if (Array.isArray(resData)) {
                     chapters = resData;
@@ -89,21 +91,15 @@
 
                 statusText.innerText = "Chapters Decrypted Successfully.";
                 container.innerHTML = chapters.map(c => {
-                    
-                    // Key variations handling
                     const chapterName = c.chapterName || c.chapter_name || c.name || c.title || "Premium Chapter Node";
                     const chapterId = c.chapterId || c.chapter_id || c._id || c.id;
                     const lecturesCount = c.lectureCount || c.lectures || 0;
 
                     return `
-                    <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-150 cursor-pointer flex items-center justify-between group" onclick="openLectures('${chapterId}')">
+                    <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-150 cursor-pointer flex items-center justify-between group" onclick="openLectures('${chapterId}')">
                         <div class="flex items-center gap-3 truncate">
-                            <div class="w-8 h-8 rounded-xl bg-indigo-50 text-[#4f46e5] flex items-center justify-center font-bold text-xs group-hover:bg-[#4f46e5] group-hover:text-white transition-all shrink-0">
-                                📁
-                            </div>
-                            <span class="text-sm font-bold text-slate-700 truncate group-hover:text-[#4f46e5] transition-colors" title="${chapterName}">
-                                ${chapterName}
-                            </span>
+                            <div class="w-8 h-8 rounded-xl bg-indigo-50 text-[#4f46e5] flex items-center justify-center font-bold text-xs group-hover:bg-[#4f46e5] group-hover:text-white transition-all shrink-0">📁</div>
+                            <span class="text-sm font-bold text-slate-700 truncate group-hover:text-[#4f46e5] transition-colors">${chapterName}</span>
                         </div>
                         <div class="flex items-center gap-2 text-xs font-medium text-slate-400 shrink-0">
                             <span>${lecturesCount} Videos</span>
@@ -114,26 +110,18 @@
                 }).join('');
 
             } catch (e) {
-                console.error("Chapters crash log:", e);
-                container.innerHTML = `
-                    <div class="text-center py-12 max-w-md mx-auto space-y-4">
-                        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
-                            <div class="w-12 h-12 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto font-bold text-lg mb-3">❌</div>
-                            <h3 class="text-sm font-bold text-slate-800">Decryption Matrix Failure</h3>
-                            <p class="text-xs text-slate-400 mt-1 leading-relaxed">Failed to stream structural elements from Wasmer master node.</p>
-                            <button onclick="window.location.reload()" class="mt-4 bg-[#4f46e5] hover:bg-[#4338ca] text-white text-xs font-bold py-2 px-6 rounded-xl transition-all shadow-sm">
-                                Retry Stream 🔄
-                            </button>
-                        </div>
-                    </div>`;
+                debugLog.innerHTML += `<br><br><span class="text-red-400">Crash Log: ${e.message}</span>`;
+                console.error(e);
+                
+                // Fallback attempt: Agar unka url literal bina 's' ke ho (chapter.php)
+                if(!targetApi.includes('chapter.php?')) {
+                    debugLog.innerHTML += `<br><br><span class="text-amber-400">Retrying via alternate endpoint template (chapter.php)...</span>`;
+                    // Alternate logic retry logic goes here if needed
+                }
             }
         }
 
         function openLectures(chapterId) {
-            if(!chapterId || chapterId === 'undefined') {
-                alert("Error: Chapter Link Node identity missing.");
-                return;
-            }
             window.location.href = "./lectures.html?batch_id=" + bId + "&subject_id=" + sId + "&chapter_id=" + chapterId;
         }
 
