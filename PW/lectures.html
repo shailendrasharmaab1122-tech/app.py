@@ -1,213 +1,231 @@
-<!DOCTYPE html><html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">The DevCoderz</title>
-    <link href="https://www.pw.live/batches-new/index.BZrLlnYz.css" rel="stylesheet" type="text/css">
+    <title>Course Lectures - DevCoderz</title>
     <style>
-        body { background-color: #f1f5f9; font-family: sans-serif; margin: 0; padding: 0; }
-        .brand-header { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); padding: 24px 16px; text-align: center; color: white; box-shadow: 0 4px 20px rgba(0,0,0,0.15); border-bottom: 4px solid #10b981; }
-        .brand-title { font-size: 26px; font-weight: 800; tracking: 2px; text-transform: uppercase; margin: 0; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.4); font-family: system-ui, -apple-system, sans-serif; }
-        .brand-subtitle { font-size: 11px; color: #34d399; margin-top: 6px; letter-spacing: 3px; font-weight: 600; }
-        
-        .custom-tabs-container { display: flex; gap: 8px; overflow-x: auto; padding: 12px 4px; margin-bottom: 16px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-        .custom-tabs-container::-webkit-scrollbar { display: none; }
-        
-        .tab-btn { background: #ffffff; color: #475569; border: 1px solid #e2e8f0; padding: 10px 18px; font-size: 13px; font-weight: 600; border-radius: 30px; white-space: nowrap; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-        .tab-btn.active-tab { background: #1e1b4b; color: #ffffff; border-color: #1e1b4b; box-shadow: 0 4px 10px rgba(30,27,75,0.25); }
-        
-        .main-wrapper { max-width: 800px; margin: auto; padding: 16px; }
-        .topic-header-title { color: #0f172a; font-size: 20px; font-weight: 700; margin: 8px 0 16px 4px; font-family: system-ui, sans-serif; border-left: 4px solid #1e1b4b; padding-left: 10px; }
-        
-        .completed-lecture { border: 2px solid #10b981 !important; border-radius: 12px; box-shadow: 0 0 12px rgba(16,185,129,0.15); }
-        .dropdown-item:hover { background: #f1f5f9; }
-        
-        #loadingScreen { position: fixed; inset: 0; background: #fff; display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 99999; }
-        .spinner { width: 45px; height: 45px; border: 4px solid #f1f5f9; border-top: 4px solid #1e1b4b; border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        * { user-select: auto !important; -webkit-user-select: auto !important; }
+        body {
+            margin: 0;
+            background: #0b0f19;
+            color: #ffffff;
+            font-family: sans-serif;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            border-bottom: 2px solid #10b981;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .title {
+            font-size: 24px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+        .section-container {
+            margin-bottom: 40px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: #111827;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            padding: 16px;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+        }
+        .live-card:hover {
+            border-color: #f43f5e;
+        }
+        .recorded-card:hover {
+            border-color: #10b981;
+        }
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0 0 10px 0;
+            line-height: 1.4;
+        }
+        .card-meta {
+            font-size: 12px;
+            color: #94a3b8;
+            margin: 0;
+        }
+        .badge {
+            font-size: 11px;
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 10px;
+            width: fit-content;
+        }
+        .badge-live {
+            background: rgba(244, 63, 94, 0.1);
+            color: #f43f5e;
+            border: 1px solid rgba(244, 63, 94, 0.3);
+        }
+        .badge-upcoming {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        .badge-recorded {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        .live-dot {
+            height: 10px;
+            width: 10px;
+            background: #f43f5e;
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(244, 63, 94, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
+        }
+        .loading {
+            color: #94a3b8;
+            font-size: 14px;
+            font-family: monospace;
+        }
     </style>
 </head>
 <body>
-    <div id="loadingScreen" style="display: flex;">
-      <div class="spinner"></div>
-      <p style="margin-top: 14px; font-weight: 600; color: #1e1b4b; font-family: sans-serif;">Loading Channels...</p>
+
+<div class="container">
+    <div class="header">
+        <h1 class="title">DevCoderz Portal</h1>
+        <div id="loadingStatus" class="loading">Loading interface pipelines...</div>
     </div>
 
-    <div class="brand-header">
-        <h1 class="brand-title">The DevCoderz</h1>
-        <div class="brand-subtitle">BYPASS ENGINE MULTI-STREAM</div>
+    <div class="section-container" id="liveSection" style="display: none;">
+        <h2 class="section-title" style="color: #f43f5e;">
+            <span class="live-dot"></span>
+            LIVE & UPCOMING CLASSES
+        </h2>
+        <div id="liveClassesGrid" class="grid"></div>
     </div>
 
-    <div class="main-wrapper">
-        <h3 class="topic-header-title" id="topicName">Loading Topic...</h3>
-        <div class="custom-tabs-container" id="tabsContainer"></div>
-        <div class="index_class_2-nA57WL" id="contentContainer"></div>
+    <div class="section-container" id="recordedSection">
+        <h2 class="section-title" style="color: #10b981;">RECORDED LECTURES</h2>
+        <div id="recordedClassesGrid" class="grid"></div>
     </div>
+</div>
 
-    <script>
-      const params = new URLSearchParams(window.location.search);
-      const batchId = params.get("batch_id");
-      const subjectId = params.get("subject_id");
-      const topicId = params.get("chapter_id") || params.get("topic_id");
-      const activeTab = params.get("tab") || "videos";
+<script>
+async function loadBatchContent() {
+    const params = new URLSearchParams(window.location.search);
+    const batchId = params.get('batch_id') || "698ad3519549b300a5e1cc6a";
+    const subjectSlug = params.get('subjectSlug') || "physical-chemistry-by-vijay-kumar-tripathi-sir--vkt-sir--164171";
+    const topicSlug = params.get('topicSlug') || "mole-concept-208340";
 
-      if (!batchId || !subjectId || !topicId) {
-        document.body.innerHTML = "<div style='padding:50px; text-align:center; font-family:sans-serif;'>Invalid Request Parameters</div>";
-        throw new Error();
-      }
+    const statusEl = document.getElementById('loadingStatus');
+    const liveSection = document.getElementById('liveSection');
+    const liveGrid = document.getElementById('liveClassesGrid');
+    const recordedGrid = document.getElementById('recordedClassesGrid');
 
-      const targetApiUrl = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}&tab=${activeTab}`;
-      const proxyUrl = `/api/stream.js?url=${encodeURIComponent(targetApiUrl)}`;
+    liveGrid.innerHTML = '';
+    recordedGrid.innerHTML = '';
 
-      fetch(proxyUrl)
-        .then(res => { if(!res.ok) throw new Error(); return res.json(); })
-        .then(data => {
-          document.getElementById("loadingScreen").style.display = "none";
-          document.getElementById("topicName").innerText = data.topic_name || "Topic";
-          renderTabs();
-          if (activeTab === "videos" || activeTab === "DppVideos") renderLectures(data.lectures || []);
-          if (activeTab === "notes" || activeTab === "DppNotes") renderNotes(data.lectures || []);
-          if (activeTab === "dppQuiz") renderQuizzes(data.dpp_quizzes || []);
-        })
-        .catch(err => {
-            document.getElementById("loadingScreen").innerHTML = `<div style="text-align:center; color:#ef4444; padding:20px; font-family:sans-serif;"><h3>❌ Network Tunnel Error</h3></div>`;
-        });
+    try {
+        statusEl.innerText = "Syncing cluster data...";
 
-      function renderTabs() {
-        const tabs = [["videos", "Lectures"], ["notes", "Notes"], ["dppQuiz", "DPP Quiz"], ["DppNotes", "DPP PDF"], ["DppVideos", "DPP Solutions"]];
-        let html = "";
-        tabs.forEach(t => {
-          const isActive = activeTab === t[0] ? "active-tab" : "";
-          html += `<button onclick="changeTab('${t[0]}')" class="tab-btn ${isActive}">${t[1]}</button>`;
-        });
-        document.getElementById("tabsContainer").innerHTML = html;
-      }
+        const recUrl = `https://apiserver.deltastudy.site/api/pw/datacontent?batchId=${batchId}&subjectSlug=${subjectSlug}&topicSlug=${topicSlug}&contentType=videos`;
+        const recRes = await fetch(recUrl);
+        const recData = await recRes.json();
+        const recList = recData.data || recData || [];
 
-      function renderLectures(lectures) {
-        let html = "";
-        if (lectures.length === 0) {
-            document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#64748b; font-family:sans-serif;'>No Lectures Online</div>";
-            return;
-        }
-        lectures.forEach(item => {
-          if (!item) return;
-          const lectureId = item._id || (item.videoDetails && item.videoDetails._id);
-          if (!lectureId) return;
-
-          html += `
-        <div class="index_class_3-FAUYHF lecture-card" data-id="${lectureId}" style="position:relative; margin-bottom:16px; cursor:pointer;" onclick="openLecture('${lectureId}')">
-        <div class="index_class_1-MVi_no">
-        <div class="index_class_3-bfYHa0">
-        <img src="${item.videoDetails?.image || "https://static.pw.live/react-batches/assets/study/blue-play-icon.svg"}" class="index_class_4-h3krT0">
-        <img src="https://static.pw.live/react-batches/assets/study/blue-play-icon.svg" class="play-icon-WPnSAT">
-        </div>
-        <section class="card_details-jhfM5S">
-        <div class="index_class_5-jpm8N4"><div class="index_class_7-QWiBzJ"><img class="index_class_8-c71iDH" src="https://static.pw.live/react-batches/assets/study/clock.svg"><span style="margin-left:4px;">${item.videoDetails?.duration || "00:00"}</span></div></div>
-        <div class="index_class_9-MwVgjv"><p class="index_class_10-F64Ile" style="color:#1e293b; font-weight:600; font-size:14px; line-height:1.4;">${item.topic || item.videoDetails?.name || "Untitled Lecture"}</p></div>
-        <div class="index_class_12-Cq8EEY" onclick="event.stopPropagation();">
-            <div class="dropdown-wrapper" style="position:relative;">
-                <div class="three-dot-btn" onclick="event.stopPropagation(); toggleDropdown('${lectureId}', event)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="moreVerticalIcon-zDj749"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
-                </div>
-                <div class="dropdown-menu" id="dropdown-${lectureId}" style="display:none; position:absolute; right:0; top:28px; background:#fff; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.15); padding:8px 0; min-width:160px; z-index:1000;">
-                    <div onclick="event.stopPropagation(); toggleComplete('${lectureId}')" class="dropdown-item" style="padding:10px 14px; font-size:14px; color:#333; font-family:sans-serif;">
-                        <span id="dropdown-text-${lectureId}">Mark as complete</span>
+        if (Array.isArray(recList) && recList.length > 0) {
+            recList.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card recorded-card';
+                card.innerHTML = `
+                    <div>
+                        <span class="badge badge-recorded">RECORDED</span>
+                        <h3 class="card-title">${item.topic || 'Untitled Lecture'}</h3>
                     </div>
-                </div>
-            </div>
-        </div>
-        </section>
-        </div>
-        </div>`;
-        });
-        document.getElementById("contentContainer").innerHTML = html;
-        restoreCompletedLectures();
-      }
-
-      function renderNotes(lectures) {
-        let html = "";
-        if (lectures.length === 0) {
-            document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#64748b; font-family:sans-serif;'>No Material Available</div>";
-            return;
+                    <p class="card-meta">Faculty: ${item.teacherName || 'Expert Faculty'}</p>
+                `;
+                card.onclick = () => {
+                    const videoId = item.videoDetails?._id || item._id;
+                    window.location.href = `player.html?video_id=${videoId}&batch_id=${batchId}&subjectSlug=${subjectSlug}&topicSlug=${topicSlug}`;
+                };
+                recordedGrid.appendChild(card);
+            });
+        } else {
+            recordedGrid.innerHTML = '<p class="card-meta">No recorded lectures found in this topic.</p>';
         }
-        lectures.forEach(item => {
-          if (!item || !item.download_url) return;
-          html += `
-        <div class="index_class_3-FAUYHF" style="margin-bottom:16px; cursor:pointer;" onclick="window.open('${item.download_url}', '_blank')">
-            <div class="index_class_1-MVi_no">
-                <div class="index_class_3-bfYHa0" style="background:#fff1f2; display:flex; align-items:center; justify-content:center;">
-                    <span style="font-size:30px;">📄</span>
-                </div>
-                <section class="card_details-jhfM5S">
-                    <div class="index_class_9-MwVgjv">
-                        <p class="index_class_10-F64Ile" style="color:#1e293b; font-weight:600; font-size:14px;">${item.title || "PDF Resource File"}</p>
-                    </div>
-                </section>
-            </div>
-        </div>`;
-        });
-        document.getElementById("contentContainer").innerHTML = html;
-      }
 
-      function renderQuizzes(quizzes) {
-        let html = "";
-        if (quizzes.length === 0) {
-            document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#64748b; font-family:sans-serif;'>No Quiz Modules Found</div>";
-            return;
+        const liveUrl = `https://apiserver.deltastudy.site/api/pw/datacontent?batchId=${batchId}&subjectSlug=${subjectSlug}&topicSlug=${topicSlug}&contentType=live`;
+        const liveRes = await fetch(liveUrl);
+        const liveData = await liveRes.json();
+        const liveList = liveData.data || liveData || [];
+
+        if (Array.isArray(liveList) && liveList.length > 0) {
+            liveSection.style.display = 'block';
+            liveList.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card live-card';
+                
+                const isLiveNow = item.isLive === true || item.videoDetails?.status === 'live';
+                const badgeClass = isLiveNow ? 'badge-live' : 'badge-upcoming';
+                const badgeText = isLiveNow ? '🔴 LIVE NOW' : '📅 SCHEDULED';
+
+                card.innerHTML = `
+                    <div>
+                        <span class="badge ${badgeClass}">${badgeText}</span>
+                        <h3 class="card-title">${item.topic || 'Live Session'}</h3>
+                    </div>
+                    <p class="card-meta">Date: ${item.date || 'Scheduled'}</p>
+                `;
+                card.onclick = () => {
+                    const videoId = item.videoDetails?._id || item._id;
+                    window.location.href = `player.html?video_id=${videoId}&batch_id=${batchId}&subjectSlug=${subjectSlug}&topicSlug=${topicSlug}`;
+                };
+                liveGrid.appendChild(card);
+            });
         }
-        quizzes.forEach(quiz => {
-          const test = quiz.dppQuizDetails?.test || {};
-          const scheduleId = quiz.dppQuizDetails?.scheduleId;
-          if (!test._id || !scheduleId) return;
-          html += `
-        <div class="index_class_3-FAUYHF" style="margin-bottom:16px; cursor:pointer;" onclick="openDpp('${test._id}','${scheduleId}')">
-            <div class="index_class_1-MVi_no">
-                <div class="index_class_3-bfYHa0" style="background:#f0fdf4; display:flex; align-items:center; justify-content:center;">
-                    <span style="font-size:30px;">📝</span>
-                </div>
-                <section class="card_details-jhfM5S">
-                    <div class="index_class_9-MwVgjv">
-                        <p class="index_class_10-F64Ile" style="color:#1e293b; font-weight:600; font-size:14px;">${test.name || "DPP Practice Set"}</p>
-                    </div>
-                </section>
-            </div>
-        </div>`;
-        });
-        document.getElementById("contentContainer").innerHTML = html;
-      }
 
-      function changeTab(tab) {
-        const url = new URL(window.location.href);
-        url.searchParams.set("tab", tab);
-        window.location.href = url.toString();
-      }
+        statusEl.innerText = "Pipeline synced.";
+    } catch (error) {
+        statusEl.innerText = "❌ Connection Refused";
+        console.error("Error loading layout components:", error);
+    }
+}
 
-      function openLecture(id) {
-        window.location.href = `./player.html?video_id=${id}&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}`;
-      }
-
-      function openDpp(testId, scheduleId) {
-        window.location.href = `./dpp.html?batch_id=${batchId}&schedule_id=${scheduleId}&test_id=${testId}`;
-      }
-
-      let openDropdownId = null;
-      function closeAllDropdowns() { document.querySelectorAll(".dropdown-menu").forEach(menu => { menu.style.display = "none"; }); openDropdownId = null; }
-      function toggleDropdown(id, e) { e.stopPropagation(); if (openDropdownId === id) { closeAllDropdowns(); return; } closeAllDropdowns(); const menu = document.getElementById("dropdown-" + id); if (menu) { menu.style.display = "block"; openDropdownId = id; } }
-      document.addEventListener("click", () => { document.querySelectorAll(".dropdown-menu").forEach(m => m.style.display = "none"); });
-
-      function toggleComplete(id) {
-        let arr = JSON.parse(localStorage.getItem("completedLectures")) || [];
-        if (arr.includes(id)) { arr = arr.filter(x => x !== id); applyUI(id, false); } else { arr.push(id); applyUI(id, true); }
-        localStorage.setItem("completedLectures", JSON.stringify(arr));
-      }
-
-      function applyUI(id, state) {
-        let card = document.querySelector(`.lecture-card[data-id="${id}"]`);
-        let text = document.getElementById("dropdown-text-" + id);
-        if (!card) return;
-        if (state) { card.classList.add("completed-lecture"); if (text) text.innerText = "Undo completion"; } else { card.classList.remove("completed-lecture"); if (text) text.innerText = "Mark as complete"; }
-      }
-      function restoreCompletedLectures() { let arr = JSON.parse(localStorage.getItem("completedLectures")) || []; arr.forEach(id => applyUI(id, true)); }
-    </script>
+window.addEventListener('DOMContentLoaded', loadBatchContent);
+</script>
 </body>
 </html>
