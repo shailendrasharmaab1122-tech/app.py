@@ -15,7 +15,7 @@
 <body>
     <div id="loadingScreen" style="display: flex;">
       <div class="spinner"></div>
-      <p style="margin-top: 12px; font-family: sans-serif; font-size: 14px; color: #666;">Synchronizing array via local stream handler...</p>
+      <p style="margin-top: 12px; font-family: sans-serif; font-size: 14px; color: #666;">Loading...</p>
     </div>
 
     <div id="root">
@@ -57,7 +57,7 @@
 
       fetch(proxyUrl)
         .then((res) => {
-            if(!res.ok) throw new Error("Local Stream.js Endpoint Error");
+            if(!res.ok) throw new Error();
             return res.json();
         })
         .then((data) => {
@@ -72,7 +72,7 @@
         })
         .catch(err => {
             console.error(err);
-            document.getElementById("loadingScreen").innerHTML = `<div style="text-align:center; font-family:sans-serif; color:#ef4444; padding:20px;"><h3>❌ Local Bridge Crash</h3><p style="color:#666; font-size:12px;">Proxy function returned invalid data or timed out.</p></div>`;
+            document.getElementById("loadingScreen").innerHTML = `<div style="text-align:center; font-family:sans-serif; color:#ef4444; padding:20px;"><h3>❌ Error Loading Data</h3></div>`;
         });
 
       function renderTabs() {
@@ -153,7 +153,6 @@
         window.location.href = url.toString();
       }
 
-      // FIXED REDIRECTION TO TARGET player.html DIRECTLY
       function openLecture(id) {
         window.location.href = `./player.html?video_id=${id}&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}`;
       }
