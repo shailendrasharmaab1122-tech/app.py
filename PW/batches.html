@@ -5,21 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subjects - DevCoderZ</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-      body { background: #f8fafc; color: #0f172a; }
-    </style>
 </head>
-<body class="min-h-screen flex flex-col justify-center items-center bg-slate-50">
+<body class="bg-slate-50 min-h-screen flex flex-col">
 
-    <div id="loader" class="text-center space-y-4">
-        <div class="w-12 h-12 border-4 border-[#4f46e5] border-t-transparent rounded-full animate-spin mx-auto"></div>
-        <p class="text-xs text-slate-500 font-medium tracking-wide">Bypassing restrictions & decrypting subject vault...</p>
-    </div>
+    <nav class="h-16 bg-[#4f46e5] flex items-center justify-between px-6 shadow-md">
+        <button onclick="window.location.href='./index.html'" class="bg-white/20 hover:bg-white/30 text-white text-xs font-bold py-2 px-4 rounded-lg transition-all">
+            ← Home
+        </button>
+        <div class="text-xs text-white/90 bg-white/10 px-3 py-1.5 rounded-full border border-white/20 font-medium">
+            Subject Channel
+        </div>
+    </nav>
 
-    <form id="gatewayForm" method="GET" action="https://devcoderz.vercel.app/api/PW/all-batches-api2.js" class="hidden">
-        <input type="hidden" name="batch_id" id="formBatchId">
-    </form>
+    <main id="mainContainer" class="flex-1 p-4 max-w-6xl w-full mx-auto">
+        <div id="loader" class="text-center py-20 space-y-4">
+            <div class="w-10 h-10 border-4 border-[#4f46e5] border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <p class="text-xs text-slate-400 font-medium">Bypassing restrictions & decrypting subject vault...</p>
+        </div>
+    </main>
 
     <script>
         const params = new URLSearchParams(window.location.search);
@@ -27,16 +30,42 @@
 
         if (!bId) {
             window.location.href = "./index.html";
-        } else {
-            // Step 1: Form ke andar batch_id inject karo
-            document.getElementById('formBatchId').value = bId;
-
-            // Step 2: Form ko auto-submit karo direct endpoint par redirection bypass ke liye
-            // Agar API server HTML bhej raha hai, toh browser khud use bina kisi CORS error ke render karega
-            setTimeout(() => {
-                document.getElementById('gatewayForm').submit();
-            }, 300);
         }
+
+        async function renderDirectHTML() {
+            const container = document.getElementById('mainContainer');
+            const targetUrl = `https://devcoderz.vercel.app/api/PW/all-batches-api2.js?batch_id=${bId}`;
+
+            try {
+                // Bina kisi proxy ke seedha direct fetch hit karo
+                const res = await fetch(targetUrl);
+                
+                if (!res.ok) throw new Error("Server response error");
+                
+                // Response ko JSON nahi, sirf raw string/text mein uthao
+                const htmlText = await res.text();
+
+                if (!htmlText || htmlText.trim() === "") {
+                    container.innerHTML = `<div class="text-center text-slate-400 py-12 text-sm">⚠️ Backend sent an empty response room.</div>`;
+                    return;
+                }
+
+                // Poore container ka loader hatao aur direct server ka banaya HTML inject karo
+                container.innerHTML = htmlText;
+
+            } catch (err) {
+                console.error("Fetch layout crashed:", err);
+                container.innerHTML = `
+                    <div class="text-center py-12 max-w-md mx-auto space-y-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm mt-10">
+                        <div class="w-12 h-12 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto font-bold text-lg">❌</div>
+                        <h3 class="text-sm font-bold text-slate-800">CORS or Network Block</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Browser blocked the stream or the API is down. Check your browser console network tab.</p>
+                        <button onclick="window.location.reload()" class="bg-[#4f46e5] text-white text-xs font-bold py-2 px-6 rounded-xl">Retry Stream 🔄</button>
+                    </div>`;
+            }
+        }
+
+        if (bId) renderDirectHTML();
     </script>
 </body>
 </html>
