@@ -4,14 +4,25 @@
     <title id="pageTitle">The DevCoderz</title>
     <link href="https://www.pw.live/batches-new/index.BZrLlnYz.css" rel="stylesheet" type="text/css">
     <style>
-        body { background-color: #f8fafc; font-family: sans-serif; }
-        .brand-header { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); padding: 20px; text-align: center; color: white; box-shadow: 0 4px 20px rgba(0,0,0,0.15); border-bottom: 3px solid #22c55e; }
-        .brand-title { font-size: 24px; font-weight: 800; tracking: 1.5px; text-transform: uppercase; margin: 0; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-        .brand-subtitle { font-size: 11px; color: #a5b4fc; margin-top: 4px; letter-spacing: 2px; }
-        .completed-lecture { border: 2px solid #22c55e !important; border-radius: 12px; box-shadow: 0 0 10px rgba(34,197,94,0.2); }
-        .dropdown-item:hover { background: #f3f4f6; }
+        body { background-color: #f1f5f9; font-family: sans-serif; margin: 0; padding: 0; }
+        .brand-header { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); padding: 24px 16px; text-align: center; color: white; box-shadow: 0 4px 20px rgba(0,0,0,0.15); border-bottom: 4px solid #10b981; }
+        .brand-title { font-size: 26px; font-weight: 800; tracking: 2px; text-transform: uppercase; margin: 0; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.4); font-family: system-ui, -apple-system, sans-serif; }
+        .brand-subtitle { font-size: 11px; color: #34d399; margin-top: 6px; letter-spacing: 3px; font-weight: 600; }
+        
+        .custom-tabs-container { display: flex; gap: 8px; overflow-x: auto; padding: 12px 4px; margin-bottom: 16px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+        .custom-tabs-container::-webkit-scrollbar { display: none; }
+        
+        .tab-btn { background: #ffffff; color: #475569; border: 1px solid #e2e8f0; padding: 10px 18px; font-size: 13px; font-weight: 600; border-radius: 30px; white-space: nowrap; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .tab-btn.active-tab { background: #1e1b4b; color: #ffffff; border-color: #1e1b4b; box-shadow: 0 4px 10px rgba(30,27,75,0.25); }
+        
+        .main-wrapper { max-width: 800px; margin: auto; padding: 16px; }
+        .topic-header-title { color: #0f172a; font-size: 20px; font-weight: 700; margin: 8px 0 16px 4px; font-family: system-ui, sans-serif; border-left: 4px solid #1e1b4b; padding-left: 10px; }
+        
+        .completed-lecture { border: 2px solid #10b981 !important; border-radius: 12px; box-shadow: 0 0 12px rgba(16,185,129,0.15); }
+        .dropdown-item:hover { background: #f1f5f9; }
+        
         #loadingScreen { position: fixed; inset: 0; background: #fff; display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 99999; }
-        .spinner { width: 45px; height: 45px; border: 4px solid #e2e8f0; border-top: 4px solid #312e81; border-radius: 50%; animation: spin 1s linear infinite; }
+        .spinner { width: 45px; height: 45px; border: 4px solid #f1f5f9; border-top: 4px solid #1e1b4b; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
         * { user-select: auto !important; -webkit-user-select: auto !important; }
     </style>
@@ -19,7 +30,7 @@
 <body>
     <div id="loadingScreen" style="display: flex;">
       <div class="spinner"></div>
-      <p style="margin-top: 14px; font-weight: 600; color: #1e1b4b;">Fetching Secure Clusters...</p>
+      <p style="margin-top: 14px; font-weight: 600; color: #1e1b4b; font-family: sans-serif;">Loading Channels...</p>
     </div>
 
     <div class="brand-header">
@@ -27,26 +38,10 @@
         <div class="brand-subtitle">BYPASS ENGINE MULTI-STREAM</div>
     </div>
 
-    <div id="root">
-      <div class="wrapper-fOD1sd">
-        <div class="layout-rbPRWR" style="max-width: 1200px; margin: auto; padding: 10px;">
-          <section id="pw-container" class="pwContainer-oQpUPM">
-            <div class="index_class_1-FuYGeK">
-              <div class="wrapper-C0ts2n">
-                <div class="wrapper-R2wcqK undefined">
-                  <div class="wrapper-aukBDk">
-                    <div class="content_wrapper-rmMzBM">
-                      <h3 class="topic_name-E3X8eg" id="topicName" style="color:#1e1b4b; font-weight:700;">Topic</h3>
-                      <section class="index_class_1-CoB5Zo exam_tabs_mf_container-xQLnhO" id="tabsContainer" style="margin-bottom:20px; border-bottom:1px solid #e2e8f0;"></section>
-                      <div class="index_class_2-nA57WL" id="contentContainer"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
-      </div>
+    <div class="main-wrapper">
+        <h3 class="topic-header-title" id="topicName">Loading Topic...</h3>
+        <div class="custom-tabs-container" id="tabsContainer"></div>
+        <div class="index_class_2-nA57WL" id="contentContainer"></div>
     </div>
 
     <script>
@@ -57,7 +52,7 @@
       const activeTab = params.get("tab") || "videos";
 
       if (!batchId || !subjectId || !topicId) {
-        document.body.innerHTML = "<div style='padding:50px; text-align:center;'>Invalid Request Parameters</div>";
+        document.body.innerHTML = "<div style='padding:50px; text-align:center; font-family:sans-serif;'>Invalid Request Parameters</div>";
         throw new Error();
       }
 
@@ -75,14 +70,15 @@
           if (activeTab === "dppQuiz") renderQuizzes(data.dpp_quizzes || []);
         })
         .catch(err => {
-            document.getElementById("loadingScreen").innerHTML = `<div style="text-align:center; color:#ef4444; padding:20px;"><h3>❌ Security Tunnel Error</h3></div>`;
+            document.getElementById("loadingScreen").innerHTML = `<div style="text-align:center; color:#ef4444; padding:20px; font-family:sans-serif;"><h3>❌ Network Tunnel Error</h3></div>`;
         });
 
       function renderTabs() {
         const tabs = [["videos", "Lectures"], ["notes", "Notes"], ["dppQuiz", "DPP Quiz"], ["DppNotes", "DPP PDF"], ["DppVideos", "DPP Solutions"]];
         let html = "";
         tabs.forEach(t => {
-          html += `<button onclick="changeTab('${t[0]}')" class="index_class_2-xQMaV5 ${activeTab === t[0] ? "active-Wkjz3n" : ""}">${t[1]}</button>`;
+          const isActive = activeTab === t[0] ? "active-tab" : "";
+          html += `<button onclick="changeTab('${t[0]}')" class="tab-btn ${isActive}">${t[1]}</button>`;
         });
         document.getElementById("tabsContainer").innerHTML = html;
       }
@@ -90,7 +86,7 @@
       function renderLectures(lectures) {
         let html = "";
         if (lectures.length === 0) {
-            document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#64748b;'>No Lectures Online</div>";
+            document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#64748b; font-family:sans-serif;'>No Lectures Online</div>";
             return;
         }
         lectures.forEach(item => {
@@ -99,22 +95,22 @@
           if (!lectureId) return;
 
           html += `
-        <div class="index_class_3-FAUYHF lecture-card" data-id="${lectureId}" style="position:relative; margin-bottom:12px; cursor:pointer;" onclick="openLecture('${lectureId}')">
+        <div class="index_class_3-FAUYHF lecture-card" data-id="${lectureId}" style="position:relative; margin-bottom:16px; cursor:pointer;" onclick="openLecture('${lectureId}')">
         <div class="index_class_1-MVi_no">
         <div class="index_class_3-bfYHa0">
         <img src="${item.videoDetails?.image || "https://static.pw.live/react-batches/assets/study/blue-play-icon.svg"}" class="index_class_4-h3krT0">
         <img src="https://static.pw.live/react-batches/assets/study/blue-play-icon.svg" class="play-icon-WPnSAT">
         </div>
         <section class="card_details-jhfM5S">
-        <div class="index_class_5-jpm8N4"><div class="index_class_7-QWiBzJ"><img class="index_class_8-c71iDH" src="https://static.pw.live/react-batches/assets/study/clock.svg"><span>${item.videoDetails?.duration || "00:00"}</span></div></div>
-        <div class="index_class_9-MwVgjv"><p class="index_class_10-F64Ile" style="color:#1e293b; font-weight:600;">${item.topic || item.videoDetails?.name || "Untitled Lecture"}</p></div>
+        <div class="index_class_5-jpm8N4"><div class="index_class_7-QWiBzJ"><img class="index_class_8-c71iDH" src="https://static.pw.live/react-batches/assets/study/clock.svg"><span style="margin-left:4px;">${item.videoDetails?.duration || "00:00"}</span></div></div>
+        <div class="index_class_9-MwVgjv"><p class="index_class_10-F64Ile" style="color:#1e293b; font-weight:600; font-size:14px; line-height:1.4;">${item.topic || item.videoDetails?.name || "Untitled Lecture"}</p></div>
         <div class="index_class_12-Cq8EEY" onclick="event.stopPropagation();">
             <div class="dropdown-wrapper" style="position:relative;">
                 <div class="three-dot-btn" onclick="event.stopPropagation(); toggleDropdown('${lectureId}', event)">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="moreVerticalIcon-zDj749"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
                 </div>
-                <div class="dropdown-menu" id="dropdown-${lectureId}" style="display:none; position:absolute; right:0; top:28px; background:#fff; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.15); padding:8px 0; min-width:180px; z-index:1000;">
-                    <div onclick="event.stopPropagation(); toggleComplete('${lectureId}')" class="dropdown-item" style="padding:10px 14px; font-size:14px; color:#333;">
+                <div class="dropdown-menu" id="dropdown-${lectureId}" style="display:none; position:absolute; right:0; top:28px; background:#fff; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.15); padding:8px 0; min-width:160px; z-index:1000;">
+                    <div onclick="event.stopPropagation(); toggleComplete('${lectureId}')" class="dropdown-item" style="padding:10px 14px; font-size:14px; color:#333; font-family:sans-serif;">
                         <span id="dropdown-text-${lectureId}">Mark as complete</span>
                     </div>
                 </div>
@@ -131,20 +127,20 @@
       function renderNotes(lectures) {
         let html = "";
         if (lectures.length === 0) {
-            document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#64748b;'>No Material Available</div>";
+            document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#64748b; font-family:sans-serif;'>No Material Available</div>";
             return;
         }
         lectures.forEach(item => {
           if (!item || !item.download_url) return;
           html += `
-        <div class="index_class_3-FAUYHF" style="margin-bottom:12px; cursor:pointer;" onclick="window.open('${item.download_url}', '_blank')">
+        <div class="index_class_3-FAUYHF" style="margin-bottom:16px; cursor:pointer;" onclick="window.open('${item.download_url}', '_blank')">
             <div class="index_class_1-MVi_no">
                 <div class="index_class_3-bfYHa0" style="background:#fff1f2; display:flex; align-items:center; justify-content:center;">
                     <span style="font-size:30px;">📄</span>
                 </div>
                 <section class="card_details-jhfM5S">
                     <div class="index_class_9-MwVgjv">
-                        <p class="index_class_10-F64Ile" style="color:#1e293b; font-weight:600;">${item.title || "PDF Resource File"}</p>
+                        <p class="index_class_10-F64Ile" style="color:#1e293b; font-weight:600; font-size:14px;">${item.title || "PDF Resource File"}</p>
                     </div>
                 </section>
             </div>
@@ -156,7 +152,7 @@
       function renderQuizzes(quizzes) {
         let html = "";
         if (quizzes.length === 0) {
-            document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#64748b;'>No Quiz Modules Found</div>";
+            document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#64748b; font-family:sans-serif;'>No Quiz Modules Found</div>";
             return;
         }
         quizzes.forEach(quiz => {
@@ -164,14 +160,14 @@
           const scheduleId = quiz.dppQuizDetails?.scheduleId;
           if (!test._id || !scheduleId) return;
           html += `
-        <div class="index_class_3-FAUYHF" style="margin-bottom:12px; cursor:pointer;" onclick="openDpp('${test._id}','${scheduleId}')">
+        <div class="index_class_3-FAUYHF" style="margin-bottom:16px; cursor:pointer;" onclick="openDpp('${test._id}','${scheduleId}')">
             <div class="index_class_1-MVi_no">
                 <div class="index_class_3-bfYHa0" style="background:#f0fdf4; display:flex; align-items:center; justify-content:center;">
                     <span style="font-size:30px;">📝</span>
                 </div>
                 <section class="card_details-jhfM5S">
                     <div class="index_class_9-MwVgjv">
-                        <p class="index_class_10-F64Ile" style="color:#1e293b; font-weight:600;">${test.name || "DPP Practice Set"}</p>
+                        <p class="index_class_10-F64Ile" style="color:#1e293b; font-weight:600; font-size:14px;">${test.name || "DPP Practice Set"}</p>
                     </div>
                 </section>
             </div>
