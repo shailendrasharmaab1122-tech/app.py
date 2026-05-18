@@ -3,96 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Player - DevCoderZ</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/shaka-player.compiled.js"></script>
+    <title>Premium Video Streaming Player</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/shaka-player.compiled.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/controls.css">
+    <style>
+        body { background-color: #0f172a; color: white; font-family: sans-serif; }
+        .video-container { max-width: 900px; width: 100%; margin: auto; background: black; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        video { width: 100%; height: 100%; aspect-ratio: 16/9; }
+    </style>
 </head>
-<body class="bg-slate-900 min-h-screen flex flex-col text-white">
+<body class="min-h-screen flex flex-col justify-center items-center p-4">
 
-    <nav class="h-16 bg-[#4f46e5] flex items-center px-6 shadow-md">
-        <button onclick="history.back()" class="bg-white/20 hover:bg-white/30 text-white text-xs font-bold py-2 px-4 rounded-lg transition-all">
-            ← Back to Lectures
-        </button>
-    </nav>
+    <div class="w-full max-w-4xl flex items-center justify-between mb-4">
+        <button onclick="history.back()" class="bg-slate-800 hover:bg-slate-700 text-sm font-bold px-4 py-2 rounded-xl transition-all">← Back to Branch</button>
+        <span class="text-xs text-indigo-400 font-mono tracking-widest bg-indigo-950/50 px-3 py-1.5 rounded-lg border border-indigo-500/20">PREMIUM DECRYPT CHANNEL</span>
+    </div>
 
-    <main class="flex-1 max-w-4xl w-full mx-auto p-4 flex flex-col justify-center items-center">
-        <div class="w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border border-slate-800 relative">
-            <video id="videoPlayer" class="w-full h-full" controls autoplay></video>
+    <div class="video-container">
+        <div data-shaka-player-container style="width:100%; height:100%;">
+            <video data-shaka-player id="video" autoplay></video>
         </div>
-        
-        <div class="mt-4 w-full bg-slate-800/50 p-4 rounded-xl border border-slate-700/50 text-xs">
-            <p class="font-bold text-emerald-400">// Stream Matrix Diagnostics:</p>
-            <div id="playerLog" class="font-mono mt-1 text-slate-300">Initializing Core Engine...</div>
-        </div>
-    </main>
+    </div>
+
+    <div id="playerStatus" class="mt-4 text-center text-xs text-slate-400">
+        Initiating stream layers and extracting keys...
+    </div>
 
     <script>
-        const log = document.getElementById('playerLog');
-        
-        // Grab URL and tokens saved from lectures page
-        let streamUrl = localStorage.getItem('current_stream_url');
-        let keyId = localStorage.getItem('current_key_id');
-        let keyVal = localStorage.getItem('current_key_val');
+        async function initApp() {
+            // Install built-in polyfills to handle old device protocols
+            shaka.polyfil.installAll();
 
-        const params = new URLSearchParams(window.location.search);
-        const vId = params.get('video_id');
-
-        async function initPlayer() {
-            // Check if URL is blank. If yes, we try to guess their lecture-details API node
-            if (!streamUrl && vId) {
-                log.innerHTML = `⚠️ Main URL blank. Attempting to resolve token endpoint for ID: ${vId}...`;
-                
-                try {
-                    // Trying to hit their video details resolver via proxy
-                    const rawResolver = `https://eduvibe-pw-api.wasmer.app/get-video-details.php?video_id=${vId}`;
-                    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(rawResolver)}`;
-                    
-                    const res = await fetch(proxyUrl);
-                    const wrapper = await res.json();
-                    const details = JSON.parse(wrapper.contents);
-                    
-                    // Fallback to extract tokens dynamically if api match works
-                    streamUrl = details.url || details.videoUrl || details.videoDetails?.videoUrl;
-                    keyId = details.keyId || details.videoDetails?.findKey;
-                    
-                    log.innerHTML += `<br><span class="text-emerald-400">✅ Resolution Handshake Success.</span>`;
-                } catch(e) {
-                    log.innerHTML += `<br><span class="text-red-400">❌ Failed to automatically resolve stream url. Need videoplayerr.php source.</span>`;
-                }
-            }
-
-            if (!streamUrl) {
-                log.innerHTML += `<br><span class="text-red-500 font-bold">Critical: No stream target found.</span>`;
+            if (!shaka.Player.isBrowserSupported()) {
+                document.getElementById('playerStatus').innerText = 'Browser does not support core streaming elements.';
                 return;
             }
 
-            log.innerHTML += `<br>Loading manifest: ${streamUrl}`;
+            const params = new URLSearchParams(window.location.search);
+            const videoId = params.get('video_id');
+            const batchId = params.get('batch_id');
 
-            const video = document.getElementById('videoPlayer');
-            const player = new shaka.Player(video);
-
-            // If DRM Keys exist, configure clearKey licensing channel
-            if (keyId && keyVal) {
-                log.innerHTML += `<br>🔐 Injecting ClearKey Decryption Pair...`;
-                player.configure({
-                    drm: {
-                        clearKeys: {
-                            [keyId]: keyVal
-                        }
-                    }
-                });
+            if (!videoId) {
+                document.getElementById('playerStatus').innerText = 'Missing Video Target Parameters.';
+                return;
             }
 
+            const video = document.getElementById('video');
+            const ui = video['ui'];
+            const controls = ui ? ui.getControls() : null;
+            const player = ui ? ui.getPlayer() : new shaka.Player(video);
+
+            // Constructing internal fetch pipeline route targeting your api
+            const keyFetcherUrl = `/api/stream.js?video_id=${videoId}&batch_id=${batchId || ''}`;
+
             try {
-                await player.load(streamUrl);
-                log.innerHTML += `<br><span class="text-emerald-400 font-bold">🚀 Shaka Engine active. Pipeline playing smoothly.</span>`;
+                const response = await fetch(keyFetcherUrl);
+                const data = await response.json();
+
+                if (!data.success || !data.manifestUrl) {
+                    throw new Error("Unable to read streaming properties from api response");
+                }
+
+                document.getElementById('playerStatus').innerText = 'Keys injected. Handshaking manifest stream...';
+
+                // Configure DRM ClearKey Parameters if present inside object array
+                if (data.keyId && data.keyValue && data.keyId !== "auto-sync") {
+                    player.configure({
+                        drm: {
+                            clearKeys: {
+                                [data.keyId]: data.keyValue
+                            }
+                        }
+                    });
+                }
+
+                // Append stream source url structure safely
+                await player.load(data.manifestUrl);
+                document.getElementById('playerStatus').innerText = 'Streaming Stabilized. Playing...';
+
             } catch (error) {
-                console.error('Shaka error:', error);
-                log.innerHTML += `<br><span class="text-amber-400">Engine Exception: ${error.code} - Check DRM keys structure.</span>`;
+                console.error("Player Initialization Pipeline Failure:", error);
+                document.getElementById('playerStatus').innerText = 'Stream error or token authentication barrier hit.';
             }
         }
 
-        document.addEventListener('DOMContentLoaded', initPlayer);
+        document.addEventListener('shaka-ui-loaded', initApp);
+        // Fallback for browsers that process framework loading natively without events
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!window['shaka-ui-loaded-event-fired']) {
+                setTimeout(initApp, 1000);
+            }
+        });
     </script>
 </body>
 </html>
