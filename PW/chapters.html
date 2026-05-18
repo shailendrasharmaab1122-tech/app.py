@@ -53,57 +53,41 @@
             window.location.href = `./batches.html?batch_id=${bId}`;
         };
 
-        async function fetchChaptersFallback() {
+        async function loadChapters() {
             const container = document.getElementById('chaptersContainer');
             const statusText = document.getElementById('statusText');
             const pageTitle = document.getElementById('pageTitle');
 
-            // Strategy A: Phle target dynamic chapters script hit karte hain
-            let targetApi = `https://eduvibe-pw-api.wasmer.app/chapters.php?batch_id=${bId}&subject_id=${sId}`;
-            
-            try {
-                statusText.innerText = "Connecting master branch stream...";
-                let res = await fetch(targetApi);
-                let resData = await res.json();
+            // Hitting the verified operational endpoint pattern
+            const targetApi = `https://eduvibe-pw-api.wasmer.app/chapters.php?batch_id=${bId}&subject_id=${sId}`;
 
-                // Wasmer target response mapping array for 'topics' or 'chapters'
-                let chapters = resData.topics || resData.chapters || resData.data?.topics || resData.data || [];
+            try {
+                statusText.innerText = "Connecting secure channel stream...";
+                const res = await fetch(targetApi);
+                if (!res.ok) throw new Error("Network issue");
+
+                const resData = await res.json();
+
+                // Target extraction for 'topics' response format
+                let chapters = resData.topics || resData.chapters || resData.data?.topics || [];
 
                 if (resData.subject_name) {
                     pageTitle.innerText = resData.subject_name;
                 }
 
-                // Strategy B: Agar Strategy A blank screen (empty list) deti hai, toh batch endpoints se filter lagayenge
                 if (chapters.length === 0) {
-                    statusText.innerText = "Route A empty. Activating Matrix Filter Fallback...";
-                    
-                    const batchBackupApi = `https://devcoderz.vercel.app/api/PW/all-batches-api2.js?batch_id=${bId}`;
-                    const backupRes = await fetch(batchBackupApi);
-                    const backupData = await backupRes.json();
-
-                    let subjectsPool = backupData.subjects || backupData.data?.subjects || backupData || [];
-                    
-                    // Match current subject node out of the root batch configuration pool
-                    let currentSubject = subjectsPool.find(sub => (sub.subjectId || sub._id || sub.id || sub.subject_id) === sId);
-                    
-                    if (currentSubject) {
-                        chapters = currentSubject.chapters || currentSubject.topics || currentSubject.data || [];
-                        if (currentSubject.subject) pageTitle.innerText = currentSubject.subject;
-                    }
-                }
-
-                if (chapters.length === 0) {
-                    container.innerHTML = `<div class="text-center text-slate-400 py-12 text-sm">⚠️ No chapters listed under this subject repository node.</div>`;
-                    statusText.innerText = "Folder payload empty.";
+                    container.innerHTML = `<div class="text-center text-slate-400 py-12 text-sm">⚠️ No chapters found inside this channel slot.</div>`;
+                    statusText.innerText = "Empty topic folder.";
                     return;
                 }
 
                 statusText.innerText = "Chapters Decrypted Successfully.";
                 container.innerHTML = chapters.map(c => {
-                    // Mapping for both 'topicName' and 'chapterName' structures
-                    const chapterName = c.topicName || c.chapterName || c.chapter_name || c.name || c.title || "Premium Chapter Node";
-                    const chapterId = c.topicId || c.chapterId || c.chapter_id || c._id || c.id;
-                    const lecturesCount = c.lectureCount || c.lectures || c.lessons || 0;
+                    const chapterName = c.topicName || c.chapterName || c.name || "Premium Chapter Node";
+                    
+                    // Wasmer specific topic identity extraction 
+                    const chapterId = c.topicId || c.chapterId || c._id || c.id;
+                    const lecturesCount = c.lectureCount || c.lectures || 0;
 
                     return `
                     <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-150 cursor-pointer flex items-center justify-between group" onclick="openLectures('${chapterId}')">
@@ -112,7 +96,7 @@
                             <span class="text-sm font-bold text-slate-700 truncate group-hover:text-[#4f46e5] transition-colors">${chapterName}</span>
                         </div>
                         <div class="flex items-center gap-2 text-xs font-medium text-slate-400 shrink-0">
-                            <span>${lecturesCount} Videos</span>
+                            <span>Videos Available</span>
                             <span class="text-indigo-500 font-bold group-hover:translate-x-1 transition-transform">→</span>
                         </div>
                     </div>
@@ -120,16 +104,8 @@
                 }).join('');
 
             } catch (e) {
-                console.error("System structural block error:", e);
-                container.innerHTML = `
-                    <div class="text-center py-12 max-w-md mx-auto space-y-4">
-                        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
-                            <div class="w-12 h-12 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto font-bold text-lg mb-3">❌</div>
-                            <h3 class="text-sm font-bold text-slate-800">Decryption Error</h3>
-                            <p class="text-xs text-slate-400 mt-1 leading-relaxed">Failed to establish sync with the network cluster node.</p>
-                            <button onclick="window.location.reload()" class="mt-4 bg-[#4f46e5] text-white text-xs font-bold py-2 px-6 rounded-xl">Retry 🔄</button>
-                        </div>
-                    </div>`;
+                console.error(e);
+                container.innerHTML = `<div class="text-center text-red-500 py-12 text-sm">❌ Synchronization matrix failure. Check network log.</div>`;
             }
         }
 
@@ -137,7 +113,7 @@
             window.location.href = "./lectures.html?batch_id=" + bId + "&subject_id=" + sId + "&chapter_id=" + chapterId;
         }
 
-        if (bId && sId) fetchChaptersFallback();
+        if (bId && sId) loadChapters();
     </script>
 </body>
 </html>
