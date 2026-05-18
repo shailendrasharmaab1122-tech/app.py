@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Batches & Live Classes</title>
+    <title>Batches - Live Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
@@ -28,7 +28,6 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             padding: 20px;
-            min-height: 100vh;
         }
 
         .container {
@@ -43,17 +42,10 @@
         }
 
         header h1 {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
         }
 
-        header p {
-            color: var(--text-secondary);
-            font-size: 14px;
-            margin-top: 5px;
-        }
-
-        /* Grid Layout for Batch/Subject Cards */
         .batches-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -65,27 +57,25 @@
             border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 20px;
-            position: relative;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            transition: transform 0.2s ease, border-color 0.2s ease;
+            transition: transform 0.2s ease;
         }
 
         .batch-card:hover {
             transform: translateY(-2px);
-            border-color: #334155;
         }
 
-        /* Container specifically reserved above teacher's name */
+        /* Teacher ke name ke upar ka live option container */
         .live-status-container {
-            min-height: 26px; /* Prevents layout shifting when live badge shows up */
-            margin-bottom: 8px;
+            min-height: 26px; 
+            margin-bottom: 6px;
             display: flex;
             align-items: center;
         }
 
-        /* ================= LIVE BADGE STYLE ================= */
+        /* 🔴 LIVE BADGE STYLE */
         .live-badge {
             background: rgba(255, 59, 48, 0.15);
             color: var(--live-color);
@@ -114,14 +104,6 @@
             100% { transform: scale(1); opacity: 1; }
         }
 
-        /* Static/Recorded Class State placeholder */
-        .recorded-badge {
-            color: var(--text-secondary);
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        /* Details */
         .teacher-name {
             font-size: 16px;
             font-weight: 600;
@@ -133,10 +115,8 @@
             font-size: 14px;
             color: var(--text-secondary);
             margin-bottom: 15px;
-            line-height: 1.4;
         }
 
-        /* Watch / Join Button */
         .action-btn {
             width: 100%;
             padding: 10px;
@@ -150,19 +130,10 @@
             text-align: center;
             text-decoration: none;
             display: block;
-            transition: background 0.2s ease;
         }
 
-        .action-btn:hover {
-            background: #1d4ed8;
-        }
-
-        /* Live state design for the button */
         .action-btn.live-btn {
             background: var(--live-color);
-        }
-        .action-btn.live-btn:hover {
-            background: #e02e24;
         }
     </style>
 </head>
@@ -170,8 +141,7 @@
 
 <div class="container">
     <header>
-        <h1>My Dashboard</h1>
-        <p>Select a lecture to start studying</p>
+        <h1>My Batches</h1>
     </header>
 
     <div class="batches-grid" id="batchesContainer">
@@ -179,79 +149,68 @@
 </div>
 
 <script>
-    // 1. DATA: Aapka dynamic backend data ya API response yahan aayega
-    // Jis class me isLive: true hoga, wahan automatically Teachers ke upar Badge show ho jayega.
-    const lecturesData = [
-        {
-            id: "class_01",
-            teacherName: "Alakh Pandey Sir",
-            topic: "Physics: Kinematics - Lecture 04",
-            isLive: true, 
-            playerUrl: "player.html?id=6a0a03fe0c69de2d061ed0c6" // Aapka main player page
-        },
-        {
-            id: "class_02",
-            teacherName: "Dear Sir",
-            topic: "Mathematics: Matrices & Determinants",
-            isLive: false,
-            playerUrl: "player.html?id=recorded_math_02"
-        },
-        {
-            id: "class_03",
-            teacherName: "MSM Sir",
-            topic: "Chemistry: Chemical Bonding L-02",
-            isLive: true,
-            playerUrl: "player.html?id=6a0a03fe0c69de2d061ed0c6"
-        }
-    ];
+    // Eduvibe ya apne backend API ka URL yahan dalein
+    const API_URL = "YOUR_API_ENDPOINT_HERE"; 
 
-    // 2. RENDER LOGIC: JavaScript se components dynamically generate ho rhe hain
-    function renderBatches() {
-        const container = document.getElementById('batchesContainer');
-        container.innerHTML = ''; // purana content clear karne ke liye
+    async function loadBatches() {
+        try {
+            // Real API se data fetch karne ke liye (Abhi ke liye fallback lagaya h)
+            // const response = await fetch(API_URL);
+            // const lectures = await response.json();
+            
+            // Jaisa aapka response data structure hota h:
+            const lectures = [
+                {
+                    teacher: "Your Teacher Name",
+                    topic: "Subject & Topic Details",
+                    isLive: true, // Agar true hoga toh upar option aayega
+                    videoId: "6a0a03fe0c69de2d061ed0c6"
+                }
+            ];
 
-        lecturesData.forEach(lecture => {
-            // Card Structure Element
-            const card = document.createElement('div');
-            card.className = 'batch-card';
+            const container = document.getElementById('batchesContainer');
+            container.innerHTML = ''; 
 
-            // Top Status Area (Teachers Name Ke Theek Upar)
-            let liveStatusHtml = '';
-            let buttonClass = 'action-btn';
-            let buttonText = 'Watch Recorded';
+            lectures.forEach(lecture => {
+                const card = document.createElement('div');
+                card.className = 'batch-card';
 
-            if (lecture.isLive) {
-                // Agar class live h, toh live badge append karo
-                liveStatusHtml = `
-                    <div class="live-badge">
-                        <span class="pulse-dot"></span> LIVE CLASS
+                // Check condition: Agar live h toh badge add karo, varna empty chodo
+                let liveBadgeHtml = '';
+                let btnText = 'Watch Recorded';
+                let btnClass = 'action-btn';
+
+                if (lecture.isLive) {
+                    liveBadgeHtml = `
+                        <div class="live-badge">
+                            <span class="pulse-dot"></span> LIVE CLASS
+                        </div>
+                    `;
+                    btnText = 'Join Live Class';
+                    btnClass = 'action-btn live-btn';
+                }
+
+                card.innerHTML = `
+                    <div>
+                        <div class="live-status-container">
+                            ${liveBadgeHtml}
+                        </div>
+                        <div class="teacher-name">${lecture.teacher}</div>
+                        <div class="topic-title">${lecture.topic}</div>
                     </div>
+                    <a href="player.html?id=${lecture.videoId}" class="${btnClass}">${btnText}</a>
                 `;
-                buttonClass = 'action-btn live-btn';
-                buttonText = 'Join Live Class';
-            } else {
-                // Optional placeholder jab live na ho
-                liveStatusHtml = `<span class="recorded-badge">Recorded Class</span>`;
-            }
 
-            // Poora Card Data Framework
-            card.innerHTML = `
-                <div>
-                    <div class="live-status-container">
-                        ${liveStatusHtml}
-                    </div>
-                    <div class="teacher-name">${lecture.teacherName}</div>
-                    <div class="topic-title">${lecture.topic}</div>
-                </div>
-                <a href="${lecture.playerUrl}" class="${buttonClass}">${buttonText}</a>
-            `;
+                container.appendChild(card);
+            });
 
-            container.appendChild(card);
-        });
+        } catch (error) {
+            console.error("Error loading batches:", error);
+        }
     }
 
-    // Initialize rendering when window loads
-    window.onload = renderBatches;
+    // Page load hote hi data fetch karega
+    window.onload = loadBatches;
 </script>
 
 </body>
