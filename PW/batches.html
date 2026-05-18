@@ -1,8 +1,9 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subjects - DevCoderZ</title>
+    <title>Lectures - DevCoderZ</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
@@ -13,23 +14,21 @@
 <body class="min-h-screen flex flex-col pb-16">
 
     <nav class="h-16 bg-[#4f46e5] flex items-center justify-between px-6 shadow-md sticky top-0 z-50">
-        <button onclick="window.location.href='./index.html'" class="bg-white/20 hover:bg-white/30 text-white text-xs font-bold py-2 px-4 rounded-lg transition-all flex items-center gap-1">
-            ← Home
+        <button onclick="history.back()" class="bg-white/20 hover:bg-white/30 text-white text-xs font-bold py-2 px-4 rounded-lg transition-all flex items-center gap-1">
+            ← Back
         </button>
         <div class="text-xs text-white/90 bg-white/10 px-3 py-1.5 rounded-full border border-white/20 font-medium">
-            Batch Channels
+            Lectures Room
         </div>
     </nav>
 
-    <main class="flex-1 max-w-6xl w-full mx-auto p-4 md:p-6">
-        <div class="mb-6">
-            <h2 class="text-xl font-extrabold text-slate-800 tracking-tight">Select Subject Channel</h2>
-            <p class="text-xs text-slate-400">Access video archives by selecting a content branch stream.</p>
+    <main class="flex-1 max-w-5xl w-full mx-auto p-4 md:p-6">
+        <div id="loader" class="text-center py-20 flex flex-col items-center gap-3">
+            <div id="spinner" class="w-10 h-10 border-4 border-t-4 border-gray-200 border-t-[#4f46e5] rounded-full animate-spin"></div>
+            <p id="loaderText" class="text-xs text-slate-400 font-medium">Waking up master instance container stream...</p>
         </div>
 
-        <div id="subjectsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div class="bg-white p-5 border border-slate-200 rounded-2xl animate-pulse h-28 shadow-sm"></div>
-        </div>
+        <div id="lecContainer" class="space-y-4 hidden"></div>
     </main>
 
     <footer class="h-12 border-t border-slate-200 bg-white text-center text-xs text-slate-400 flex items-center justify-center gap-1 fixed bottom-0 inset-x-0 z-50 shadow-inner">
@@ -41,65 +40,133 @@
     <script>
         const params = new URLSearchParams(window.location.search);
         const bId = params.get('batch_id');
+        const sId = params.get('subject_id');
+        const tId = params.get('topic_id');
 
-        if (!bId) {
+        if (!tId || !bId) {
             window.location.href = "./index.html";
         }
 
-        async function loadSubjects() {
-            const container = document.getElementById('subjectsContainer');
+        const targetApi = `https://devcoderz.vercel.app/api/PW/all-batches-api2.js?batch_id=${bId}&subject_id=${sId}&topic_id=${tId}`;
+
+        const proxies = [
+            { name: "Direct API Link", url: targetApi, type: "direct" },
+            { name: "Global Proxy Bridge", url: `https://api.allorigins.win/get?url=${encodeURIComponent(targetApi)}`, type: "allorigins" },
+            { name: "Direct Fallback CDN", url: `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetApi)}`, type: "codetabs" }
+        ];
+
+        async function fetchWithFallback(index = 0) {
+            const container = document.getElementById('lecContainer');
+            const loader = document.getElementById('loader');
+            const loaderText = document.getElementById('loaderText');
+            const spinner = document.getElementById('spinner');
+
+            if (index >= proxies.length) {
+                spinner.classList.add('hidden');
+                loader.innerHTML = `
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 max-w-md mx-auto text-center space-y-4 shadow-sm">
+                        <div class="w-12 h-12 bg-amber-50 text-amber-500 rounded-full flex items-center justify-center mx-auto font-bold text-lg">⚠️</div>
+                        <div class="space-y-1">
+                            <h3 class="text-sm font-bold text-slate-800">Server Synchronization Down</h3>
+                            <p class="text-xs text-slate-400 leading-relaxed">The microservice layer failed to establish connection with core database endpoints.</p>
+                        </div>
+                        <div class="pt-2 flex gap-2 justify-center">
+                            <button onclick="window.location.reload()" class="bg-[#4f46e5] hover:bg-[#4338ca] text-white text-xs font-bold py-2.5 px-6 rounded-xl transition-all shadow-sm">
+                                Retry Connection 🔄
+                            </button>
+                        </div>
+                    </div>`;
+                return;
+            }
+
+            const currentProxy = proxies[index];
+            loaderText.innerText = `Routing through ${currentProxy.name}...`;
+
             try {
-                const res = await fetch(`https://devcoderz.vercel.app/api/PW/all-batches-api2.js?batch_id=${bId}`);
-                const data = await res.json();
+                const response = await fetch(currentProxy.url);
+                if (!response.ok) throw new Error("Status bad");
 
-                const subjects = data.subjects || data.data?.subjects || data.data || (Array.isArray(data) ? data : []);
+                let resData;
+                if (currentProxy.type === "allorigins") {
+                    const rawJson = await response.json();
+                    resData = JSON.parse(rawJson.contents);
+                } else {
+                    resData = await response.json();
+                }
 
-                if (subjects.length === 0) {
-                    container.innerHTML = `<div class="col-span-full text-center text-slate-400 py-12 text-sm">⚠️ No premium streaming feeds listed inside this channel matrix.</div>`;
+                let lectures = resData.lectures || resData.data?.lectures || resData.data || (Array.isArray(resData) ? resData : []);
+
+                if (lectures.length === 0) {
+                    loader.innerHTML = `<div class="text-center text-slate-400 py-12 text-sm">⚠️ No premium assets found under this node filter.</div>`;
                     return;
                 }
 
-                container.innerHTML = subjects.map(s => {
-                    const subjectName = s.name || s.subjectName || s.topic || s.title || "Premium Subject Channel";
-                    let facultyName = "Expert Mentor";
+                loader.classList.add('hidden');
+                container.classList.remove('hidden');
 
-                    if (s.faculties && Array.isArray(s.faculties) && s.faculties.length > 0) {
-                        facultyName = s.faculties.map(f => f.name || f.facultyName).filter(Boolean).join(', ');
-                    } else if (s.faculty && typeof s.faculty === 'object') {
-                        facultyName = s.faculty.name || facultyName;
-                    } else if (s.teacher || s.faculty || s.teacherName) {
-                        facultyName = s.teacher || s.faculty || s.teacherName;
+                window.premiumLecturesDb = {};
+
+                container.innerHTML = lectures.map(l => {
+                    const streamTitle = l.topic || l.name || l.title || "Premium Secure Lecture";
+                    const displayDate = l.date || l.createdAt?.split('T')[0] || 'Live Stream';
+                    const videoId = l._id || l.id || (l.videoDetails && l.videoDetails._id) || '';
+
+                    let streamUrl = l.url || l.videoUrl || l.streamUrl || (l.videoDetails && (l.videoDetails.url || l.videoDetails.videoUrl)) || '';
+                    let kId = l.keyId || l.key_id || (l.videoDetails && l.videoDetails.keyId) || '';
+                    let kVal = l.key || l.key_value || (l.videoDetails && l.videoDetails.key) || '';
+
+                    window.premiumLecturesDb[videoId] = { url: streamUrl, keyId: kId, key: kVal };
+
+                    let notesButtonHtml = '';
+                    let noteObj = null;
+
+                    if (l.notes && Array.isArray(l.notes) && l.notes.length > 0) {
+                        noteObj = l.notes[0];
+                    } else if (l.note && typeof l.note === 'object') {
+                        noteObj = l.note;
+                    } else if (l.attachment && typeof l.attachment === 'object') {
+                        noteObj = l.attachment;
+                    } else if (l.attachments && Array.isArray(l.attachments) && l.attachments.length > 0) {
+                        noteObj = l.attachments[0];
                     }
 
-                    const targetId = s._id || s.id || s.subject_id;
+                    const noteUrl = noteObj?.url || noteObj?.baseUrl || l.noteUrl || '';
+                    
+                    if (noteUrl) {
+                        notesButtonHtml = `<button onclick="window.open('${noteUrl}', '_blank')" class="bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all text-center whitespace-nowrap shadow-sm flex items-center gap-1">📄 Notes</button>`;
+                    }
 
                     return `
-                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all duration-150 cursor-pointer border-l-4 border-l-[#4f46e5] flex flex-col justify-between h-32 group" onclick="openChapters('${targetId}')">
-                        <div>
-                            <h3 class="text-sm font-bold text-slate-800 tracking-tight leading-snug group-hover:text-[#4f46e5] transition-colors truncate">${subjectName}</h3>
-                            <p class="text-[11px] text-slate-400 font-medium mt-1 truncate">Teacher: ${facultyName}</p>
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md border-l-4 border-l-[#4f46e5] flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all">
+                        <div class="space-y-1">
+                            <h3 class="text-sm font-bold text-slate-800 leading-snug">${streamTitle}</h3>
+                            <div class="text-[11px] font-medium text-slate-400">📅 Sync: ${displayDate}</div>
                         </div>
-                        <div class="flex items-center justify-between border-t border-slate-50 pt-3 mt-2 text-[11px] font-bold text-[#4f46e5]">
-                            <span>Enter Vault →</span>
+                        <div class="flex items-center gap-2 self-end sm:self-auto">
+                            ${notesButtonHtml}
+                            <button onclick="playVideo('${videoId}')" class="bg-[#4f46e5] hover:bg-[#4338ca] text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all text-center whitespace-nowrap shadow-sm">
+                                ▶ Watch Now
+                            </button>
                         </div>
-                    </div>
-                    `;
+                    </div>`;
                 }).join('');
-            } catch (e) {
-                console.error(e);
-                container.innerHTML = `<div class="col-span-full text-center text-red-500 font-medium text-sm py-12">❌ Core network connection drop. Verify cluster instance health.</div>`;
+
+            } catch (err) {
+                console.error(err);
+                fetchWithFallback(index + 1);
             }
         }
 
-        function openChapters(subjectId) {
-            if(!subjectId || subjectId === 'undefined') {
-                alert("Error: Subject Stream Mapping ID is empty.");
-                return;
-            }
-            window.location.href = `./chapters.html?batch_id=${bId}&subject_id=${subjectId}`;
+        function playVideo(vId) {
+            const videoData = window.premiumLecturesDb[vId];
+            localStorage.setItem('current_stream_url', videoData ? videoData.url : '');
+            localStorage.setItem('current_key_id', videoData ? videoData.keyId : '');
+            localStorage.setItem('current_key_val', videoData ? videoData.key : '');
+
+            window.location.href = `./player.html?video_id=${vId}&batch_id=${bId}&subject_id=${sId}&topic_id=${tId}`;
         }
 
-        if(bId) loadSubjects();
+        if(tId && bId) fetchWithFallback();
     </script>
 </body>
 </html>
