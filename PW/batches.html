@@ -375,7 +375,7 @@
         // Subject cards mapping redirected directly to chapter.html
         const card = `
         <div class="subject-card"
-          onclick='location.href="/PW/chapter.html?batch_id=${batchId}&subject_id=${sub._id}&subject_slug=${sub.slug || ''}&subject=${escapedSubject}"'>
+          onclick='location.href="/PW/chapters.html?batch_id=${batchId}&subject_id=${sub._id}&subject_slug=${sub.slug || ''}&subject=${escapedSubject}"'>
           <img src="${image}" alt="Subject Icon">
           <div class="subject-info">
             <div class="sub-title">${sub.subject || "Premium Content Module"}</div>
