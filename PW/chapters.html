@@ -14,9 +14,15 @@
 <body class="min-h-screen flex flex-col pb-16">
 
     <nav class="h-16 bg-[#4f46e5] flex items-center justify-between px-6 shadow-md sticky top-0 z-50">
-        <button id="backBtn" class="bg-white/20 hover:bg-white/30 text-white text-xs font-bold py-2 px-4 rounded-lg transition-all">
-            ← Back to Subjects
-        </button>
+        <div class="flex items-center gap-4">
+            <button id="backBtn" class="bg-white/20 hover:bg-white/30 text-white text-xs font-bold py-2 px-4 rounded-lg transition-all">
+                ← Back to Subjects
+            </button>
+            <div class="hidden sm:flex items-center gap-2">
+                <div class="h-9 w-9 bg-white rounded-lg flex items-center justify-center font-bold text-[#4f46e5]">TDC</div>
+                <span class="text-xl font-black tracking-tight text-white">The DevCoderZ</span>
+            </div>
+        </div>
         <div class="text-xs text-white/90 bg-white/10 px-3 py-1.5 rounded-full border border-white/20 font-medium">
             Chapter Vault Active
         </div>
@@ -58,8 +64,7 @@
             const statusText = document.getElementById('statusText');
             const pageTitle = document.getElementById('pageTitle');
 
-            // Hitting the verified operational endpoint pattern
-            const targetApi = `https://eduvibe-pw-api.wasmer.app/chapters.php?batch_id=${bId}&subject_id=${sId}`;
+            const targetApi = `https://devcoderz.vercel.app/api/PW/all-batches-api2.js/chapters.php?batch_id=${bId}&subject_id=${sId}`;
 
             try {
                 statusText.innerText = "Connecting secure channel stream...";
@@ -67,8 +72,6 @@
                 if (!res.ok) throw new Error("Network issue");
 
                 const resData = await res.json();
-
-                // Target extraction for 'topics' response format
                 let chapters = resData.topics || resData.chapters || resData.data?.topics || [];
 
                 if (resData.subject_name) {
@@ -84,10 +87,7 @@
                 statusText.innerText = "Chapters Decrypted Successfully.";
                 container.innerHTML = chapters.map(c => {
                     const chapterName = c.topicName || c.chapterName || c.name || "Premium Chapter Node";
-                    
-                    // Wasmer specific topic identity extraction 
                     const chapterId = c.topicId || c.chapterId || c._id || c.id;
-                    const lecturesCount = c.lectureCount || c.lectures || 0;
 
                     return `
                     <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-150 cursor-pointer flex items-center justify-between group" onclick="openLectures('${chapterId}')">
