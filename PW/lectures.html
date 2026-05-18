@@ -148,4 +148,38 @@
       }
 
       function changeTab(tab) {
-        const url = new URL(window.location.href
+        const url = new URL(window.location.href);
+        url.searchParams.set("tab", tab);
+        window.location.href = url.toString();
+      }
+
+      // FIXED REDIRECTION TO TARGET player.html DIRECTLY
+      function openLecture(id) {
+        window.location.href = `./player.html?video_id=${id}&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}`;
+      }
+
+      function openDpp(testId, scheduleId) {
+        window.location.href = `./dpp.html?batch_id=${batchId}&schedule_id=${scheduleId}&test_id=${testId}`;
+      }
+
+      let openDropdownId = null;
+      function closeAllDropdowns() { document.querySelectorAll(".dropdown-menu").forEach((menu) => { menu.style.display = "none"; }); openDropdownId = null; }
+      function toggleDropdown(id, e) { e.stopPropagation(); if (openDropdownId === id) { closeAllDropdowns(); return; } closeAllDropdowns(); const menu = document.getElementById("dropdown-" + id); if (menu) { menu.style.display = "block"; openDropdownId = id; } }
+      document.addEventListener("click", () => { document.querySelectorAll(".dropdown-menu").forEach((m) => (m.style.display = "none")); });
+
+      function toggleComplete(id) {
+        let arr = JSON.parse(localStorage.getItem("completedLectures")) || [];
+        if (arr.includes(id)) { arr = arr.filter((x) => x !== id); applyUI(id, false); } else { arr.push(id); applyUI(id, true); }
+        localStorage.setItem("completedLectures", JSON.stringify(arr));
+      }
+
+      function applyUI(id, state) {
+        let card = document.querySelector(`.lecture-card[data-id="${id}"]`);
+        let text = document.getElementById("dropdown-text-" + id);
+        if (!card) return;
+        if (state) { card.classList.add("completed-lecture"); if (text) text.innerText = "Undo completion"; } else { card.classList.remove("completed-lecture"); if (text) text.innerText = "Mark as complete"; }
+      }
+      function restoreCompletedLectures() { let arr = JSON.parse(localStorage.getItem("completedLectures")) || []; arr.forEach((id) => applyUI(id, true)); }
+    </script>
+</body>
+</html>
