@@ -3,212 +3,388 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">Lectures & Notes - DevCoderZ</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title id="pageTitle">Topic</title>
+
+    <link href="https://www.pw.live/batches-new/index.BZrLlnYz.css" rel="stylesheet" type="text/css">
+    <link id="pw-auth-web-sdk-style" rel="stylesheet" href="https://static.pw.live/web/sdk/auth/v1.1.64/pw-auth-web-sdk.style.css">
+    <link rel="stylesheet" type="text/css" href="/study-v2/static/css/async/185.8ace8ad6.css">
+    <link rel="stylesheet" type="text/css" href="/study-v2/static/css/async/47.42b6faaa.css">
+    <link href="https://pw-batches-mfe.pw.live/static/css/async/pw-package.01fd1956.css" rel="stylesheet" type="text/css">
+    <link href="https://pw-batches-mfe.pw.live/static/css/async/pw-tech-packages.813dc8f0.css" rel="stylesheet" type="text/css">
+    <link href="https://pw-batches-mfe.pw.live/static/css/async/452.5ab7b86a.css" rel="stylesheet" type="text/css">
+    <link href="https://pw-batches-mfe.pw.live/static/css/async/8974.5ef14210.css" rel="stylesheet" type="text/css">
+    <link href="https://pw-batches-mfe.pw.live/static/css/async/6659.57c9663f.css" rel="stylesheet" type="text/css">
+    <link href="https://pw-batches-mfe.pw.live/static/css/async/7679.6a392745.css" rel="stylesheet" type="text/css">
+    <link href="https://pw-batches-mfe.pw.live/static/css/async/5693.249e7439.css" rel="stylesheet" type="text/css">
+    <link href="https://pw-batches-mfe.pw.live/static/css/async/991.b618784a.css" rel="stylesheet" type="text/css">
+    <link href="https://pw-batches-mfe.pw.live/static/css/async/8164.1ef779d4.css" rel="stylesheet" type="text/css">
+    <link href="https://pw-batches-mfe.pw.live/static/css/async/8765.0426e8ab.css" rel="stylesheet" type="text/css">
+    <link href="https://pw-batches-mfe.pw.live/static/css/async/5202.b583f24e.css" rel="stylesheet" type="text/css">
+    <link href="https://pw-batches-mfe.pw.live/static/css/async/6872.ffe39eaf.css" rel="stylesheet" type="text/css">
+    <link href="https://pw-batches-mfe.pw.live/static/css/async/7161.8f71865f.css" rel="stylesheet" type="text/css">
+    <link href="https://pw-batches-mfe.pw.live/static/css/async/6876.79201b7c.css" rel="stylesheet" type="text/css">
+    <link href="https://pw-batches-mfe.pw.live/static/css/async/6797.77969eb3.css" rel="stylesheet" type="text/css">
+    <link href="https://pw-batches-mfe.pw.live/static/css/async/2036.e24bd4cf.css" rel="stylesheet" type="text/css">
+    <link href="https://pw-batches-mfe.pw.live/static/css/async/4603.7247e9be.css" rel="stylesheet" type="text/css">
+    <link href="https://pw-batches-mfe.pw.live/static/css/async/7923.f3d87fc8.css" rel="stylesheet" type="text/css">
+    <link href="https://pw-batches-mfe.pw.live/static/css/async/8902.0fca1556.css" rel="stylesheet" type="text/css">
+    <link href="https://pw-batches-mfe.pw.live/static/css/async/723.9e5f4773.css" rel="stylesheet" type="text/css">
+    <link href="https://pw-learn-to-earn-mfe.pw.live/static/css/async/__federation_expose_Learn2Earn.150f6681.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="https://pw-learn-to-earn-mfe.pw.live/static/css/async/397.cd5f4749.css">
+    <link rel="stylesheet" type="text/css" href="https://test-series-mf.pw.live/_next/static/chunks/../../static/css/02534381fb3cf900.css">
+    <link rel="stylesheet" type="text/css" href="https://test-series-mf.pw.live/_next/static/chunks/../../static/css/8de4268ed3f2a50c.css">
+    <link rel="stylesheet" type="text/css" href="https://pw-batches-mfe.pw.live/static/css/async/1800.e8765dc1.css">
+    <link rel="stylesheet" type="text/css" href="https://pw-batches-mfe.pw.live/static/css/async/3130.30ec8bab.css">
+
     <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-      body { background: #f8fafc; color: #0f172a; }
-      .glow-text { text-shadow: 0 0 8px rgba(239,68,68,0.3); }
+      .completed-lecture {
+        border: 2px solid #22c55e !important;
+        border-radius: 12px;
+      }
+      .dropdown-item:hover {
+        background: #f3f4f6;
+      }
+      #loadingScreen {
+        position: fixed;
+        inset: 0;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        z-index: 99999;
+      }
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #ddd;
+        border-top: 4px solid #22c55e;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin { 100% { transform: rotate(360deg); } }
+      * { user-select: auto !important; -webkit-user-select: auto !important; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col pb-16">
 
-    <nav class="h-16 bg-[#4f46e5] flex items-center justify-between px-6 shadow-md sticky top-0 z-50">
-        <button id="backBtn" class="bg-white/20 hover:bg-white/30 text-white text-xs font-bold py-2 px-4 rounded-lg transition-all flex items-center gap-1">
-            ← Back
-        </button>
-        <div id="tabsContainer" class="flex bg-white/10 p-1 rounded-xl border border-white/20 gap-1"></div>
-    </nav>
+  <body>
+    <div id="loadingScreen" style="display: flex;">
+      <div class="spinner"></div>
+      <p style="margin-top: 12px; font-family: sans-serif; font-size: 14px; color: #666;">Loading content loop via proxy tunnel...</p>
+    </div>
 
-    <main class="flex-1 max-w-5xl w-full mx-auto p-4 md:p-6">
-        <div class="mb-6">
-            <h2 id="topicName" class="text-xl font-extrabold text-slate-800 tracking-tight">Syncing Module Array...</h2>
-            <p id="statusText" class="text-xs text-slate-400">Pulling raw stream layers via page.gd bypass channel...</p>
+    <div id="root">
+      <div class="wrapper-fOD1sd">
+        <div class="layout-rbPRWR">
+          <section id="pw-container" class="pwContainer-oQpUPM">
+            <div class="index_class_1-FuYGeK">
+              <div class="wrapper-C0ts2n">
+                <div class="wrapper-R2wcqK undefined">
+                  <div class="wrapper-aukBDk">
+                    <div class="content_wrapper-rmMzBM">
+                      <h3 class="topic_name-E3X8eg" id="topicName">Topic</h3>
+
+                      <section class="index_class_1-CoB5Zo exam_tabs_mf_container-xQLnhO" id="tabsContainer"></section>
+
+                      <div class="index_class_2-nA57WL" id="contentContainer"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
-
-        <div id="loader" class="text-center py-20 flex flex-col items-center gap-3">
-            <div class="w-10 h-10 border-4 border-t-4 border-gray-200 border-t-[#4f46e5] rounded-full animate-spin"></div>
-            <p class="text-xs text-slate-400 font-medium">Connecting to Eduvibe backup domain. Fetching list...</p>
-        </div>
-
-        <div id="contentContainer" class="space-y-4 hidden"></div>
-    </main>
-
-    <footer class="h-12 border-t border-slate-200 bg-white text-center text-xs text-slate-400 flex items-center justify-center gap-1 fixed bottom-0 inset-x-0 z-50 shadow-inner">
-        <span>© 2026 The DevCoderz. All Rights Reserved.</span>
-        <span>•</span>
-        <span>Developed by <span class="text-red-500 font-bold tracking-wide glow-text">Devansh Sharma</span></span>
-    </footer>
+      </div>
+    </div>
 
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const bId = params.get('batch_id');
-        const sId = params.get('subject_id');
-        const cId = params.get('chapter_id') || params.get('topic_id');
-        const activeTab = params.get('tab') || 'videos';
+      const params = new URLSearchParams(window.location.search);
 
-        if (!bId || !sId || !cId) {
-            window.location.href = "./index.html";
+      const batchId = params.get("batch_id");
+      const subjectId = params.get("subject_id");
+      const topicId = params.get("chapter_id") || params.get("topic_id"); // Fallback for safety
+      const activeTab = params.get("tab") || "videos";
+
+      if (!batchId || !subjectId || !topicId) {
+        document.body.innerHTML = "<div style='padding:50px; text-align:center; font-family:sans-serif;'>Invalid Request Parameters</div>";
+        throw new Error("Missing Params");
+      }
+
+      const apiUrl = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}&tab=${activeTab}`;
+      
+      // AllOrigins RAW Endpoint Pipeline to smash CORS restrictions completely
+      const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(apiUrl)}`;
+
+      fetch(proxyUrl)
+        .then((res) => {
+            if(!res.ok) throw new Error("CORS Handshake Fail");
+            return res.json();
+        })
+        .then((data) => {
+          document.getElementById("loadingScreen").style.display = "none";
+
+          document.getElementById("topicName").innerText = data.topic_name || "Topic";
+          document.getElementById("pageTitle").innerText = data.topic_name || "Topic";
+
+          renderTabs();
+
+          if (activeTab === "videos" || activeTab === "DppVideos") {
+            renderLectures(data.lectures || []);
+          }
+
+          if (activeTab === "notes" || activeTab === "DppNotes") {
+            renderNotes(data.lectures || []);
+          }
+
+          if (activeTab === "dppQuiz") {
+            renderQuizzes(data.dpp_quizzes || []);
+          }
+        })
+        .catch(err => {
+            console.error(err);
+            document.getElementById("loadingScreen").innerHTML = `
+                <div style="text-align:center; font-family:sans-serif; color:#ef4444; padding:20px;">
+                    <h3>❌ Gateway Error</h3>
+                    <p style="color:#666; font-size:12px;">Failed to tunnel array response from Wasmer master node.</p>
+                </div>
+            `;
+        });
+
+      // ================= TABS (FULL ORIGINAL CLASS STYLE) =================
+      function renderTabs() {
+        const tabs = [
+          ["videos", "Lectures"],
+          ["notes", "Notes"],
+          ["dppQuiz", "DPP Quiz"],
+          ["DppNotes", "DPP PDF"],
+          ["DppVideos", "DPP Solutions"],
+        ];
+
+        let html = "";
+        tabs.forEach((t) => {
+          html += `
+        <button onclick="changeTab('${t[0]}')"
+        class="index_class_2-xQMaV5 ${activeTab === t[0] ? "active-Wkjz3n" : ""}">
+            ${t[1]}
+        </button>`;
+        });
+
+        document.getElementById("tabsContainer").innerHTML = html;
+      }
+
+      // ================= LECTURES (100% SAME STRUCTURE) =================
+      function renderLectures(lectures) {
+        let html = "";
+        if (lectures.length === 0) {
+            document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#999; font-family:sans-serif;'>No Lectures Available</div>";
+            return;
         }
 
-        document.getElementById('backBtn').onclick = () => {
-            window.location.href = `./chapters.html?batch_id=${bId}&subject_id=${sId}`;
-        };
+        lectures.forEach((item) => {
+          if (!item) return;
+          const lectureId = item._id || (item.videoDetails && item.videoDetails._id);
+          if (!lectureId) return;
 
-        function renderTabs() {
-            const tabs = [
-                ["videos", "Lectures"],
-                ["notes", "Notes"],
-                ["dppQuiz", "DPP Quiz"],
-                ["DppNotes", "DPP PDF"],
-                ["DppVideos", "DPP Solutions"]
-            ];
-            document.getElementById('tabsContainer').innerHTML = tabs.map(t => {
-                const isActive = activeTab === t[0];
-                return `<button onclick="changeTab('${t[0]}')" class="text-xs font-bold px-3 py-1.5 rounded-lg transition-all ${isActive ? 'bg-white text-[#4f46e5]' : 'text-white hover:bg-white/10'}">${t[1]}</button>`;
-            }).join('');
+          html += `
+        <div class="index_class_3-FAUYHF lecture-card"
+             data-id="${lectureId}"
+             style="position:relative;"
+             onclick="openLecture('${lectureId}')">
+
+        <div class="index_class_1-MVi_no">
+
+        <div class="index_class_3-bfYHa0">
+
+        <img src="${item.videoDetails?.image || "https://static.pw.live/react-batches/assets/study/blue-play-icon.svg"}"
+             class="index_class_4-h3krT0">
+
+        <img src="https://static.pw.live/react-batches/assets/study/blue-play-icon.svg"
+             class="play-icon-WPnSAT">
+
+        </div>
+
+        <section class="card_details-jhfM5S">
+
+        <div class="index_class_5-jpm8N4">
+
+        <div class="index_class_7-QWiBzJ">
+
+        <img class="index_class_8-c71iDH"
+        src="https://static.pw.live/react-batches/assets/study/clock.svg">
+
+        <span>${item.videoDetails?.duration || "00:00"}</span>
+
+        </div>
+        </div>
+
+        <div class="index_class_9-MwVgjv">
+        <p class="index_class_10-F64Ile">
+        ${item.topic || item.videoDetails?.name || "Untitled Lecture"}
+        </p>
+        </div>
+
+        <div class="index_class_12-Cq8EEY" onclick="event.stopPropagation();">
+            <div class="dropdown-wrapper" style="position:relative;">
+                <div class="three-dot-btn"
+                     onclick="event.stopPropagation(); toggleDropdown('${lectureId}', event)"
+                     style="cursor:pointer;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis-vertical moreVerticalIcon-zDj749">
+                        <circle cx="12" cy="12" r="1"></circle>
+                        <circle cx="12" cy="5" r="1"></circle>
+                        <circle cx="12" cy="19" r="1"></circle>
+                    </svg>
+                </div>
+                <div class="dropdown-menu" id="dropdown-${lectureId}" style="display:none; position:absolute; right:0; top:28px; background:#fff; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.15); padding:8px 0; min-width:180px; z-index:1000;">
+                    <div onclick="event.stopPropagation(); toggleComplete('${lectureId}')" class="dropdown-item" style="padding:10px 14px; cursor:pointer; font-size:14px; color:#333; font-family:sans-serif;">
+                        <span id="dropdown-text-${lectureId}">Mark as complete</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="index_class_12-Cq8EEY"></div>
+
+        </section>
+        </div>
+        </div>`;
+        });
+
+        document.getElementById("contentContainer").innerHTML = html;
+        restoreCompletedLectures();
+      }
+
+      // ================= NOTES (UNCHANGED STRUCTURE) =================
+      function renderNotes(lectures) {
+        let html = "";
+        if (lectures.length === 0) {
+            document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#999; font-family:sans-serif;'>No Notes Available</div>";
+            return;
         }
 
-        window.premiumLecturesDb = {};
+        lectures.forEach((item) => {
+          if (!item || !item.download_url) return;
 
-        function fetchContentCluster() {
-            const container = document.getElementById('contentContainer');
-            const loader = document.getElementById('loader');
-            const topicNameText = document.getElementById('topicName');
-            const pageTitle = document.getElementById('pageTitle');
-            const statusText = document.getElementById('statusText');
+          html += `
+        <div class="index_class_3-FAUYHF"
+             onclick="window.open('${item.download_url}', '_blank')">
+            <div class="index_class_1-MVi_no">
+                <section class="card_details-jhfM5S">
+                    <div class="index_class_9-MwVgjv">
+                        <p class="index_class_10-F64Ile">
+                            📄 ${item.title || "PDF Notes"}
+                        </p>
+                    </div>
+                </section>
+            </div>
+        </div>`;
+        });
 
-            // EXACT KAL WALI REAL API NODE (page.gd)
-            const rawApiUrl = `https://eduvibe.page.gd/get-lectures.php?batch_id=${bId}&subject_id=${sId}&topic_id=${cId}&tab=${activeTab}`;
-            
-            // AllOrigins RAW tunnel sequence
-            const proxyApiUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(rawApiUrl)}`;
+        document.getElementById("contentContainer").innerHTML = html;
+      }
 
-            fetch(proxyApiUrl)
-                .then(res => {
-                    if (!res.ok) throw new Error("Network pipeline error");
-                    return res.json();
-                })
-                .then(data => {
-                    loader.classList.add('hidden');
-                    container.classList.remove('hidden');
-
-                    topicNameText.innerText = data.topic_name || "Topic Repository Node";
-                    pageTitle.innerText = data.topic_name || "Premium Portal";
-                    statusText.innerText = `Raw JSON packet synchronized from page.gd.`;
-
-                    renderTabs();
-
-                    // 1. VIDEOS OR DPP SOLUTIONS
-                    if (activeTab === "videos" || activeTab === "DppVideos") {
-                        let lectures = data.lectures || [];
-                        if (lectures.length === 0) {
-                            container.innerHTML = `<div class="text-center text-slate-400 py-12 text-sm">⚠️ No premium streaming feeds listed under this branch channel.</div>`;
-                            return;
-                        }
-
-                        container.innerHTML = lectures.map(item => {
-                            if (!item) return '';
-                            const id = item._id || item.id || (item.videoDetails && item.videoDetails._id);
-                            if (!id) return '';
-
-                            const title = item.topic || (item.videoDetails && item.videoDetails.name) || "Premium Secure Stream";
-                            const duration = (item.videoDetails && item.videoDetails.duration) || "00:00";
-                            const thumbnail = (item.videoDetails && item.videoDetails.image) || "https://static.pw.live/react-batches/assets/study/blue-play-icon.svg";
-
-                            let streamUrl = item.url || (item.videoDetails && item.videoDetails.videoUrl) || (item.videoDetails && item.videoDetails.hls_url) || '';
-                            let findKey = (item.videoDetails && item.videoDetails.findKey) || '';
-
-                            window.premiumLecturesDb[id] = { url: streamUrl, keyId: findKey };
-
-                            return `
-                            <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-l-4 border-l-[#4f46e5]">
-                                <div class="flex items-center gap-4 truncate flex-1">
-                                    <img src="${thumbnail}" class="w-16 h-10 object-cover rounded-lg border border-slate-100 hidden sm:block">
-                                    <div class="space-y-1 truncate">
-                                        <h3 class="text-sm font-bold text-slate-800 truncate" title="${title}">${title}</h3>
-                                        <div class="text-[11px] font-medium text-slate-400">⏱️ Duration: ${duration}</div>
-                                    </div>
-                                </div>
-                                <button onclick="playVideo('${id}')" class="bg-[#4f46e5] hover:bg-[#4338ca] text-white text-xs font-bold px-4 py-2 rounded-xl transition-all whitespace-nowrap shadow-sm">▶ Watch Now</button>
-                            </div>`;
-                        }).join('');
-                    }
-
-                    // 2. NOTES OR DPP PDF
-                    else if (activeTab === "notes" || activeTab === "DppNotes") {
-                        let notes = data.lectures || [];
-                        if (notes.length === 0) {
-                            container.innerHTML = `<div class="text-center text-slate-400 py-12 text-sm">⚠️ No reference notes or PDF documents available here.</div>`;
-                            return;
-                        }
-
-                        container.innerHTML = notes.map(item => {
-                            if (!item || !item.download_url) return '';
-                            return `
-                            <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm border-l-4 border-l-emerald-500 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                                <div class="space-y-1 truncate flex-1">
-                                    <h3 class="text-sm font-bold text-slate-800 truncate" title="${item.title}">📄 ${item.title || "Notes Document"}</h3>
-                                    <p class="text-[11px] text-slate-400">PDF Document Vault Resource</p>
-                                </div>
-                                <button onclick="window.open('${item.download_url}', '_blank')" class="bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-sm">📄 Open PDF</button>
-                            </div>`;
-                        }).join('');
-                    }
-
-                    // 3. DPP INTERACTIVE QUIZZES
-                    else if (activeTab === "dppQuiz") {
-                        let quizzes = data.dpp_quizzes || [];
-                        if (quizzes.length === 0) {
-                            container.innerHTML = `<div class="text-center text-slate-400 py-12 text-sm">⚠️ No interactive quiz sets configured for this topic.</div>`;
-                            return;
-                        }
-
-                        container.innerHTML = quizzes.map(quiz => {
-                            const test = quiz.dppQuizDetails?.test || {};
-                            const scheduleId = quiz.dppQuizDetails?.scheduleId;
-                            if (!test._id || !scheduleId) return '';
-                            return `
-                            <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm border-l-4 border-l-amber-500 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                                <div class="space-y-1 truncate flex-1">
-                                    <h3 class="text-sm font-bold text-slate-800 truncate" title="${test.name}">📝 ${test.name || "CBT Quiz"}</h3>
-                                    <p class="text-[11px] text-slate-400">Online Computer Based Test</p>
-                                </div>
-                                <button onclick="openDpp('${test._id}', '${scheduleId}')" class="bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-sm">📝 Start Quiz</button>
-                            </div>`;
-                        }).join('');
-                    }
-                })
-                .catch(err => {
-                    console.error(err);
-                    loader.innerHTML = `
-                    <div class="bg-white border border-slate-200 rounded-2xl p-6 max-w-md mx-auto text-center space-y-4 shadow-sm">
-                        <div class="w-12 h-12 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto font-bold text-lg">❌</div>
-                        <h3 class="text-sm font-bold text-slate-800">Operational Gateway Break</h3>
-                        <p class="text-xs text-slate-400 leading-relaxed">Could not read response parameters from page.gd node.</p>
-                        <button onclick="window.location.reload()" class="w-full bg-[#4f46e5] text-white text-xs font-bold py-2.5 rounded-xl">Refresh & Reconnect 🔄</button>
-                    </div>`;
-                });
+      // ================= QUIZ (UNCHANGED STRUCTURE) =================
+      function renderQuizzes(quizzes) {
+        let html = "";
+        if (quizzes.length === 0) {
+            document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#999; font-family:sans-serif;'>No Quizzes Available</div>";
+            return;
         }
 
-        function changeTab(tab) {
-            const url = new URL(window.location.href);
-            url.searchParams.set("tab", tab);
-            window.location.href = url.toString();
-        }
+        quizzes.forEach((quiz) => {
+          const test = quiz.dppQuizDetails?.test || {};
+          const scheduleId = quiz.dppQuizDetails?.scheduleId;
 
-        function playVideo(id) {
-            const videoData = window.premiumLecturesDb[id];
-            localStorage.setItem('current_stream_url', videoData ? videoData.url : '');
-            localStorage.setItem('current_key_id', videoData ? videoData.keyId : '');
-            window.location.href = `./player.html?video_id=${id}&batch_id=${bId}&subject_id=${sId}&topic_id=${cId}`;
-        }
+          if (!test._id || !scheduleId) return;
 
-        function openDpp(testId, scheduleId) {
-            window.location.href = `./dpp.html?batch_id=${bId}&schedule_id=${scheduleId}&test_id=${testId}`;
-        }
+          html += `
+        <div class="index_class_3-FAUYHF"
+             onclick="openDpp('${test._id}','${scheduleId}')">
+            <div class="index_class_1-MVi_no">
+                <section class="card_details-jhfM5S">
+                    <div class="index_class_9-MwVgjv">
+                        <p class="index_class_10-F64Ile">
+                            📝 ${test.name || "DPP Quiz"}
+                        </p>
+                    </div>
+                </section>
+            </div>
+        </div>`;
+        });
 
-        if (bId && cId) fetchContentCluster();
+        document.getElementById("contentContainer").innerHTML = html;
+      }
+
+      // ================= NAVIGATION LOGIC =================
+      function changeTab(tab) {
+        const url = new URL(window.location.href);
+        url.searchParams.set("tab", tab);
+        window.location.href = url.toString();
+      }
+
+      function openLecture(id) {
+        window.location.href = `/videoplayerr.php?video_id=${id}&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}`;
+      }
+
+      function openDpp(testId, scheduleId) {
+        window.location.href = `/dpp.php?batch_id=${batchId}&schedule_id=${scheduleId}&test_id=${testId}`;
+      }
+
+      let openDropdownId = null;
+      function closeAllDropdowns() {
+        document.querySelectorAll(".dropdown-menu").forEach((menu) => {
+          menu.style.display = "none";
+        });
+        openDropdownId = null;
+      }
+
+      function toggleDropdown(id, e) {
+        e.stopPropagation();
+        if (openDropdownId === id) {
+          closeAllDropdowns();
+          return;
+        }
+        closeAllDropdowns();
+
+        const menu = document.getElementById("dropdown-" + id);
+        if (menu) {
+          menu.style.display = "block";
+          openDropdownId = id;
+        }
+      }
+
+      document.addEventListener("click", () => {
+        document.querySelectorAll(".dropdown-menu").forEach((m) => (m.style.display = "none"));
+      });
+
+      function toggleComplete(id) {
+        let arr = JSON.parse(localStorage.getItem("completedLectures")) || [];
+        if (arr.includes(id)) {
+          arr = arr.filter((x) => x !== id);
+          applyUI(id, false);
+        } else {
+          arr.push(id);
+          applyUI(id, true);
+        }
+        localStorage.setItem("completedLectures", JSON.stringify(arr));
+      }
+
+      function applyUI(id, state) {
+        let card = document.querySelector(`.lecture-card[data-id="${id}"]`);
+        let text = document.getElementById("dropdown-text-" + id);
+        if (!card) return;
+
+        if (state) {
+          card.classList.add("completed-lecture");
+          if (text) text.innerText = "Undo completion";
+        } else {
+          card.classList.remove("completed-lecture");
+          if (text) text.innerText = "Mark as complete";
+        }
+      }
+
+      function restoreCompletedLectures() {
+        let arr = JSON.parse(localStorage.getItem("completedLectures")) || [];
+        arr.forEach((id) => applyUI(id, true));
+      }
     </script>
-</body>
+  </body>
 </html>
