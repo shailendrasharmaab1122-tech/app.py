@@ -1,124 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Secure Premium Player - DevCoderz</title>
-
-<link rel="stylesheet" href="https://gray-madelina-19.tiiny.site/ogx.css">
-<link rel="stylesheet" href="https://gray-madelina-19.tiiny.site/plyrx55.css">
-
-<style>
-  body { margin:0; background:#000; overflow: hidden; font-family: sans-serif; }
-  .video-container { width:100%; height:100vh; position:relative; background:#000; }
-  video { width:100%; height:100vh; object-fit: contain; }
-  
-  .top-brand {
-    position: absolute; top: 15px; left: 15px; z-index: 999; pointer-events: none;
-    background: rgba(0, 0, 0, 0.6); padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(255, 152, 0, 0.3);
-  }
-  .top-brand .jsr { color: #ff9800; font-weight: 700; font-size: 11px; margin-right: 6px; }
-  .top-brand .dev { font-size: 11px; font-weight: 600; color: #00e5ff; }
-
-  .overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.98); display: flex; align-items: center; justify-content: center; z-index: 200000 !important; }
-  .box { width: 320px; padding: 26px; border-radius: 22px; text-align: center; background: linear-gradient(135deg, #1e3c72, #2a5298); color: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); }
-  .tg-btn { display: block; margin-top: 14px; padding: 14px; border-radius: 28px; font-weight: 700; width: 100%; cursor: pointer; text-align: center; text-decoration: none; color: #fff; font-size: 14px; border: none;}
-  .join { background: #fff; color: #1e3c72; }
-  .continue { background: #ff9800; color: #fff; margin-top: 15px; }
-  .loading-text { font-size: 14px; color: #ff9800; margin-top: 10px; display: none; font-weight: bold;}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Player - DevCoderZ</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/shaka-player.compiled.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-slate-900 min-h-screen flex flex-col text-white">
 
-<div class="overlay" id="tgPopup">
- <div class="box">
-  <h2>🚩 Jai Shree Ram 🚩</h2>
-  <p style="font-size:12px; color:rgba(255,255,255,0.8); line-height: 1.4;">Lectures ko bina kisi cookie error ke dekhne ke liye join karke Continue karein.</p>
-  <a class="tg-btn join" href="https://t.me/+JXdxtVzQf-NhM2Jl" target="_blank">Join Telegram</a>
-  <button class="tg-btn continue" id="startBtn">Continue to Video</button>
-  <div class="loading-text" id="loader">Fetching Secure Stream... Please wait...</div>
- </div>
-</div>
+    <nav class="h-16 bg-[#4f46e5] flex items-center px-6 shadow-md">
+        <button onclick="history.back()" class="bg-white/20 hover:bg-white/30 text-white text-xs font-bold py-2 px-4 rounded-lg transition-all">
+            ← Back to Lectures
+        </button>
+    </nav>
 
-<div class="video-container">
-  <div class="top-brand"><span class="jsr">🚩 Jai Shree Ram</span><span class="dev">| Devansh Sharma</span></div>
-  <video id="lecture-player" playsinline autoplay></video>
-</div>
+    <main class="flex-1 max-w-4xl w-full mx-auto p-4 flex flex-col justify-center items-center">
+        <div class="w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border border-slate-800 relative">
+            <video id="videoPlayer" class="w-full h-full" controls autoplay></video>
+        </div>
+        
+        <div class="mt-4 w-full bg-slate-800/50 p-4 rounded-xl border border-slate-700/50 text-xs">
+            <p class="font-bold text-emerald-400">// Stream Matrix Diagnostics:</p>
+            <div id="playerLog" class="font-mono mt-1 text-slate-300">Initializing Core Engine...</div>
+        </div>
+    </main>
 
-<script src="https://cdn.jsdelivr.net/npm/shaka-player@4.7.11/dist/shaka-player.compiled.js"></script>
-<script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+    <script>
+        const log = document.getElementById('playerLog');
+        
+        // Grab URL and tokens saved from lectures page
+        let streamUrl = localStorage.getItem('current_stream_url');
+        let keyId = localStorage.getItem('current_key_id');
+        let keyVal = localStorage.getItem('current_key_val');
 
-<script>
-const startBtn = document.getElementById("startBtn");
-const loader = document.getElementById("loader");
+        const params = new URLSearchParams(window.location.search);
+        const vId = params.get('video_id');
 
-startBtn.onclick = async () => {
-  startBtn.style.display = "none";
-  loader.style.display = "block";
+        async function initPlayer() {
+            // Check if URL is blank. If yes, we try to guess their lecture-details API node
+            if (!streamUrl && vId) {
+                log.innerHTML = `⚠️ Main URL blank. Attempting to resolve token endpoint for ID: ${vId}...`;
+                
+                try {
+                    // Trying to hit their video details resolver via proxy
+                    const rawResolver = `https://eduvibe-pw-api.wasmer.app/get-video-details.php?video_id=${vId}`;
+                    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(rawResolver)}`;
+                    
+                    const res = await fetch(proxyUrl);
+                    const wrapper = await res.json();
+                    const details = JSON.parse(wrapper.contents);
+                    
+                    // Fallback to extract tokens dynamically if api match works
+                    streamUrl = details.url || details.videoUrl || details.videoDetails?.videoUrl;
+                    keyId = details.keyId || details.videoDetails?.findKey;
+                    
+                    log.innerHTML += `<br><span class="text-emerald-400">✅ Resolution Handshake Success.</span>`;
+                } catch(e) {
+                    log.innerHTML += `<br><span class="text-red-400">❌ Failed to automatically resolve stream url. Need videoplayerr.php source.</span>`;
+                }
+            }
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const videoId = urlParams.get("video_id");
-  const batchId = urlParams.get("batch_id");
-  const subjectId = urlParams.get("subject_id");
-  const topicId = urlParams.get("topic_id");
+            if (!streamUrl) {
+                log.innerHTML += `<br><span class="text-red-500 font-bold">Critical: No stream target found.</span>`;
+                return;
+            }
 
-  try {
-    // Vercel backend API endpoint call
-    const res = await fetch(`/api/stream?video_id=${videoId}&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}`);
-    const data = await res.json();
+            log.innerHTML += `<br>Loading manifest: ${streamUrl}`;
 
-    if(data.error) { alert("Stream Error: " + data.error); startBtn.style.display = "block"; loader.style.display = "none"; return; }
+            const video = document.getElementById('videoPlayer');
+            const player = new shaka.Player(video);
 
-    document.getElementById("tgPopup").style.setProperty('display','none','important');
-    initializePlayer(data.manifestUrl, data.keyId, data.keyValue);
+            // If DRM Keys exist, configure clearKey licensing channel
+            if (keyId && keyVal) {
+                log.innerHTML += `<br>🔐 Injecting ClearKey Decryption Pair...`;
+                player.configure({
+                    drm: {
+                        clearKeys: {
+                            [keyId]: keyVal
+                        }
+                    }
+                });
+            }
 
-  } catch (err) {
-    alert("Server Connection Failed!");
-    startBtn.style.display = "block";
-    loader.style.display = "none";
-  }
-};
+            try {
+                await player.load(streamUrl);
+                log.innerHTML += `<br><span class="text-emerald-400 font-bold">🚀 Shaka Engine active. Pipeline playing smoothly.</span>`;
+            } catch (error) {
+                console.error('Shaka error:', error);
+                log.innerHTML += `<br><span class="text-amber-400">Engine Exception: ${error.code} - Check DRM keys structure.</span>`;
+            }
+        }
 
-async function initializePlayer(manifestUrl, keyId, keyValue) {
-  const videoEl = document.getElementById('lecture-player');
-  const videoContainer = videoEl.parentElement;
-
-  const shakaPlayer = new shaka.Player(videoEl);
-  shakaPlayer.configure({ drm: { clearKeys: { [keyId]: keyValue } } });
-
-  const manifestObj = new URL(manifestUrl);
-  shakaPlayer.getNetworkingEngine().registerRequestFilter((type, request) => {
-    if (type !== shaka.net.NetworkingEngine.RequestType.SEGMENT) return;
-    manifestObj.searchParams.forEach((v, k) => {
-      const segUrl = new URL(request.uris[0]);
-      segUrl.searchParams.set(k, v);
-      request.uris[0] = segUrl.toString();
-    });
-  });
-
-  let tracks = [];
-  await shakaPlayer.load(manifestUrl);
-  tracks = shakaPlayer.getVariantTracks();
-  const resolutions = [...new Map(tracks.filter(t => t.height).map(t => [t.height, t])).values()].sort((a,b)=>b.height - a.height).map(t => t.height);
-
-  const player = new Plyr(videoEl, {
-    controls: ['play-large','rewind','play','fast-forward','progress','current-time','duration','mute','volume','settings','fullscreen'],
-    settings: ['quality','speed'],
-    quality: {
-      default: 'Auto', options: ['Auto', ...resolutions], forced: true,
-      onChange: (q) => {
-        if (q === 'Auto') { shakaPlayer.configure({ abr: { enabled: true } }); return; }
-        const track = tracks.find(t => t.height == q);
-        if (track) { shakaPlayer.configure({ abr: { enabled: false } }); shakaPlayer.selectVariantTrack(track, true); }
-      }
-    },
-    speed: { selected:1, options:[0.5,0.75,1,1.25,1.5,1.75,2,2.5,3] },
-    autoplay: true
-  });
-
-  videoContainer.addEventListener("dblclick", e=>{ e.stopPropagation(); e.preventDefault(); }, true);
-  ['touchstart','touchmove','touchend','click'].forEach(ev=>{ videoEl.addEventListener(ev, e=>e.stopImmediatePropagation(), true); });
-}
-</script>
+        document.addEventListener('DOMContentLoaded', initPlayer);
+    </script>
 </body>
 </html>
