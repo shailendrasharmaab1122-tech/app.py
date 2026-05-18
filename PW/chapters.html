@@ -14,25 +14,24 @@
 <body class="min-h-screen flex flex-col pb-16">
 
     <nav class="h-16 bg-[#4f46e5] flex items-center justify-between px-6 shadow-md sticky top-0 z-50">
-        <button onclick="history.back()" class="bg-white/20 hover:bg-white/30 text-white text-xs font-bold py-2 px-4 rounded-lg transition-all flex items-center gap-1">
-            ← Back
+        <button id="backBtn" class="bg-white/20 hover:bg-white/30 text-white text-xs font-bold py-2 px-4 rounded-lg transition-all">
+            ← Back to Subjects
         </button>
         <div class="text-xs text-white/90 bg-white/10 px-3 py-1.5 rounded-full border border-white/20 font-medium">
-            Select Chapter
+            Chapter Vault Active
         </div>
     </nav>
 
-    <main class="flex-1 max-w-4xl w-full mx-auto p-4 md:p-6">
-        <div class="mb-6 flex flex-col gap-1">
-            <h2 id="subName" class="text-xl font-extrabold text-slate-800 tracking-tight">Loading Chapters...</h2>
-            <p class="text-xs text-slate-400">Select a chapter topic channel to access video archives.</p>
+    <main class="flex-1 max-w-5xl w-full mx-auto p-4 md:p-6">
+        <div class="mb-6">
+            <h2 class="text-xl font-extrabold text-slate-800 tracking-tight">Select Chapter Node</h2>
+            <p id="statusText" class="text-xs text-slate-400">Loading listed chapters for this stream branch...</p>
         </div>
 
-        <div id="chaptersContainer" class="space-y-4">
-            <div class="bg-white p-5 border border-slate-200 rounded-2xl animate-pulse flex flex-col gap-3 shadow-sm">
-                <div class="h-5 bg-slate-200 rounded w-2/3"></div>
-                <div class="h-3 bg-slate-200 rounded w-1/3"></div>
-            </div>
+        <div id="chaptersContainer" class="space-y-3">
+            <div class="bg-white p-5 border border-slate-200 rounded-2xl animate-pulse h-16 shadow-sm"></div>
+            <div class="bg-white p-5 border border-slate-200 rounded-2xl animate-pulse h-16 shadow-sm"></div>
+            <div class="bg-white p-5 border border-slate-200 rounded-2xl animate-pulse h-16 shadow-sm"></div>
         </div>
     </main>
 
@@ -47,56 +46,98 @@
         const bId = params.get('batch_id');
         const sId = params.get('subject_id');
 
-        // Parameter Validation Safeguard
         if (!bId || !sId) {
             window.location.href = "./index.html";
         }
 
+        // Back button configuration to preserve history mapping
+        document.getElementById('backBtn').onclick = () => {
+            window.location.href = `./batches.html?batch_id=${bId}`;
+        };
+
         async function loadChapters() {
             const container = document.getElementById('chaptersContainer');
-            const subTitle = document.getElementById('subName');
+            const statusText = document.getElementById('statusText');
+
+            // Wasmer database structure for chapters retrieval
+            const targetApi = `https://eduvibe-pw-api.wasmer.app/chapters.php?batch_id=${bId}&subject_id=${sId}`;
 
             try {
-                const res = await fetch(`https://eduvibe-pw-api.wasmer.app/chapters.php?batch_id=${bId}&subject_id=${sId}`);
-                const data = await res.json();
+                statusText.innerText = "Connecting secure channel stream...";
+                const res = await fetch(targetApi);
+                if (!res.ok) throw new Error("Chapters network failed");
 
-                subTitle.innerText = "Chapters & Topics";
+                const resData = await res.json();
 
-                if (!data.topics || data.topics.length === 0) {
-                    container.innerHTML = `<div class="text-center text-slate-400 py-12 text-sm">⚠️ No chapters found for this subject channel.</div>`;
+                // Target extraction loop
+                let chapters = [];
+                if (Array.isArray(resData)) {
+                    chapters = resData;
+                } else if (resData.chapters) {
+                    chapters = resData.chapters;
+                } else if (resData.data && Array.isArray(resData.data)) {
+                    chapters = resData.data;
+                } else if (resData.data?.chapters) {
+                    chapters = resData.data.chapters;
+                }
+
+                if (chapters.length === 0) {
+                    container.innerHTML = `<div class="text-center text-slate-400 py-12 text-sm">⚠️ No chapters found for this subject channel node inside the stream.</div>`;
+                    statusText.innerText = "Empty folder node.";
                     return;
                 }
 
-                container.innerHTML = data.topics.map(ch => `
-                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md border-l-4 border-l-red-500 hover:border-l-[#4f46e5] transition-all duration-150 cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-4 group" onclick="openLectures('${ch._id}')">
-                        <div class="space-y-1.5 flex-1 overflow-hidden">
-                            <h3 class="text-sm font-bold text-slate-800 tracking-tight leading-snug group-hover:text-[#4f46e5] transition-colors truncate">${ch.name}</h3>
-                            <div class="flex flex-wrap gap-2 text-[11px] font-semibold text-slate-400">
-                                <span class="bg-slate-50 border border-slate-100 px-2 py-0.5 rounded-md flex items-center gap-1">
-                                    📽️ ${ch.lectureVideos || 0} Videos
-                                </span>
-                                <span class="bg-slate-50 border border-slate-100 px-2 py-0.5 rounded-md flex items-center gap-1">
-                                    📝 ${ch.notes || 0} Notes
-                                </span>
+                statusText.innerText = "Chapters Decrypted Successfully.";
+                container.innerHTML = chapters.map(c => {
+                    
+                    // Key variations handling
+                    const chapterName = c.chapterName || c.chapter_name || c.name || c.title || "Premium Chapter Node";
+                    const chapterId = c.chapterId || c.chapter_id || c._id || c.id;
+                    const lecturesCount = c.lectureCount || c.lectures || 0;
+
+                    return `
+                    <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-150 cursor-pointer flex items-center justify-between group" onclick="openLectures('${chapterId}')">
+                        <div class="flex items-center gap-3 truncate">
+                            <div class="w-8 h-8 rounded-xl bg-indigo-50 text-[#4f46e5] flex items-center justify-center font-bold text-xs group-hover:bg-[#4f46e5] group-hover:text-white transition-all shrink-0">
+                                📁
                             </div>
+                            <span class="text-sm font-bold text-slate-700 truncate group-hover:text-[#4f46e5] transition-colors" title="${chapterName}">
+                                ${chapterName}
+                            </span>
                         </div>
-                        <div class="text-[#4f46e5] text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity hidden sm:block shrink-0">
-                            Open Room →
+                        <div class="flex items-center gap-2 text-xs font-medium text-slate-400 shrink-0">
+                            <span>${lecturesCount} Videos</span>
+                            <span class="text-indigo-500 font-bold group-hover:translate-x-1 transition-transform">→</span>
                         </div>
                     </div>
-                `).join('');
+                    `;
+                }).join('');
 
             } catch (e) {
-                container.innerHTML = `<div class="text-center text-red-500 font-medium text-sm py-12">❌ Failed to sync chapter matrix. Server could be sleeping.</div>`;
-                subTitle.innerText = "Sync Error";
+                console.error("Chapters crash log:", e);
+                container.innerHTML = `
+                    <div class="text-center py-12 max-w-md mx-auto space-y-4">
+                        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+                            <div class="w-12 h-12 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto font-bold text-lg mb-3">❌</div>
+                            <h3 class="text-sm font-bold text-slate-800">Decryption Matrix Failure</h3>
+                            <p class="text-xs text-slate-400 mt-1 leading-relaxed">Failed to stream structural elements from Wasmer master node.</p>
+                            <button onclick="window.location.reload()" class="mt-4 bg-[#4f46e5] hover:bg-[#4338ca] text-white text-xs font-bold py-2 px-6 rounded-xl transition-all shadow-sm">
+                                Retry Stream 🔄
+                            </button>
+                        </div>
+                    </div>`;
             }
         }
 
-        function openLectures(topicId) {
-            window.location.href = `./lectures.html?batch_id=${bId}&subject_id=${sId}&topic_id=${topicId}`;
+        function openLectures(chapterId) {
+            if(!chapterId || chapterId === 'undefined') {
+                alert("Error: Chapter Link Node identity missing.");
+                return;
+            }
+            window.location.href = "./lectures.html?batch_id=" + bId + "&subject_id=" + sId + "&chapter_id=" + chapterId;
         }
 
-        if(bId && sId) loadChapters();
+        if (bId && sId) loadChapters();
     </script>
 </body>
 </html>
