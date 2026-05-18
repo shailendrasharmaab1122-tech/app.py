@@ -39,14 +39,15 @@ video { width:100%; height:auto }
   const params = new URLSearchParams(window.location.search);
   const videoId = params.get('video_id');
   const batchId = params.get('batch_id');
+  const subjectSlug = params.get('subjectSlug');
+  const topicSlug = params.get('topicSlug');
 
   if (!videoId) {
     statusEl.innerText = "❌ Missing Video ID";
     return;
   }
 
-  // Tumhari backend API se live tokenized details fetch karna
-  const keyFetcherUrl = `/api/stream.js?video_id=${videoId}&batch_id=${batchId || ''}`;
+  const keyFetcherUrl = `/api/stream.js?video_id=${videoId}&batch_id=${batchId || ''}&subjectSlug=${subjectSlug || ''}&topicSlug=${topicSlug || ''}`;
   let manifestUrl, keyId, keyValue;
 
   try {
@@ -64,16 +65,14 @@ video { width:100%; height:auto }
     return;
   }
 
-  /* ================= SHAKA INIT ================= */
   const shakaPlayer = new shaka.Player(videoEl);
 
-  if (keyId && keyValue) {
+  if (keyId && keyValue && keyId !== "auto-sync") {
     shakaPlayer.configure({
       drm: { clearKeys: { [keyId]: keyValue } }
     });
   }
 
-  /* ================= SIGNED URL FIX ================= */
   try {
     const manifestObj = new URL(manifestUrl);
     shakaPlayer.getNetworkingEngine().registerRequestFilter((type, request) => {
@@ -89,14 +88,13 @@ video { width:100%; height:auto }
   let tracks = [];
   try {
     await shakaPlayer.load(manifestUrl);
-    statusEl.style.display = "none"; // Chalne ke baad overlay hide ho jayega
+    statusEl.style.display = "none";
     tracks = shakaPlayer.getVariantTracks();
   } catch (err) {
     statusEl.innerText = `❌ Decryption Blocked (Error ${err.code})`;
     return;
   }
 
-  /* ================= EXTRACT QUALITY ================= */
   const resolutions = [...new Map(
     tracks.filter(t => t.height)
       .map(t => [t.height, t])
@@ -104,7 +102,6 @@ video { width:100%; height:auto }
   .sort((a,b)=>b.height - a.height)
   .map(t => t.height);
 
-  /* ================= NOW CREATE PLYR ================= */
   const player = new Plyr(videoEl, {
     controls: [
       'play-large','rewind','play','fast-forward',
@@ -132,13 +129,11 @@ video { width:100%; height:auto }
     autoplay: true
   });
 
-  // Block default gestures
   videoContainer.addEventListener("dblclick", e=>{ e.stopPropagation(); e.preventDefault(); }, true);
   ['touchstart','touchmove','touchend','click'].forEach(ev=>{
       videoEl.addEventListener(ev, e=>e.stopImmediatePropagation(), true);
   });
 
-  /* ================= GESTURES ================= */
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   let holdTimeout=null, speedHeld=false, lastTap=0;
 
@@ -171,7 +166,6 @@ video { width:100%; height:auto }
     }
   });
 
-  // PC Hotkeys
   document.addEventListener("keydown", (e) => {
     const tag = document.activeElement.tagName.toLowerCase();
     if (tag === "input" || tag === "textarea") return;
