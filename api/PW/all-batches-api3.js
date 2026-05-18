@@ -1,8 +1,6 @@
 export default async function handler(req, res) {
-    // Chapters fetch karne ke liye batch_id aur subject_id dono zaroori hain
     const { batch_id, subject_id } = req.query;
 
-    // CORS aur Security Headers Setup
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -12,7 +10,6 @@ export default async function handler(req, res) {
         return res.status(200).end();
     }
 
-    // Dono parameters ka verification check
     if (!batch_id || !subject_id) {
         return res.status(400).json({ 
             error: "Required identity parameters (batch_id or subject_id) missing." 
@@ -20,7 +17,6 @@ export default async function handler(req, res) {
     }
 
     try {
-        // FIXED: Route ko chapters.php par point kiya aur batch_id + subject_id dono forward kar diye
         const targetUrl = `https://eduvibe-pw-api.wasmer.app/chapters.php?batch_id=${encodeURIComponent(batch_id)}&subject_id=${encodeURIComponent(subject_id)}`;
 
         const response = await fetch(targetUrl, {
