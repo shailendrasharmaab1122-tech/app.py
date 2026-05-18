@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Dashboard - Classroom</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
       body { background: #f5f6f8; color: #111; }
 
-      /* Loader Spinner */
       .spinner {
         width: 45px;
         height: 45px;
@@ -22,7 +22,6 @@
         100% { transform: rotate(360deg); }
       }
 
-      /* Layout Styling */
       .layout-container {
         width: 100%;
         max-width: 1400px;
@@ -52,7 +51,6 @@
         gap: 8px;
       }
 
-      /* Live Classes Horizontal Scroll */
       .live-row {
         display: flex;
         overflow-x: auto;
@@ -158,7 +156,6 @@
         transition: 0.2s;
       }
 
-      /* Subjects Grid Layout */
       .subjects-grid {
         display: grid;
         grid-template-columns: repeat(1, 1fr);
@@ -220,6 +217,13 @@
       <div class="spinner"></div>
     </div>
 
+    <nav class="h-16 bg-[#4f46e5] flex items-center justify-between px-6 shadow-md sticky top-0 z-50">
+        <div class="flex items-center gap-2">
+            <div class="h-9 w-9 bg-white rounded-lg flex items-center justify-center font-bold text-[#4f46e5]">TDC</div>
+            <span class="text-xl font-black tracking-tight text-white">The DevCoderZ</span>
+        </div>
+    </nav>
+
     <div class="layout-container">
       <header class="header-section">
         <h1 id="batchTitle">Loading Batch Portal...</h1>
@@ -243,7 +247,6 @@
       alert("Error: Batch configuration code missing.");
       document.getElementById("loader").style.display = "none";
     } else {
-      // Secure endpoint connection pipeline
       fetch("https://eduvibe-pw-api.wasmer.app/batch.php?batch_id=" + encodeURIComponent(batchId))
         .then((res) => res.json())
         .then((data) => {
@@ -251,13 +254,9 @@
             window.location.href = data.redirect;
             return;
           }
-          
           document.getElementById("batchTitle").innerText = data.batch_title || "My Classroom Batch";
-
-          // Inject nodes arrays to render templates
           renderClasses(data.classes || []);
           renderSubjects(data.subjects || []);
-
           document.getElementById("loader").style.display = "none";
         })
         .catch((err) => {
@@ -266,7 +265,6 @@
         });
     }
 
-    // ================= DATA CARD ELEMENT GENERATORS =================
     function renderClasses(classes) {
       const container = document.getElementById("liveClassesContainer");
       container.innerHTML = "";
@@ -295,11 +293,9 @@
         let subjectName = live.subjectId?.name || "General Lecture";
         let topic = live.topic || "Topic Session";
         let videoId = live._id;
-
         let isNote = live.homeworkIds?.length && live.isVideoLecture === false;
         let link = "#";
 
-        // Structured Target Router Pipeline Mapping
         if (status === "LIVE") {
           link = `/PW/live.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&video_id=${videoId}&start=${unixStart}`;
         } else if (isNote) {
@@ -309,14 +305,12 @@
           link = `/PW/player.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&video_id=${videoId}`;
         }
 
-        // Badge styles configurations
-        let badgeBg = "#f59e0b"; // Upcoming -> Orange
-        if (status === "LIVE") badgeBg = "#ef4444"; // Live -> Red 🔴
-        if (status === "ENDED") badgeBg = "#6b7280"; // Ended -> Solid Grey
+        let badgeBg = "#f59e0b"; 
+        if (status === "LIVE") badgeBg = "#ef4444"; 
+        if (status === "ENDED") badgeBg = "#6b7280"; 
 
         let timeText = start ? start.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" }) : "TBD";
 
-        // Button Layout Styles Logic
         let btnStyle = "background: #f3f4f6; color: #1f2937; border: 1px solid #e5e7eb;";
         let btnText = "Starts Soon";
         if (status === "LIVE") {
@@ -372,7 +366,6 @@
 
         let escapedSubject = sub.subject ? encodeURIComponent(sub.subject.replace(/'/g, "%27")) : "Subject";
 
-        // Subject cards mapping redirected directly to chapter.html
         const card = `
         <div class="subject-card"
           onclick='location.href="/PW/chapters.html?batch_id=${batchId}&subject_id=${sub._id}&subject_slug=${sub.slug || ''}&subject=${escapedSubject}"'>
