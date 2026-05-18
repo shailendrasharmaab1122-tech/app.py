@@ -1,95 +1,230 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The DevCoderz Player</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/shaka-player.compiled.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/controls.css">
-    <style>
-        body { background-color: #0b0f19; color: white; font-family: sans-serif; }
-        .brand-header { background: linear-gradient(135deg, #111827 0%, #1f2937 100%); width: 100%; padding: 15px; text-align: center; border-bottom: 2px solid #22c55e; box-shadow: 0 4px 15px rgba(0,0,0,0.4); margin-bottom: 24px; }
-        .brand-title { font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #ffffff; }
-        .video-container { max-width: 960px; width: 100%; margin: auto; background: black; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.7); border: 1px solid #374151; }
-        video { width: 100%; height: 100%; aspect-ratio: 16/9; }
-    </style>
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The DevCoderz Player</title>
+<link rel="stylesheet" href="https://gray-madelina-19.tiiny.site/ogx.css">
+<link rel="stylesheet" href="https://gray-madelina-19.tiiny.site/plyrx55.css">
+<style>
+body { margin:0; background:#0b0f19; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+.brand-header { background: linear-gradient(135deg, #111827 0%, #1f2937 100%); width: 100%; padding: 15px; text-align: center; border-bottom: 2px solid #10b981; box-shadow: 0 4px 15px rgba(0,0,0,0.4); margin-bottom: 20px; }
+.brand-title { font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #ffffff; margin: 0; }
+.control-bar { width: 100%; max-width: 960px; display: flex; justify-content: space-between; align-items: center; padding: 0 16px; margin-bottom: 12px; }
+.back-btn { background: #1f2937; color: white; border: 1px solid #374151; padding: 8px 16px; font-size: 12px; font-weight: 700; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+.back-btn:hover { background: #374151; }
+.secure-badge { font-size: 10px; color: #34d399; font-family: monospace; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); padding: 4px 10px; border-radius: 4px; letter-spacing: 1px; }
+.video-container { width: 100%; max-width: 960px; height: auto; position: relative; background: #000; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.6); border: 1px solid #1e293b; }
+video { width: 100%; height: auto; aspect-ratio: 16/9; }
+#playerStatus { margin-top: 16px; text-align: center; font-size: 12px; color: #64748b; font-family: monospace; }
+</style>
+<style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style>
 </head>
-<body class="min-h-screen flex flex-col items-center pb-8">
+<body>
 
-    <div class="brand-header">
-        <h1 class="brand-title">The DevCoderz</h1>
+<div class="brand-header">
+    <h1 class="brand-title">The DevCoderz</h1>
+</div>
+
+<div class="control-bar">
+    <button onclick="history.back()" class="back-btn">← BACK</button>
+    <span class="secure-badge">DEVIATION TUNNEL ACTIVE</span>
+</div>
+
+<div class="video-container">
+  <div class="plyr plyr--full-ui plyr--video plyr--html5 plyr--fullscreen-enabled plyr--is-touch plyr--captions-enabled plyr--playing plyr--loading">
+    <div class="plyr__video-wrapper">
+        <video id="lecture-player" playsinline autoplay></video>
+        <div class="plyr__poster"></div>
     </div>
+    <div class="plyr__captions" dir="auto"></div>
+  </div>
+</div>
 
-    <div class="w-full max-w-4xl flex items-center justify-between mb-4 px-4">
-        <button onclick="history.back()" class="bg-gray-800 hover:bg-gray-700 text-xs font-bold px-4 py-2 rounded-lg transition-all border border-gray-700">← Back</button>
-        <span class="text-[10px] text-green-400 font-mono bg-green-950/40 px-2.5 py-1 rounded border border-green-500/30">SECURE SHELL</span>
-    </div>
+<div id="playerStatus">Initializing secure cluster matrix...</div>
 
-    <div class="video-container">
-        <div data-shaka-player-container style="width:100%; height:100%;">
-            <video data-shaka-player id="video" autoplay controls></video>
-        </div>
-    </div>
+<script src="https://cdn.jsdelivr.net/npm/shaka-player@4.7.11/dist/shaka-player.compiled.js"></script>
+<script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
 
-    <div id="playerStatus" class="mt-4 text-center text-xs text-gray-500 font-mono">
-        Connecting to core engine...
-    </div>
+<script>
+(async function() {
+  shaka.polyfill.installAll();
 
-    <script>
-        async function initApp() {
-            try { shaka.polyfil.installAll(); } catch(e) { try { shaka.polyfill.installAll(); } catch(err){} }
-            
-            const video = document.getElementById('video');
-            const ui = video['ui'];
-            const player = ui ? ui.getPlayer() : new shaka.Player(video);
+  const videoEl = document.getElementById('lecture-player');
+  const videoContainer = videoEl.parentElement;
+  const statusEl = document.getElementById('playerStatus');
 
-            const params = new URLSearchParams(window.location.search);
-            const videoId = params.get('video_id');
-            const batchId = params.get('batch_id');
+  const params = new URLSearchParams(window.location.search);
+  const videoId = params.get('video_id');
+  const batchId = params.get('batch_id');
 
-            if (!videoId) {
-                document.getElementById('playerStatus').innerText = 'Missing Address Parameters.';
-                return;
-            }
+  if (!videoId) {
+    statusEl.innerText = "❌ Error: Video ID parameters are missing.";
+    return;
+  }
 
-            const keyFetcherUrl = `/api/stream.js?video_id=${videoId}&batch_id=${batchId || ''}`;
+  const keyFetcherUrl = `/api/stream.js?video_id=${videoId}&batch_id=${batchId || ''}`;
+  let manifestUrl, keyId, keyValue;
 
-            try {
-                const response = await fetch(keyFetcherUrl);
-                const data = await response.json();
+  try {
+    statusEl.innerText = "Fetching decrypted keys...";
+    const response = await fetch(keyFetcherUrl);
+    const apiData = await response.json();
 
-                if (!data.success || !data.manifestUrl) throw new Error();
+    if (!apiData.success || !apiData.manifestUrl) {
+        throw new Error("Invalid API payload");
+    }
 
-                if (data.keyId && data.keyValue && data.keyId !== "auto-sync") {
-                    player.configure({
-                        drm: {
-                            clearKeys: {
-                                [data.keyId]: data.keyValue
-                            }
-                        }
-                    });
-                }
+    manifestUrl = apiData.manifestUrl;
+    keyId = apiData.keyId;
+    keyValue = apiData.keyValue;
 
-                await player.load(data.manifestUrl);
-                document.getElementById('playerStatus').innerText = 'Stream Matrix Connected.';
-            } catch (error) {
-                document.getElementById('playerStatus').innerText = 'Handshake failed. Retrying auto-sync mode...';
-                try {
-                    await player.load(`https://sec-prod-mediacdn.pw.live/files/${videoId}/master.mpd`);
-                    document.getElementById('playerStatus').innerText = 'Fallback Sync Active.';
-                } catch(err) {
-                    document.getElementById('playerStatus').innerText = 'Stream Decryption Blocked.';
-                }
-            }
+  } catch (err) {
+    statusEl.innerText = "API Layer failed. Engaging emergency auto-sync fallback...";
+    manifestUrl = `https://sec-prod-mediacdn.pw.live/files/${videoId}/master.mpd`;
+    keyId = "auto-sync";
+    keyValue = "auto-sync";
+  }
+
+  const shakaPlayer = new shaka.Player(videoEl);
+
+  if (keyId && keyValue && keyId !== "auto-sync") {
+      shakaPlayer.configure({
+        drm: {
+          clearKeys: {
+            [keyId]: keyValue
+          }
         }
+      });
+  }
 
-        document.addEventListener('shaka-ui-loaded', initApp);
-        document.addEventListener('DOMContentLoaded', () => {
-            if (!window['shaka-ui-loaded-event-fired']) {
-                setTimeout(initApp, 1000);
-            }
+  try {
+    const manifestObj = new URL(manifestUrl);
+    shakaPlayer.getNetworkingEngine().registerRequestFilter((type, request) => {
+        if (type !== shaka.net.NetworkingEngine.RequestType.SEGMENT) return;
+        manifestObj.searchParams.forEach((v, k) => {
+          const segUrl = new URL(request.uris[0]);
+          segUrl.searchParams.set(k, v);
+          request.uris[0] = segUrl.toString();
         });
-    </script>
-</body>
-</html>
+    });
+  } catch(e){}
+
+  let tracks = [];
+  try {
+    await shakaPlayer.load(manifestUrl);
+    statusEl.innerText = "✅ Pipeline Connected. Stream matrix active.";
+    tracks = shakaPlayer.getVariantTracks();
+  } catch (err) {
+    statusEl.innerText = "❌ Critical Decryption Error (Stream Blocked)";
+    console.error(err);
+    return;
+  }
+
+  const resolutions = [...new Map(
+    tracks.filter(t => t.height)
+      .map(t => [t.height, t])
+  ).values()]
+  .sort((a,b)=>b.height - a.height)
+  .map(t => t.height);
+
+  const player = new Plyr(videoEl, {
+    controls: [
+      'play-large','rewind','play','fast-forward',
+      'progress','current-time','duration',
+      'mute','volume','settings','fullscreen'
+    ],
+    settings: ['quality','speed'],
+    quality: {
+      default: 'Auto',
+      options: ['Auto', ...resolutions],
+      forced: true,
+      onChange: (q) => {
+        if (q === 'Auto') {
+          shakaPlayer.configure({ abr: { enabled: true } });
+          return;
+        }
+        const track = tracks.find(t => t.height == q);
+        if (track) {
+          shakaPlayer.configure({ abr: { enabled: false } });
+          shakaPlayer.selectVariantTrack(track, true);
+        }
+      }
+    },
+    speed: { selected:1, options:[0.5,0.75,1,1.25,1.5,1.75,2,2.5,3] },
+    autoplay: true
+  });
+
+  videoContainer.addEventListener("dblclick", e=>{ e.stopPropagation(); e.preventDefault(); }, true);
+  ['touchstart','touchmove','touchend','click'].forEach(ev=>{
+        videoEl.addEventListener(ev, e=>e.stopImmediatePropagation(), true);
+  });
+
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  let holdTimeout=null, speedHeld=false, lastTap=0;
+
+  videoEl.addEventListener("touchstart", ()=>{
+    if(!isMobile) return;
+    holdTimeout = setTimeout(()=>{
+      if(!speedHeld){ speedHeld=true; player.speed=2; }
+    },1000);
+  });
+
+  videoEl.addEventListener("touchend", ()=>{
+    if(!isMobile) return;
+    clearTimeout(holdTimeout);
+    if(speedHeld){ player.speed=1; speedHeld=false; }
+  });
+
+  videoContainer.addEventListener("touchend",(e)=>{
+    if(!isMobile) return;
+    const now = Date.now();
+    const gap = now-lastTap;
+    lastTap = now;
+    const {clientX} = e.changedTouches[0];
+    const {left,width} = videoContainer.getBoundingClientRect();
+    const x = clientX-left;
+
+    if(gap<300){
+      if(x<width/3) player.currentTime-=10;
+      else if(x>2*width/3) player.currentTime+=10;
+      else player.togglePlay();
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    const tag = document.activeElement.tagName.toLowerCase();
+    if (tag === "input" || tag === "textarea") return;
+    switch (e.key.toLowerCase()) {
+      case " ":
+      case "k":
+        e.preventDefault();
+        player.togglePlay();
+        break;
+      case "arrowright":
+        player.currentTime += 10;
+        break;
+      case "arrowleft":
+        player.currentTime -= 10;
+        break;
+      case "arrowup":
+        e.preventDefault();
+        player.volume = Math.min(1, player.volume + 0.1);
+        break;
+      case "arrowdown":
+        e.preventDefault();
+        player.volume = Math.max(0, player.volume - 0.1);
+        break;
+      case "m":
+        player.muted = !player.muted;
+        break;
+      case "f":
+        player.fullscreen.toggle();
+        break;
+      case "c":
+        player.speed = player.speed === 1 ? 2 : 1;
+        break;
+    }
+  });
+
+})();
+</script>
+</body></html>
