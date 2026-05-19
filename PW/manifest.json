@@ -1,0 +1,21 @@
+{
+  "short_name": "DevCoderZ",
+  "name": "The DevCoderZ - Classroom Portal",
+  "icons": [
+    {
+      "src": "https://static.pw.live/react-batches/assets/images/thumbnail_placeholder.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://static.pw.live/react-batches/assets/images/thumbnail_placeholder.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".PW/index.html",
+  "background_color": "#f5f6f8",
+  "theme_color": "#4f46e5",
+  "display": "standalone",
+  "orientation": "portrait"
+}
