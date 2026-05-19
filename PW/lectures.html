@@ -71,7 +71,7 @@
       };
 
       // Successfully streamlined to point directly to your extensionless clean route
-      const cleanApiUrl = `/api/PW/batches?type=lectures&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}&tab=${activeTab}`;
+      const cleanApiUrl = `/api/PW/batches.js?type=lectures&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}&tab=${activeTab}`;
 
       fetch(cleanApiUrl)
         .then(res => { if(!res.ok) throw new Error(); return res.json(); })
