@@ -5,7 +5,7 @@
     <link rel="manifest" href="/manifest.json">
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Batches - DevCoderZ</title>
+    <title>The DevCoderZ - Classroom</title>
 
     <style>
       * {
@@ -164,7 +164,7 @@
       }
 
       @keyframes shimmer {
-        0 { background-position: -200% 0; }
+        0% { background-position: -200% 0; }
         100% { background-position: 200% 0; }
       }
 
@@ -225,8 +225,8 @@
 
   <body>
     <div class="header">
-      The DevCoderZ 
-      <span>⚡ made with ❤️ for students</span>
+      The DevCoderZ
+      <span>⚡ Smart Learning Terminal</span>
     </div>
 
     <div class="search-section">
@@ -244,7 +244,7 @@
     </div>
 
     <script>
-      const FALLBACK_IMG = "https://static.pw.live/react-batches/assets/images/thumbnail_placeholder.png";
+      const FALLBACK_IMG = "https://devcoderz.vercel.app/pw.png";
 
       let ALL = [];
       let filtered = [];
@@ -403,8 +403,10 @@
         let finalPrice = bPrice === 0 || b.isFree ? "Free" : `₹ ${bPrice}`;
 
         let bImage = FALLBACK_IMG;
-        if (b.previewImage || b.thumbnail) {
-          bImage = b.previewImage || b.thumbnail;
+        if (b.previewImage && b.previewImage !== "/pwbatch.png") {
+          bImage = b.previewImage;
+        } else if (b.thumbnail && b.thumbnail !== "/pwbatch.png") {
+          bImage = b.thumbnail;
         } else if (b.imageId?.baseUrl && b.imageId?.key) {
           bImage = b.imageId.baseUrl + b.imageId.key;
         }
@@ -487,7 +489,7 @@
 
         if (e.target.classList.contains("explore-btn")) {
           let id = e.target.dataset.id;
-          window.location.href = "PW/batches.html?batch_id=" + id;
+          window.location.href = "batches.html?batch_id=" + id;
         }
       });
 
