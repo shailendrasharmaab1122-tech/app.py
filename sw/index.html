@@ -5,62 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eduvibe PW - the DevCoderZ</title>
     <style>
-        /* Reset default margins and paddings */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body, html {
             width: 100%;
             height: 100%;
-            overflow: hidden;
+            background-color: #121212;
             font-family: 'Arial', sans-serif;
+            color: white;
         }
-
         /* Header Style */
         .credit-header {
             width: 100%;
-            height: 50px;
+            height: 60px;
             background-color: #1a1a1a;
-            color: #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
             font-size: 18px;
             font-weight: bold;
-            box-shadow: 0px 2px 5px rgba(0,0,0,0.3);
-            z-index: 1000;
-            position: relative;
+            box-shadow: 0px 2px 10px rgba(0,0,0,0.5);
         }
-
         .credit-header span {
-            color: #00ffcc; /* text ka color badalne ke liye */
+            color: #00ffcc;
             margin-left: 5px;
         }
-
-        /* Iframe Container */
-        .iframe-container {
-            width: 100%;
-            height: calc(100% - 50px); /* Total height me se header ki height minus ki hai */
+        /* Main Content Container */
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: calc(100% - 60px);
+            text-align: center;
+            padding: 20px;
         }
-
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
+        .main-container h2 {
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+        .main-container p {
+            color: #aaaaaa;
+            margin-bottom: 25px;
+        }
+        /* Redirect Button */
+        .visit-btn {
+            background-color: #00ffcc;
+            color: #121212;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: 0.3s ease;
+            box-shadow: 0px 4px 15px rgba(0, 255, 204, 0.4);
+        }
+        .visit-btn:hover {
+            background-color: #00b38f;
+            transform: translateY(-2px);
         }
     </style>
 </head>
 <body>
 
+    <!-- Header Credits -->
     <div class="credit-header">
         Developed & Managed by: <span>the DevCoderZ</span>
     </div>
 
-    <div class="iframe-container">
-        <iframe src="https://eduvibe-pw.page.gd/?i=1" allowfullscreen></iframe>
+    <!-- Main Content with Button -->
+    <div class="main-container">
+        <h2>Welcome to Eduvibe PW</h2>
+        <p>Security reasons ki wajah se site ko direct yahan embed nahi kiya ja sakta.</p>
+        <a href="https://eduvibe-pw.page.gd/?i=1" target="_blank" class="visit-btn">Open Website Now</a>
     </div>
 
 </body>
