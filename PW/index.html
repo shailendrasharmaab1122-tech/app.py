@@ -3,315 +3,394 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The DevCoderZ - Study Portal</title>
+    <title>My Dashboard - Classroom</title>
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#4f46e5">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="DevCoderZ">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-      body { background: #f8fafc; color: #0f172a; }
-      ::-webkit-scrollbar { width: 6px; }
-      ::-webkit-scrollbar-track { background: #f8fafc; }
-      ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-      @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
-      .skel-anim { background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%); background-size: 200% 100%; animation: shimmer 1.2s infinite; }
-      .glow-text { text-shadow: 0 0 8px rgba(239,68,68,0.3); }
+      body { background: #f5f6f8; color: #111; }
+
+      .spinner {
+        width: 45px;
+        height: 45px;
+        border: 4px solid #e5e7eb;
+        border-top: 4px solid #4f46e5;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      .layout-container {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 30px 20px;
+      }
+
+      .header-section {
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #e5e7eb;
+      }
+
+      #batchTitle {
+        font-size: 26px;
+        font-weight: 700;
+        color: #1f2937;
+      }
+
+      .section-title {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: #374151;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .live-row {
+        display: flex;
+        overflow-x: auto;
+        gap: 16px;
+        padding-bottom: 15px;
+        scroll-behavior: smooth;
+      }
+      .live-row::-webkit-scrollbar {
+        height: 6px;
+      }
+      .live-row::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+      }
+
+      .live-card-link {
+        text-decoration: none;
+        color: inherit;
+        flex: 0 0 auto;
+      }
+
+      .live-card {
+        width: 310px;
+        background: #fff;
+        border-radius: 14px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        border: 1px solid #e5e7eb;
+      }
+      .live-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .thumbnail-area {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16/9;
+        background: #f3f4f6;
+      }
+      .thumbnail-area img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .status-badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        padding: 4px 10px;
+        font-size: 11px;
+        border-radius: 999px;
+        color: #fff;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .card-details {
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        gap: 8px;
+      }
+      .subject-tag {
+        font-size: 12px;
+        color: #4f46e5;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+      .topic-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #111827;
+        line-height: 1.4;
+        height: 40px;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
+
+      .meta-info {
+        margin-top: auto;
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        color: #6b7280;
+      }
+
+      .action-btn {
+        margin-top: 12px;
+        font-size: 13px;
+        text-align: center;
+        padding: 10px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: 0.2s;
+      }
+
+      .subjects-grid {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 20px;
+        margin-top: 15px;
+      }
+      @media (min-width: 768px) { .subjects-grid { grid-template-columns: repeat(2, 1fr); } }
+      @media (min-width: 1024px) { .subjects-grid { grid-template-columns: repeat(3, 1fr); } }
+      @media (min-width: 1440px) { .subjects-grid { grid-template-columns: repeat(4, 1fr); } }
+
+      .subject-card {
+        background: #fff;
+        border-radius: 14px;
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        border: 1px solid #e5e7eb;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .subject-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      }
+      .subject-card img {
+        width: 65px;
+        height: 65px;
+        object-fit: contain;
+        background: #f9fafb;
+        border-radius: 10px;
+        padding: 6px;
+      }
+      .subject-info {
+        flex: 1;
+      }
+      .sub-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 4px;
+      }
+      .sub-count {
+        font-size: 13px;
+        color: #6b7280;
+      }
+      .sub-teacher {
+        font-size: 13px;
+        color: #9ca3af;
+        margin-top: 4px;
+        font-style: italic;
+      }
     </style>
 </head>
-<body class="min-h-screen flex flex-col pb-16">
+<body>
+
+    <div id="loader" style="position: fixed; inset: 0; background: #fff; display: flex; align-items: center; justify-content: center; z-index: 9999;">
+      <div class="spinner"></div>
+    </div>
 
     <nav class="h-16 bg-[#4f46e5] flex items-center justify-between px-6 shadow-md sticky top-0 z-50">
         <div class="flex items-center gap-2">
-            <div class="h-9 w-9 bg-white rounded-lg flex items-center justify-center font-bold text-[#4f46e5]">TDC</div>
+            <div class="h-9 w-9 bg-white rounded-lg flex items-center justify-center font-bold text-[#4f46e5]">DC</div>
             <span class="text-xl font-black tracking-tight text-white">The DevCoderZ</span>
-        </div>
-        <div id="coreStatus" class="text-xs text-white/90 bg-white/10 px-3 py-1.5 rounded-full border border-white/20 font-medium">
-            Connecting Courses...
         </div>
     </nav>
 
-    <div class="sticky top-16 z-40 bg-white border-b border-slate-200 shadow-sm">
-        <div class="max-w-md mx-auto p-4">
-            <input id="searchInput" class="w-full bg-slate-50 text-slate-800 pl-5 pr-5 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:border-[#4f46e5] transition-colors text-sm shadow-inner" placeholder="Search your batches here...">
-        </div>
-        <div class="flex max-w-7xl mx-auto">
-            <button class="flex-1 py-3 text-center text-sm font-bold border-b-2 border-[#4f46e5] text-[#4f46e5]" id="totalTab">Available Batches</button>
-            <button class="flex-1 py-3 text-center text-sm font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-600" id="favTab">My Favourites ❤️</button>
-        </div>
+    <div class="layout-container">
+      <header class="header-section">
+        <h1 id="batchTitle">Loading Batch Portal...</h1>
+      </header>
+
+      <section style="margin-bottom: 35px;">
+        <h2 class="section-title">Live & Recent Classes</h2>
+        <div id="liveClassesContainer" class="live-row"></div>
+      </section>
+
+      <section>
+        <h2 class="section-title">Course Subjects</h2>
+        <div id="subjectsContainer" class="subjects-grid"></div>
+      </section>
     </div>
 
-    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6">
-        <div id="total" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
-        <div id="fav" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 hidden"></div>
-    </main>
+  <script>
+    const batchId = new URLSearchParams(window.location.search).get("batch_id");
 
-    <footer class="h-12 border-t border-slate-200 bg-white text-center text-xs text-slate-400 flex items-center justify-center gap-1 fixed bottom-0 inset-x-0 z-50 shadow-inner">
-        <span>© 2026 Classroom Hub. All Rights Reserved.</span>
-        <span>•</span>
-        <span>Developed by <span class="text-red-500 font-bold tracking-wide glow-text">Devansh Sharma</span></span>
-    </footer>
-
-    <script>
-      const API_1 = "https://devcoderz.vercel.app/api/PW/all-batches-api1.js";
-      const API_2 = "https://devcoderz.vercel.app/api/PW/all-batches-api2.js";
-      const FALLBACK_IMG = "https://static.pw.live/react-batches/assets/images/thumbnail_placeholder.png";
-
-      const proxySets = [
-        { name: "Server Node Alpha", urls: [API_1, API_2], type: "direct" },
-        { name: "Server Node Beta", urls: [`https://api.allorigins.win/get?url=${encodeURIComponent(API_1)}`, `https://api.allorigins.win/get?url=${encodeURIComponent(API_2)}`], type: "allorigins" },
-        { name: "Backup Mode", urls: [`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(API_1)}`, `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(API_2)}`], type: "codetabs" }
-      ];
-
-      let ALL = [], filtered = [];
-      let favs = JSON.parse(localStorage.getItem("favs") || "[]");
-      let cachedBatches = JSON.parse(localStorage.getItem("fav_batches") || "{}");
-
-      let loaded = 0, LIMIT = 8, loading = false;
-
-      const total = document.getElementById("total");
-      const fav = document.getElementById("fav");
-      const searchInput = document.getElementById("searchInput");
-      const totalTab = document.getElementById("totalTab");
-      const favTab = document.getElementById("favTab");
-      const coreStatus = document.getElementById("coreStatus");
-
-      showSkeleton();
-
-      async function syncClusterStreams(setIndex = 0) {
-        if (setIndex >= proxySets.length) {
-            coreStatus.innerText = "Offline Mode Active";
-            ALL = Object.values(cachedBatches);
-            filtered = ALL;
-            if (ALL.length) { 
-                loadMore(true); 
-            } else { 
-                total.innerHTML = `<div class="col-span-full text-center text-slate-400 py-12 text-sm">❌ Unable to connect to servers. Please refresh the page.</div>`; 
-            }
+    if (!batchId) {
+      alert("Error: Batch configuration code missing.");
+      document.getElementById("loader").style.display = "none";
+    } else {
+      fetch("/api/PW/batches?type=batch&batch_id=" + encodeURIComponent(batchId))
+        .then((res) => res.json())
+        .then((data) => {
+          if (!data.success && data.redirect) {
+            window.location.href = data.redirect;
             return;
-        }
-
-        const activeSet = proxySets[setIndex];
-        coreStatus.innerText = "Connecting Portal...";
-
-        try {
-            const results = await Promise.allSettled(activeSet.urls.map(url => fetch(url).then(r => {
-                if(!r.ok) throw new Error("Invalid Response");
-                return r.json();
-            })));
-
-            let combinedBatches = [];
-            results.forEach((result) => {
-              if (result.status === "fulfilled" && result.value) {
-                let resData = result.value;
-                if (activeSet.type === "allorigins") {
-                    resData = JSON.parse(resData.contents);
-                }
-                const batchList = resData.batches || resData.data?.batches || resData.data || (Array.isArray(resData) ? resData : []);
-                combinedBatches = combinedBatches.concat(batchList);
-              }
-            });
-
-            const uniqueMap = new Map();
-            combinedBatches.forEach(b => {
-              if (b && (b._id || b.id)) { uniqueMap.set(b._id || b.id, b); }
-            });
-
-            ALL = Array.from(uniqueMap.values());
-            filtered = ALL;
-
-            if (ALL.length > 0) {
-              coreStatus.innerText = "System Connected";
-              setTimeout(() => { loadMore(true); }, 200);
-            } else {
-              throw new Error("Empty Feed");
-            }
-
-        } catch (err) {
-            syncClusterStreams(setIndex + 1);
-        }
-      }
-
-      function normalizeText(t) { return (t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim(); }
-      function tokenize(t) { return normalizeText(t).split(/\s+/).map((x) => x.replace(/[^a-z0-9]+/g, "")).filter(Boolean); }
-
-      function calcLevenshtein(a, b) {
-        if (!a.length) return b.length; if (!b.length) return a.length;
-        let prev = Array(b.length + 1).fill(0).map((_, i) => i), curr = Array(b.length + 1);
-        for (let i = 0; i < a.length; i++) {
-          curr[0] = i + 1;
-          for (let j = 0; j < b.length; j++) {
-            curr[j + 1] = Math.min(curr[j] + 1, prev[j + 1] + 1, prev[j] + (a[i] === b[j] ? 0 : 1));
           }
-          [prev, curr] = [curr, prev];
-        }
-        return prev[b.length];
-      }
-
-      function performFuzzySearch(searchTerm, sourceArray) {
-        if (!searchTerm) return sourceArray.slice();
-        const normalized = normalizeText(searchTerm);
-        const tokens = tokenize(searchTerm).filter((t) => t.length >= 1);
-        const results = [];
-
-        sourceArray.forEach((batch, idx) => {
-          const batchNorm = normalizeText(batch.name || batch.batchName || batch.title);
-          let score = 0, matchType = "none";
-          if (!batchNorm) return;
-
-          if (batchNorm === normalized) { score = 1000; matchType = "exact"; } 
-          else if (batchNorm.includes(normalized)) { score = 500; matchType = "substring"; } 
-          else {
-            const batchTokens = tokenize(batchNorm).filter((t) => t.length >= 1);
-            if (!batchTokens.length || !tokens.length) return;
-            let totalScore = 0, matched = 0, exactMatches = 0;
-            tokens.forEach((st) => {
-              let best = 0, foundExact = false;
-              batchTokens.forEach((bt) => {
-                if (bt === st) { best = 100; foundExact = true; } 
-                else if (bt.includes(st) && st.length >= 2) { best = Math.max(best, 85); } 
-                else if (st.includes(bt) && bt.length >= 2) { best = Math.max(best, 75); } 
-                else {
-                  const mx = Math.max(st.length, bt.length);
-                  const sim = ((mx - calcLevenshtein(st, bt)) / mx) * 100;
-                  if (sim > best) best = sim;
-                }
-              });
-              if (best >= 40) { totalScore += best; matched++; if (foundExact) exactMatches++; }
-            });
-            if (matched > 0) {
-              const avg = totalScore / tokens.length; const matchRatio = matched / tokens.length;
-              if (avg >= 55) { score = avg * matchRatio * 10; if (exactMatches > 0) score += exactMatches * 50; if (matchRatio === 1) score += 100; matchType = "fuzzy"; }
-            }
-          }
-          if (matchType !== "none") { results.push({ batch, score: Math.round(score), index: idx, matchType }); }
+          document.getElementById("batchTitle").innerText = data.batch_title || "My Classroom Batch";
+          renderClasses(data.classes || []);
+          renderSubjects(data.subjects || []);
+          document.getElementById("loader").style.display = "none";
+        })
+        .catch((err) => {
+          console.error("Connection Error: ", err);
+          document.getElementById("loader").style.display = "none";
         });
-        results.sort((a, b) => {
-          if (a.matchType !== b.matchType) { return { exact: 0, substring: 1, fuzzy: 2 }[a.matchType] - { exact: 0, substring: 1, fuzzy: 2 }[b.matchType]; }
-          return b.score - a.score || a.index - b.index;
-        });
-        return results.map((r) => r.batch);
+    }
+
+    function renderClasses(classes) {
+      const container = document.getElementById("liveClassesContainer");
+      container.innerHTML = "";
+
+      if(classes.length === 0) {
+        container.innerHTML = `<div style="color:#6b7280; font-size:14px; padding:15px; background:#fff; border-radius:10px; border:1px solid #e5e7eb; width:100%;">No scheduled live or recorded classes available today.</div>`;
+        return;
       }
 
-      function showSkeleton() {
-        let html = "";
-        for (let i = 0; i < 8; i++) {
-          html += `
-            <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col gap-3 shadow-sm">
-                <div class="skel-anim h-6 w-3/4 rounded"></div>
-                <div class="skel-anim h-40 w-full rounded-xl"></div>
-                <div class="skel-anim h-4 w-1/2 rounded"></div>
-                <div class="skel-anim h-4 w-2/3 rounded"></div>
-                <div class="skel-anim h-10 w-full rounded-xl mt-auto"></div>
-            </div>`;
+      const now = new Date();
+
+      classes.forEach((live) => {
+        if (live.homeworkIds?.length && !live.url && !live.videoDetails) return;
+
+        let start = live.startTime ? new Date(live.startTime) : null;
+        let end = live.endTime ? new Date(live.endTime) : null;
+        let unixStart = start ? Math.floor(start.getTime() / 1000) : null;
+
+        let status = "UPCOMING";
+        if (start && now >= start && (!end || now <= end)) {
+          status = "LIVE";
+        } else if (end && now > end) {
+          status = "ENDED";
         }
-        total.innerHTML = html;
-      }
 
-      function card(b) {
-        const id = b._id || b.id;
-        let isFav = favs.includes(id);
-        let imgUrl = b.previewImage || b.image || FALLBACK_IMG;
-        if (typeof imgUrl !== 'string' || imgUrl.startsWith('/') || imgUrl.includes('pwbatch.png')) imgUrl = FALLBACK_IMG;
+        let subjectName = live.subjectId?.name || "General Lecture";
+        let topic = live.topic || "Topic Session";
+        let videoId = live._id;
+        let isNote = live.homeworkIds?.length && live.isVideoLecture === false;
+        let link = "#";
 
-        const batchName = b.name || b.batchName || b.title || "Premium Study Batch";
-        const faculty = b.byName || b.faculty || "Expert Faculty Team";
+        if (status === "LIVE") {
+          link = `./live.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&video_id=${videoId}&start=${unixStart}`;
+        } else if (isNote) {
+          let noteId = live.homeworkIds[0]?._id || videoId;
+          link = `./view?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&note=${noteId}`;
+        } else if (status === "ENDED") {
+          link = `./player.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&video_id=${videoId}`;
+        }
 
-        return `
-        <div class="bg-white border border-slate-200 rounded-2xl p-4 hover:shadow-md hover:border-slate-300 transition-all flex flex-col relative group shadow-sm" data-id="${id}">
-            <button class="absolute top-6 right-6 w-8 h-8 rounded-full border border-slate-200 bg-white/80 flex items-center justify-center text-sm z-10 favorite-btn ${isFav?'text-red-500 font-bold':''}">
-                ${isFav?'❤️':'♡'}
-            </button>
-            <h3 class="text-sm font-bold text-slate-800 mb-3 pr-8 truncate group-hover:text-[#4f46e5] transition-colors">${batchName}</h3>
-            <div class="h-36 w-full rounded-xl overflow-hidden bg-slate-50 border border-slate-100 mb-3 shrink-0">
-                <img class="w-full h-full object-contain p-2" loading="lazy" src="${imgUrl}" onerror="this.src='${FALLBACK_IMG}'">
+        let badgeBg = "#f59e0b"; 
+        if (status === "LIVE") badgeBg = "#ef4444"; 
+        if (status === "ENDED") badgeBg = "#6b7280"; 
+
+        let timeText = start ? start.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" }) : "TBD";
+
+        let btnStyle = "background: #f3f4f6; color: #1f2937; border: 1px solid #e5e7eb;";
+        let btnText = "Starts Soon";
+        if (status === "LIVE") {
+          btnStyle = "background: #ef4444; color: #fff; border: 1px solid #ef4444;";
+          btnText = "Join Live Class 🔴";
+        } else if (status === "ENDED") {
+          btnStyle = "background: #4f46e5; color: #fff; border: 1px solid #4f46e5;";
+          btnText = "Watch Recording";
+        }
+
+        const card = `
+        <a href="${link}" class="live-card-link">
+          <div class="live-card">
+            <div class="thumbnail-area">
+              <img src="https://static.pw.live/react-batches/assets/images/thumbnail_placeholder.png" alt="Class Cover">
+              <span class="status-badge" style="background: ${badgeBg};">${status}</span>
             </div>
-            <div class="space-y-1 mb-4 text-[12px] text-slate-500">
-                <div>👨‍🏫 Course By: ${faculty}</div>
-                <div>🗣️ Language: ${b.language || 'Hinglish'}</div>
-                <div class="truncate text-[10px] text-slate-400">🗓️ Schedule: ${b.startDate || 'Dynamic'} → ${b.endDate || 'Archive'}</div>
+            <div class="card-details">
+              <div class="subject-tag">${subjectName}</div>
+              <div class="topic-title">${topic}</div>
+              <div class="meta-info">
+                <span>🕒 ${timeText} (IST)</span>
+              </div>
+              <div class="action-btn" style="${btnStyle}">${btnText}</div>
             </div>
-            <div class="text-xs font-bold text-emerald-600 mb-3 mt-auto">${b.feeTotal ? "₹ " + b.feeTotal : "Access Unlocked"}</div>
-            <button class="w-full bg-[#4f46e5] hover:bg-[#4338ca] text-white text-xs font-bold py-2.5 rounded-xl transition-all explore-btn" data-id="${id}">Explore Course</button>
-        </div>`;
-      }
-
-      function loadMore(reset = false) {
-        if (loading) return; loading = true;
-        if (reset) { total.innerHTML = ""; loaded = 0; }
-        let slice = filtered.slice(loaded, loaded + LIMIT);
-        if (!slice.length && loaded === 0) {
-          total.innerHTML = `<div class="col-span-full text-center text-slate-400 py-12 text-sm">No batches found matching your search.</div>`;
-          loading = false; return;
-        }
-        total.innerHTML += slice.map(card).join("");
-        loaded += LIMIT; loading = false;
-      }
-
-      window.addEventListener("scroll", () => {
-        if (total.classList.contains("hidden")) return;
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) { loadMore(); }
+          </div>
+        </a>
+        `;
+        container.innerHTML += card;
       });
+    }
 
-      document.addEventListener("click", (e) => {
-        if (e.target.classList.contains("favorite-btn")) {
-          let id = e.target.closest("[data-id]").dataset.id;
-          let batch = ALL.find((b) => (b._id || b.id) == id);
+    function renderSubjects(subjects) {
+      const container = document.getElementById("subjectsContainer");
+      container.innerHTML = "";
 
-          if (favs.includes(id)) {
-            favs = favs.filter((f) => f !== id); delete cachedBatches[id];
-          } else {
-            favs.push(id); if (batch) cachedBatches[id] = batch;
-          }
+      if(subjects.length === 0) {
+         container.innerHTML = `<div style="text-align:center; color:#6b7280; padding: 20px; background:#fff; border-radius:10px; width:100%; grid-column: 1/-1;">No mapped course modules found in this batch catalog.</div>`;
+         return;
+      }
 
-          localStorage.setItem("favs", JSON.stringify(favs));
-          localStorage.setItem("fav_batches", JSON.stringify(cachedBatches));
-
-          document.querySelectorAll(`[data-id="${id}"] .favorite-btn`).forEach((b) => {
-            b.classList.toggle("text-red-500", favs.includes(id));
-            b.innerHTML = favs.includes(id) ? "❤️" : "♡";
-          });
-          if (!fav.classList.contains("hidden")) renderFav();
+      subjects.forEach((sub) => {
+        let teacher = "Faculty Team";
+        if (sub.teacherIds?.length && typeof sub.teacherIds[0] === "object") {
+          teacher = (sub.teacherIds[0].firstName || "") + " " + (sub.teacherIds[0].lastName || "");
+        } else if (sub.teacherName || sub.teacher_name) {
+          teacher = sub.teacherName || sub.teacher_name;
         }
 
-        if (e.target.classList.contains("explore-btn")) {
-          let id = e.target.dataset.id;
-          let batch = ALL.find((b) => (b._id || b.id) == id) || cachedBatches[id];
+        let image = sub.imageId?.baseUrl
+          ? sub.imageId.baseUrl + sub.imageId.key
+          : "https://static.pw.live/react-batches/assets/svg/subjects/defaultSubject.svg";
 
-          if (batch && batch.startDate) {
-            let startDate = new Date(batch.startDate);
-            let now = new Date();
-            if (!isNaN(startDate.getTime()) && startDate > now) {
-              let ok = confirm(`⚠️ This batch has not started yet.\n\nStart Date: ${batch.startDate}\n\nDo you still want to continue?`);
-              if (!ok) return;
-            }
-          }
-          
-          // HERE IS THE FIX: Added correct folder routing path to avoid 404 error
-          window.location.href = "./PW/batches.html?batch_id=" + id;
-        }
+        let escapedSubject = sub.subject ? encodeURIComponent(sub.subject.replace(/'/g, "%27")) : "Subject";
+
+        const card = `
+        <div class="subject-card"
+          onclick='location.href="./chapters.html?batch_id=${batchId}&subject_id=${sub._id}&subject_slug=${sub.slug || ''}&subject=${escapedSubject}"'>
+          <img src="${image}" alt="Subject Icon">
+          <div class="subject-info">
+            <div class="sub-title">${sub.subject || "Premium Content Module"}</div>
+            <div class="sub-count">${sub.lectureCount || 0} Lectures Included</div>
+            <div class="sub-teacher">${teacher}</div>
+          </div>
+        </div>
+        `;
+        container.innerHTML += card;
       });
+    }
 
-      function setTab(active, inactive, showEl, hideEl) {
-        active.classList.remove("border-transparent", "text-slate-400"); active.classList.add("border-b-2", "border-[#4f46e5]", "text-[#4f46e5]");
-        inactive.classList.remove("border-b-2", "border-[#4f46e5]", "text-[#4f46e5]"); inactive.classList.add("border-transparent", "text-slate-400");
-        showEl.classList.remove("hidden"); hideEl.classList.add("hidden");
-      }
-
-      totalTab.onclick = () => { setTab(totalTab, favTab, total, fav); };
-      favTab.onclick = () => { setTab(favTab, total, fav, total); renderFav(); };
-
-      function renderFav() {
-        let items = favs.map((id) => cachedBatches[id]).filter(Boolean);
-        fav.innerHTML = items.length ? items.map(card).join("") : `<div class="col-span-full text-center text-slate-400 py-12 text-sm">No favourites added yet ❤️</div>`;
-      }
-
-      searchInput.oninput = function () {
-        let q = this.value.trim();
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        filtered = performFuzzySearch(q, ALL);
-        if (!fav.classList.contains("hidden")) { setTab(totalTab, favTab, total, fav); }
-        loadMore(true);
-      };
-
-      syncClusterStreams();
-    </script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW registration failed:', err));
+      });
+    }
+  </script>
 </body>
 </html>
