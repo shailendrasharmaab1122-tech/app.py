@@ -3,47 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selection Way Hub | DevCoderz</title>
+    <title>Eduvibe PW - the DevCoderZ</title>
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #000; }
-        .frame-wrapper { height: calc(100vh - 55px); width: 100%; }
-        iframe { width: 100%; height: 100%; border: none; }
-        
-        /* Aapke Professional Credits */
-        footer {
-            height: 55px;
-            background: #111;
-            color: #00ffcc;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 25px;
-            font-family: 'Segoe UI', sans-serif;
-            border-top: 2px solid #00ffcc;
-            box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
+        /* Reset default margins and paddings */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .dev-title { font-weight: bold; font-size: 14px; letter-spacing: 1px; }
-        .role-tag { font-size: 10px; color: #888; text-transform: uppercase; }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Header Style */
+        .credit-header {
+            width: 100%;
+            height: 50px;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.3);
+            z-index: 1000;
+            position: relative;
+        }
+
+        .credit-header span {
+            color: #00ffcc; /* text ka color badalne ke liye */
+            margin-left: 5px;
+        }
+
+        /* Iframe Container */
+        .iframe-container {
+            width: 100%;
+            height: calc(100% - 50px); /* Total height me se header ki height minus ki hai */
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
     </style>
 </head>
 <body>
 
-    <div class="frame-wrapper">
-        <iframe 
-            src="https://api.allorigins.win/raw?url=https://deltastudy.site/selectionway" 
-            title="Selection Way Content">
-        </iframe>
+    <div class="credit-header">
+        Developed & Managed by: <span>the DevCoderZ</span>
     </div>
 
-    <footer>
-        <div>
-            <div class="dev-title">DEVANSH SHARMA</div>
-            <div class="role-tag">Lead Architect & Founder</div>
-        </div>
-        <div style="font-size: 12px; border: 1px solid #00ffcc; padding: 3px 8px; border-radius: 4px;">
-            DEVCODERZ CENTRAL
-        </div>
-    </footer>
+    <div class="iframe-container">
+        <iframe src="https://eduvibe-pw.page.gd/?i=1" allowfullscreen></iframe>
+    </div>
 
 </body>
 </html>
