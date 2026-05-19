@@ -8,7 +8,7 @@
     <link href="https://www.pw.live/batches-new/index.BZrLlnYz.css" rel="stylesheet" type="text/css">
     <style>
         body { background-color: #f1f5f9; font-family: sans-serif; margin: 0; padding: 0; }
-        
+
         .custom-tabs-container { display: flex; gap: 8px; overflow-x: auto; padding: 12px 4px; margin-bottom: 16px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
         .custom-tabs-container::-webkit-scrollbar { display: none; }
 
@@ -70,10 +70,10 @@
          window.location.href = `./chapters.html?batch_id=${batchId}&subject_id=${subjectId}`;
       };
 
-      const targetApiUrl = `https://devcoderz.vercel.app/api/PW/batches3/get-lectures.php?batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}&tab=${activeTab}`;
-      const proxyUrl = `/api/stream.js?url=${encodeURIComponent(targetApiUrl)}`;
+      // Successfully streamlined to point directly to your extensionless clean route
+      const cleanApiUrl = `/api/PW/batches?type=lectures&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}&tab=${activeTab}`;
 
-      fetch(proxyUrl)
+      fetch(cleanApiUrl)
         .then(res => { if(!res.ok) throw new Error(); return res.json(); })
         .then(data => {
           document.getElementById("loadingScreen").style.display = "none";
