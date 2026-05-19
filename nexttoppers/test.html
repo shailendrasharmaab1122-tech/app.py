@@ -1,1575 +1,416 @@
-<!DOCTYPE html><html lang="en"><head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>EXAMCRUSHERS NT | Unified Secure Hub</title>
-    <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&amp;display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script><style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style><input type="hidden" id="inject_idm_text_selection"><style></style>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css">
-    <style>
-        * { font-family: 'Inter', sans-serif; }
-        body { background: #0a0c12; color: #eef2ff; }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The DevCoderZ - Premium Batches</title>
+  <style>
+    :root {
+      --primary: #007bff;
+      --primary-hover: #0056b3;
+      --bg-dark: #0f172a;
+      --bg-card: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
 
-        /* Glassmorphism */
-        .glass {
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-        }
+    * {
+      margin: 0;
+      padding: 0;
+      box-box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      user-select: auto !important;
+      -webkit-user-select: auto !important;
+    }
 
-        .glass-card {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(249, 115, 22, 0.15);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      padding-bottom: 80px;
+    }
 
-        .glass-card:hover {
-            border-color: rgba(249, 115, 22, 0.4);
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.5);
-        }
+    /* Header & Branding */
+    header {
+      background-color: var(--bg-card);
+      padding: 20px;
+      text-align: center;
+      border-bottom: 2px solid #334155;
+    }
 
-        /* Live indicator */
-        .live-dot {
-            width: 8px;
-            height: 8px;
-            background: #ef4444;
-            border-radius: 50%;
-            box-shadow: 0 0 12px #ef4444;
-            animation: pulseLive 2s infinite;
-        }
+    header h1 {
+      font-size: 24px;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
 
-        @keyframes pulseLive {
-            0%, 100% { opacity: 0.4; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1.2); }
-        }
+    header p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 5px;
+    }
 
-        /* Gradient text */
-        .gradient-text {
-            background: linear-gradient(135deg, #f97316 0%, #fbbf24 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
+    /* Category Tabs */
+    .tabs {
+      display: flex;
+      gap: 10px;
+      padding: 20px;
+      overflow-x: auto;
+      justify-content: center;
+      background: var(--bg-dark);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
 
-        /* Loading spinner */
-        .spinner {
-            width: 48px;
-            height: 48px;
-            border: 3px solid rgba(249, 115, 22, 0.2);
-            border-radius: 50%;
-            border-top-color: #f97316;
-            animation: spin 0.8s linear infinite;
-        }
+    .tab {
+      padding: 10px 20px;
+      border-radius: 30px;
+      background: var(--bg-card);
+      color: var(--text-main);
+      cursor: pointer;
+      white-space: nowrap;
+      border: 1px solid #334155;
+      transition: 0.2s;
+    }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+    .tab.active, .tab:hover {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
 
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #1e293b; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb { background: #f97316; border-radius: 10px; }
+    /* Batches Grid Container */
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
 
-        /* Quality Selector */
-        .quality-selector {
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(249, 115, 22, 0.4);
-            border-radius: 8px;
-            padding: 6px 12px;
-            font-size: 11px;
-            font-weight: bold;
-            color: #fff;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: monospace;
-        }
+    /* Batch Cards */
+    .card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      border: 1px solid #334155;
+      position: relative;
+    }
 
-        .quality-selector:hover {
-            background: rgba(249, 115, 22, 0.3);
-            border-color: #f97316;
-        }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
 
-        /* Video Controls */
-        .custom-video-controls {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            z-index: 10;
-            opacity: 0;
-            transition: opacity 0.3s;
-            flex-wrap: wrap;
-        }
+    .wrapper {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    }
 
-        .video-container:hover .custom-video-controls {
-            opacity: 1;
-        }
+    .card img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-        .control-btn {
-            background: rgba(255,255,255,0.1);
-            border: none;
-            color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+    .badge {
+      position: absolute;
+      background: #ef4444;
+      color: white;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: bold;
+      border-radius: 6px;
+      top: 12px;
+      left: 12px;
+      z-index: 2;
+    }
 
-        .control-btn:hover {
-            background: #f97316;
-            transform: scale(1.02);
-        }
+    .card-body {
+      padding: 16px;
+    }
 
-        /* Watermarks */
-        .watermark {
-            position: fixed;
-            bottom: 12px;
-            right: 12px;
-            z-index: 999;
-            font-size: 10px;
-            font-weight: 800;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
-            padding: 6px 12px;
-            border-radius: 20px;
-            letter-spacing: 0.5px;
-            border-left: 3px solid #f97316;
-            pointer-events: none;
-            font-family: monospace;
-        }
+    .title {
+      font-size: 15px;
+      font-weight: bold;
+      line-height: 1.4;
+      margin-bottom: 12px;
+      height: 42px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
 
-        .watermark-jai {
-            position: fixed;
-            bottom: 12px;
-            left: 12px;
-            z-index: 999;
-            font-size: 10px;
-            font-weight: 800;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
-            padding: 6px 12px;
-            border-radius: 20px;
-            letter-spacing: 0.5px;
-            border-right: 3px solid #f97316;
-            pointer-events: none;
-            font-family: monospace;
-        }
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-        /* Admin Panel Modal */
-        .modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(8px);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    .price-tag {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-        .modal-content {
-            background: #1e293b;
-            border-radius: 24px;
-            padding: 24px;
-            max-width: 500px;
-            width: 90%;
-            border: 1px solid rgba(249,115,22,0.3);
-            max-height: 80vh;
-            overflow-y: auto;
-        }
+    .price {
+      color: #22c55e;
+      font-weight: bold;
+      font-size: 16px;
+    }
 
-        .admin-btn {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-        }
+    .mrp {
+      text-decoration: line-through;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
 
-        .admin-btn:hover {
-            transform: scale(1.05);
-        }
+    /* Lectures Modal / Popup */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
 
-        /* Video container */
-        .video-container {
-            position: relative;
-        }
+    .modal-content {
+      background: var(--bg-card);
+      width: 100%;
+      max-width: 600px;
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid #334155;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
 
-        .stream-quality-controls {
-            position: absolute;
-            bottom: 80px;
-            right: 12px;
-            z-index: 20;
-            display: flex;
-            gap: 8px;
-        }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+    }
 
-        .video-thumbnail {
-            width: 80px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 8px;
-            background: #1e293b;
-        }
+    .close-btn {
+      cursor: pointer;
+      font-size: 24px;
+      color: var(--text-muted);
+    }
 
-        .folder-thumbnail {
-            width: 100%;
-            height: 120px;
-            object-fit: cover;
-            border-top-left-radius: 12px;
-            border-top-right-radius: 12px;
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-        }
+    .lecture-item {
+      background: var(--bg-dark);
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #334155;
+    }
 
-        .duration-badge {
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(4px);
-            font-size: 9px;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: monospace;
-        }
+    .play-btn {
+      background: var(--primary);
+      border: none;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
 
-        .content-count {
-            background: rgba(249, 115, 22, 0.2);
-            border-radius: 20px;
-            padding: 2px 8px;
-            font-size: 9px;
-            font-weight: bold;
-        }
+    /* Footer Credits */
+    footer {
+      background-color: var(--bg-card);
+      text-align: center;
+      padding: 15px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      border-top: 2px solid #334155;
+    }
 
-        .category-badge {
-            background: linear-gradient(135deg, #f97316 0%, #c2410c 100%);
-            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
-        }
+    footer p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
 
-        /* Secret Admin Access - Hidden from users */
-        .secret-admin-trigger {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            height: 40px;
-            opacity: 0;
-            cursor: pointer;
-            z-index: 1001;
-        }
+    footer .highlight {
+      color: var(--primary);
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
 
-        @media (max-width: 640px) {
-            .watermark, .watermark-jai { font-size: 7px; padding: 4px 8px; }
-            .video-thumbnail { width: 60px; height: 45px; }
-        }
-    </style>
-<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.inset-0{inset:0px}.left-0{left:0px}.right-0{right:0px}.top-0{top:0px}.bottom-0{bottom:0px}.bottom-3{bottom:0.75rem}.left-3{left:0.75rem}.left-4{left:1rem}.top-1\/2{top:50%}.z-\[100\]{z-index:100}.z-\[200\]{z-index:200}.mx-auto{margin-left:auto;margin-right:auto}.mb-2{margin-bottom:0.5rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mt-0\.5{margin-top:0.125rem}.mt-2{margin-top:0.5rem}.mt-4{margin-top:1rem}.mt-5{margin-top:1.25rem}.mt-8{margin-top:2rem}.mt-6{margin-top:1.5rem}.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-1{height:0.25rem}.h-10{height:2.5rem}.h-16{height:4rem}.h-8{height:2rem}.h-3{height:0.75rem}.h-4{height:1rem}.h-40{height:10rem}.h-64{height:16rem}.h-full{height:100%}.max-h-96{max-height:24rem}.min-h-\[80vh\]{min-height:80vh}.w-10{width:2.5rem}.w-16{width:4rem}.w-8{width:2rem}.w-full{width:100%}.w-3{width:0.75rem}.w-4{width:1rem}.w-64{width:16rem}.max-w-7xl{max-width:80rem}.max-w-sm{max-width:24rem}.max-w-md{max-width:28rem}.max-w-xl{max-width:36rem}.-translate-y-1\/2{--tw-translate-y:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.cursor-pointer{cursor:pointer}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-1{gap:0.25rem}.gap-6{gap:1.5rem}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-8 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(2rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(2rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-y-auto{overflow-y:auto}.overflow-x-hidden{overflow-x:hidden}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rounded-3xl{border-radius:1.5rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.rounded-2xl{border-radius:1rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-orange-500\/30{border-color:rgb(249 115 22 / 0.3)}.border-red-500\/20{border-color:rgb(239 68 68 / 0.2)}.border-white\/5{border-color:rgb(255 255 255 / 0.05)}.bg-black\/80{background-color:rgb(0 0 0 / 0.8)}.bg-green-600{--tw-bg-opacity:1;background-color:rgb(22 163 74 / var(--tw-bg-opacity, 1))}.bg-slate-800{--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.bg-blue-500\/10{background-color:rgb(59 130 246 / 0.1)}.bg-orange-500\/10{background-color:rgb(249 115 22 / 0.1)}.bg-white\/5{background-color:rgb(255 255 255 / 0.05)}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.bg-gradient-to-t{background-image:linear-gradient(to top, var(--tw-gradient-stops))}.from-blue-600{--tw-gradient-from:#2563eb var(--tw-gradient-from-position);--tw-gradient-to:rgb(37 99 235 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-black\/70{--tw-gradient-from:rgb(0 0 0 / 0.7) var(--tw-gradient-from-position);--tw-gradient-to:rgb(0 0 0 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-transparent{--tw-gradient-to:rgb(0 0 0 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), transparent var(--tw-gradient-via-position), var(--tw-gradient-to)}.to-blue-500{--tw-gradient-to:#3b82f6 var(--tw-gradient-to-position)}.to-transparent{--tw-gradient-to:transparent var(--tw-gradient-to-position)}.object-cover{object-fit:cover}.p-4{padding:1rem}.p-8{padding:2rem}.px-4{padding-left:1rem;padding-right:1rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-8{padding-top:2rem;padding-bottom:2rem}.py-32{padding-top:8rem;padding-bottom:8rem}.px-12{padding-left:3rem;padding-right:3rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.pb-12{padding-bottom:3rem}.pt-24{padding-top:6rem}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-\[10px\]{font-size:10px}.text-\[7px\]{font-size:7px}.text-\[8px\]{font-size:8px}.text-\[9px\]{font-size:9px}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xs{font-size:0.75rem;line-height:1rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.font-black{font-weight:900}.font-bold{font-weight:700}.uppercase{text-transform:uppercase}.italic{font-style:italic}.leading-none{line-height:1}.tracking-\[0\.2em\]{letter-spacing:0.2em}.tracking-\[0\.3em\]{letter-spacing:0.3em}.tracking-tight{letter-spacing:-0.025em}.tracking-wide{letter-spacing:0.025em}.tracking-wider{letter-spacing:0.05em}.text-red-400{--tw-text-opacity:1;color:rgb(248 113 113 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.blur-3xl{--tw-blur:blur(64px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.duration-500{transition-duration:500ms}.selection\:bg-orange-500\/30 *::selection{background-color:rgb(249 115 22 / 0.3)}.selection\:bg-orange-500\/30::selection{background-color:rgb(249 115 22 / 0.3)}.placeholder\:text-slate-500::placeholder{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.hover\:border-red-500\/40:hover{border-color:rgb(239 68 68 / 0.4)}.hover\:bg-orange-500\/20:hover{background-color:rgb(249 115 22 / 0.2)}.hover\:text-slate-400:hover{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.hover\:shadow-blue-500\/20:hover{--tw-shadow-color:rgb(59 130 246 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.group:hover .group-hover\:scale-105{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:scale-110{--tw-scale-x:1.1;--tw-scale-y:1.1;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@media (min-width: 640px){.sm\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}}@media (min-width: 768px){.md\:px-8{padding-left:2rem;padding-right:2rem}.md\:text-5xl{font-size:3rem;line-height:1}}@media (min-width: 1024px){.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}}@media (min-width: 1280px){.xl\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}}</style></head>
-<body class="selection:bg-orange-500/30 overflow-x-hidden">
-    <!-- Watermarks -->
-    <div class="watermark-jai">🕉️ JAY SHRI RAM 🚩</div>
-    <div class="watermark">❤️ MADE WITH ❤️ SHIVAM SINGH</div>
-    
-    <!-- Secret Admin Trigger (Triple click to open) -->
-    <div class="secret-admin-trigger" id="secretAdminTrigger"></div>
+  <!-- Branding Header -->
+  <header>
+    <h1>The DevCoderZ Portal</h1>
+    <p>Access Your Learning Batches Dynamically</p>
+  </header>
 
-    <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 h-16 flex items-center justify-between px-4 md:px-8 glass z-[100] border-b border-white/5">
-        <div onclick="location.hash='#'" class="flex items-center gap-3 cursor-pointer group">
-            <img src="https://i.ibb.co/bM27L52n/IMG-20260422-WA0009.jpg" class="w-10 h-10 rounded-xl shadow-xl transition-transform group-hover:scale-105">
-            <div>
-                <h1 class="text-sm font-black uppercase tracking-tight">EXAMCRUSHERS <span class="gradient-text">NT</span></h1>
-                <p class="text-[8px] text-slate-500 font-bold uppercase tracking-[0.2em] leading-none mt-0.5">Dev: SHIVAM SINGH BHUMIHAR</p>
-            </div>
-        </div>
-        <a href="https://examcrushers.in/NT/LIVE/" target="_blank" class="flex items-center gap-2 glass px-4 py-2 rounded-full border-red-500/20 hover:border-red-500/40 transition-all">
-            <span class="live-dot"></span>
-            <span class="text-[10px] font-black text-red-400 uppercase tracking-wide">Live Now</span>
-        </a>
-    </nav>
+  <!-- Category Tabs -->
+  <div class="tabs">
+    <div class="tab active" onclick="filterCards('all', this)">All</div>
+    <div class="tab" onclick="filterCards('9th', this)">9th Class</div>
+    <div class="tab" onclick="filterCards('10th', this)">10th Class</div>
+    <div class="tab" onclick="filterCards('11th', this)">11th Class</div>
+    <div class="tab" onclick="filterCards('12th', this)">12th Class</div>
+  </div>
 
-    <!-- Main Content -->
-    <main id="app" class="max-w-7xl mx-auto px-4 md:px-8 pt-24 pb-12 min-h-[80vh]">
-                <div class="space-y-8 fade-in">
-                    <div class="glass-card rounded-3xl p-8 text-center relative overflow-hidden">
-                        <div class="absolute top-0 right-0 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl"></div>
-                        <div class="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
-                        <h1 class="text-4xl md:text-5xl font-black mb-4">
-                            Welcome to <span class="gradient-text">EXAMCRUSHERS</span>
-                        </h1>
-                        <p class="text-slate-400 max-w-xl mx-auto text-sm">
-                            Your unified gateway to premium educational content. Access all batches, live sessions, and study materials in one place.
-                        </p>
-                        <div class="flex flex-wrap gap-2 justify-center mt-6">
-                            <span class="px-3 py-1 bg-white/5 rounded-full text-[10px] font-bold uppercase tracking-wider">📚 10+ Batches</span>
-                            <span class="px-3 py-1 bg-white/5 rounded-full text-[10px] font-bold uppercase tracking-wider">🎥 HD Videos</span>
-                            <span class="px-3 py-1 bg-white/5 rounded-full text-[10px] font-bold uppercase tracking-wider">🔐 Secure Access</span>
-                        </div>
-                    </div>
-                    <div class="relative">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="search" aria-hidden="true" class="lucide lucide-search absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg>
-                        <input type="text" id="searchInput" placeholder="Search batches by name..." class="search-input w-full max-w-md mx-auto block px-12 py-3 rounded-full text-sm text-white placeholder:text-slate-500">
-                    </div>
-                    <div id="coursesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/62'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dxixtlyravvxx.cloudfront.net/540/admin_v1/bundle_management/course/285939929246_10th%20aarambh%202.0%20banner%20app.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Class 10
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">AARAMBH 2.O 10th</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹999</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/64'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dxixtlyravvxx.cloudfront.net/540/admin_v1/bundle_management/course/152792333113_9th%20aarambh%202.0%20banner%20app.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Class 9
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">AARAMBH 2.O 9th</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹999</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/78'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dxixtlyravvxx.cloudfront.net/540/admin_v1/bundle_management/course/626308539904_abhay%2010th%20banner%20app%202026.png" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Class 10
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">Abhay 10th 2026</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹999</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/81'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dxixtlyravvxx.cloudfront.net/540/admin_v1/bundle_management/course/151836440589_abhay%209th%20banner%20app%202026.png" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Class 9
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">Abhay 9th 2026</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹999</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/83'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dylnd2lqy6eys.cloudfront.net/540/admin_v1/bundle_management/course/641788840605_Abhay_UP_Board_(1).png" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Class 10
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">UP Board ABHAY 10th (हिंदी माध्यम)</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹499</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/84'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dylnd2lqy6eys.cloudfront.net/540/admin_v1/bundle_management/course/777873140606_Abhay_Bihar_Board_(1).png" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Class 10
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">Bihar Board ABHAY 10th(हिंदी माध्यम)</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹499</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/86'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dxixtlyravvxx.cloudfront.net/540/admin_v1/bundle_management/course/194079640690_Nirbhay%20Class%2012th%20Science.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Class 12
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">Science 12th NIRBHAY</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹999</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/88'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dxixtlyravvxx.cloudfront.net/540/admin_v1/bundle_management/course/547817640692_Nirbhay%20Class%2012th%20Humanities.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Class 12
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">Hum. 12th NIRBHAY</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹999</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/55'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dxixtlyravvxx.cloudfront.net/540/admin_v1/bundle_management/course/183130728609_Prarambh%20BATCh%20Science%20Class%2011.png" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Premium
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">Prarambh Sci. 11th</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹999</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/58'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dxixtlyravvxx.cloudfront.net/540/admin_v1/bundle_management/course/337551428612_Prarambh%20BATCh%20Science%2012.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Class 12
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">Prarambh Sci. 12th</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹999</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/53'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dxixtlyravvxx.cloudfront.net/540/admin_v1/bundle_management/course/216113028517_Prarambh%20BATCh%20Humanities%2011.png" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Premium
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">Prarambh Humanities XI 2025-26</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹1999</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/56'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dxixtlyravvxx.cloudfront.net/540/admin_v1/bundle_management/course/737975028610_Prarambh%20BATCh%20Commerce%2011.png" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Premium
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">Prarambh 11th Commerce </h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹1499</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/179'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/2788484_125_aarambh%20plus%202027%20class%209th%20banner%20app.png" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Class 9
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">AARAMBH PLUS 9th BATCH 26-27</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹3999</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/178'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/6571450_125_aarambh%202027%20class%209th%20banner%20app.png" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Class 9
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">AARAMBH 9th BATCH 26-27</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹2999</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/105'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/1300928_125_IMG_5290.jpeg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Class 12
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">Humanities 12th - PRARAMBH 26-27</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹3499</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/106'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/3207649_125_IMG_5291.jpeg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Class 12
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">Humanities 12th - PRARAMBH Pro 26-27</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹4999</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/109'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/2936192_125_Humanities_Prarambh_Batch_Class_11th_App_Banners.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Premium
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">Humanities 11th - PRARAMBH 2026-27</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹3499</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/124'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/721208_125_Commerce%20CUET%20Batch%20Class%2012th%20PRO%20App%20Banners.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Premium
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">CUET (Commerce)</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹1499</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/122'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/346473_125_Science%20CUET%20Batch%20Class%2012th%20PRO%20App%20Banners.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Premium
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">CUET (Science)</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹1499</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/177'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/3124628_125_Nirbhay%20Batch%20Class%208th%20App%20Banners09-01.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Premium
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">NIRMAAN BATCH  Class 8th</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹3499</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/123'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/6877813_125_Humanities%20CUET%20Batch%20Class%2012th%20PRO%20App%20Banners.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Premium
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">CUET (Humanities)</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹1499</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/107'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/2159678_125_Science_Prarambh_Batch_Class_11th_App_Banners.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Premium
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">Science (PCMB) 11th - PRARAMBH 2026-27</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹3499</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/112'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/1046248_125_Science_Plus_Prarambh_Batch_Class_11th_App_Banners.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Premium
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">Science (PCMB) 11th - PRARAMBH PLUS 2026-27</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹4999</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/103'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/5881826_125_Science%20Prarambh%20Batch%20Class%2012th%20App%20Banners%20%281%29.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Class 12
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">Science (PCMB)12th - PRARAMBH 26-27</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹3499</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/104'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/1890800_125_Science%20Prarambh%20Batch%20Class%2012th%20PRO%20App%20Banners.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Class 12
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">Science (PCMB) 12th - PRARAMBH Pro 26-27</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹4999</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/108'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/1338423_125_Commerce_Prarambh_Batch_Class_11th_App_Banners.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Premium
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">Commerce 11th - PRARAMBH 2026-27</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹3499</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/110'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/486342_125_Commerce_Plus_Prarambh_Batch_Class_11th_App_Banners.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Premium
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">Commerce 11th - PRARAMBH PLUS 2026-27</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹4999</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/101'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/4018906_125_Commerce%20Prarambh%20Batch%20Class%2012th%20App%20Banners.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Class 12
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">Commerce 12th - PRARAMBH 26-27</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹3499</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/102'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/7402116_125_Commerce%20Prarambh%20Batch%20Class%2012th%20PRO%20App%20Banners.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Class 12
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">Commerce 12th  - PRARAMBH Pro 26-27</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹4999</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/176'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/4628574_125_aarambh%20banner%20app%202026%202.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Class 10
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">AARAMBH 10th BATCH 26-27</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹3499</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/111'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/3557768_125_Humanities_Plus_Prarambh_Batch_Class_11th_App_Banners.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                Premium
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">Humanities 11th - PRARAMBH PLUS 2026-27</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹4999</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                </div>
-            </main>
+  <!-- Batches Dynamic Grid -->
+  <div class="container" id="batches-grid">
+    <!-- JavaScript will inject cards here -->
+  </div>
 
-    <!-- Footer -->
-    <footer class="py-8 text-center border-t border-white/5 mt-8">
-        <p class="text-[9px] text-slate-600 font-black uppercase tracking-[0.3em]">© 2026 EXAMCRUSHERS • SHIVAM SINGH BHUMIHAR</p>
-        <p class="text-[7px] text-slate-700 mt-2 tracking-wider">EMPOWERING EDUCATION THROUGH TECHNOLOGY</p>
-    </footer>
-
-    <!-- Popup Modal -->
-    <div id="pop" class="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md transition-all duration-300" style="display: none;">
-        <div class="glass-card max-w-sm w-full p-8 rounded-3xl text-center relative overflow-hidden fade-in">
-            <div class="absolute top-0 left-0 w-full h-1 category-badge"></div>
-            <div class="w-16 h-16 mx-auto mb-4 rounded-full category-badge flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="users" aria-hidden="true" class="lucide lucide-users w-8 h-8 text-white"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><path d="M16 3.128a4 4 0 0 1 0 7.744"></path><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><circle cx="9" cy="7" r="4"></circle></svg>
-            </div>
-            <h3 class="text-2xl font-black italic text-white mb-2">Join The Matrix</h3>
-            <p class="text-xs text-slate-400 mb-6">Get exclusive updates, support &amp; premium content</p>
-            <a href="https://t.me/+6O4vB11WxHc4NWRl" target="_blank" class="block bg-gradient-to-r from-blue-600 to-blue-500 text-white py-3 rounded-xl font-bold text-xs uppercase tracking-wider shadow-lg hover:shadow-blue-500/20 transition-all">Join Telegram Channel</a>
-            <button onclick="document.getElementById('pop').style.display='none'" class="mt-5 text-[10px] text-slate-500 font-black uppercase tracking-wider hover:text-slate-400 transition">Remind Me Later</button>
-        </div>
+  <!-- Lectures List Modal (Hidden by default) -->
+  <div class="modal" id="lectures-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-batch-title">Batch Lectures</h3>
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+      </div>
+      <div id="lectures-list">
+        <!-- Lectures data will show up here -->
+      </div>
     </div>
+  </div>
 
-    <!-- Admin Panel Modal (Hidden by default, triggered by secret click) -->
-    <div id="adminModal" class="modal hidden">
-        <div class="modal-content">
-            <div id="adminLoginForm" class="admin-section">
-                <h2 class="text-2xl font-black mb-4 gradient-text">Admin Login</h2>
-                <input type="password" id="adminPassword" placeholder="Enter Password" class="w-full px-4 py-2 rounded-lg bg-slate-800 border border-orange-500/30 text-white mb-4">
-                <button onclick="adminLogin()" class="w-full admin-btn py-2 rounded-lg text-white font-bold">Login</button>
+  <!-- Footer Credits -->
+  <footer>
+    <p>© 2026 <span class="highlight">The DevCoderZ</span> | Developed by <span class="highlight">Devansh Sharma</span></p>
+  </footer>
+
+  <script>
+    // Pure Batches Ka Data Array Jo Tumne Nikaala Hai
+    const batchData = [
+      { id: "62", name: "AARAMBH 2.O 10th BATCH 2025-26", img: "https://dxixtlyravvxx.cloudfront.net/540/admin_v1/bundle_management/course/285939929246_10th%20aarambh%202.0%20banner%20app.jpg", tag: "10th" },
+      { id: "64", name: "AARAMBH 2.O 9th BATCH 2025-26", img: "https://dxixtlyravvxx.cloudfront.net/540/admin_v1/bundle_management/course/152792333113_9th%20aarambh%202.0%20banner%20app.jpg", tag: "9th" },
+      { id: "78", name: "Abhay 10th Batch 2025-26", img: "https://dxixtlyravvxx.cloudfront.net/540/admin_v1/bundle_management/course/626308539904_abhay%2010th%20banner%20app%202026.png", tag: "10th" },
+      { id: "81", name: "Abhay 9th Batch 2025-26", img: "https://dxixtlyravvxx.cloudfront.net/540/admin_v1/bundle_management/course/151836440589_abhay%209th%20banner%20app%202026.png", tag: "9th" },
+      { id: "83", name: "UP Board ABHAY 10th (हिंदी माध्यम) 2025-26", img: "https://dxixtlyravvxx.cloudfront.net/540/admin_v1/bundle_management/course/641788840605_Abhay%20UP%20Board%20%281%29.png", tag: "10th" },
+      { id: "84", name: "Bihar Board ABHAY 10th(हिंदी माध्यम) 2025-26", img: "https://dxixtlyravvxx.cloudfront.net/540/admin_v1/bundle_management/course/777873140606_Abhay%20Bihar%20Board%20%281%29.png", tag: "10th" },
+      { id: "85", name: "Science 11th (PCMB) - NIRBHAY 2025-26", img: "https://dxixtlyravvxx.cloudfront.net/540/admin_v1/bundle_management/course/443372940688_Nirbhay%20Class%2011th%20Science.jpg", tag: "11th" },
+      { id: "86", name: "Science 12th (PCMB) - NIRBHAY 2025-26", img: "https://dxixtlyravvxx.cloudfront.net/540/admin_v1/bundle_management/course/194079640690_Nirbhay%20Class%2012th%20Science.jpg", tag: "12th" },
+      { id: "55", name: "Prarambh Science 11th (PCMB) 25-26", img: "https://dxixtlyravvxx.cloudfront.net/540/admin_v1/bundle_management/course/183130728609_Prarambh%20BATCh%20Science%20Class%2011.png", tag: "11th" },
+      { id: "58", name: "Prarambh Science 12th (PCMB) 25-26", img: "https://dxixtlyravvxx.cloudfront.net/540/admin_v1/bundle_management/course/337551428612_Prarambh%20BATCh%20Science%2012.jpg", tag: "12th" }
+    ];
+
+    const grid = document.getElementById('batches-grid');
+
+    // Function to Render Batch Cards Dynamic Tarike se
+    function renderBatches(data) {
+      grid.innerHTML = "";
+      data.forEach(batch => {
+        const cardHtml = `
+          <div class="card" data-tag="${batch.tag}" onclick="openBatch('${batch.id}', '${batch.name}')">
+            <div class="wrapper">
+              <div class="badge">Trending</div>
+              <img src="${batch.img}" alt="${batch.name}">
             </div>
-            <div id="adminDashboard" class="admin-section hidden">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-2xl font-black gradient-text">Admin Dashboard</h2>
-                    <button onclick="adminLogout()" class="text-red-400 text-xs">Logout</button>
+            <div class="card-body">
+              <div class="title">${batch.name}</div>
+              <div class="card-footer">
+                <div class="price-tag">
+                  <span class="price">₹Free</span>
+                  <span class="mrp">₹1199</span>
                 </div>
-                <button onclick="showAddCourseForm()" class="w-full bg-green-600 py-2 rounded-lg text-white font-bold mb-4">+ Add New Course</button>
-                <div id="coursesList" class="space-y-2 max-h-96 overflow-y-auto"></div>
+              </div>
             </div>
-            <button onclick="closeAdminPanel()" class="mt-4 text-slate-400 text-xs w-full">Close</button>
-        </div>
-    </div>
+          </div>
+        `;
+        grid.innerHTML += cardHtml;
+      });
+    }
 
-    <script>
-        const app = document.getElementById('app');
-        let _c = [];
-        let currentHls = null;
-        let currentVideo = null;
-        let availableQualities = [];
-        let isAdmin = false;
-        let clickCount = 0;
-        let clickTimer = null;
+    // Tab Filtering Logic
+    function filterCards(type, element) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      element.classList.add('active');
 
-        // Secret admin trigger - triple click on hidden area
-        document.getElementById('secretAdminTrigger').addEventListener('click', function() {
-            clickCount++;
-            if (clickTimer) clearTimeout(clickTimer);
-            clickTimer = setTimeout(() => { clickCount = 0; }, 500);
-            if (clickCount === 3) {
-                toggleAdminPanel();
-                clickCount = 0;
-            }
-        });
+      if (type === 'all') {
+        renderBatches(batchData);
+      } else {
+        const filtered = batchData.filter(b => b.tag === type);
+        renderBatches(filtered);
+      }
+    }
 
-        // Helper functions
-        function formatDuration(seconds) {
-            if (!seconds || seconds <= 0) return '';
-            const hrs = Math.floor(seconds / 3600);
-            const mins = Math.floor((seconds % 3600) / 60);
-            const secs = seconds % 60;
-            if (hrs > 0) return `${hrs}h ${mins}m`;
-            if (mins > 0) return `${mins}m ${secs}s`;
-            return `${secs}s`;
-        }
+    // Card Click Hone Par Modal Open Hoga Aur API Hit Hogi
+    function openBatch(courseId, courseName) {
+      document.getElementById('modal-batch-title').innerText = courseName;
+      document.getElementById('lectures-modal').style.display = 'flex';
+      
+      // Loader Text
+      document.getElementById('lectures-list').innerHTML = `<p style="color: var(--text-muted)">Lectures fetch ho rahe hain... Course ID: ${courseId}</p>`;
+      
+      // Trigger API to get Content IDs
+      fetchLectures(courseId);
+    }
 
-        function getThumbnail(item) {
-            if (item.type === 'folder' && item.data && item.data.thumbnail) return item.data.thumbnail;
-            if (item.data && item.data.thumbnail) return item.data.thumbnail;
-            const title = (item.title || '').toLowerCase();
-            if (title.includes('maths')) return 'https://cdn-icons-png.flaticon.com/512/2331/2331969.png';
-            if (title.includes('science')) return 'https://cdn-icons-png.flaticon.com/512/2948/2948029.png';
-            if (title.includes('social')) return 'https://cdn-icons-png.flaticon.com/512/2103/2103716.png';
-            if (title.includes('english')) return 'https://cdn-icons-png.flaticon.com/512/2920/2920262.png';
-            if (title.includes('hindi')) return 'https://cdn-icons-png.flaticon.com/512/3046/3046790.png';
-            if (title.includes('sanskrit')) return 'https://cdn-icons-png.flaticon.com/512/3194/3194684.png';
-            return 'https://placehold.co/400x225/1e293b/475569?text=' + encodeURIComponent((item.title || '📁').charAt(0));
-        }
+    // YAHA APNI LECTURES LIST WALI API CONNECT KARNA HAI
+    async function fetchLectures(courseId) {
+      try {
+        /*
+        // JAB TUMHEIN LECTURE WALI API MIL JAYE, TOH IS CODE KO UNCOMMENT KAR LENA:
+        
+        let response = await fetch(`https://eduvibe-nt-api.wasmer.app/GET-LECTURES-ENDPOINT?course_id=${courseId}`);
+        let data = await response.json();
+        
+        // Loop chalakar data modal me render kar dena.
+        */
 
-        function showQualityModalForDownload(videoUrl, qualitiesList) {
-            const modal = document.createElement('div');
-            modal.className = 'quality-modal';
-            modal.innerHTML = `
-                <div class="quality-modal-content">
-                    <h3 class="text-lg font-bold mb-3 text-center gradient-text">Download Quality</h3>
-                    <p class="text-xs text-slate-400 mb-4 text-center">Choose video quality to download</p>
-                    <div class="space-y-2">
-                        ${qualitiesList.map((q, idx) => `
-                            <button class="quality-download-option w-full text-left px-4 py-2 rounded-lg bg-white/5 hover:bg-orange-500/20 transition-all flex justify-between items-center" data-url="${q.url}" data-label="${q.label}">
-                                <span>${q.label}</span>
-                                <i data-lucide="download" class="w-4 h-4"></i>
-                            </button>
-                        `).join('')}
-                    </div>
-                    <button class="close-modal w-full mt-4 px-4 py-2 rounded-lg text-xs text-slate-400 hover:text-white transition">Cancel</button>
-                </div>
-            `;
-            document.body.appendChild(modal);
-            lucide.createIcons();
-            modal.querySelectorAll('.quality-download-option').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const url = btn.dataset.url;
-                    window.open(`https://qooly.com/d/?query=${encodeURIComponent(url)}`, '_blank');
-                    modal.remove();
-                });
-            });
-            modal.querySelector('.close-modal').addEventListener('click', () => modal.remove());
-            modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
-        }
+        // Abhi ke liye testing dummy output:
+        setTimeout(() => {
+          document.getElementById('lectures-list').innerHTML = `
+            <div class="lecture-item">
+              <span>Ch-01 : Basic Mathematics - Lecture 01</span>
+              <button class="play-btn" onclick="playVideo('10610', '${courseId}')">Play</button>
+            </div>
+            <div class="lecture-item">
+              <span>Ch-01 : Basic Mathematics - Lecture 02</span>
+              <button class="play-btn" onclick="playVideo('10611', '${courseId}')">Play</button>
+            </div>
+          `;
+        }, 1000);
 
-        async function s() {
-            app.innerHTML = `<div class="flex justify-center items-center py-32"><div class="spinner"></div></div>`;
-            const d = await(await fetch('?api=all')).json();
-            _c = d.data || [];
-            h();
-            window.onhashchange = h;
-            setTimeout(() => {
-                const popup = document.getElementById('pop');
-                popup.classList.remove('hidden');
-                popup.style.display = 'flex';
-            }, 2000);
-        }
+      } catch (error) {
+        document.getElementById('lectures-list').innerHTML = `<p style="color: red">Lectures load karne me dikkat aai!</p>`;
+      }
+    }
 
-        function h() {
-            const hash = location.hash;
-            if (hash.startsWith('#course/')) {
-                const parts = hash.split('/');
-                renderCourseContent(parts[1], parts[2] || '0');
-            } else {
-                renderHome();
-            }
-        }
+    // Final Player Redirection Function (Dono IDs ko mix karke jo tumne dhundha tha)
+    function playVideo(contentId, courseId) {
+      const targetStreamApi = `https://eduvibe-nt-api.wasmer.app/content-details?content_id=${contentId}&course_id=${courseId}`;
+      
+      alert(`Asli API content hit ho raha hai!\nURL: ${targetStreamApi}\n\nYahan tum apna Shaka Player open karwa sakte ho.`);
+      
+      // Agar direct player portal par redirect karna hai:
+      // window.location.href = `YOUR_PLAYER_PAGE.html?content=${contentId}&course=${courseId}`;
+    }
 
-        function renderHome() {
-            app.innerHTML = `
-                <div class="space-y-8 fade-in">
-                    <div class="glass-card rounded-3xl p-8 text-center relative overflow-hidden">
-                        <div class="absolute top-0 right-0 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl"></div>
-                        <div class="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
-                        <h1 class="text-4xl md:text-5xl font-black mb-4">
-                            Welcome to <span class="gradient-text">EXAMCRUSHERS</span>
-                        </h1>
-                        <p class="text-slate-400 max-w-xl mx-auto text-sm">
-                            Your unified gateway to premium educational content. Access all batches, live sessions, and study materials in one place.
-                        </p>
-                        <div class="flex flex-wrap gap-2 justify-center mt-6">
-                            <span class="px-3 py-1 bg-white/5 rounded-full text-[10px] font-bold uppercase tracking-wider">📚 10+ Batches</span>
-                            <span class="px-3 py-1 bg-white/5 rounded-full text-[10px] font-bold uppercase tracking-wider">🎥 HD Videos</span>
-                            <span class="px-3 py-1 bg-white/5 rounded-full text-[10px] font-bold uppercase tracking-wider">🔐 Secure Access</span>
-                        </div>
-                    </div>
-                    <div class="relative">
-                        <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"></i>
-                        <input type="text" id="searchInput" placeholder="Search batches by name..." class="search-input w-full max-w-md mx-auto block px-12 py-3 rounded-full text-sm text-white placeholder:text-slate-500">
-                    </div>
-                    <div id="coursesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
-                </div>
-            `;
-            lucide.createIcons();
-            const drawCourses = (searchTerm = '') => {
-                const filtered = _c.filter(x => x.title.toLowerCase().includes(searchTerm.toLowerCase()));
-                const grid = document.getElementById('coursesGrid');
-                if (filtered.length === 0) {
-                    grid.innerHTML = `<div class="col-span-full text-center py-12"><i data-lucide="inbox" class="w-12 h-12 mx-auto text-slate-600 mb-3"></i><p class="text-slate-500 text-sm">No batches found</p></div>`;
-                    lucide.createIcons();
-                    return;
-                }
-                grid.innerHTML = filtered.map(x => `
-                    <div class="glass-card rounded-2xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/${x.id}'">
-                        <div class="relative overflow-hidden h-40">
-                            <img src="${x.thumbnail}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x200/1e293b/475569?text=No+Image'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 category-badge text-[8px] font-black px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
-                                ${x.title.includes('10th') ? 'Class 10' : x.title.includes('9th') ? 'Class 9' : x.title.includes('12th') ? 'Class 12' : 'Premium'}
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="text-sm font-bold truncate mb-2">${escapeHtml(x.title)}</h4>
-                            <div class="flex justify-between items-center">
-                                <span class="gradient-text font-black text-lg">₹${Math.floor(x.offer_price)}</span>
-                                <button class="text-[10px] px-4 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 transition-all font-black uppercase tracking-wider flex items-center gap-1">
-                                    Explore <i data-lucide="arrow-right" class="w-3 h-3"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-                lucide.createIcons();
-            };
-            drawCourses();
-            document.getElementById('searchInput')?.addEventListener('input', (e) => drawCourses(e.target.value));
-        }
+    function closeModal() {
+      document.getElementById('lectures-modal').style.display = 'none';
+    }
 
-        async function renderCourseContent(cid, fid) {
-            app.innerHTML = `<div class="flex justify-center items-center py-32"><div class="spinner"></div></div>`;
-            const d = await(await fetch(`?api=con&cid=${cid}&fid=${fid}`)).json();
-            const items = d.data || [];
-            const folders = items.filter(i => i.type === 'folder');
-            const files = items.filter(i => i.type === 'file');
-
-            app.innerHTML = `
-                <div class="fade-in">
-                    <button onclick="history.back()" class="group flex items-center gap-2 text-slate-400 hover:text-orange-400 transition-all mb-8 text-sm font-medium">
-                        <i data-lucide="arrow-left" class="w-4 h-4 transition-transform group-hover:-translate-x-1"></i>
-                        Back to Dashboard
-                    </button>
-                    ${folders.length > 0 ? `
-                        <div class="mb-8">
-                            <div class="flex items-center gap-3 mb-5">
-                                <div class="category-badge w-10 h-10 rounded-xl flex items-center justify-center">
-                                    <i data-lucide="folder-tree" class="w-5 h-5 text-white"></i>
-                                </div>
-                                <div>
-                                    <h2 class="text-xl font-black">Subjects</h2>
-                                    <p class="text-xs text-slate-400 mt-0.5">${folders.length} subjects available</p>
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                                ${folders.map(folder => {
-                                    const thumbnail = getThumbnail(folder);
-                                    const contentCounts = folder.data?.content_counts || {};
-                                    const totalVideos = (contentCounts.video?.paid || 0) + (contentCounts.video?.free || 0);
-                                    const totalPdfs = (contentCounts.pdf?.paid || 0) + (contentCounts.pdf?.free || 0);
-                                    return `
-                                        <div class="folder-card glass-card rounded-xl overflow-hidden cursor-pointer transition-all group" onclick="location.hash='#course/${cid}/${folder.entity_id}'">
-                                            <div class="relative overflow-hidden h-28">
-                                                <img src="${thumbnail}" class="folder-thumbnail w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x120/1e293b/475569?text=${encodeURIComponent(folder.title.charAt(0))}'">
-                                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                                            </div>
-                                            <div class="p-3">
-                                                <h4 class="text-sm font-bold truncate">${escapeHtml(folder.title)}</h4>
-                                                <div class="flex items-center gap-2 mt-2">
-                                                    ${totalVideos > 0 ? `<span class="content-count text-orange-400">🎥 ${totalVideos} videos</span>` : ''}
-                                                    ${totalPdfs > 0 ? `<span class="content-count text-blue-400">📄 ${totalPdfs} notes</span>` : ''}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    `;
-                                }).join('')}
-                            </div>
-                        </div>
-                    ` : ''}
-                    ${files.length > 0 ? `
-                        <div class="glass-card rounded-2xl p-6">
-                            <div class="flex items-center gap-3 mb-4">
-                                <div class="category-badge w-10 h-10 rounded-xl flex items-center justify-center">
-                                    <i data-lucide="video" class="w-5 h-5 text-white"></i>
-                                </div>
-                                <div>
-                                    <h2 class="text-xl font-black">Videos & Content</h2>
-                                    <p class="text-xs text-slate-400 mt-0.5">${files.length} ${files.length === 1 ? 'item' : 'items'} available</p>
-                                </div>
-                            </div>
-                            <div class="space-y-2">
-                                ${files.map(file => {
-                                    const videoData = file.data || {};
-                                    const thumbnail = getThumbnail(file);
-                                    const duration = videoData.duration || 0;
-                                    const isLocked = videoData.is_locked == 1;
-                                    return `
-                                        <div class="video-item-card glass-card p-3 rounded-xl cursor-pointer hover:bg-white/5 transition-all" onclick="openMedia('${file.entity_id}','${cid}')">
-                                            <div class="flex gap-4">
-                                                <div class="relative flex-shrink-0">
-                                                    <img src="${thumbnail}" class="video-thumbnail w-24 h-16 object-cover rounded-lg" onerror="this.src='https://placehold.co/120x68/1e293b/475569?text=🎬'">
-                                                    ${duration > 0 ? `<div class="absolute bottom-1 right-1 duration-badge">${formatDuration(duration)}</div>` : ''}
-                                                    ${isLocked ? `<div class="absolute top-1 right-1 bg-red-500/80 rounded-full p-0.5"><i data-lucide="lock" class="w-3 h-3 text-white"></i></div>` : ''}
-                                                </div>
-                                                <div class="flex-1 min-w-0">
-                                                    <h4 class="text-sm font-bold truncate">${escapeHtml(file.title)}</h4>
-                                                    <div class="flex items-center gap-2 mt-1">
-                                                        <span class="text-[9px] text-slate-400 uppercase tracking-wider">
-                                                            <i data-lucide="play-circle" class="w-3 h-3 inline mr-1"></i>Video Lecture
-                                                        </span>
-                                                        ${isLocked ? '<span class="text-[9px] text-orange-400 font-bold">🔒 Premium</span>' : '<span class="text-[9px] text-green-400">✓ Available</span>'}
-                                                    </div>
-                                                </div>
-                                                <i data-lucide="play" class="w-4 h-4 text-orange-400 self-center opacity-0 group-hover:opacity-100 transition-opacity"></i>
-                                            </div>
-                                        </div>
-                                    `;
-                                }).join('')}
-                            </div>
-                        </div>
-                    ` : ''}
-                    ${items.length === 0 ? `
-                        <div class="glass-card p-12 text-center rounded-3xl">
-                            <i data-lucide="folder-open" class="w-12 h-12 mx-auto text-slate-600 mb-3"></i>
-                            <p class="text-slate-400">No content available in this section.</p>
-                        </div>
-                    ` : ''}
-                </div>
-            `;
-            lucide.createIcons();
-        }
-
-        async function parseMasterPlaylist(masterUrl) {
-            try {
-                const response = await fetch(masterUrl, {
-                    headers: {
-                        'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36',
-                        'Referer': window.location.href
-                    }
-                });
-                const content = await response.text();
-                const lines = content.split('\n');
-                const qualities = [];
-                for (let i = 0; i < lines.length; i++) {
-                    const line = lines[i].trim();
-                    if (line.startsWith('#EXT-X-STREAM-INF')) {
-                        const resolutionMatch = line.match(/RESOLUTION=(\d+x\d+)/);
-                        if (resolutionMatch && lines[i + 1]) {
-                            let qualityLabel = '';
-                            const res = resolutionMatch[1];
-                            if (res === '426x240') qualityLabel = '240p';
-                            else if (res === '640x360') qualityLabel = '360p';
-                            else if (res === '852x480') qualityLabel = '480p';
-                            else if (res === '1280x720') qualityLabel = '720p HD';
-                            else if (res === '1920x1080') qualityLabel = '1080p Full HD';
-                            else qualityLabel = res.split('x')[1] + 'p';
-                            qualities.push({
-                                label: qualityLabel,
-                                resolution: res,
-                                url: new URL(lines[i + 1], masterUrl).href
-                            });
-                        }
-                        i++;
-                    }
-                }
-                const resolutionOrder = { '240p': 0, '360p': 1, '480p': 2, '720p HD': 3, '1080p Full HD': 4 };
-                qualities.sort((a, b) => (resolutionOrder[a.label] || 0) - (resolutionOrder[b.label] || 0));
-                return qualities;
-            } catch (error) {
-                console.error('Error parsing master playlist:', error);
-                return [];
-            }
-        }
-
-        async function setupQualityVideo(videoElement, masterUrl) {
-            const qualities = await parseMasterPlaylist(masterUrl);
-            availableQualities = qualities;
-
-            if (qualities.length === 0) {
-                if (Hls.isSupported()) {
-                    const hls = new Hls();
-                    currentHls = hls;
-                    hls.loadSource(masterUrl);
-                    hls.attachMedia(videoElement);
-                    hls.on(Hls.Events.MANIFEST_PARSED, () => { new Plyr(videoElement); });
-                } else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
-                    videoElement.src = masterUrl;
-                    new Plyr(videoElement);
-                } else {
-                    videoElement.src = masterUrl;
-                    new Plyr(videoElement);
-                }
-                return;
-            }
-
-            const defaultQuality = qualities[qualities.length - 1];
-            loadQuality(videoElement, defaultQuality.url);
-
-            const qualityContainer = document.createElement('div');
-            qualityContainer.className = 'stream-quality-controls';
-            const select = document.createElement('select');
-            select.className = 'quality-selector';
-            select.innerHTML = qualities.map((q, idx) =>
-                `<option value="${idx}" ${idx === qualities.length - 1 ? 'selected' : ''}>🎬 ${q.label}</option>`
-            ).join('');
-            select.addEventListener('change', (e) => {
-                const idx = parseInt(e.target.value);
-                const selectedQuality = qualities[idx];
-                const currentTime = videoElement.currentTime;
-                const wasPlaying = !videoElement.paused;
-                loadQuality(videoElement, selectedQuality.url, () => {
-                    videoElement.currentTime = currentTime;
-                    if (wasPlaying) videoElement.play();
-                });
-            });
-            qualityContainer.appendChild(select);
-            videoElement.parentElement.style.position = 'relative';
-            videoElement.parentElement.appendChild(qualityContainer);
-
-            setTimeout(() => {
-                const container = videoElement.closest('.video-container');
-                if (container && !container.querySelector('.custom-video-controls')) {
-                    const controlsBar = document.createElement('div');
-                    controlsBar.className = 'custom-video-controls';
-                    controlsBar.innerHTML = `<button class="control-btn download-video-btn"><i data-lucide="download" class="w-3 h-3"></i> Download</button>`;
-                    container.appendChild(controlsBar);
-                    lucide.createIcons();
-                    controlsBar.querySelector('.download-video-btn').addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        if (availableQualities.length > 0) {
-                            showQualityModalForDownload(masterUrl, availableQualities);
-                        } else {
-                            window.open(`https://qooly.com/d/?query=${encodeURIComponent(masterUrl)}`, '_blank');
-                        }
-                    });
-                }
-            }, 500);
-        }
-
-        function loadQuality(videoElement, qualityUrl, onLoaded = null) {
-            if (currentHls) {
-                currentHls.destroy();
-                currentHls = null;
-            }
-            if (Hls.isSupported()) {
-                const hls = new Hls();
-                currentHls = hls;
-                hls.loadSource(qualityUrl);
-                hls.attachMedia(videoElement);
-                if (onLoaded) hls.on(Hls.Events.MANIFEST_PARSED, onLoaded);
-            } else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
-                videoElement.src = qualityUrl;
-                if (onLoaded) videoElement.addEventListener('loadedmetadata', onLoaded);
-            } else {
-                videoElement.src = qualityUrl;
-                if (onLoaded) videoElement.addEventListener('loadedmetadata', onLoaded);
-            }
-        }
-
-        async function openMedia(mid, cid) {
-            app.innerHTML = `<div class="flex flex-col items-center justify-center py-32"><div class="spinner"></div><p class="text-orange-400 text-xs font-black uppercase tracking-widest mt-6 animate-pulse">Loading Media Matrix...</p></div>`;
-            const d = await(await fetch(`?api=det&mid=${mid}&bid=${cid}`)).json();
-            const media = d.data;
-
-            let videoUrl = media.file_url;
-            let masterPlaylistUrl = null;
-            let hasQualities = false;
-
-            if (media.download_urls && typeof media.download_urls === 'string') {
-                try {
-                    const qualities = JSON.parse(media.download_urls);
-                    if (qualities && qualities.length > 0) {
-                        const qualityMap = { '240': 0, '360': 1, '480': 2, '720': 3 };
-                        const bestQuality = qualities.sort((a, b) => (qualityMap[b.title] || 0) - (qualityMap[a.title] || 0))[0];
-                        videoUrl = bestQuality.url;
-                        hasQualities = true;
-                    }
-                } catch(e) { console.log('Error parsing download_urls', e); }
-            }
-
-            if (media.file_url && (media.file_url.endsWith('.m3u8') || media.file_url.includes('.m3u8'))) {
-                masterPlaylistUrl = media.file_url;
-            }
-            if (videoUrl && (videoUrl.endsWith('.m3u8') || videoUrl.includes('.m3u8'))) {
-                masterPlaylistUrl = videoUrl;
-            }
-
-            if (media.is_drm == 1) {
-                app.innerHTML = `<div class="glass-card p-12 text-center rounded-3xl max-w-md mx-auto fade-in"><div class="w-20 h-20 mx-auto mb-6 rounded-full bg-red-500/10 flex items-center justify-center"><i data-lucide="lock" class="w-10 h-10 text-red-500"></i></div><h3 class="text-2xl font-black text-white italic mb-3">DRM Protected</h3><p class="text-sm text-slate-400 mb-6">This content is encrypted. Please verify your access via Telegram.</p><a href="https://t.me/+6O4vB11WxHc4NWRl" target="_blank" class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-500 px-8 py-3 rounded-xl font-black text-xs uppercase tracking-wider shadow-lg transition-all hover:shadow-blue-500/20"><i data-lucide="send" class="w-4 h-4"></i> Verify on Telegram</a><button onclick="history.back()" class="block w-full mt-4 text-slate-500 text-xs font-medium hover:text-slate-400 transition">Go Back</button></div>`;
-                lucide.createIcons();
-            }
-            else if (media.file_type == 2) {
-                const videoThumbnail = media.thumbnail || getThumbnail({ data: media, title: media.title });
-                app.innerHTML = `<div class="glass-card rounded-2xl overflow-hidden fade-in video-container"><div class="relative aspect-video bg-black"><video id="mediaPlayer" playsinline controls class="w-full h-full" poster="${videoThumbnail}"></video></div><div class="p-4 flex justify-between items-center flex-wrap gap-2"><div class="flex-1 min-w-0"><h3 class="font-bold text-sm truncate">${escapeHtml(media.title || 'Video Content')}</h3><p class="text-[10px] text-slate-500 mt-0.5 flex items-center gap-2 flex-wrap"><span>🎬 ${hasQualities ? 'Multiple Qualities Available' : 'HD Quality'}</span><span>🔒 Secure Stream</span></p></div><button onclick="history.back()" class="glass px-4 py-2 rounded-xl text-xs font-medium hover:text-orange-400 transition">Close</button></div></div>`;
-                const video = document.getElementById('mediaPlayer');
-                currentVideo = video;
-                if (masterPlaylistUrl) {
-                    await setupQualityVideo(video, masterPlaylistUrl);
-                } else if (videoUrl) {
-                    if (videoUrl.endsWith('.m3u8') || videoUrl.includes('.m3u8')) {
-                        await setupQualityVideo(video, videoUrl);
-                    } else {
-                        video.src = videoUrl;
-                        new Plyr(video);
-                        setTimeout(() => {
-                            const container = video.closest('.video-container');
-                            if (container && !container.querySelector('.custom-video-controls')) {
-                                const controlsBar = document.createElement('div');
-                                controlsBar.className = 'custom-video-controls';
-                                controlsBar.innerHTML = `<button class="control-btn download-video-btn"><i data-lucide="download" class="w-3 h-3"></i> Download</button>`;
-                                container.appendChild(controlsBar);
-                                lucide.createIcons();
-                                controlsBar.querySelector('.download-video-btn').addEventListener('click', () => {
-                                    window.open(`https://qooly.com/d/?query=${encodeURIComponent(videoUrl)}`, '_blank');
-                                });
-                            }
-                        }, 500);
-                    }
-                } else {
-                    app.innerHTML = `<div class="glass-card p-12 text-center rounded-3xl"><i data-lucide="alert-circle" class="w-12 h-12 text-orange-500 mx-auto mb-3"></i><p class="text-slate-400">Video URL not available</p><button onclick="history.back()" class="mt-4 glass px-4 py-2 rounded-xl text-xs">Go Back</button></div>`;
-                    lucide.createIcons();
-                }
-            }
-            else {
-                app.innerHTML = `<div class="glass-card rounded-2xl overflow-hidden fade-in p-4"><div class="flex justify-between items-center mb-4"><h3 class="font-bold">Document Viewer</h3><button onclick="history.back()" class="glass px-4 py-2 rounded-xl text-xs font-medium hover:text-orange-400 transition">Close</button></div><iframe src="https://docs.google.com/viewer?url=${encodeURIComponent(media.file_url)}&embedded=true" class="w-full h-[70vh] rounded-xl bg-white/5"></iframe></div>`;
-            }
-            lucide.createIcons();
-        }
-
-        // Admin Panel Functions
-        async function toggleAdminPanel() {
-            const modal = document.getElementById('adminModal');
-            modal.classList.toggle('hidden');
-            if (!isAdmin) {
-                document.getElementById('adminLoginForm').classList.remove('hidden');
-                document.getElementById('adminDashboard').classList.add('hidden');
-            } else {
-                await loadAdminCourses();
-                document.getElementById('adminLoginForm').classList.add('hidden');
-                document.getElementById('adminDashboard').classList.remove('hidden');
-            }
-        }
-
-        async function adminLogin() {
-            const password = document.getElementById('adminPassword').value;
-            const res = await fetch('', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                body: `admin_action=login&password=${encodeURIComponent(password)}`
-            });
-            const data = await res.json();
-            if (data.success) {
-                isAdmin = true;
-                await loadAdminCourses();
-                document.getElementById('adminLoginForm').classList.add('hidden');
-                document.getElementById('adminDashboard').classList.remove('hidden');
-            } else {
-                alert('Invalid password!');
-            }
-        }
-
-        async function loadAdminCourses() {
-            await fetchCourses();
-            const container = document.getElementById('coursesList');
-            container.innerHTML = _c.map(course => `
-                <div class="bg-slate-800 p-3 rounded-lg">
-                    <div class="flex justify-between items-start">
-                        <div class="flex-1">
-                            <h4 class="font-bold text-sm">${escapeHtml(course.title)}</h4>
-                            <p class="text-xs text-slate-400">ID: ${course.id} | ₹${course.offer_price}</p>
-                        </div>
-                        <div class="flex gap-2">
-                            <button onclick='editCourse(${JSON.stringify(course).replace(/'/g, "&#39;")})' class="text-blue-400 text-xs">Edit</button>
-                            <button onclick='deleteCourse(${course.id})' class="text-red-400 text-xs">Delete</button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        async function fetchCourses() {
-            const res = await fetch('?api=all');
-            const data = await res.json();
-            _c = data.data || [];
-            return _c;
-        }
-
-        function showAddCourseForm() {
-            const courseId = prompt('Enter Course ID (number):');
-            if (!courseId) return;
-            if (isNaN(courseId)) {
-                alert('Course ID must be a number!');
-                return;
-            }
-            
-            // Check if ID exists
-            if (_c.some(c => c.id == courseId)) {
-                alert('Course ID already exists! Please use a different ID.');
-                return;
-            }
-            
-            const title = prompt('Enter course title:');
-            if (!title) return;
-            const thumbnail = prompt('Enter thumbnail URL:', 'https://placehold.co/400x200');
-            const price = prompt('Enter price:', '999');
-            addCourse(courseId, title, thumbnail, price);
-        }
-
-        async function addCourse(courseId, title, thumbnail, price) {
-            const res = await fetch('', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                body: `admin_action=add_course&course_id=${courseId}&title=${encodeURIComponent(title)}&thumbnail=${encodeURIComponent(thumbnail)}&offer_price=${encodeURIComponent(price)}`
-            });
-            const data = await res.json();
-            if (data.success) {
-                await fetchCourses();
-                await loadAdminCourses();
-                renderHome();
-                alert('Course added successfully!');
-            } else {
-                alert(data.message || 'Error adding course');
-            }
-        }
-
-        async function editCourse(course) {
-            const newTitle = prompt('Edit title:', course.title);
-            if (!newTitle) return;
-            const newThumbnail = prompt('Edit thumbnail URL:', course.thumbnail);
-            const newPrice = prompt('Edit price:', course.offer_price);
-            const res = await fetch('', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                body: `admin_action=edit_course&id=${course.id}&title=${encodeURIComponent(newTitle)}&thumbnail=${encodeURIComponent(newThumbnail)}&offer_price=${encodeURIComponent(newPrice)}`
-            });
-            const data = await res.json();
-            if (data.success) {
-                await fetchCourses();
-                await loadAdminCourses();
-                renderHome();
-                alert('Course updated!');
-            }
-        }
-
-        async function deleteCourse(id) {
-            if (!confirm('Delete this course?')) return;
-            const res = await fetch('', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                body: `admin_action=delete_course&id=${id}`
-            });
-            const data = await res.json();
-            if (data.success) {
-                await fetchCourses();
-                await loadAdminCourses();
-                renderHome();
-                alert('Course deleted!');
-            }
-        }
-
-        async function adminLogout() {
-            const res = await fetch('', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                body: 'admin_action=logout'
-            });
-            isAdmin = false;
-            closeAdminPanel();
-            alert('Logged out!');
-        }
-
-        function closeAdminPanel() {
-            document.getElementById('adminModal').classList.add('hidden');
-        }
-
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            });
-        }
-
-        // Initialize everything
-        s();
-    </script>
-<script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;88efb2a8c2364476a2c273ae5ae7750c&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
-
-</body></html>
+    // Initial Load
+    renderBatches(batchData);
+  </script>
+</body>
+</html>
