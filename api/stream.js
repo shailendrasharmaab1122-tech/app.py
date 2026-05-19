@@ -15,8 +15,8 @@ export default async function handler(req, res) {
                 headers: {
                     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
                     'Accept': 'application/json, text/plain, */*',
-                    'Origin': 'https://eduvibe-pw-api.wasmer.app',
-                    'Referer': 'https://eduvibe-pw-api.wasmer.app/'
+                    'Origin': 'https://DevCoderz.vercel.app/api/PW/batches.js/',
+                    'Referer': 'https://DevCoderz.vercel.app/api/PW/batches.js/'
                 }
             });
 
