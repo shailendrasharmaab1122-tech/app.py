@@ -2,231 +2,527 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Dashboard - Classroom</title>
-    <link rel="manifest" href="./manifest.json">
-    <meta name="theme-color" content="#4f46e5">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="DevCoderZ">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Batches - DevCoderZ</title>
+
     <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-      body { background: #f5f6f8; color: #111; }
-
-      .spinner {
-        width: 45px;
-        height: 45px;
-        border: 4px solid #e5e7eb;
-        border-top: 4px solid #4f46e5;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-      }
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Inter, sans-serif;
       }
 
-      .layout-container {
-        width: 100%;
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 30px 20px;
+      body {
+        background: #f8fafc;
+        color: #0f172a;
+        overflow: hidden;
       }
 
-      .header-section {
-        margin-bottom: 25px;
-        padding-bottom: 15px;
-        border-bottom: 1px solid #e5e7eb;
-      }
-
-      #portalTitle {
-        font-size: 26px;
-        font-weight: 700;
-        color: #1f2937;
-      }
-
-      .section-title {
-        font-size: 18px;
-        font-weight: 700;
-        margin-bottom: 15px;
-        color: #374151;
+      .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 55px;
+        background: linear-gradient(135deg, #4f46e5, #6366f1);
+        color: white;
+        padding: 16px 20px;
+        font-size: 20px;
+        font-weight: 800;
+        letter-spacing: 1px;
         display: flex;
         align-items: center;
-        gap: 8px;
+        justify-content: space-between;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        z-index: 10;
       }
 
-      .batches-grid {
-        display: grid;
-        grid-template-columns: repeat(1, 1fr);
-        gap: 20px;
-        margin-top: 15px;
+      .header span {
+        font-size: 13px;
+        opacity: 0.9;
+        font-weight: 600;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 4px 10px;
+        border-radius: 8px;
       }
-      @media (min-width: 768px) { .batches-grid { grid-template-columns: repeat(2, 1fr); } }
-      @media (min-width: 1024px) { .batches-grid { grid-template-columns: repeat(3, 1fr); } }
-      @media (min-width: 1440px) { .batches-grid { grid-template-columns: repeat(4, 1fr); } }
 
-      .batch-card {
+      .search-section {
+        position: fixed;
+        top: 55px;
+        left: 0;
+        right: 0;
+        padding: 12px;
         background: #fff;
-        border-radius: 14px;
-        overflow: hidden;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      .search-box {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e2e8f0;
+        border-left: 4px solid #4f46e5;
+        border-radius: 25px;
+      }
+
+      .tab-nav {
+        position: fixed;
+        top: 115px;
+        left: 0;
+        right: 0;
         display: flex;
-        flex-direction: column;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-        border: 1px solid #e5e7eb;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        background: #fff;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      .tab-btn {
+        flex: 1;
+        padding: 12px;
+        font-weight: 700;
+        border: none;
+        background: none;
         cursor: pointer;
       }
-      .batch-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      .tab-btn.active {
+        background: #4f46e5;
+        color: #fff;
       }
 
-      .batch-thumbnail {
-        width: 100%;
-        aspect-ratio: 16/9;
-        background: #f3f4f6;
-        overflow: hidden;
+      .content {
+        position: absolute;
+        top: 160px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        overflow-y: auto;
+        padding: 20px;
       }
-      .batch-thumbnail img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
       }
 
-      .batch-details {
-        padding: 16px;
+      .batch {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-left: 5px solid var(--accent, #4f46e5);
+        border-radius: 18px;
+        padding: 18px;
         display: flex;
         flex-direction: column;
-        flex: 1;
-        gap: 6px;
+        justify-content: space-between;
+        position: relative;
+        transition: 0.25s;
+      }
+      .batch:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
       }
 
       .batch-name {
-        font-size: 15px;
-        font-weight: 700;
-        color: #111827;
-        line-height: 1.4;
-        height: 42px;
-        overflow: hidden;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
+        font-weight: 800;
+        margin-bottom: 10px;
+        font-size: 16px;
       }
 
-      .batch-meta {
+      .batch-thumbnail {
+        position: relative;
+        overflow: hidden;
+        border-radius: 12px;
+        margin-bottom: 12px;
+        z-index: 1;
+      }
+      .batch-thumbnail img {
+        width: 100%;
+        height: 180px;
+        object-fit: contain;
+        transition: 0.3s;
+      }
+      .batch:hover img {
+        transform: scale(1.05);
+      }
+
+      .skeleton {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-left: 5px solid #cbd5f5;
+        border-radius: 18px;
+        padding: 18px;
+      }
+
+      .skel {
+        background: linear-gradient(
+          90deg,
+          #e2e8f0 25%,
+          #f1f5f9 50%,
+          #e2e8f0 75%
+        );
+        background-size: 200% 100%;
+        animation: shimmer 1.2s infinite;
+        border-radius: 8px;
+      }
+
+      @keyframes shimmer {
+        0 { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+      }
+
+      .skel-title { height: 20px; width: 70%; margin-bottom: 10px; }
+      .skel-img { height: 180px; margin-bottom: 12px; border-radius: 12px; }
+      .skel-text { height: 12px; margin-bottom: 6px; }
+      .skel-btn { height: 35px; margin-top: 10px; border-radius: 10px; }
+
+      .favorite-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        border: 1px solid #e2e8f0;
+        background: #fff;
+        cursor: pointer;
+        z-index: 5;
+      }
+      .favorite-btn.favorited {
+        background: #ef4444;
+        color: #fff;
+        border-color: #ef4444;
+      }
+
+      .batch-info {
         font-size: 13px;
-        color: #6b7280;
-        margin-top: auto;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        color: #475569;
+        margin-bottom: 5px;
+      }
+      .batch-price {
+        font-weight: 700;
+        margin-top: 6px;
       }
 
       .explore-btn {
         margin-top: 10px;
-        font-size: 13px;
-        text-align: center;
-        padding: 8px 12px;
-        border-radius: 8px;
-        font-weight: 600;
-        background: #4f46e5;
+        width: 100%;
+        padding: 11px;
+        border: none;
+        border-radius: 12px;
+        margin-top: auto;
+        font-weight: 700;
         color: #fff;
-        transition: 0.2s;
+        background: linear-gradient(135deg, #4f46e5, #4338ca);
+        cursor: pointer;
+      }
+
+      .empty {
+        text-align: center;
+        padding: 40px;
+        color: #64748b;
       }
     </style>
+    <style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style>
 </head>
-<body>
 
-    <div id="loader" style="position: fixed; inset: 0; background: #fff; display: flex; align-items: center; justify-content: center; z-index: 9999;">
-      <div class="spinner"></div>
+  <body>
+    <div class="header">
+      EDUVIBE-PW
+      <span>⚡ Powered by DevCoderZ</span>
     </div>
 
-    <nav class="h-16 bg-[#4f46e5] flex items-center justify-between px-6 shadow-md sticky top-0 z-50">
-        <div class="flex items-center gap-2">
-            <div class="h-9 w-9 bg-white rounded-lg flex items-center justify-center font-bold text-[#4f46e5]">DC</div>
-            <span class="text-xl font-black tracking-tight text-white">The DevCoderZ</span>
-        </div>
-    </nav>
-
-    <div class="layout-container">
-      <header class="header-section">
-        <h1 id="portalTitle">Classroom Vault</h1>
-      </header>
-
-      <section>
-        <h2 class="section-title">Available Batches Catalog</h2>
-        <div id="batchesContainer" class="batches-grid"></div>
-      </section>
+    <div class="search-section">
+      <input id="searchInput" class="search-box" placeholder="Search batches...">
     </div>
 
-  <script>
-    function loadAllBatches() {
-      fetch("/api/PW/all-batches-api1.js")
-        .then((res) => res.json())
-        .then((data) => {
-          let dynamicBatches = data.batches || data.data?.batches || data.data || [];
-          renderBatches(dynamicBatches);
-          document.getElementById("loader").style.display = "none";
-        })
-        .catch((err) => {
-          console.error("Catalog Sync Failure: ", err);
-          document.getElementById("batchesContainer").innerHTML = `<div style="grid-column:1/-1; text-align:center; color:#ef4444; padding:20px;">❌ Matrix loading failure. Check internal gateway api log.</div>`;
-          document.getElementById("loader").style.display = "none";
-        });
-    }
+    <div class="tab-nav">
+      <button class="tab-btn active" id="totalTab">Total</button>
+      <button class="tab-btn" id="favTab">Favourites</button>
+    </div>
 
-    function renderBatches(batches) {
-      const container = document.getElementById("batchesContainer");
-      container.innerHTML = "";
+    <div class="content">
+      <div id="total" class="grid"></div>
+      <div id="fav" class="grid" style="display: none"></div>
+    </div>
 
-      if (batches.length === 0) {
-        container.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:#6b7280; padding:20px;">No registered batches linked to this terminal slot.</div>`;
-        return;
+    <script>
+      const FALLBACK_IMG = "https://static.pw.live/react-batches/assets/images/thumbnail_placeholder.png";
+
+      let ALL = [];
+      let filtered = [];
+
+      let favs = JSON.parse(localStorage.getItem("favs") || "[]");
+      let cachedBatches = JSON.parse(localStorage.getItem("fav_batches") || "{}");
+
+      if (localStorage.getItem("batch_cache")) {
+        localStorage.removeItem("batch_cache");
       }
 
-      batches.forEach((b) => {
-        let bName = b.name || b.batchName || b.title || "Premium Course Allocation";
+      const total = document.getElementById("total");
+      const fav = document.getElementById("fav");
+      const content = document.querySelector(".content");
+
+      const totalTab = document.getElementById("totalTab");
+      const favTab = document.getElementById("favTab");
+
+      let loaded = 0, LIMIT = 8, loading = false;
+
+      showSkeleton();
+
+      fetch("/api/PW/all-batches-api1.js")
+        .then((r) => r.json())
+        .then((d) => {
+          ALL = d.batches || d.data?.batches || d.data || [];
+          filtered = ALL;
+          setTimeout(() => { loadMore(true); }, 300);
+        })
+        .catch(() => {
+          ALL = Object.values(cachedBatches);
+          filtered = ALL;
+          if (ALL.length) {
+            loadMore(true);
+          } else {
+            total.innerHTML = `<div class="empty">Failed to load system clusters</div>`;
+          }
+        });
+
+      function normalizeText(t) {
+        return (t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+      }
+
+      function tokenize(t) {
+        return normalizeText(t).split(/\s+/).map((x) => x.replace(/[^a-z0-9]+/g, "")).filter(Boolean);
+      }
+
+      function calcLevenshtein(a, b) {
+        if (!a.length) return b.length;
+        if (!b.length) return a.length;
+        let prev = Array(b.length + 1).fill(0).map((_, i) => i);
+        let curr = Array(b.length + 1);
+        for (let i = 0; i < a.length; i++) {
+          curr[0] = i + 1;
+          for (let j = 0; j < b.length; j++) {
+            curr[j + 1] = Math.min(curr[j] + 1, prev[j + 1] + 1, prev[j] + (a[i] === b[j] ? 0 : 1));
+          }
+          [prev, curr] = [curr, prev];
+        }
+        return prev[b.length];
+      }
+
+      function performFuzzySearch(searchTerm, sourceArray) {
+        if (!searchTerm) return sourceArray.slice();
+        const normalized = normalizeText(searchTerm);
+        const tokens = tokenize(searchTerm).filter((t) => t.length >= 1);
+        const results = [];
+
+        sourceArray.forEach((batch, idx) => {
+          let bName = batch.name || batch.batchName || batch.title || "";
+          const batchNorm = normalizeText(bName);
+          let score = 0, matchType = "none";
+
+          if (batchNorm === normalized) {
+            score = 1000;
+            matchType = "exact";
+          } else if (batchNorm.includes(normalized)) {
+            score = 500;
+            matchType = "substring";
+          } else {
+            const batchTokens = tokenize(bName).filter((t) => t.length >= 1);
+            if (!batchTokens.length || !tokens.length) return;
+            let totalScore = 0, matched = 0, exactMatches = 0;
+
+            tokens.forEach((st) => {
+              let best = 0, foundExact = false;
+              batchTokens.forEach((bt) => {
+                if (bt === st) { foundExact = true; best = 100; }
+                else if (bt.includes(st) && st.length >= 2) best = Math.max(best, 85);
+                else if (st.includes(bt) && bt.length >= 2) best = Math.max(best, 75);
+                else {
+                  const mx = Math.max(st.length, bt.length);
+                  const sim = ((mx - calcLevenshtein(st, bt)) / mx) * 100;
+                  if (sim > best) best = sim;
+                }
+              });
+              if (best >= 40) { totalScore += best; matched++; if (foundExact) exactMatches++; }
+            });
+
+            if (matched > 0) {
+              const avg = totalScore / tokens.length;
+              const matchRatio = matched / tokens.length;
+              if (avg >= 55) {
+                score = avg * matchRatio * 10;
+                if (exactMatches > 0) score += exactMatches * 50;
+                if (matchRatio === 1) score += 100;
+                matchType = "fuzzy";
+              }
+            }
+          }
+
+          if (matchType !== "none") {
+            results.push({ batch, score: Math.round(score), index: idx, matchType });
+          }
+        });
+
+        results.sort((a, b) => {
+          if (a.matchType !== b.matchType) {
+            const order = { exact: 0, substring: 1, fuzzy: 2 };
+            return order[a.matchType] - order[b.matchType];
+          }
+          return b.score - a.score || a.index - b.index;
+        });
+        return results.map((r) => r.batch);
+      }
+
+      function getAccent(b) {
+        return "#4f46e5";
+      }
+
+      function showSkeleton() {
+        let skel = "";
+        for (let i = 0; i < 6; i++) {
+          skel += `
+        <div class="skeleton">
+            <div class="skel skel-title"></div>
+            <div class="skel skel-img"></div>
+            <div class="skel skel-text"></div>
+            <div class="skel skel-text" style="width:60%"></div>
+            <div class="skel skel-text" style="width:40%"></div>
+            <div class="skel skel-btn"></div>
+        </div>`;
+        }
+        total.innerHTML = skel;
+      }
+
+      function card(b) {
         let bId = b._id || b.id || b.batchId;
-        let bPrice = b.price === 0 || b.isFree ? "FREE" : `₹${b.price || 'Premium'}`;
-        
-        let bImage = "https://static.pw.live/react-batches/assets/images/thumbnail_placeholder.png";
-        if (b.imageId?.baseUrl && b.imageId?.key) {
-          bImage = b.imageId.baseUrl + b.imageId.key;
-        } else if (b.previewImage || b.thumbnail) {
+        let isFav = favs.includes(bId);
+        let bName = b.name || b.batchName || b.title || "Premium Course Allocation";
+        let bBy = b.byName || "Classroom Node";
+        let bLang = b.language || "Hinglish";
+        let bStart = b.startDate || "Active Slot";
+        let bEnd = b.endDate || "Ongoing";
+        let bPrice = b.feeTotal || b.price;
+        let finalPrice = bPrice === 0 || b.isFree ? "Free" : `₹ ${bPrice}`;
+
+        let bImage = FALLBACK_IMG;
+        if (b.previewImage || b.thumbnail) {
           bImage = b.previewImage || b.thumbnail;
+        } else if (b.imageId?.baseUrl && b.imageId?.key) {
+          bImage = b.imageId.baseUrl + b.imageId.key;
         }
 
-        const card = `
-        <div class="batch-card" onclick="openBatchStructure('${bId}')">
-          <div class="batch-thumbnail">
-            <img src="${bImage}" alt="Batch Banner">
-          </div>
-          <div class="batch-details">
-            <div class="batch-name">${bName}</div>
-            <div class="batch-meta">
-              <span style="font-weight: 700; color: #10b981;">${bPrice}</span>
-              <span>🔒 Connected</span>
-            </div>
-            <div class="explore-btn">Open Classroom Node</div>
-          </div>
+        return `
+    <div class="batch" data-id="${bId}" style="--accent:${getAccent(b)}">
+        <button class="favorite-btn ${isFav ? "favorited" : ""}">
+            ${isFav ? "❤️" : "♡"}
+        </button>
+        <div class="batch-name">${bName}</div>
+        <div class="batch-thumbnail">
+            <img loading="lazy" src="${bImage}" onerror="this.src='${FALLBACK_IMG}'">
         </div>
-        `;
-        container.innerHTML += card;
+        <div class="batch-info">👨‍🎓 ${bBy}</div>
+        <div class="batch-info">🗣️ ${bLang}</div>
+        <div class="batch-info">🗓️ ${bStart} → ${bEnd}</div>
+        <div class="batch-price">${finalPrice}</div>
+        <button class="explore-btn" data-id="${bId}">Explore</button>
+    </div>`;
+      }
+
+      function loadMore(reset = false) {
+        if (loading) return;
+        loading = true;
+        if (reset) { total.innerHTML = ""; loaded = 0; }
+        let slice = filtered.slice(loaded, loaded + LIMIT);
+        if (!slice.length && loaded === 0) {
+          total.innerHTML = `<div class="empty">No batches found</div>`;
+          loading = false;
+          return;
+        }
+        total.innerHTML += slice.map(card).join("");
+        loaded += LIMIT;
+        loading = false;
+      }
+
+      content.addEventListener("scroll", () => {
+        if (total.style.display === "none") return;
+        if (content.scrollTop + content.clientHeight >= content.scrollHeight - 50) {
+          loadMore();
+        }
       });
-    }
 
-    function openBatchStructure(targetBatchId) {
-      window.location.href = `./batches.html?batch_id=${targetBatchId}`;
-    }
+      document.addEventListener("click", (e) => {
+        if (e.target.classList.contains("favorite-btn")) {
+          let id = e.target.closest(".batch").dataset.id;
+          let batch = ALL.find((b) => (b._id || b.id || b.batchId) === id);
 
-    loadAllBatches();
+          if (favs.includes(id)) {
+            favs = favs.filter((f) => f !== id);
+            delete cachedBatches[id];
+          } else {
+            favs.push(id);
+            if (batch) {
+              cachedBatches[id] = batch;
+            } else if (!cachedBatches[id]) {
+              fetch("/api/PW/all-batches-api1.js")
+                .then((r) => r.json())
+                .then((d) => {
+                  let list = d.batches || d.data?.batches || d.data || [];
+                  let found = list.find((b) => (b._id || b.id || b.batchId) === id);
+                  if (found) {
+                    cachedBatches[id] = found;
+                    localStorage.setItem("fav_batches", JSON.stringify(cachedBatches));
+                  }
+                });
+            }
+          }
 
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW registration failed:', err));
+          localStorage.setItem("favs", JSON.stringify(favs));
+          localStorage.setItem("fav_batches", JSON.stringify(cachedBatches));
+
+          document.querySelectorAll(`.batch[data-id="${id}"] .favorite-btn`).forEach((btn) => {
+              btn.classList.toggle("favorited", favs.includes(id));
+              btn.innerHTML = favs.includes(id) ? "❤️" : "♡";
+          });
+
+          if (fav.style.display === "grid") { renderFav(); }
+        }
+
+        if (e.target.classList.contains("explore-btn")) {
+          let id = e.target.dataset.id;
+          window.location.href = "batches.html?batch_id=" + id;
+        }
       });
-    }
-  </script>
+
+      function setActive(tab) {
+        totalTab.classList.remove("active");
+        favTab.classList.remove("active");
+        tab.classList.add("active");
+      }
+
+      totalTab.onclick = () => {
+        setActive(totalTab);
+        total.style.display = "grid";
+        fav.style.display = "none";
+      };
+
+      favTab.onclick = () => {
+        setActive(favTab);
+        total.style.display = "none";
+        fav.style.display = "grid";
+        renderFav();
+      };
+
+      function renderFav() {
+        let items = favs.map((id) => cachedBatches[id]).filter(Boolean);
+        fav.innerHTML = items.length
+          ? items.map(card).join("")
+          : `<div class="empty">No favourites yet ❤️</div>`;
+      }
+
+      document.getElementById("searchInput").oninput = function () {
+        let q = this.value.trim();
+        content.scrollTo({ top: 0, behavior: "smooth" });
+        filtered = performFuzzySearch(q, ALL);
+        loadMore(true);
+      };
+    </script>
 </body>
 </html>
