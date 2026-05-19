@@ -227,6 +227,21 @@
             <div class="h-9 w-9 bg-white rounded-lg flex items-center justify-center font-bold text-[#4f46e5]">DC</div>
             <span class="text-xl font-black tracking-tight text-white">The DevCoderZ</span>
         </div>
+        <div class="flex items-center gap-2">
+            <select id="classSelector" onchange="switchBatchByClass(this.value)" class="bg-white text-slate-800 text-xs font-bold py-1.5 px-3 rounded-lg border border-slate-200 outline-none cursor-pointer shadow-sm">
+                <option value="">Select Stream/Class</option>
+                <option value="6">Class 6th</option>
+                <option value="7">Class 7th</option>
+                <option value="8">Class 8th</option>
+                <option value="9">Class 9th</option>
+                <option value="10">Class 10th</option>
+                <option value="11">Class 11th</option>
+                <option value="12">Class 12th</option>
+                <option value="jee">IIT-JEE Wing</option>
+                <option value="neet">NEET Medical</option>
+                <option value="upsc">UPSC Civil Services</option>
+            </select>
+        </div>
     </nav>
 
     <div class="layout-container">
@@ -234,24 +249,57 @@
         <h1 id="batchTitle">Loading Batch Portal...</h1>
       </header>
 
-      <section style="margin-bottom: 35px;">
+      <section id="liveSection" style="margin-bottom: 35px;">
         <h2 class="section-title">Live & Recent Classes</h2>
         <div id="liveClassesContainer" class="live-row"></div>
       </section>
 
-      <section>
+      <section id="subjectSection">
         <h2 class="section-title">Course Subjects</h2>
         <div id="subjectsContainer" class="subjects-grid"></div>
       </section>
     </div>
 
   <script>
-    const batchId = new URLSearchParams(window.location.search).get("batch_id");
+    const classBatchMapping = {
+      "6": "698ad3519549b300a5e1cc6a",
+      "7": "698ad3519549b300a5e1cc6a",
+      "8": "698ad3519549b300a5e1cc6a",
+      "9": "698ad3519549b300a5e1cc6a",
+      "10": "698ad3519549b300a5e1cc6a",
+      "11": "698ad3519549b300a5e1cc6a",
+      "12": "698ad3519549b300a5e1cc6a",
+      "jee": "698ad3519549b300a5e1cc6a",
+      "neet": "698ad3519549b300a5e1cc6a",
+      "upsc": "698ad3519549b300a5e1cc6a"
+    };
+
+    let batchId = new URLSearchParams(window.location.search).get("batch_id");
 
     if (!batchId) {
-      alert("Error: Batch configuration code missing.");
-      document.getElementById("loader").style.display = "none";
-    } else {
+      batchId = classBatchMapping["jee"];
+    }
+
+    function switchBatchByClass(selectedClass) {
+      if (!selectedClass || !classBatchMapping[selectedClass]) return;
+      const newBatchId = classBatchMapping[selectedClass];
+      window.location.href = `./index.html?batch_id=${newBatchId}`;
+    }
+
+    function syncSelectorUI() {
+      const selector = document.getElementById("classSelector");
+      for (const [key, value] of Object.entries(classBatchMapping)) {
+        if (value === batchId) {
+          selector.value = key;
+          break;
+        }
+      }
+    }
+
+    function fetchBatchData() {
+      document.getElementById("loader").style.display = "flex";
+      syncSelectorUI();
+
       fetch("/api/PW/batches?type=batch&batch_id=" + encodeURIComponent(batchId))
         .then((res) => res.json())
         .then((data) => {
@@ -385,6 +433,8 @@
         container.innerHTML += card;
       });
     }
+
+    fetchBatchData();
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
