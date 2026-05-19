@@ -40,7 +40,7 @@
         border-bottom: 1px solid #e5e7eb;
       }
 
-      #batchTitle {
+      #portalTitle {
         font-size: 26px;
         font-weight: 700;
         color: #1f2937;
@@ -56,163 +56,83 @@
         gap: 8px;
       }
 
-      .live-row {
-        display: flex;
-        overflow-x: auto;
-        gap: 16px;
-        padding-bottom: 15px;
-        scroll-behavior: smooth;
+      .batches-grid {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 20px;
+        margin-top: 15px;
       }
-      .live-row::-webkit-scrollbar {
-        height: 6px;
-      }
-      .live-row::-webkit-scrollbar-thumb {
-        background: #cbd5e1;
-        border-radius: 4px;
-      }
+      @media (min-width: 768px) { .batches-grid { grid-template-columns: repeat(2, 1fr); } }
+      @media (min-width: 1024px) { .batches-grid { grid-template-columns: repeat(3, 1fr); } }
+      @media (min-width: 1440px) { .batches-grid { grid-template-columns: repeat(4, 1fr); } }
 
-      .live-card-link {
-        text-decoration: none;
-        color: inherit;
-        flex: 0 0 auto;
-      }
-
-      .live-card {
-        width: 310px;
+      .batch-card {
         background: #fff;
         border-radius: 14px;
         overflow: hidden;
         display: flex;
         flex-direction: column;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
         border: 1px solid #e5e7eb;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        cursor: pointer;
       }
-      .live-card:hover {
+      .batch-card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
       }
 
-      .thumbnail-area {
-        position: relative;
+      .batch-thumbnail {
         width: 100%;
         aspect-ratio: 16/9;
         background: #f3f4f6;
+        overflow: hidden;
       }
-      .thumbnail-area img {
+      .batch-thumbnail img {
         width: 100%;
         height: 100%;
         object-fit: cover;
       }
 
-      .status-badge {
-        position: absolute;
-        top: 12px;
-        right: 12px;
-        padding: 4px 10px;
-        font-size: 11px;
-        border-radius: 999px;
-        color: #fff;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-
-      .card-details {
-        padding: 15px;
+      .batch-details {
+        padding: 16px;
         display: flex;
         flex-direction: column;
         flex: 1;
-        gap: 8px;
+        gap: 6px;
       }
-      .subject-tag {
-        font-size: 12px;
-        color: #4f46e5;
-        font-weight: 600;
-        text-transform: uppercase;
-      }
-      .topic-title {
-        font-size: 14px;
+
+      .batch-name {
+        font-size: 15px;
         font-weight: 700;
         color: #111827;
         line-height: 1.4;
-        height: 40px;
+        height: 42px;
         overflow: hidden;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
       }
 
-      .meta-info {
+      .batch-meta {
+        font-size: 13px;
+        color: #6b7280;
         margin-top: auto;
         display: flex;
         justify-content: space-between;
-        font-size: 12px;
-        color: #6b7280;
+        align-items: center;
       }
 
-      .action-btn {
-        margin-top: 12px;
+      .explore-btn {
+        margin-top: 10px;
         font-size: 13px;
         text-align: center;
-        padding: 10px;
+        padding: 8px 12px;
         border-radius: 8px;
         font-weight: 600;
+        background: #4f46e5;
+        color: #fff;
         transition: 0.2s;
-      }
-
-      .subjects-grid {
-        display: grid;
-        grid-template-columns: repeat(1, 1fr);
-        gap: 20px;
-        margin-top: 15px;
-      }
-      @media (min-width: 768px) { .subjects-grid { grid-template-columns: repeat(2, 1fr); } }
-      @media (min-width: 1024px) { .subjects-grid { grid-template-columns: repeat(3, 1fr); } }
-      @media (min-width: 1440px) { .subjects-grid { grid-template-columns: repeat(4, 1fr); } }
-
-      .subject-card {
-        background: #fff;
-        border-radius: 14px;
-        padding: 16px;
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        cursor: pointer;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-        border: 1px solid #e5e7eb;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-      }
-      .subject-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-      }
-      .subject-card img {
-        width: 65px;
-        height: 65px;
-        object-fit: contain;
-        background: #f9fafb;
-        border-radius: 10px;
-        padding: 6px;
-      }
-      .subject-info {
-        flex: 1;
-      }
-      .sub-title {
-        font-size: 16px;
-        font-weight: 700;
-        color: #111827;
-        margin-bottom: 4px;
-      }
-      .sub-count {
-        font-size: 13px;
-        color: #6b7280;
-      }
-      .sub-teacher {
-        font-size: 13px;
-        color: #9ca3af;
-        margin-top: 4px;
-        font-style: italic;
       }
     </style>
 </head>
@@ -231,160 +151,76 @@
 
     <div class="layout-container">
       <header class="header-section">
-        <h1 id="batchTitle">Loading Batch Portal...</h1>
+        <h1 id="portalTitle">Classroom Vault</h1>
       </header>
 
-      <section style="margin-bottom: 35px;">
-        <h2 class="section-title">Live & Recent Classes</h2>
-        <div id="liveClassesContainer" class="live-row"></div>
-      </section>
-
       <section>
-        <h2 class="section-title">Course Subjects</h2>
-        <div id="subjectsContainer" class="subjects-grid"></div>
+        <h2 class="section-title">Available Batches Catalog</h2>
+        <div id="batchesContainer" class="batches-grid"></div>
       </section>
     </div>
 
   <script>
-    const batchId = new URLSearchParams(window.location.search).get("batch_id");
-
-    if (!batchId) {
-      alert("Error: Batch configuration code missing.");
-      document.getElementById("loader").style.display = "none";
-    } else {
-      fetch("/api/PW/batches?type=batch&batch_id=" + encodeURIComponent(batchId))
+    function loadAllBatches() {
+      fetch("/api/PW/all-batches-api1.js")
         .then((res) => res.json())
         .then((data) => {
-          if (!data.success && data.redirect) {
-            window.location.href = data.redirect;
-            return;
-          }
-          document.getElementById("batchTitle").innerText = data.batch_title || "My Classroom Batch";
-          renderClasses(data.classes || []);
-          renderSubjects(data.subjects || []);
+          let dynamicBatches = data.batches || data.data?.batches || data.data || [];
+          renderBatches(dynamicBatches);
           document.getElementById("loader").style.display = "none";
         })
         .catch((err) => {
-          console.error("Connection Error: ", err);
+          console.error("Catalog Sync Failure: ", err);
+          document.getElementById("batchesContainer").innerHTML = `<div style="grid-column:1/-1; text-align:center; color:#ef4444; padding:20px;">❌ Matrix loading failure. Check internal gateway api log.</div>`;
           document.getElementById("loader").style.display = "none";
         });
     }
 
-    function renderClasses(classes) {
-      const container = document.getElementById("liveClassesContainer");
+    function renderBatches(batches) {
+      const container = document.getElementById("batchesContainer");
       container.innerHTML = "";
 
-      if(classes.length === 0) {
-        container.innerHTML = `<div style="color:#6b7280; font-size:14px; padding:15px; background:#fff; border-radius:10px; border:1px solid #e5e7eb; width:100%;">No scheduled live or recorded classes available today.</div>`;
+      if (batches.length === 0) {
+        container.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:#6b7280; padding:20px;">No registered batches linked to this terminal slot.</div>`;
         return;
       }
 
-      const now = new Date();
-
-      classes.forEach((live) => {
-        if (live.homeworkIds?.length && !live.url && !live.videoDetails) return;
-
-        let start = live.startTime ? new Date(live.startTime) : null;
-        let end = live.endTime ? new Date(live.endTime) : null;
-        let unixStart = start ? Math.floor(start.getTime() / 1000) : null;
-
-        let status = "UPCOMING";
-        if (start && now >= start && (!end || now <= end)) {
-          status = "LIVE";
-        } else if (end && now > end) {
-          status = "ENDED";
-        }
-
-        let subjectName = live.subjectId?.name || "General Lecture";
-        let topic = live.topic || "Topic Session";
-        let videoId = live._id;
-        let isNote = live.homeworkIds?.length && live.isVideoLecture === false;
-        let link = "#";
-
-        if (status === "LIVE") {
-          link = `./live.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&video_id=${videoId}&start=${unixStart}`;
-        } else if (isNote) {
-          let noteId = live.homeworkIds[0]?._id || videoId;
-          link = `./view?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&note=${noteId}`;
-        } else if (status === "ENDED") {
-          link = `./player.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&video_id=${videoId}`;
-        }
-
-        let badgeBg = "#f59e0b"; 
-        if (status === "LIVE") badgeBg = "#ef4444"; 
-        if (status === "ENDED") badgeBg = "#6b7280"; 
-
-        let timeText = start ? start.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" }) : "TBD";
-
-        let btnStyle = "background: #f3f4f6; color: #1f2937; border: 1px solid #e5e7eb;";
-        let btnText = "Starts Soon";
-        if (status === "LIVE") {
-          btnStyle = "background: #ef4444; color: #fff; border: 1px solid #ef4444;";
-          btnText = "Join Live Class 🔴";
-        } else if (status === "ENDED") {
-          btnStyle = "background: #4f46e5; color: #fff; border: 1px solid #4f46e5;";
-          btnText = "Watch Recording";
+      batches.forEach((b) => {
+        let bName = b.name || b.batchName || b.title || "Premium Course Allocation";
+        let bId = b._id || b.id || b.batchId;
+        let bPrice = b.price === 0 || b.isFree ? "FREE" : `₹${b.price || 'Premium'}`;
+        
+        let bImage = "https://static.pw.live/react-batches/assets/images/thumbnail_placeholder.png";
+        if (b.imageId?.baseUrl && b.imageId?.key) {
+          bImage = b.imageId.baseUrl + b.imageId.key;
+        } else if (b.previewImage || b.thumbnail) {
+          bImage = b.previewImage || b.thumbnail;
         }
 
         const card = `
-        <a href="${link}" class="live-card-link">
-          <div class="live-card">
-            <div class="thumbnail-area">
-              <img src="https://static.pw.live/react-batches/assets/images/thumbnail_placeholder.png" alt="Class Cover">
-              <span class="status-badge" style="background: ${badgeBg};">${status}</span>
-            </div>
-            <div class="card-details">
-              <div class="subject-tag">${subjectName}</div>
-              <div class="topic-title">${topic}</div>
-              <div class="meta-info">
-                <span>🕒 ${timeText} (IST)</span>
-              </div>
-              <div class="action-btn" style="${btnStyle}">${btnText}</div>
-            </div>
+        <div class="batch-card" onclick="openBatchStructure('${bId}')">
+          <div class="batch-thumbnail">
+            <img src="${bImage}" alt="Batch Banner">
           </div>
-        </a>
-        `;
-        container.innerHTML += card;
-      });
-    }
-
-    function renderSubjects(subjects) {
-      const container = document.getElementById("subjectsContainer");
-      container.innerHTML = "";
-
-      if(subjects.length === 0) {
-         container.innerHTML = `<div style="text-align:center; color:#6b7280; padding: 20px; background:#fff; border-radius:10px; width:100%; grid-column: 1/-1;">No mapped course modules found in this batch catalog.</div>`;
-         return;
-      }
-
-      subjects.forEach((sub) => {
-        let teacher = "Faculty Team";
-        if (sub.teacherIds?.length && typeof sub.teacherIds[0] === "object") {
-          teacher = (sub.teacherIds[0].firstName || "") + " " + (sub.teacherIds[0].lastName || "");
-        } else if (sub.teacherName || sub.teacher_name) {
-          teacher = sub.teacherName || sub.teacher_name;
-        }
-
-        let image = sub.imageId?.baseUrl
-          ? sub.imageId.baseUrl + sub.imageId.key
-          : "https://static.pw.live/react-batches/assets/svg/subjects/defaultSubject.svg";
-
-        let escapedSubject = sub.subject ? encodeURIComponent(sub.subject.replace(/'/g, "%27")) : "Subject";
-
-        const card = `
-        <div class="subject-card"
-          onclick='location.href="./chapters.html?batch_id=${batchId}&subject_id=${sub._id}&subject_slug=${sub.slug || ''}&subject=${escapedSubject}"'>
-          <img src="${image}" alt="Subject Icon">
-          <div class="subject-info">
-            <div class="sub-title">${sub.subject || "Premium Content Module"}</div>
-            <div class="sub-count">${sub.lectureCount || 0} Lectures Included</div>
-            <div class="sub-teacher">${teacher}</div>
+          <div class="batch-details">
+            <div class="batch-name">${bName}</div>
+            <div class="batch-meta">
+              <span style="font-weight: 700; color: #10b981;">${bPrice}</span>
+              <span>🔒 Connected</span>
+            </div>
+            <div class="explore-btn">Open Classroom Node</div>
           </div>
         </div>
         `;
         container.innerHTML += card;
       });
     }
+
+    function openBatchStructure(targetBatchId) {
+      window.location.href = `./batches.html?batch_id=${targetBatchId}`;
+    }
+
+    loadAllBatches();
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
