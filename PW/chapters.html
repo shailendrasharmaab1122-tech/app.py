@@ -64,7 +64,8 @@
             const statusText = document.getElementById('statusText');
             const pageTitle = document.getElementById('pageTitle');
 
-            const targetApi = `https://devcoderz.vercel.app/api/PW/batches2/chapters.php?batch_id=${bId}&subject_id=${sId}`;
+            // Corrected to extensionless clean route mapped with type parameter
+            const targetApi = `/api/PW/batches?type=chapters&batch_id=${bId}&subject_id=${sId}`;
 
             try {
                 statusText.innerText = "Connecting secure channel stream...";
