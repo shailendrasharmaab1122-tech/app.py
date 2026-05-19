@@ -219,7 +219,7 @@
 
     <nav class="h-16 bg-[#4f46e5] flex items-center justify-between px-6 shadow-md sticky top-0 z-50">
         <div class="flex items-center gap-2">
-            <div class="h-9 w-9 bg-white rounded-lg flex items-center justify-center font-bold text-[#4f46e5]">TDC</div>
+            <div class="h-9 w-9 bg-white rounded-lg flex items-center justify-center font-bold text-[#4f46e5]">DC</div>
             <span class="text-xl font-black tracking-tight text-white">The DevCoderZ</span>
         </div>
     </nav>
@@ -248,7 +248,7 @@
       document.getElementById("loader").style.display = "none";
     } else {
       // Clean Extensionless API Route implementation
-      fetch("/api/PW/batches?type=batch&batch_id=" + encodeURIComponent(batchId))
+      fetch("devcoderz.vercel.app/api/PW/batches.js?type=batch&batch_id=" + encodeURIComponent(batchId))
         .then((res) => res.json())
         .then((data) => {
           if (!data.success && data.redirect) {
