@@ -247,7 +247,8 @@
       alert("Error: Batch configuration code missing.");
       document.getElementById("loader").style.display = "none";
     } else {
-      fetch("https://devcoderz.vercel.app/api/PW/batches/batch.php?batch_id=" + encodeURIComponent(batchId))
+      // Clean Extensionless API Route implementation
+      fetch("/api/PW/batches?type=batch&batch_id=" + encodeURIComponent(batchId))
         .then((res) => res.json())
         .then((data) => {
           if (!data.success && data.redirect) {
@@ -296,13 +297,14 @@
         let isNote = live.homeworkIds?.length && live.isVideoLecture === false;
         let link = "#";
 
+        // Paths made relative safely to preserve deep paths
         if (status === "LIVE") {
-          link = `/PW/live.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&video_id=${videoId}&start=${unixStart}`;
+          link = `./live.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&video_id=${videoId}&start=${unixStart}`;
         } else if (isNote) {
           let noteId = live.homeworkIds[0]?._id || videoId;
-          link = `/view?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&note=${noteId}`;
+          link = `./view?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&note=${noteId}`;
         } else if (status === "ENDED") {
-          link = `/PW/player.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&video_id=${videoId}`;
+          link = `./player.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&video_id=${videoId}`;
         }
 
         let badgeBg = "#f59e0b"; 
@@ -368,7 +370,7 @@
 
         const card = `
         <div class="subject-card"
-          onclick='location.href="/PW/chapters.html?batch_id=${batchId}&subject_id=${sub._id}&subject_slug=${sub.slug || ''}&subject=${escapedSubject}"'>
+          onclick='location.href="./chapters.html?batch_id=${batchId}&subject_id=${sub._id}&subject_slug=${sub.slug || ''}&subject=${escapedSubject}"'>
           <img src="${image}" alt="Subject Icon">
           <div class="subject-info">
             <div class="sub-title">${sub.subject || "Premium Content Module"}</div>
