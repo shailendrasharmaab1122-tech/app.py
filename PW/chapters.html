@@ -65,7 +65,7 @@
             const pageTitle = document.getElementById('pageTitle');
 
             // Corrected to extensionless clean route mapped with type parameter
-            const targetApi = `/api/PW/batches?type=chapters&batch_id=${bId}&subject_id=${sId}`;
+            const targetApi = `/api/PW/batches.js?type=chapters&batch_id=${bId}&subject_id=${sId}`;
 
             try {
                 statusText.innerText = "Connecting secure channel stream...";
