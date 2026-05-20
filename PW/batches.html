@@ -394,12 +394,12 @@
 
         let link = "#";
         if (status === "LIVE") {
-          link = `/live.php?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&video_id=${videoId}&start=${unixStart}`;
+          link = `/live.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&video_id=${videoId}&start=${unixStart}`;
         } else if (isNote) {
           let noteId = live.homeworkIds[0]?._id || videoId;
           link = `/view?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&note=${noteId}`;
         } else if (status === "ENDED") {
-          link = `/videoplayerr.php?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&video_id=${videoId}`;
+          link = `/player.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&video_id=${videoId}`;
         }
 
         let badgeColor = "#facc15";
@@ -485,7 +485,7 @@
 
         const card = `
         <div class="subject_card-WgK2V0"
-          onclick='location.href="/pwch/?batch_id=${batchId}&subject_id=${subId}&subject_slug=${sub.slug || ''}&subject=${escapedSubject}"'>
+          onclick='location.href="/chapters.html/?batch_id=${batchId}&subject_id=${subId}&subject_slug=${sub.slug || ''}&subject=${escapedSubject}"'>
           <div class="_all-class-card_mu3oc_3">
             <img src="${image}">
             <div class="_class_mu3oc_10">
