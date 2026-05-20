@@ -242,12 +242,12 @@
 
   <script>
     const batchId = new URLSearchParams(window.location.search).get("batch_id");
+    const FALLBACK_IMG = "https://devcoderz.vercel.app/pw.png";
 
     if (!batchId) {
       alert("Error: Batch configuration code missing.");
       document.getElementById("loader").style.display = "none";
     } else {
-      // Clean Extensionless API Route implementation
       fetch("https://devcoderz.vercel.app/api/PW/batches.js?type=batch&batch_id=" + encodeURIComponent(batchId))
         .then((res) => res.json())
         .then((data) => {
@@ -255,13 +255,20 @@
             window.location.href = data.redirect;
             return;
           }
-          document.getElementById("batchTitle").innerText = data.batch_title || "My Classroom Batch";
-          renderClasses(data.classes || []);
-          renderSubjects(data.subjects || []);
+          
+          // Fallback parsing logic injection
+          let batchName = data.batch_title || data.data?.batch_title || data.name || "My Classroom Batch";
+          let classesList = data.classes || data.data?.classes || [];
+          let subjectsList = data.subjects || data.data?.subjects || data.batch_subjects || [];
+
+          document.getElementById("batchTitle").innerText = batchName;
+          renderClasses(classesList);
+          renderSubjects(subjectsList);
           document.getElementById("loader").style.display = "none";
         })
         .catch((err) => {
           console.error("Connection Error: ", err);
+          document.getElementById("subjectsContainer").innerHTML = `<div style="text-align:center; color:#ef4444; padding:20px; width:100%; grid-column:1/-1;">❌ System load failure. Proxy server check required.</div>`;
           document.getElementById("loader").style.display = "none";
         });
     }
@@ -270,7 +277,7 @@
       const container = document.getElementById("liveClassesContainer");
       container.innerHTML = "";
 
-      if(classes.length === 0) {
+      if(!classes || classes.length === 0) {
         container.innerHTML = `<div style="color:#6b7280; font-size:14px; padding:15px; background:#fff; border-radius:10px; border:1px solid #e5e7eb; width:100%;">No scheduled live or recorded classes available today.</div>`;
         return;
       }
@@ -291,13 +298,12 @@
           status = "ENDED";
         }
 
-        let subjectName = live.subjectId?.name || "General Lecture";
-        let topic = live.topic || "Topic Session";
-        let videoId = live._id;
+        let subjectName = live.subjectId?.name || live.subjectName || "General Lecture";
+        let topic = live.topic || live.title || "Topic Session";
+        let videoId = live._id || live.id;
         let isNote = live.homeworkIds?.length && live.isVideoLecture === false;
         let link = "#";
 
-        // Paths made relative safely to preserve deep paths
         if (status === "LIVE") {
           link = `./live.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&video_id=${videoId}&start=${unixStart}`;
         } else if (isNote) {
@@ -327,7 +333,7 @@
         <a href="${link}" class="live-card-link">
           <div class="live-card">
             <div class="thumbnail-area">
-              <img src="https://static.pw.live/react-batches/assets/images/thumbnail_placeholder.png" alt="Class Cover">
+              <img src="${FALLBACK_IMG}" alt="Class Cover">
               <span class="status-badge" style="background: ${badgeBg};">${status}</span>
             </div>
             <div class="card-details">
@@ -349,7 +355,7 @@
       const container = document.getElementById("subjectsContainer");
       container.innerHTML = "";
 
-      if(subjects.length === 0) {
+      if(!subjects || subjects.length === 0) {
          container.innerHTML = `<div style="text-align:center; color:#6b7280; padding: 20px; background:#fff; border-radius:10px; width:100%; grid-column: 1/-1;">No mapped course modules found in this batch catalog.</div>`;
          return;
       }
@@ -362,19 +368,25 @@
           teacher = sub.teacherName || sub.teacher_name;
         }
 
-        let image = sub.imageId?.baseUrl
-          ? sub.imageId.baseUrl + sub.imageId.key
-          : "https://static.pw.live/react-batches/assets/svg/subjects/defaultSubject.svg";
+        let image = FALLBACK_IMG;
+        if (sub.imageId?.baseUrl && sub.imageId?.key) {
+          image = sub.imageId.baseUrl + sub.imageId.key;
+        } else if (sub.previewImage || sub.thumbnail) {
+          image = sub.previewImage || sub.thumbnail;
+        }
 
-        let escapedSubject = sub.subject ? encodeURIComponent(sub.subject.replace(/'/g, "%27")) : "Subject";
+        // PW JSON API key handling fallback (.subject || .name || .title)
+        let actualSubjectName = sub.subject || sub.name || sub.title || "Premium Content Module";
+        let escapedSubject = encodeURIComponent(actualSubjectName.replace(/'/g, "%27"));
+        let subId = sub._id || sub.id;
 
         const card = `
         <div class="subject-card"
-          onclick='location.href="./chapters.html?batch_id=${batchId}&subject_id=${sub._id}&subject_slug=${sub.slug || ''}&subject=${escapedSubject}"'>
-          <img src="${image}" alt="Subject Icon">
+          onclick='location.href="./chapters.html?batch_id=${batchId}&subject_id=${subId}&subject_slug=${sub.slug || ''}&subject=${escapedSubject}"'>
+          <img src="${image}" onerror="this.src='${FALLBACK_IMG}'" alt="Subject Icon">
           <div class="subject-info">
-            <div class="sub-title">${sub.subject || "Premium Content Module"}</div>
-            <div class="sub-count">${sub.lectureCount || 0} Lectures Included</div>
+            <div class="sub-title">${actualSubjectName}</div>
+            <div class="sub-count">${sub.lectureCount || sub.lectures || 0} Lectures Included</div>
             <div class="sub-teacher">${teacher}</div>
           </div>
         </div>
