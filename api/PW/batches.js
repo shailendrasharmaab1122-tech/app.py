@@ -48,8 +48,38 @@ export default async function handler(req, res) {
             return res.status(response.status).json({ success: false, error: "Core production cluster returned flat response error" });
         }
 
-        const data = await response.json();
-        return res.status(200).json(data);
+        const rawData = await response.json();
+
+        // 4. BATCH STRUCTURE RE-MAPPING ENGINE (Sirf batch type ke liye)
+        if (!type || type === 'batch') {
+            // Agar backend se data nested aa raha ho toh layers bypass karo
+            let actualData = rawData.data || rawData;
+            
+            // Extract Subjects safely
+            let subjects = [];
+            if (Array.isArray(actualData)) {
+                subjects = actualData;
+            } else {
+                subjects = actualData.subjects || actualData.batch_subjects || actualData.faculties || [];
+            }
+
+            // Extract Classes safely
+            let classes = actualData.classes || actualData.live_classes || [];
+
+            // Extract Title safely
+            let batchTitle = rawData.batch_title || actualData.batch_title || actualData.name || actualData.title || "My Classroom Batch";
+
+            // Frontend ko standard standardized format bypass karke bhejo
+            return res.status(200).json({
+                success: true,
+                batch_title: batchTitle,
+                subjects: subjects,
+                classes: classes
+            });
+        }
+
+        // Chapters aur Lectures ke liye direct clean output pass kar do
+        return res.status(200).json(rawData);
 
     } catch (error) {
         console.error("Secure Serverless Gateway Error:", error);
