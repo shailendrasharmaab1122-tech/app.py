@@ -91,7 +91,7 @@
       .content {
         position: absolute;
         top: 160px;
-        bottom: 0;
+        bottom: 40px; /* Adjusted to leave space for the sticky footer */
         left: 0;
         right: 0;
         overflow-y: auto;
@@ -219,6 +219,30 @@
         padding: 40px;
         color: #64748b;
       }
+
+      /* Custom Matching Footer Style */
+      .app-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 40px;
+        background: #ffffff;
+        border-top: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: 600;
+        color: #64748b;
+        letter-spacing: 0.5px;
+        z-index: 10;
+      }
+      .app-footer span {
+        color: #4f46e5;
+        font-weight: 700;
+        margin-left: 4px;
+      }
     </style>
     <style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style>
 </head>
@@ -241,6 +265,10 @@
     <div class="content">
       <div id="total" class="grid"></div>
       <div id="fav" class="grid" style="display: none"></div>
+    </div>
+
+    <div class="app-footer">
+      Developed by - <span>Devansh Sharma</span>
     </div>
 
     <script>
