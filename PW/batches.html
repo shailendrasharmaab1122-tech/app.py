@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subjects</title>
+    <title>The DevCoderZ - Batches</title>
     <style>
       .live-row {
         display: flex;
@@ -223,36 +223,11 @@
 
                       <section class="navBar-F4tVlt">
                         <section class="tabWrapper-xvaFla">
-                          <div class="index_class_1-zUAkrj" id="Description_tab">
-                            <div class="index_class_2-UejR3P">
-                              <span class="btn-X2VsdQ tab-pgBLWx">Description</span>
-                            </div>
-                          </div>
-
                           <div class="index_class_1-zUAkrj" id="All Classes_tab">
                             <div class="index_class_2-UejR3P">
                               <span class="btn-X2VsdQ tab-pgBLWx activeTab-uR1wOL">All Classes</span>
                             </div>
                             <div class="active-RzQf__"></div>
-                          </div>
-
-                          <div class="index_class_1-zUAkrj" id="Clubbing_tab">
-                            <div class="index_class_2-UejR3P">
-                              <img src="https://static.pw.live/react-batches/assets/infinity-icon.svg" alt="PW" class="index_class_3-vElVTH">
-                              <span class="btn-X2VsdQ tab-pgBLWx">Infinity Learning</span>
-                            </div>
-                          </div>
-
-                          <div class="index_class_1-zUAkrj" id="Tests_tab">
-                            <div class="index_class_2-UejR3P">
-                              <span class="btn-X2VsdQ tab-pgBLWx">Tests</span>
-                            </div>
-                          </div>
-
-                          <div class="index_class_1-zUAkrj" id="Community_tab">
-                            <div class="index_class_2-UejR3P">
-                              <span class="btn-X2VsdQ tab-pgBLWx">Community</span>
-                            </div>
                           </div>
                         </section>
 
@@ -300,7 +275,7 @@
         alert("Batch ID missing");
         return;
       }
-      window.location.href = "/annoucements/?batch_id=" + encodeURIComponent(batchId);
+      window.location.href = "/announcements.html?batch_id=" + encodeURIComponent(batchId);
     }
 
     if (!batchId) {
@@ -328,7 +303,7 @@
           else if (Array.isArray(data.faculties)) subjectsList = data.faculties;
           else if (data.data && Array.isArray(data.data.faculties)) subjectsList = data.data.faculties;
           else if (Array.isArray(data.batch_subjects)) subjectsList = data.batch_subjects;
-          
+
           if (subjectsList.length === 0) {
             for (let key in data) {
               if (Array.isArray(data[key]) && data[key].length > 0) {
@@ -397,7 +372,7 @@
           link = `/live.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&video_id=${videoId}&start=${unixStart}`;
         } else if (isNote) {
           let noteId = live.homeworkIds[0]?._id || videoId;
-          link = `/view?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&note=${noteId}`;
+          link = `/view.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&note=${noteId}`;
         } else if (status === "ENDED") {
           link = `/player.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&video_id=${videoId}`;
         }
@@ -485,7 +460,7 @@
 
         const card = `
         <div class="subject_card-WgK2V0"
-          onclick='location.href="/chapters.html/?batch_id=${batchId}&subject_id=${subId}&subject_slug=${sub.slug || ''}&subject=${escapedSubject}"'>
+          onclick='location.href="/chapters.html?batch_id=${batchId}&subject_id=${subId}&subject_slug=${sub.slug || ''}&subject=${escapedSubject}"'>
           <div class="_all-class-card_mu3oc_3">
             <img src="${image}">
             <div class="_class_mu3oc_10">
