@@ -3,175 +3,136 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>NEXT TOPPER - Course Material</title>
-    <!-- Tailwind CSS for modern premium dark theme -->
+    <title>NEXT TOPPER - Course View</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         * { user-select: auto !important; -webkit-user-select: auto !important; }
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .line-clamp-2 {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;  
-            overflow: hidden;
-        }
+        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     </style>
 </head>
-<body class="bg-[#050507] text-white min-h-screen flex flex-col antialiased selection:bg-purple-500/40">
+<body class="bg-[#050507] text-white min-h-screen flex flex-col antialiased">
 
     <!-- Navbar -->
-    <nav class="sticky top-0 z-40 bg-black/70 backdrop-blur-2xl border-b border-white/5 transition-all">
+    <nav class="sticky top-0 z-40 bg-black/70 backdrop-blur-2xl border-b border-white/5">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <a class="flex items-center gap-3 group" href="index.html">
-                <div class="w-9 h-9 bg-white text-black rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform shadow-[0_0_20px_rgba(255,255,255,0.15)]">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 fill-black"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-                </div>
-                <div class="flex flex-col">
-                    <span class="text-xl font-black text-white tracking-widest leading-none">NEXT TOPPER</span>
-                    <span class="text-[9px] font-bold tracking-[0.25em] text-neutral-500 uppercase leading-none mt-1.5">FREE PORTAL</span>
-                </div>
-            </a>
-            <div class="flex items-center gap-5 sm:gap-6">
-                <a class="text-neutral-400 hover:text-white transition-colors group" href="#">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 group-hover:scale-110 transition-transform"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
-                </a>
-                <a class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-neutral-300 hover:text-black hover:bg-white hover:scale-105 transition-all shadow-sm" href="#">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                </a>
-            </div>
+            <a class="text-xl font-black text-white tracking-widest" href="index.html">NEXT TOPPER</a>
+            <button id="backBtn" onclick="handleBack()" class="bg-white/5 border border-white/10 text-sm font-bold px-4 py-2 rounded-xl hover:bg-white/10 transition-all flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg> Back
+            </button>
         </div>
     </nav>
 
-    <!-- Hero Banner Section -->
-    <header class="relative w-full h-[35vh] min-h-[300px] md:h-[45vh] overflow-hidden flex items-end justify-start">
-        <div class="absolute inset-0 w-full h-full">
-            <img id="courseBanner" src="https://via.placeholder.com/1200x600?text=Loading+Course..." alt="Batch Banner" class="w-full h-full object-cover opacity-40 scale-105">
-            <div class="absolute inset-0 bg-gradient-to-t from-[#050507] via-[#050507]/60 to-transparent"></div>
-            <div class="absolute inset-0 bg-gradient-to-r from-[#050507] via-transparent to-transparent opacity-90"></div>
-        </div>
-        <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 md:pb-12">
-            <button onclick="window.history.back()" class="inline-flex items-center text-neutral-300 hover:text-white mb-4 transition-all font-bold backdrop-blur-xl bg-white/5 hover:bg-white/15 px-4 py-2 rounded-full border border-white/10 text-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg> Back
-            </button>
-            <h1 id="courseTitle" class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-neutral-200 to-neutral-400 leading-tight tracking-tight drop-shadow-lg">
-                Loading Batch...
-            </h1>
+    <!-- Header Banner -->
+    <header class="relative w-full h-[25vh] min-h-[200px] overflow-hidden flex items-end justify-start bg-neutral-900">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#050507] via-[#050507]/40 to-transparent z-10"></div>
+        <img id="courseBanner" src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/4628574_125_aarambh%20banner%20app%202026%202.jpg" class="absolute inset-0 w-full h-full object-cover opacity-30">
+        <div class="relative z-20 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pb-6">
+            <h1 id="courseTitle" class="text-2xl sm:text-4xl font-black text-white tracking-tight">Loading Content...</h1>
+            <p id="breadCrumb" class="text-xs text-neutral-400 mt-2 font-mono tracking-wide">Root /</p>
         </div>
     </header>
 
-    <!-- Main Content Tabs & Folders -->
-    <main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 -mt-4 md:-mt-6 pb-20">
-        
-        <!-- Navigation Tabs -->
-        <div class="flex space-x-2 p-1 bg-white/5 border border-white/10 rounded-2xl w-full md:w-fit overflow-x-auto hide-scrollbar mb-6">
-            <button class="px-6 py-3 rounded-xl text-sm font-bold transition-all text-neutral-400 hover:text-white hover:bg-white/5 whitespace-nowrap">Batch Overview</button>
-            <button class="px-6 py-3 rounded-xl text-sm font-bold transition-all bg-gradient-to-br from-blue-500 to-cyan-600 text-white shadow-[0_4px_20px_rgba(59,130,246,0.3)] whitespace-nowrap">Study Material</button>
-        </div>
-
-        <!-- Material Container Card -->
+    <!-- Main Section -->
+    <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
         <div class="bg-[#0c0c0f] border border-white/5 rounded-3xl overflow-hidden shadow-2xl">
-            <div class="p-5 md:p-6 border-b border-white/5 bg-gradient-to-r from-white/5 to-transparent flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 mr-3 text-blue-400"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
-                <h2 class="text-lg md:text-xl font-bold text-white">Study Material / Subjects</h2>
+            <div class="p-5 border-b border-white/5 bg-white/5 flex items-center justify-between">
+                <h2 id="sectionTitle" class="text-md font-bold text-neutral-300 uppercase tracking-wider">Subjects / Folders</h2>
+                <span id="itemCount" class="text-xs bg-white/10 text-white px-2.5 py-1 rounded-full font-bold">0 Items</span>
             </div>
 
-            <!-- Loading Spinner Inside Content Area -->
-            <div id="contentLoading" class="text-center py-16 text-neutral-500 font-medium">
-                Fetching premium resources...
-            </div>
+            <!-- Loader -->
+            <div id="contentLoading" class="text-center py-20 text-neutral-500 font-medium">Fetching contents from server...</div>
 
-            <!-- Dynamic Content List -->
-            <div id="materialList" class="divide-y divide-white/5 p-2 md:p-4 hidden">
-                <!-- Dynamically loaded folders or videos will appear here -->
-            </div>
+            <!-- Dynamic List View -->
+            <div id="contentList" class="divide-y divide-white/5 p-2 md:p-4 hidden"></div>
         </div>
     </main>
 
-    <!-- Script to handle URL param and dynamically fetch Course Data -->
     <script>
-        // URL se course_id search parameters nikalna (e.g., course.html?course_id=176)
         const urlParams = new URLSearchParams(window.location.search);
-        const courseId = urlParams.get('course_id') || '176'; // Fallback to 176 if not present
+        const courseId = urlParams.get('course_id');
         
-        const apiURL = `https://nt-api.eg-a-nm-a-e-sala-zar.workers.dev/api/full-course?course_id=${courseId}`;
+        let currentData = null; // Pure course ka response state maintain karne ke liye
+        let folderStack = [];   // Spidy back navigation track karne ke liye tracking history
 
-        async function loadCourseData() {
+        if (!courseId) {
+            window.location.href = 'index.html';
+        }
+
+        async function loadCourse() {
+            const apiURL = `https://nt-api.eg-a-nm-a-e-sala-zar.workers.dev/api/full-course?course_id=${courseId}`;
             try {
                 const response = await fetch(apiURL);
-                const data = await response.json();
+                currentData = await response.json();
 
-                // 1. Setup Header Info
-                // Note: API details ke anusaar variables crosscheck kar lena (data.course_title, data.banner_url)
-                document.getElementById('courseTitle').innerText = data.title || data.name || "AARAMBH 10th BATCH 26-27";
-                if(data.banner || data.image || data.thumbnail) {
-                    document.getElementById('courseBanner').src = data.banner || data.image || data.thumbnail;
-                } else {
-                    // Fallback to default exact HTML image provided by you
-                    document.getElementById('courseBanner').src = "https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/4628574_125_aarambh%20banner%20app%202026%202.jpg";
+                // Setup Page Title and Banner
+                document.getElementById('courseTitle').innerText = currentData.title || currentData.name || "Batch Material";
+                if(currentData.banner || currentData.image) {
+                    document.getElementById('courseBanner').src = currentData.banner || currentData.image;
                 }
 
-                // 2. Load Content Items (Folders or Videos)
-                // API keys handle karne ke liye fallback structures check karna padega (e.g., data.materials, data.data.contents)
-                const items = data.materials || data.contents || data.data || [];
-                renderContentList(items);
+                // Render Top Level Folders (Root)
+                const items = currentData.materials || currentData.contents || currentData.data || [];
+                renderItems(items, "Subjects / Folders");
 
             } catch (error) {
-                console.error("Error fetching full course details:", error);
-                document.getElementById('contentLoading').innerText = "Failed to load subjects. Setting fallback static folders...";
-                
-                // Fallback static structure agar testing offline karni ho
-                setupStaticFallback();
+                console.error("Error loading course details:", error);
+                document.getElementById('contentLoading').innerText = "Error loading batch data.";
             }
         }
 
-        function renderContentList(items) {
-            const listContainer = document.getElementById('materialList');
+        function renderItems(items, sectionName) {
+            const listContainer = document.getElementById('contentList');
             document.getElementById('contentLoading').classList.add('hidden');
             listContainer.classList.remove('hidden');
-            listContainer.innerHTML = ''; 
+            listContainer.innerHTML = '';
+
+            document.getElementById('sectionTitle').innerText = sectionName;
+            document.getElementById('itemCount').innerText = `${items.length} Items`;
 
             if(items.length === 0) {
-                listContainer.innerHTML = `<div class="p-8 text-center text-neutral-500">No content available inside this course yet.</div>`;
+                listContainer.innerHTML = `<div class="p-12 text-center text-neutral-600 font-medium">This folder is empty.</div>`;
                 return;
             }
 
             items.forEach(item => {
-                const title = item.title || item.name || "Untitled Item";
-                const isVideo = item.type === 'video' || item.isVideo || false;
-                const itemId = item.id || '#';
+                const title = item.title || item.name || "Untitled";
+                
+                // Spidy validation: Agar item ke andar content array hai ya type folder hai, to folder render hoga
+                const isFolder = item.type === 'folder' || item.materials || item.contents || (!item.stream_url && !item.video_id);
+                const itemId = item.id || item.folder_id || Math.random().toString();
 
                 const row = document.createElement('div');
-                
-                if(!isVideo) {
-                    // FOLDER TEMPLATE (For Subjects like Science, Maths etc.)
+                row.className = "w-full";
+
+                if (isFolder) {
+                    // FOLDER VIEW BUTTON
                     row.innerHTML = `
-                        <button onclick="openFolder('${itemId}', '${title}')" class="w-full flex items-center justify-between p-3 md:p-5 rounded-2xl hover:bg-white/5 transition-all duration-300 text-left group">
-                            <div class="flex items-center gap-4 md:gap-6 w-full">
-                                <div class="relative w-16 h-12 md:w-28 md:h-20 rounded-xl overflow-hidden bg-[#15151a] flex items-center justify-center shrink-0 border border-white/5 group-hover:border-white/10">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 md:w-8 md:h-8 text-neutral-500 group-hover:text-blue-400 transition-colors"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"></path></svg>
+                        <button onclick="enterFolder('${itemId}', '${title.replace(/'/g, "\\'")}')" class="w-full flex items-center justify-between p-4 rounded-2xl hover:bg-white/5 transition-all text-left group">
+                            <div class="flex items-center gap-4 flex-1 min-w-0">
+                                <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>
                                 </div>
-                                <div class="flex-1 min-w-0">
-                                    <h3 class="font-bold text-white text-base md:text-lg tracking-wide truncate">${title}</h3>
-                                    <span class="text-xs text-neutral-500 mt-1 block">Subject Folder</span>
-                                </div>
-                                <div class="shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/5 group-hover:bg-white/10 flex items-center justify-center transition-all">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-neutral-400 group-hover:text-white"><path d="m9 18 6-6-6-6"></path></svg>
+                                <div class="truncate">
+                                    <h3 class="font-bold text-white text-base tracking-wide truncate group-hover:text-blue-400 transition-colors">${title}</h3>
+                                    <span class="text-xs text-neutral-500 block mt-0.5">Folder / Click to view contents</span>
                                 </div>
                             </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-neutral-500 group-hover:text-white transition-colors"><path d="m9 18 6-6-6-6"/></svg>
                         </button>
                     `;
                 } else {
-                    // VIDEO LECTURE TEMPLATE (For actual playable items)
+                    // LECTURE/VIDEO PLAY LINK
+                    const videoId = item.id || item.video_id || '';
                     row.innerHTML = `
-                        <a href="player.html?video_id=${itemId}&course_id=${courseId}" class="w-full flex items-center justify-between p-3 md:p-5 rounded-2xl hover:bg-white/5 transition-all duration-300 text-left group">
-                            <div class="flex items-center gap-4 md:gap-6 w-full">
-                                <div class="relative w-16 h-12 md:w-28 md:h-20 rounded-xl overflow-hidden bg-[#15151a] flex items-center justify-center shrink-0 border border-white/5">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-neutral-500 group-hover:text-purple-400 transition-colors"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
+                        <a href="player.html?video_id=${videoId}&course_id=${courseId}" class="w-full flex items-center justify-between p-4 rounded-2xl hover:bg-white/5 transition-all text-left group">
+                            <div class="flex items-center gap-4 flex-1 min-w-0">
+                                <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
                                 </div>
-                                <div class="flex-1 min-w-0">
-                                    <h3 class="font-bold text-white text-base md:text-lg tracking-wide line-clamp-2">${title}</h3>
-                                    <span class="text-xs font-bold text-purple-400 mt-1 block">Video Lecture</span>
+                                <div class="truncate">
+                                    <h3 class="font-bold text-white text-base tracking-wide line-clamp-2 group-hover:text-purple-400 transition-colors">${title}</h3>
+                                    <span class="text-xs text-purple-400/80 font-semibold block mt-0.5">Video Lecture</span>
                                 </div>
                             </div>
                         </a>
@@ -181,28 +142,75 @@
             });
         }
 
-        // Folder logic click handling
-        function openFolder(folderId, folderName) {
-            alert(`Opening Subject: ${folderName}\n(Yahan se tum sub-folder API hit karke lectures fetch kara sakte ho)`);
-            // window.location.href = `lectures.html?folder_id=${folderId}&course_id=${courseId}`;
+        // Spidy Engine: Page refresh kiye bina child nesting render karne ke liye loop logic
+        function enterFolder(folderId, folderName) {
+            // Find current active items depending on hierarchy
+            let targetItems = [];
+            const rootItems = currentData.materials || currentData.contents || currentData.data || [];
+
+            // Simple traversal check inside full-course JSON trees
+            let foundFolder = findFolderById(rootItems, folderId);
+            
+            if (foundFolder) {
+                // Save current state context inside history navigation stack
+                folderStack.push({
+                    name: folderName,
+                    items: getCurrentRenderedItemsList()
+                });
+
+                targetItems = foundFolder.materials || foundFolder.contents || foundFolder.data || [];
+                updateBreadcrumb();
+                renderItems(targetItems, folderName);
+            }
         }
 
-        // Static fallback agar direct testing karni ho Bina API response error ke
-        function setupStaticFallback() {
-            const fallbackSubjects = [
-                { name: "TEST", type: "folder", id: "f1" },
-                { name: "Artificial Intelligence", type: "folder", id: "f2" },
-                { name: "Information technology", type: "folder", id: "f3" },
-                { name: "Science", type: "folder", id: "f4" },
-                { name: "Maths", type: "folder", id: "f5" },
-                { name: "Social Science", type: "folder", id: "f6" },
-                { name: "Welcome Lecture", type: "video", id: "v1" }
-            ];
-            renderContentList(fallbackSubjects);
+        function findFolderById(items, id) {
+            for (let item of items) {
+                if ((item.id == id || item.folder_id == id)) return item;
+                const subItems = item.materials || item.contents || item.data || [];
+                if (subItems.length > 0) {
+                    let deepSearch = findFolderById(subItems, id);
+                    if (deepSearch) return deepSearch;
+                }
+            }
+            return null;
         }
 
-        // Run application setup
-        loadCourseData();
+        function getCurrentRenderedItemsList() {
+            // Helper function to extract current view item array
+            return currentData._lastRendered || currentData.materials || currentData.contents || currentData.data || [];
+        }
+
+        function updateBreadcrumb() {
+            let path = "Root / ";
+            folderStack.forEach(f => { path += `${f.name} / `; });
+            document.getElementById('breadCrumb').innerText = path;
+        }
+
+        function handleBack() {
+            if (folderStack.length > 0) {
+                // Stack me se pichla folder nikalna
+                const previousState = folderStack.pop();
+                updateBreadcrumb();
+                
+                // Puraane folder ka contents render karna bina page refresh kiya
+                let sectionTitle = folderStack.length === 0 ? "Subjects / Folders" : folderStack[folderStack.length - 1].name;
+                
+                // Re-calculating objects reference hierarchy tree
+                if(folderStack.length === 0) {
+                     renderItems(currentData.materials || currentData.contents || currentData.data || [], sectionTitle);
+                } else {
+                     let rootItems = currentData.materials || currentData.contents || currentData.data || [];
+                     let activeFolder = findFolderById(rootItems, previousState.id);
+                     renderItems(previousState.items, sectionTitle);
+                }
+            } else {
+                // Agar stack empty hai, matlab hum root subjects par hain -> seedhe index page bhej do
+                window.location.href = 'index.html';
+            }
+        }
+
+        loadCourse();
     </script>
 </body>
 </html>
