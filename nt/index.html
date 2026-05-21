@@ -16,7 +16,7 @@
     <nav class="sticky top-0 z-40 bg-black/70 backdrop-blur-2xl border-b border-white/5">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div class="w-9 h-9 bg-white text-black rounded-xl flex items-center justify-center font-black shadow-[0_0_20px_rgba(255,255,255,0.15)]">NT</div>
+                <div class="w-9 h-9 bg-white text-black rounded-xl flex items-center justify-center font-black">NT</div>
                 <div class="flex flex-col">
                     <span class="text-xl font-black text-white tracking-widest leading-none">NEXT TOPPER</span>
                     <span class="text-[9px] font-bold tracking-[0.25em] text-neutral-500 uppercase mt-1.5">FREE PORTAL</span>
@@ -50,8 +50,19 @@
                 const response = await fetch(apiURL);
                 const data = await response.json();
                 
-                // Handling array response or nested data structure
-                allBatches = Array.isArray(data) ? data : (data.batches || data.data || []);
+                // Debugging ke liye console me log check kar sakte ho inspect karke
+                console.log("Batches API Response Data:", data);
+                
+                // API keys formatting extract patterns
+                if (Array.isArray(data)) {
+                    allBatches = data;
+                } else if (data.data && Array.isArray(data.data)) {
+                    allBatches = data.data;
+                } else if (data.batches && Array.isArray(data.batches)) {
+                    allBatches = data.batches;
+                } else {
+                    allBatches = [];
+                }
                 
                 document.getElementById('loading').classList.add('hidden');
                 document.getElementById('batchesGrid').classList.remove('hidden');
@@ -76,8 +87,13 @@
                 const title = batch.name || batch.title || "Premium Batch";
                 const image = batch.image || batch.thumbnail || batch.banner || "https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/4628574_125_aarambh%20banner%20app%202026%202.jpg";
                 
-                // Fetching the dynamic course ID from API response
-                const courseId = batch.id || batch.course_id;
+                // Pure safety fallback mechanism for course ID mapping
+                const courseId = batch.id || batch.course_id || batch.batch_id || batch.id_course;
+
+                // Checking if ID still breaks or fails logic
+                if (!courseId) {
+                    console.warn("Missing ID string field inside batch object item structure:", batch);
+                }
 
                 const card = document.createElement('div');
                 card.className = "bg-[#0a0a0a] rounded-3xl overflow-hidden border border-white/5 hover:border-white/20 transition-all duration-300 flex flex-col h-full";
@@ -98,10 +114,13 @@
         }
 
         function openCourse(id) {
+            if (!id || id === 'undefined') {
+                alert("Error: Course ID configuration extraction key failed on target item object reference!");
+                return;
+            }
             window.location.href = `course.html?course_id=${id}`;
         }
 
-        // Filter search logic
         document.getElementById('searchInput').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
             const filtered = allBatches.filter(b => (b.name || b.title || "").toLowerCase().includes(term));
