@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>NEXT TOPPER - Portal</title>
+    <title>NEXT TOPPER - ALL LIVE BATCHES</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         * { user-select: auto !important; -webkit-user-select: auto !important; }
@@ -28,20 +28,24 @@
     <!-- Main Content -->
     <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-6 pb-20">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
-            <h1 class="text-3xl md:text-5xl font-black text-white tracking-tight">Explore <span class="text-neutral-500">Batches</span></h1>
+            <div>
+                <h1 class="text-3xl md:text-5xl font-black text-white tracking-tight">All Live <span class="text-neutral-500">Batches</span></h1>
+                <p id="batchCount" class="text-sm text-neutral-400 mt-2 font-mono">Total Batches: Loading...</p>
+            </div>
             <div class="relative w-full md:w-[400px]">
                 <input id="searchInput" placeholder="Search your batch..." class="w-full bg-[#0a0a0a] border border-white/10 text-white px-5 py-4 rounded-2xl focus:outline-none focus:border-white transition-all placeholder:text-neutral-600">
             </div>
         </div>
 
         <!-- Loading State -->
-        <div id="loading" class="text-center py-20 text-neutral-500 text-xl font-bold">Loading Premium Batches...</div>
+        <div id="loading" class="text-center py-20 text-neutral-500 text-xl font-bold">Loading Premium Batches from API...</div>
 
         <!-- Grid Container -->
         <div id="batchesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 hidden"></div>
     </main>
 
     <script>
+        // TRULY LIVE API LINK
         const apiURL = 'https://nt-api.eg-a-nm-a-e-sala-zar.workers.dev/api/batches';
         let allBatches = [];
 
@@ -50,27 +54,30 @@
                 const response = await fetch(apiURL);
                 const data = await response.json();
                 
-                // Debugging ke liye console me log check kar sakte ho inspect karke
-                console.log("Batches API Response Data:", data);
+                console.log("Raw API Response:", data); // Check karne ke liye console me dekh sakte ho
                 
-                // API keys formatting extract patterns
+                // API Structure handle: data array nikalna bina fail hue
                 if (Array.isArray(data)) {
                     allBatches = data;
+                } else if (data.courses && Array.isArray(data.courses)) {
+                    allBatches = data.courses; // Agar response me { courses: [...] } hai
                 } else if (data.data && Array.isArray(data.data)) {
-                    allBatches = data.data;
+                    allBatches = data.data;    // Agar response me { data: [...] } hai
                 } else if (data.batches && Array.isArray(data.batches)) {
-                    allBatches = data.batches;
+                    allBatches = data.batches; // Agar response me { batches: [...] } hai
                 } else {
-                    allBatches = [];
+                    // Fail safe lookup agar direct object keys array ho
+                    allBatches = Object.values(data).find(val => Array.isArray(val)) || [];
                 }
                 
                 document.getElementById('loading').classList.add('hidden');
                 document.getElementById('batchesGrid').classList.remove('hidden');
+                document.getElementById('batchCount').innerText = `Total Batches: ${allBatches.length}`;
                 
                 displayBatches(allBatches);
             } catch (error) {
-                console.error("Error:", error);
-                document.getElementById('loading').innerText = "Failed to load batches.";
+                console.error("Error fetching live API:", error);
+                document.getElementById('loading').innerText = "Failed to load batches from API server.";
             }
         }
 
@@ -79,34 +86,32 @@
             grid.innerHTML = ''; 
 
             if(batches.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center text-neutral-500 py-10">No batches found.</div>`;
+                grid.innerHTML = `<div class="col-span-full text-center text-neutral-500 py-10">No batches available.</div>`;
                 return;
             }
 
             batches.forEach(batch => {
-                const title = batch.name || batch.title || "Premium Batch";
-                const image = batch.image || batch.thumbnail || batch.banner || "https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/4628574_125_aarambh%20banner%20app%202026%202.jpg";
+                // API keys alignment mapping for Names, Images & IDs
+                const title = batch.name || batch.title || batch.course_name || "Premium Batch";
+                const image = batch.image || batch.thumbnail || batch.banner || batch.preview_image || "https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/4628574_125_aarambh%20banner%20app%202026%202.jpg";
                 
-                // Pure safety fallback mechanism for course ID mapping
+                // Extracting unique numeric tracking token keys 
                 const courseId = batch.id || batch.course_id || batch.batch_id || batch.id_course;
 
-                // Checking if ID still breaks or fails logic
-                if (!courseId) {
-                    console.warn("Missing ID string field inside batch object item structure:", batch);
-                }
-
                 const card = document.createElement('div');
-                card.className = "bg-[#0a0a0a] rounded-3xl overflow-hidden border border-white/5 hover:border-white/20 transition-all duration-300 flex flex-col h-full";
+                card.className = "bg-[#0a0a0a] rounded-3xl overflow-hidden border border-white/5 hover:border-white/20 transition-all duration-300 flex flex-col h-full shadow-lg";
                 card.innerHTML = `
                     <div class="relative aspect-[4/3] p-2 cursor-pointer" onclick="openCourse('${courseId}')">
-                        <img src="${image}" alt="${title}" class="w-full h-full object-cover rounded-2xl" loading="lazy">
+                        <img src="${image}" alt="${title}" class="w-full h-full object-cover rounded-2xl" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1610116306796-6fea9f4fae38?w=500'">
                     </div>
                     <div class="p-5 flex flex-col flex-grow">
-                        <h3 class="font-bold text-lg text-white line-clamp-2 mb-4 cursor-pointer" onclick="openCourse('${courseId}')">${title}</h3>
-                        <button onclick="openCourse('${courseId}')" class="w-full mt-auto bg-white text-black font-bold py-3.5 rounded-xl hover:bg-neutral-200 transition-all flex items-center justify-center gap-2">
-                            Explore Batch
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-                        </button>
+                        <h3 class="font-bold text-lg text-white line-clamp-2 mb-4 cursor-pointer hover:text-neutral-300" onclick="openCourse('${courseId}')">${title}</h3>
+                        <div class="mt-auto pt-2">
+                             <button onclick="openCourse('${courseId}')" class="w-full bg-white text-black font-bold py-3.5 rounded-xl hover:bg-neutral-200 transition-all flex items-center justify-center gap-2 text-sm">
+                                Explore Batch
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                            </button>
+                        </div>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -115,18 +120,23 @@
 
         function openCourse(id) {
             if (!id || id === 'undefined') {
-                alert("Error: Course ID configuration extraction key failed on target item object reference!");
+                alert("Error: Course ID configuration parse failed on this specific batch item.");
                 return;
             }
             window.location.href = `course.html?course_id=${id}`;
         }
 
+        // Live Search Filter
         document.getElementById('searchInput').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
-            const filtered = allBatches.filter(b => (b.name || b.title || "").toLowerCase().includes(term));
+            const filtered = allBatches.filter(b => {
+                const titleText = (b.name || b.title || b.course_name || "").toLowerCase();
+                return titleText.includes(term);
+            });
             displayBatches(filtered);
         });
 
+        // Trigger API Execution on Page Load
         fetchBatches();
     </script>
 </body>
