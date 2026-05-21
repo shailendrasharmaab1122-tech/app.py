@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>NEXT TOPPER - FREE BATCHES</title>
-    <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         * { user-select: auto !important; -webkit-user-select: auto !important; }
@@ -30,14 +29,6 @@
                     <span class="text-[9px] font-bold tracking-[0.25em] text-neutral-500 uppercase leading-none mt-1.5">FREE PORTAL</span>
                 </div>
             </a>
-            <div class="flex items-center gap-5 sm:gap-6">
-                <a class="text-neutral-400 hover:text-white transition-colors group" href="#">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 group-hover:scale-110 transition-transform"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
-                </a>
-                <a class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-neutral-300 hover:text-black hover:bg-white hover:scale-105 transition-all shadow-sm" href="#">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                </a>
-            </div>
         </div>
     </nav>
 
@@ -64,26 +55,23 @@
 
                 <!-- Batches Grid -->
                 <div id="batchesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 hidden">
-                    <!-- Dynamic Cards isme load honge JS ke through -->
+                    <!-- Cards will be injected dynamically -->
                 </div>
 
             </div>
         </div>
     </main>
 
-    <!-- Script for API Fetching & Search -->
     <script>
         const apiURL = 'https://nt-api.eg-a-nm-a-e-sala-zar.workers.dev/api/batches';
         let allBatches = [];
 
-        // Fetch Data from API
         async function fetchBatches() {
             try {
                 const response = await fetch(apiURL);
                 const data = await response.json();
                 
-                // Note: Agar API response direct array nahi hai (jaise data.batches ya data.data), 
-                // toh uss hisab se niche wali line change kar lena.
+                // Cloudflare worker format validation
                 allBatches = Array.isArray(data) ? data : (data.batches || data.data || []);
                 
                 document.getElementById('loading').classList.add('hidden');
@@ -92,14 +80,13 @@
                 displayBatches(allBatches);
             } catch (error) {
                 console.error("Error fetching batches:", error);
-                document.getElementById('loading').innerText = "Failed to load batches. Please try again later.";
+                document.getElementById('loading').innerText = "Failed to load batches. Check internet or API server.";
             }
         }
 
-        // Display Batches dynamically
         function displayBatches(batches) {
             const grid = document.getElementById('batchesGrid');
-            grid.innerHTML = ''; // Clear previous content
+            grid.innerHTML = ''; 
 
             if(batches.length === 0) {
                 grid.innerHTML = `<div class="col-span-full text-center text-neutral-500 py-10">No batches found matching your search.</div>`;
@@ -107,34 +94,32 @@
             }
 
             batches.forEach(batch => {
-                // API keys handle karne ke liye fallbacks lagaye hain (title/name, price, image/thumbnail)
                 const title = batch.name || batch.title || "Premium Batch";
-                const image = batch.image || batch.thumbnail || "https://via.placeholder.com/400x300?text=Next+Topper";
-                const rawPrice = batch.price || "499";
-                const originalPrice = batch.originalPrice || parseInt(rawPrice) + 1000;
+                // Agar API me automatic images dynamic hain toh wahi uthayega, warna default fallback banner lagayega
+                const image = batch.image || batch.thumbnail || batch.banner || "https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/4628574_125_aarambh%20banner%20app%202026%202.jpg";
+                const originalPrice = batch.originalPrice || "1499";
                 
-                // Card UI generation
+                // Custom course_id fallback to 176 if missing from dynamic iteration
+                const targetId = batch.id || batch.course_id || '176';
+
                 const card = document.createElement('div');
                 card.className = "bg-[#0a0a0a] rounded-3xl overflow-hidden border border-white/5 hover:border-white/20 transition-all duration-300 cursor-pointer group flex flex-col h-full";
                 
                 card.innerHTML = `
-                    <div class="relative aspect-[4/3] p-2">
+                    <div class="relative aspect-[4/3] p-2" onclick="exploreCourse('${targetId}')">
                         <div class="w-full h-full rounded-2xl overflow-hidden relative bg-neutral-900">
                             <img src="${image}" alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy">
                             <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] to-transparent opacity-80"></div>
                         </div>
-                        <button class="absolute top-4 right-4 p-2.5 rounded-full bg-black/50 backdrop-blur-md z-10 border border-white/10 hover:bg-black transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-neutral-400"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
-                        </button>
                     </div>
                     <div class="p-5 flex flex-col flex-grow">
-                        <h3 class="font-bold text-lg text-white line-clamp-2 mb-2">${title}</h3>
+                        <h3 class="font-bold text-lg text-white line-clamp-2 mb-2" onclick="exploreCourse('${targetId}')">${title}</h3>
                         <div class="mt-auto mb-6 flex items-end gap-2">
                             <p class="text-xl font-black text-white">₹0.00</p>
                             <p class="text-sm font-medium text-neutral-500 line-through mb-0.5">₹${originalPrice}</p>
                         </div>
-                        <button onclick="startBatch('${batch.id || '#'}')" class="w-full bg-white text-black font-bold py-3.5 rounded-xl transition-all duration-300 hover:bg-neutral-200 flex items-center justify-center gap-2">
-                            Start Learning 
+                        <button onclick="exploreCourse('${targetId}')" class="w-full bg-white text-black font-bold py-3.5 rounded-xl transition-all duration-300 hover:bg-neutral-200 flex items-center justify-center gap-2">
+                            Explore Course 
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="m9 18 6-6-6-6"></path></svg>
                         </button>
                     </div>
@@ -143,7 +128,7 @@
             });
         }
 
-        // Search Filter Functionality
+        // Search engine filter logic
         document.getElementById('searchInput').addEventListener('input', (e) => {
             const searchTerm = e.target.value.toLowerCase();
             const filtered = allBatches.filter(batch => {
@@ -153,13 +138,11 @@
             displayBatches(filtered);
         });
 
-        // Action when 'Start Learning' is clicked
-        function startBatch(batchId) {
-            alert("Redirecting to Batch ID: " + batchId + " (Yahan tum single batch ka video player page open kara sakte ho)");
-            // window.location.href = `player.html?id=${batchId}`;
+        // Click handler jo automatic parameters ke sath course.html par pahochaega
+        function exploreCourse(id) {
+            window.location.href = `course.html?course_id=${id}`;
         }
 
-        // Initialize App
         fetchBatches();
     </script>
 </body>
