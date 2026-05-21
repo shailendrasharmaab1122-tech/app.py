@@ -1,143 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>NEXT TOPPER - ALL LIVE BATCHES</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevCoderZ - NT Portal</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
-        * { user-select: auto !important; -webkit-user-select: auto !important; }
-        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        /* Mobile horizontal scroll support */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-black text-white min-h-screen flex flex-col antialiased">
+<body class="bg-slate-900 text-white min-h-screen font-sans">
 
-    <!-- Navbar -->
-    <nav class="sticky top-0 z-40 bg-black/70 backdrop-blur-2xl border-b border-white/5">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="w-9 h-9 bg-white text-black rounded-xl flex items-center justify-center font-black">NT</div>
-                <div class="flex flex-col">
-                    <span class="text-xl font-black text-white tracking-widest leading-none">NEXT TOPPER</span>
-                    <span class="text-[9px] font-bold tracking-[0.25em] text-neutral-500 uppercase mt-1.5">FREE PORTAL</span>
-                </div>
-            </div>
+    <nav class="p-4 bg-slate-800 border-b border-slate-700 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold tracking-wider text-teal-400">DevCoderZ <span class="text-xs text-white bg-teal-600 px-2 py-0.5 rounded ml-1">NT</span></h1>
+            <button class="bg-teal-500 hover:bg-teal-600 px-4 py-1.5 rounded-md text-sm font-semibold transition">Portal Login</button>
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-6 pb-20">
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
-            <div>
-                <h1 class="text-3xl md:text-5xl font-black text-white tracking-tight">All Live <span class="text-neutral-500">Batches</span></h1>
-                <p id="batchCount" class="text-sm text-neutral-400 mt-2 font-mono">Total Batches: Loading...</p>
-            </div>
-            <div class="relative w-full md:w-[400px]">
-                <input id="searchInput" placeholder="Search your batch..." class="w-full bg-[#0a0a0a] border border-white/10 text-white px-5 py-4 rounded-2xl focus:outline-none focus:border-white transition-all placeholder:text-neutral-600">
-            </div>
-        </div>
+    <main class="container mx-auto px-4 py-8">
+        
+        <section id="banner-section" class="mb-10 hidden">
+            <h2 class="text-lg font-semibold mb-3 text-slate-400">🎯 Latest Announcements</h2>
+            <div id="banner-container" class="w-full rounded-2xl overflow-hidden shadow-lg border border-slate-700">
+                </div>
+        </section>
 
-        <!-- Loading State -->
-        <div id="loading" class="text-center py-20 text-neutral-500 text-xl font-bold">Loading Premium Batches from API...</div>
+        <section class="mb-12">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold border-l-4 border-teal-500 pl-3">Explore Batches / Products</h2>
+                <span class="text-xs bg-slate-800 text-slate-400 px-3 py-1 rounded-full">Live Synchronized</span>
+            </div>
+            
+            <div id="courses-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div class="text-slate-500 animate-pulse col-span-full text-center py-10">Fetching live content pipelines...</div>
+            </div>
+        </section>
 
-        <!-- Grid Container -->
-        <div id="batchesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 hidden"></div>
     </main>
 
-    <script>
-        // TRULY LIVE API LINK
-        const apiURL = 'https://nt-api.eg-a-nm-a-e-sala-zar.workers.dev/api/batches';
-        let allBatches = [];
-
-        async function fetchBatches() {
-            try {
-                const response = await fetch(apiURL);
-                const data = await response.json();
-                
-                console.log("Raw API Response:", data); // Check karne ke liye console me dekh sakte ho
-                
-                // API Structure handle: data array nikalna bina fail hue
-                if (Array.isArray(data)) {
-                    allBatches = data;
-                } else if (data.courses && Array.isArray(data.courses)) {
-                    allBatches = data.courses; // Agar response me { courses: [...] } hai
-                } else if (data.data && Array.isArray(data.data)) {
-                    allBatches = data.data;    // Agar response me { data: [...] } hai
-                } else if (data.batches && Array.isArray(data.batches)) {
-                    allBatches = data.batches; // Agar response me { batches: [...] } hai
-                } else {
-                    // Fail safe lookup agar direct object keys array ho
-                    allBatches = Object.values(data).find(val => Array.isArray(val)) || [];
-                }
-                
-                document.getElementById('loading').classList.add('hidden');
-                document.getElementById('batchesGrid').classList.remove('hidden');
-                document.getElementById('batchCount').innerText = `Total Batches: ${allBatches.length}`;
-                
-                displayBatches(allBatches);
-            } catch (error) {
-                console.error("Error fetching live API:", error);
-                document.getElementById('loading').innerText = "Failed to load batches from API server.";
-            }
-        }
-
-        function displayBatches(batches) {
-            const grid = document.getElementById('batchesGrid');
-            grid.innerHTML = ''; 
-
-            if(batches.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center text-neutral-500 py-10">No batches available.</div>`;
-                return;
-            }
-
-            batches.forEach(batch => {
-                // API keys alignment mapping for Names, Images & IDs
-                const title = batch.name || batch.title || batch.course_name || "Premium Batch";
-                const image = batch.image || batch.thumbnail || batch.banner || batch.preview_image || "https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/4628574_125_aarambh%20banner%20app%202026%202.jpg";
-                
-                // Extracting unique numeric tracking token keys 
-                const courseId = batch.id || batch.course_id || batch.batch_id || batch.id_course;
-
-                const card = document.createElement('div');
-                card.className = "bg-[#0a0a0a] rounded-3xl overflow-hidden border border-white/5 hover:border-white/20 transition-all duration-300 flex flex-col h-full shadow-lg";
-                card.innerHTML = `
-                    <div class="relative aspect-[4/3] p-2 cursor-pointer" onclick="openCourse('${courseId}')">
-                        <img src="${image}" alt="${title}" class="w-full h-full object-cover rounded-2xl" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1610116306796-6fea9f4fae38?w=500'">
-                    </div>
-                    <div class="p-5 flex flex-col flex-grow">
-                        <h3 class="font-bold text-lg text-white line-clamp-2 mb-4 cursor-pointer hover:text-neutral-300" onclick="openCourse('${courseId}')">${title}</h3>
-                        <div class="mt-auto pt-2">
-                             <button onclick="openCourse('${courseId}')" class="w-full bg-white text-black font-bold py-3.5 rounded-xl hover:bg-neutral-200 transition-all flex items-center justify-center gap-2 text-sm">
-                                Explore Batch
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-                            </button>
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function openCourse(id) {
-            if (!id || id === 'undefined') {
-                alert("Error: Course ID configuration parse failed on this specific batch item.");
-                return;
-            }
-            window.location.href = `course.html?course_id=${id}`;
-        }
-
-        // Live Search Filter
-        document.getElementById('searchInput').addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase();
-            const filtered = allBatches.filter(b => {
-                const titleText = (b.name || b.title || b.course_name || "").toLowerCase();
-                return titleText.includes(term);
-            });
-            displayBatches(filtered);
-        });
-
-        // Trigger API Execution on Page Load
-        fetchBatches();
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
