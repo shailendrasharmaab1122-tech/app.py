@@ -5,37 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DevCoderZ - NT Portal</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <style>
-        /* Mobile horizontal scroll support */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    </style>
 </head>
-<body class="bg-slate-900 text-white min-h-screen font-sans">
+<body class="bg-[#0b0f19] text-slate-100 min-h-screen font-sans antialiased">
 
-    <nav class="p-4 bg-slate-800 border-b border-slate-700 shadow-md">
+    <nav class="sticky top-0 z-50 backdrop-blur-md bg-[#0b0f19]/80 border-b border-slate-800/80 px-4 py-3">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold tracking-wider text-teal-400">DevCoderZ <span class="text-xs text-white bg-teal-600 px-2 py-0.5 rounded ml-1">NT</span></h1>
-            <button class="bg-teal-500 hover:bg-teal-600 px-4 py-1.5 rounded-md text-sm font-semibold transition">Portal Login</button>
+            <div class="flex items-center gap-2">
+                <span class="text-xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-cyan-400">DevCoderZ</span>
+                <span class="text-[10px] font-bold tracking-widest uppercase bg-teal-500/10 text-teal-400 px-2 py-0.5 rounded-full border border-teal-500/20">Portal</span>
+            </div>
+            <button class="bg-gradient-to-r from-teal-500 to-cyan-500 hover:opacity-90 text-slate-950 px-5 py-1.5 rounded-lg text-xs font-bold shadow-lg shadow-teal-500/20 transition-all duration-300">
+                Sign In
+            </button>
         </div>
     </nav>
 
-    <main class="container mx-auto px-4 py-8">
+    <main class="container mx-auto px-4 py-8 max-w-7xl">
         
         <section id="banner-section" class="mb-10 hidden">
-            <h2 class="text-lg font-semibold mb-3 text-slate-400">🎯 Latest Announcements</h2>
-            <div id="banner-container" class="w-full rounded-2xl overflow-hidden shadow-lg border border-slate-700">
+            <div id="banner-container" class="w-full relative rounded-2xl overflow-hidden shadow-2xl border border-slate-800 bg-slate-900 aspect-[21/9] md:aspect-[3/1]">
                 </div>
         </section>
 
         <section class="mb-12">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-bold border-l-4 border-teal-500 pl-3">Explore Batches / Products</h2>
-                <span class="text-xs bg-slate-800 text-slate-400 px-3 py-1 rounded-full">Live Synchronized</span>
+                <div class="flex items-center gap-3">
+                    <div class="h-6 w-1 bg-gradient-to-b from-teal-400 to-cyan-500 rounded-full"></div>
+                    <h2 class="text-lg font-bold tracking-wide">Synchronized Streams / Batches</h2>
+                </div>
+                <div class="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-medium px-2.5 py-0.5 rounded-full">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Live API
+                </div>
             </div>
             
             <div id="courses-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                <div class="text-slate-500 animate-pulse col-span-full text-center py-10">Fetching live content pipelines...</div>
+                <div class="col-span-full flex flex-col items-center justify-center py-20 gap-3">
+                    <div class="w-8 h-8 border-2 border-teal-500 border-t-transparent rounded-full animate-spin"></div>
+                    <p class="text-xs text-slate-500 tracking-widest uppercase font-medium">Connecting to Eduvibe Engine...</p>
+                </div>
             </div>
         </section>
 
