@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NEXT TOPPER - FREE BATCHES</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * { user-select: auto !important; -webkit-user-select: auto !important; }
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;  
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="bg-black text-white min-h-screen flex flex-col antialiased">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-40 bg-black/70 backdrop-blur-2xl border-b border-white/5 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a class="flex items-center gap-3 group" href="#">
+                <div class="w-9 h-9 bg-white text-black rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform shadow-[0_0_20px_rgba(255,255,255,0.15)]">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 fill-black"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xl font-black text-white tracking-widest leading-none">NEXT TOPPER</span>
+                    <span class="text-[9px] font-bold tracking-[0.25em] text-neutral-500 uppercase leading-none mt-1.5">FREE PORTAL</span>
+                </div>
+            </a>
+            <div class="flex items-center gap-5 sm:gap-6">
+                <a class="text-neutral-400 hover:text-white transition-colors group" href="#">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 group-hover:scale-110 transition-transform"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
+                </a>
+                <a class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-neutral-300 hover:text-black hover:bg-white hover:scale-105 transition-all shadow-sm" href="#">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow w-full">
+        <div class="min-h-screen bg-black text-white pb-20 md:pb-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-10">
+                
+                <!-- Header & Search -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                    <div>
+                        <h1 class="text-3xl md:text-5xl font-black text-white tracking-tight">Explore <span class="text-neutral-500">Batches</span></h1>
+                    </div>
+                    <div class="relative w-full md:w-[400px]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500 w-5 h-5"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+                        <input id="searchInput" placeholder="Search your future..." class="w-full bg-[#0a0a0a] border border-white/10 text-white pl-12 pr-4 py-4 rounded-2xl focus:outline-none focus:border-white transition-all placeholder:text-neutral-600" type="text">
+                    </div>
+                </div>
+
+                <!-- Loading State -->
+                <div id="loading" class="text-center py-20 text-neutral-500 text-xl font-bold">
+                    Loading Premium Batches...
+                </div>
+
+                <!-- Batches Grid -->
+                <div id="batchesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 hidden">
+                    <!-- Dynamic Cards isme load honge JS ke through -->
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Script for API Fetching & Search -->
+    <script>
+        const apiURL = 'https://nt-api.eg-a-nm-a-e-sala-zar.workers.dev/api/batches';
+        let allBatches = [];
+
+        // Fetch Data from API
+        async function fetchBatches() {
+            try {
+                const response = await fetch(apiURL);
+                const data = await response.json();
+                
+                // Note: Agar API response direct array nahi hai (jaise data.batches ya data.data), 
+                // toh uss hisab se niche wali line change kar lena.
+                allBatches = Array.isArray(data) ? data : (data.batches || data.data || []);
+                
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('batchesGrid').classList.remove('hidden');
+                
+                displayBatches(allBatches);
+            } catch (error) {
+                console.error("Error fetching batches:", error);
+                document.getElementById('loading').innerText = "Failed to load batches. Please try again later.";
+            }
+        }
+
+        // Display Batches dynamically
+        function displayBatches(batches) {
+            const grid = document.getElementById('batchesGrid');
+            grid.innerHTML = ''; // Clear previous content
+
+            if(batches.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center text-neutral-500 py-10">No batches found matching your search.</div>`;
+                return;
+            }
+
+            batches.forEach(batch => {
+                // API keys handle karne ke liye fallbacks lagaye hain (title/name, price, image/thumbnail)
+                const title = batch.name || batch.title || "Premium Batch";
+                const image = batch.image || batch.thumbnail || "https://via.placeholder.com/400x300?text=Next+Topper";
+                const rawPrice = batch.price || "499";
+                const originalPrice = batch.originalPrice || parseInt(rawPrice) + 1000;
+                
+                // Card UI generation
+                const card = document.createElement('div');
+                card.className = "bg-[#0a0a0a] rounded-3xl overflow-hidden border border-white/5 hover:border-white/20 transition-all duration-300 cursor-pointer group flex flex-col h-full";
+                
+                card.innerHTML = `
+                    <div class="relative aspect-[4/3] p-2">
+                        <div class="w-full h-full rounded-2xl overflow-hidden relative bg-neutral-900">
+                            <img src="${image}" alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy">
+                            <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] to-transparent opacity-80"></div>
+                        </div>
+                        <button class="absolute top-4 right-4 p-2.5 rounded-full bg-black/50 backdrop-blur-md z-10 border border-white/10 hover:bg-black transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-neutral-400"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
+                        </button>
+                    </div>
+                    <div class="p-5 flex flex-col flex-grow">
+                        <h3 class="font-bold text-lg text-white line-clamp-2 mb-2">${title}</h3>
+                        <div class="mt-auto mb-6 flex items-end gap-2">
+                            <p class="text-xl font-black text-white">₹0.00</p>
+                            <p class="text-sm font-medium text-neutral-500 line-through mb-0.5">₹${originalPrice}</p>
+                        </div>
+                        <button onclick="startBatch('${batch.id || '#'}')" class="w-full bg-white text-black font-bold py-3.5 rounded-xl transition-all duration-300 hover:bg-neutral-200 flex items-center justify-center gap-2">
+                            Start Learning 
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="m9 18 6-6-6-6"></path></svg>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Search Filter Functionality
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filtered = allBatches.filter(batch => {
+                const title = (batch.name || batch.title || "").toLowerCase();
+                return title.includes(searchTerm);
+            });
+            displayBatches(filtered);
+        });
+
+        // Action when 'Start Learning' is clicked
+        function startBatch(batchId) {
+            alert("Redirecting to Batch ID: " + batchId + " (Yahan tum single batch ka video player page open kara sakte ho)");
+            // window.location.href = `player.html?id=${batchId}`;
+        }
+
+        // Initialize App
+        fetchBatches();
+    </script>
+</body>
+</html>
