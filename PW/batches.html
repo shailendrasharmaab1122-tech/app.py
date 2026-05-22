@@ -178,7 +178,6 @@
         }
       }
 
-      /* Consistent Matching Footer */
       .app-footer {
         width: 100%;
         height: 50px;
@@ -307,54 +306,20 @@
       alert("Batch ID missing");
       document.getElementById("loader").style.display = "none";
     } else {
-      // Eduvibe API configuration fallback router (No parameter type version)
-      fetch("https://eduvibe-pw-api.wasmer.app/batch.php?batch_id=" + encodeURIComponent(batchId))
+      // Connects directly to your updated and clean Vercel API
+      fetch("https://devcoderz.vercel.app/api/PW/batches.js?type=batch&batch_id=" + encodeURIComponent(batchId))
         .then((res) => res.json())
         .then((data) => {
-          if (!data.success && data.redirect) {
-            window.location.href = data.redirect;
-            return;
+          if (data.success === false) {
+             alert(data.error || "Failed to load batch");
+             document.getElementById("loader").style.display = "none";
+             return;
           }
 
-          let batchName = data.batch_title || data.name || "The DevCoderZ Dashboard";
-          if (data.data && typeof data.data === 'object') {
-             batchName = data.data.batch_title || data.data.name || batchName;
-          }
-          document.getElementById("batchTitle").innerText = batchName;
+          document.getElementById("batchTitle").innerText = data.batch_title || "The DevCoderZ Dashboard";
 
-          let subjectsList = [];
-          if (Array.isArray(data.subjects)) subjectsList = data.subjects;
-          else if (data.data && Array.isArray(data.data.subjects)) subjectsList = data.data.subjects;
-          else if (data.data && Array.isArray(data.data)) subjectsList = data.data;
-          else if (Array.isArray(data.faculties)) subjectsList = data.faculties;
-          else if (data.data && Array.isArray(data.data.faculties)) subjectsList = data.data.faculties;
-          else if (Array.isArray(data.batch_subjects)) subjectsList = data.batch_subjects;
-          else if (data.data && Array.isArray(data.data.batch_subjects)) subjectsList = data.data.batch_subjects;
-
-          if (subjectsList.length === 0) {
-            for (let key in data) {
-              if (Array.isArray(data[key]) && data[key].length > 0) {
-                subjectsList = data[key];
-                break;
-              }
-            }
-          }
-          if (subjectsList.length === 0 && data.data) {
-            for (let key in data.data) {
-              if (Array.isArray(data.data[key]) && data.data[key].length > 0) {
-                subjectsList = data.data[key];
-                break;
-              }
-            }
-          }
-
-          let classesList = data.classes || data.live_classes || [];
-          if (data.data && !classesList.length) {
-            classesList = data.data.classes || data.data.live_classes || [];
-          }
-
-          renderClasses(classesList);
-          renderSubjects(subjectsList);
+          renderClasses(data.classes || []);
+          renderSubjects(data.subjects || []);
 
           document.getElementById("loader").style.display = "none";
         })
@@ -379,8 +344,6 @@
         if (!live) return;
         
         const hasHomework = Array.isArray(live.homeworkIds) && live.homeworkIds.length > 0;
-        if (hasHomework && !live.url && !live.videoDetails) return;
-
         let start = live.startTime ? new Date(live.startTime) : null;
         let end = live.endTime ? new Date(live.endTime) : null;
         let unixStart = start ? Math.floor(start.getTime() / 1000) : null;
@@ -453,71 +416,20 @@
          return;
       }
 
+      // Backend directly delivers optimized flat blueprints now!
       subjects.forEach((sub) => {
-        // --- EDUVIBE DEEP SUBJECT NESTING MAPPER ---
-        let subRef = sub.subjectId && typeof sub.subjectId === "object" ? sub.subjectId : sub;
-
-        // 1. Exact Nested Faculty Name Extraction
-        let teacher = "Faculty Team";
-        if (subRef.faculties && subRef.faculties.length > 0) {
-          let fac = subRef.faculties[0];
-          teacher = typeof fac === "object" ? (fac.name || fac.displayName || fac.firstName || "Faculty Team") : fac;
-        } else if (sub.teacherName || sub.teacher_name || subRef.teacherName) {
-          teacher = sub.teacherName || sub.teacher_name || subRef.teacherName;
-        } else if (sub.teacherIds && sub.teacherIds.length > 0 && typeof sub.teacherIds[0] === "object") {
-          let tObj = sub.teacherIds[0];
-          teacher = ((tObj.firstName || "") + " " + (tObj.lastName || "")).trim() || tObj.name || "Faculty Team";
-        }
-
-        // 2. Image Parser
-        let image = "https://static.pw.live/react-batches/assets/svg/subjects/defaultSubject.svg";
-        if (subRef.imageId?.baseUrl && subRef.imageId?.key) {
-          image = subRef.imageId.baseUrl + subRef.imageId.key;
-        } else if (subRef.previewImage || subRef.thumbnail || subRef.image || subRef.imageUrl) {
-          image = subRef.previewImage || subRef.thumbnail || subRef.image || subRef.imageUrl;
-        } else if (sub.previewImage || sub.thumbnail) {
-          image = sub.previewImage || sub.thumbnail;
-        }
-
-        // 3. Subject Name Sanitizer
-        let actualSubjectName = "";
-        if (sub.batch_subject_name) actualSubjectName = sub.batch_subject_name;
-        else if (subRef.name && typeof subRef.name === "string") actualSubjectName = subRef.name;
-        else if (subRef.subject && typeof subRef.subject === "string") actualSubjectName = subRef.subject;
-        else if (sub.subject && typeof sub.subject === "string") actualSubjectName = sub.subject;
-        else if (sub.name && typeof sub.name === "string") actualSubjectName = sub.name;
-        else if (subRef.title && typeof subRef.title === "string") actualSubjectName = subRef.title;
-        else {
-          actualSubjectName = subRef.slug || sub.slug || "Premium Content Module";
-        }
-
-        if (actualSubjectName.includes("-")) {
-          actualSubjectName = actualSubjectName.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
-        }
-
-        let escapedSubject = encodeURIComponent(actualSubjectName.replace(/'/g, "%27"));
-        let subId = sub._id || sub.id || subRef._id || subRef.id || Math.random().toString(36).substring(7);
-
-        // 4. Exact Nested Video Count Extraction (Fixes the "0 Lectures" bug)
-        let dynamicCount = subRef.videos_count || 
-                           subRef.videosCount || 
-                           subRef.content_count || 
-                           subRef.contentCount || 
-                           subRef.totalLectures || 
-                           subRef.lectureCount || 
-                           sub.lectureCount || 
-                           sub.lectures || 
-                           0;
+        let subjectTitle = sub.name || "Premium Content Module";
+        let escapedSubject = encodeURIComponent(subjectTitle.replace(/'/g, "%27"));
 
         const card = `
         <div class="subject_card-WgK2V0"
-          onclick='location.href="/PW/chapters.html?batch_id=${batchId}&subject_id=${subId}&subject_slug=${subRef.slug || sub.slug || ''}&subject=${escapedSubject}"'>
+          onclick='location.href="/PW/chapters.html?batch_id=${batchId}&subject_id=${sub._id}&subject_slug=${sub.slug || ''}&subject=${escapedSubject}"'>
           <div class="_all-class-card_mu3oc_3">
-            <img src="${image}">
+            <img src="${sub.image}">
             <div class="_class_mu3oc_10">
-              <div class="_class-title_mu3oc_14">${actualSubjectName}</div>
-              <div class="_tag-color_mu3oc_18 _caption-1_mu3oc_22">${dynamicCount} Lectures</div>
-              <div style="margin-top:6px; font-size:13px; color:#666;"><em>${teacher}</em></div>
+              <div class="_class-title_mu3oc_14">${subjectTitle}</div>
+              <div class="_tag-color_mu3oc_18 _caption-1_mu3oc_22">${sub.lectureCount} Lectures</div>
+              <div style="margin-top:6px; font-size:13px; color:#666;"><em>${sub.teacherName}</em></div>
             </div>
           </div>
         </div>
