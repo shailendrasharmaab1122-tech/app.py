@@ -178,6 +178,7 @@
         }
       }
 
+      /* Consistent Matching Footer */
       .app-footer {
         width: 100%;
         height: 50px;
@@ -290,6 +291,7 @@
         </div>
       </div>
     </div>
+
   <script>
     const batchId = new URLSearchParams(window.location.search).get("batch_id");
 
@@ -305,7 +307,8 @@
       alert("Batch ID missing");
       document.getElementById("loader").style.display = "none";
     } else {
-      fetch("https://devcoderz.vercel.app/api/PW/batches.js?type=batch&batch_id=" + encodeURIComponent(batchId))
+      // Eduvibe API configuration fallback router (No parameter type version)
+      fetch("https://eduvibe-pw-api.wasmer.app/batch.php?batch_id=" + encodeURIComponent(batchId))
         .then((res) => res.json())
         .then((data) => {
           if (!data.success && data.redirect) {
@@ -326,6 +329,7 @@
           else if (Array.isArray(data.faculties)) subjectsList = data.faculties;
           else if (data.data && Array.isArray(data.data.faculties)) subjectsList = data.data.faculties;
           else if (Array.isArray(data.batch_subjects)) subjectsList = data.batch_subjects;
+          else if (data.data && Array.isArray(data.data.batch_subjects)) subjectsList = data.data.batch_subjects;
 
           if (subjectsList.length === 0) {
             for (let key in data) {
@@ -372,10 +376,8 @@
       const now = new Date();
 
       classes.forEach((live) => {
-        // Safe Check: Agar runtime array pipeline me koi block unmapped ya corrupt ho
         if (!live) return;
-
-        // Dynamic array confirmation check to avoid execution freeze
+        
         const hasHomework = Array.isArray(live.homeworkIds) && live.homeworkIds.length > 0;
         if (hasHomework && !live.url && !live.videoDetails) return;
 
@@ -395,7 +397,6 @@
         let videoId = live._id || live.id;
         let isNote = (hasHomework || live.homeworkIds?.length) && live.isVideoLecture === false;
 
-        // Engine Tunneling Links Fix (No more blank freeze/unresponsive # paths)
         let link = "#";
         if (status === "LIVE") {
           link = `/live.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || live.subjectId || ''}&video_id=${videoId}&start=${unixStart}`;
@@ -403,7 +404,6 @@
           let noteId = (live.homeworkIds && live.homeworkIds[0]?._id) || videoId;
           link = `/view.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || live.subjectId || ''}&note=${noteId}`;
         } else {
-          // UPCOMING aur ENDED dono safe custom player gateway par bypass honge
           link = `/player.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || live.subjectId || ''}&video_id=${videoId}`;
         }
 
@@ -454,30 +454,41 @@
       }
 
       subjects.forEach((sub) => {
+        // --- EDUVIBE DEEP SUBJECT NESTING MAPPER ---
+        let subRef = sub.subjectId && typeof sub.subjectId === "object" ? sub.subjectId : sub;
+
+        // 1. Exact Nested Faculty Name Extraction
         let teacher = "Faculty Team";
-        if (sub.teacherIds?.length && typeof sub.teacherIds[0] === "object") {
-          teacher = (sub.teacherIds[0].firstName || "") + " " + (sub.teacherIds[0].lastName || "");
-        } else if (sub.teacherName || sub.teacher_name || sub.faculties?.[0]?.name) {
-          teacher = sub.teacherName || sub.teacher_name || sub.faculties[0].name;
+        if (subRef.faculties && subRef.faculties.length > 0) {
+          let fac = subRef.faculties[0];
+          teacher = typeof fac === "object" ? (fac.name || fac.displayName || fac.firstName || "Faculty Team") : fac;
+        } else if (sub.teacherName || sub.teacher_name || subRef.teacherName) {
+          teacher = sub.teacherName || sub.teacher_name || subRef.teacherName;
+        } else if (sub.teacherIds && sub.teacherIds.length > 0 && typeof sub.teacherIds[0] === "object") {
+          let tObj = sub.teacherIds[0];
+          teacher = ((tObj.firstName || "") + " " + (tObj.lastName || "")).trim() || tObj.name || "Faculty Team";
         }
 
+        // 2. Image Parser
         let image = "https://static.pw.live/react-batches/assets/svg/subjects/defaultSubject.svg";
-        if (sub.imageId?.baseUrl && sub.imageId?.key) {
-          image = sub.imageId.baseUrl + sub.imageId.key;
-        } else if (sub.previewImage || sub.thumbnail || sub.image) {
-          image = sub.previewImage || sub.thumbnail || sub.image;
+        if (subRef.imageId?.baseUrl && subRef.imageId?.key) {
+          image = subRef.imageId.baseUrl + subRef.imageId.key;
+        } else if (subRef.previewImage || subRef.thumbnail || subRef.image || subRef.imageUrl) {
+          image = subRef.previewImage || subRef.thumbnail || subRef.image || subRef.imageUrl;
+        } else if (sub.previewImage || sub.thumbnail) {
+          image = sub.previewImage || sub.thumbnail;
         }
 
+        // 3. Subject Name Sanitizer
         let actualSubjectName = "";
-        if (sub.subject && typeof sub.subject === "string") actualSubjectName = sub.subject;
+        if (sub.batch_subject_name) actualSubjectName = sub.batch_subject_name;
+        else if (subRef.name && typeof subRef.name === "string") actualSubjectName = subRef.name;
+        else if (subRef.subject && typeof subRef.subject === "string") actualSubjectName = subRef.subject;
+        else if (sub.subject && typeof sub.subject === "string") actualSubjectName = sub.subject;
         else if (sub.name && typeof sub.name === "string") actualSubjectName = sub.name;
-        else if (sub.title && typeof sub.title === "string") actualSubjectName = sub.title;
-        else if (sub.subjectName && typeof sub.subjectName === "string") actualSubjectName = sub.subjectName;
-        else if (sub.subjectId && typeof sub.subjectId === "object" && sub.subjectId.name) actualSubjectName = sub.subjectId.name;
-        else if (sub.subjectId && typeof sub.subjectId === "string") actualSubjectName = sub.subjectId;
-        else if (sub.batch_subject_name) actualSubjectName = sub.batch_subject_name;
+        else if (subRef.title && typeof subRef.title === "string") actualSubjectName = subRef.title;
         else {
-          actualSubjectName = sub.slug || sub.code || "Premium Content Module";
+          actualSubjectName = subRef.slug || sub.slug || "Premium Content Module";
         }
 
         if (actualSubjectName.includes("-")) {
@@ -485,12 +496,22 @@
         }
 
         let escapedSubject = encodeURIComponent(actualSubjectName.replace(/'/g, "%27"));
-        let subId = sub._id || sub.id || sub.subjectId?._id || sub.subjectId || Math.random().toString(36).substring(7);
-        let dynamicCount = sub.lectureCount || sub.lectures || sub.total_lectures || sub.contentCount || 0;
+        let subId = sub._id || sub.id || subRef._id || subRef.id || Math.random().toString(36).substring(7);
+
+        // 4. Exact Nested Video Count Extraction (Fixes the "0 Lectures" bug)
+        let dynamicCount = subRef.videos_count || 
+                           subRef.videosCount || 
+                           subRef.content_count || 
+                           subRef.contentCount || 
+                           subRef.totalLectures || 
+                           subRef.lectureCount || 
+                           sub.lectureCount || 
+                           sub.lectures || 
+                           0;
 
         const card = `
         <div class="subject_card-WgK2V0"
-          onclick='location.href="/PW/chapters.html?batch_id=${batchId}&subject_id=${subId}&subject_slug=${sub.slug || ''}&subject=${escapedSubject}"'>
+          onclick='location.href="/PW/chapters.html?batch_id=${batchId}&subject_id=${subId}&subject_slug=${subRef.slug || sub.slug || ''}&subject=${escapedSubject}"'>
           <div class="_all-class-card_mu3oc_3">
             <img src="${image}">
             <div class="_class_mu3oc_10">
