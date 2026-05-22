@@ -3,108 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevCoderZ Premium Player</title>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/shaka-player.compiled.js"></script>
-    
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
-    <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
-
+    <title>The DevCoderZ - Premium Player</title>
     <style>
-        body {
+        body, html {
             margin: 0;
             padding: 0;
+            width: 100%;
+            height: 100%;
             background-color: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            font-family: sans-serif;
             overflow: hidden;
+            font-family: sans-serif;
         }
-        .video-container {
+        .player-container {
             width: 100%;
-            max-width: 960px;
-            background: #000;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.7);
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
         }
-        video {
+        iframe, video {
             width: 100%;
-            display: block;
+            height: 100%;
+            border: none;
         }
+        .status-msg {
+            color: #fff;
+            font-size: 16px;
+            position: absolute;
+            z-index: 10;
+            background: rgba(0,0,0,0.7);
+            padding: 12px 24px;
+            border-radius: 8px;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top: 4px solid #4f46e5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/shaka-player.compiled.js"></script>
 </head>
 <body>
 
-<div class="video-container">
-    <video id="video" crossorigin playsinline></video>
-</div>
-<script>
-    // 1. Get video_id from URL parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('video_id');
-
-    if (!videoId) {
-        alert("Error: video_id parameters missing in URL!");
-    } else {
-        initPlayer();
-    }
-
-    async function initPlayer() {
-        const video = document.getElementById('video');
+    <div class="player-container">
+        <div id="loader" class="spinner"></div>
+        <div id="status" class="status-msg" style="display:none;">Loading Stream Data...</div>
         
-        // 2. Setup Premium UI Overlays (Plyr Controls)
-        const plyrPlayer = new Plyr(video, { 
-            controls: [
-                'play-large', 'rewind', 'play', 'fast-forward', 'progress', 
-                'current-time', 'duration', 'mute', 'volume', 'settings', 'fullscreen'
-            ],
-            settings: ['quality', 'speed'],
-            speed: { selected: 1, options: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3] }
-        });
+        <video id="videoPlayer" controls crossorigin style="display:none;"></video>
+        <iframe id="iframePlayer" style="display:none;" allowfullscreen></iframe>
+    </div>
 
-        // 3. Initialize Media Engine (Shaka Player)
-        shaka.polyfill.installAll();
-        if (!shaka.Player.isBrowserSupported()) {
-            console.error('Browser built-in engine unsupported.');
-            return;
+    <script>
+        // Url se parameters extract karo
+        const urlParams = new URLSearchParams(window.location.search);
+        const batchId = urlParams.get("batch_id");
+        const subjectId = urlParams.get("subject_id");
+        const videoId = urlParams.get("video_id");
+
+        const statusEl = document.getElementById("status");
+        const loaderEl = document.getElementById("loader");
+        const videoEl = document.getElementById("videoPlayer");
+        const iframeEl = document.getElementById("iframePlayer");
+
+        function showStatus(msg) {
+            statusEl.innerText = msg;
+            statusEl.style.display = "block";
+            loaderEl.style.display = "none";
         }
 
-        const shakaPlayer = new shaka.Player(video);
+        if (!batchId || !videoId) {
+            showStatus("Error: Mismatch Parameter Context (Missing IDs)");
+        } else {
+            // Tumhari apni API se batch types router fetch call lagao lectures fetch karne ke liye
+            // Note: lectures nikalne ke liye hum humesha pure array tree loop verify karte hain
+            const apiUrl = `https://devcoderz.vercel.app/api/PW/batches.js?type=lectures&batch_id=${encodeURIComponent(batchId)}&subject_id=${encodeURIComponent(subjectId || '')}&topic_id=${encodeURIComponent(videoId)}`;
+            
+            fetch(apiUrl)
+                .then(res => res.json())
+                .then(data => {
+                    // Eduvibe nested payload fallback loop target setup
+                    let lectureData = data.data || data;
+                    let videoObject = null;
 
-        shakaPlayer.addEventListener('error', (event) => {
-            console.error('Playback Stream Engine Error:', event.detail);
-        });
-
-        try {
-            // 4. Fetch manifest link and authentication metadata from local backend API
-            const response = await fetch(`/api/getStream?video_id=${videoId}`);
-            const data = await response.json();
-
-            if (!data.manifestUrl) {
-                throw new Error("Unable to read valid streaming path from API gateway response.");
-            }
-
-            // 5. Apply dynamic clear keys if returned in authentication package
-            if (data.keyId && data.keyValue) {
-                shakaPlayer.configure({
-                    drm: {
-                        clearKeys: {
-                            [data.keyId]: data.keyValue
-                        }
+                    // 1. Agar response direct array hai ya list ke andar video ID dhundni hai
+                    if (Array.isArray(lectureData)) {
+                        videoObject = lectureData.find(item => item._id === videoId || item.id === videoId);
+                    } else if (lectureData.lectures && Array.isArray(lectureData.lectures)) {
+                        videoObject = lectureData.lectures.find(item => item._id === videoId || item.id === videoId);
+                    } else if (typeof lectureData === 'object') {
+                        // Agar direct single lecture ka object mil gaya ho
+                        videoObject = lectureData;
                     }
+
+                    if (!videoObject) {
+                        // Global fallback layer mapping target if id pattern matches layout keys
+                        videoObject = data;
+                    }
+
+                    // --- DEEP LINK EXTRACTOR ENGINE ---
+                    // Eduvibe streams ya toh secure iframe web token URL hoti hain ya raw manifest links
+                    let streamUrl = videoObject.url || 
+                                    videoObject.videoUrl || 
+                                    videoObject.videoDetails?.hls || 
+                                    videoObject.videoDetails?.mpd || 
+                                    videoObject.videoDetails?.url;
+
+                    if (!streamUrl && videoObject.streamData) {
+                        streamUrl = videoObject.streamData.url || videoObject.streamData.hls;
+                    }
+
+                    if (!streamUrl) {
+                        showStatus("Stream Target Error: Direct media source manifest not found.");
+                        return;
+                    }
+
+                    loaderEl.style.display = "none";
+
+                    // 2. Routing logic stream handler: Embed or Raw Native Playback
+                    if (streamUrl.includes("embed") || streamUrl.includes("player.php") || streamUrl.includes("wasmer.app")) {
+                        // Agar bypass direct proxy secure iframe player panel bhej raha hai
+                        iframeEl.src = streamUrl;
+                        iframeEl.style.display = "block";
+                    } else {
+                        // Agar raw MPD (DASH) ya M3U8 (HLS) stream link hai toh use native/shaka engine mein feed karo
+                        videoEl.style.display = "block";
+                        initSecurePlayer(videoEl, streamUrl);
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    showStatus("Gateway Connection Interrupted.");
                 });
+        }
+
+        // Shaka Player Multi-Stream Manifest Decoder
+        function initSecurePlayer(videoElement, manifestUri) {
+            shaka.poly填补.installAll();
+            if (!shaka.Player.isBrowserSupported()) {
+                videoElement.src = manifestUri; // Native HLS fallback for iOS/Safari
+                return;
             }
 
-            // 6. Connect source manifest data to core viewport instance
-            await shakaPlayer.load(data.manifestUrl);
-            console.log('Stream source initialization successful!');
+            const player = new shaka.Player(videoElement);
+            player.addEventListener('error', (e) => console.error("Shaka MFE Core Error", e.detail));
 
-        } catch (error) {
-            console.error('Core Pipeline Breakdown:', error);
+            player.load(manifestUri)
+                .then(() => {
+                    console.log("Stream successfully securely mounted onto the pipeline engine.");
+                })
+                .catch(err => {
+                    console.error("Playback Mount Failed:", err);
+                    // Last survival fallback to native rendering
+                    videoElement.src = manifestUri;
+                });
         }
-    }
-</script>
-
+    </script>
 </body>
 </html>
