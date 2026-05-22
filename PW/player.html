@@ -3,48 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loading Recorded Lecture...</title>
+    <title>DevCoderZ Premium Player</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/shaka-player.compiled.js"></script>
+    
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+    <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+
     <style>
-        body { background-color: #0b0f19; color: #f3f4f6; font-family: 'Inter', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .loader-container { text-align: center; }
-        .spinner { width: 50px; height: 50px; border: 5px solid rgba(255, 255, 255, 0.1); border-top: 5px solid #22c55e; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: scale(1); rotate: 360deg; } }
-        h2 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
-        p { color: #9ca3af; font-size: 14px; }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: sans-serif;
+            overflow: hidden;
+        }
+        .video-container {
+            width: 100%;
+            max-width: 960px;
+            background: #000;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.7);
+        }
+        video {
+            width: 100%;
+            display: block;
+        }
     </style>
 </head>
 <body>
 
-    <div class="loader-container">
-        <div class="spinner"></div>
-        <h2>Loading Recorded Video Cloud...</h2>
-        <p>Streaming authorization handshake initialized.</p>
-    </div>
+<div class="video-container">
+    <video id="video" crossorigin playsinline></video>
+</div>
+<script>
+    // 1. Get video_id from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const videoId = urlParams.get('video_id');
 
-    <script>
-        // URL se parameters extract karna
-        const urlParams = new URLSearchParams(window.location.search);
-        const videoId = urlParams.get('video_id');
-        const batchId = urlParams.get('batch_id');
-        const subjectId = urlParams.get('subject_id');
-        const topicId = urlParams.get('topic_id');
+    if (!videoId) {
+        alert("Error: video_id parameters missing in URL!");
+    } else {
+        initPlayer();
+    }
 
-        if (videoId && batchId) {
-            // EduVibe Recorded Player PHP Portal Targeting Link Construction
-            let targetRedirectUrl = `https://eduvibe-pw.page.gd/videoplayerr.php?video_id=${encodeURIComponent(videoId)}&batch_id=${encodeURIComponent(batchId)}`;
-            
-            if (subjectId) targetRedirectUrl += `&subject_id=${encodeURIComponent(subjectId)}`;
-            if (topicId) targetRedirectUrl += `&topic_id=${encodeURIComponent(topicId)}`;
+    async function initPlayer() {
+        const video = document.getElementById('video');
+        
+        // 2. Setup Premium UI Overlays (Plyr Controls)
+        const plyrPlayer = new Plyr(video, { 
+            controls: [
+                'play-large', 'rewind', 'play', 'fast-forward', 'progress', 
+                'current-time', 'duration', 'mute', 'volume', 'settings', 'fullscreen'
+            ],
+            settings: ['quality', 'speed'],
+            speed: { selected: 1, options: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3] }
+        });
 
-            // Direct Routing Execution
-            setTimeout(() => {
-                window.location.href = targetRedirectUrl;
-            }, 600); 
-        } else {
-            document.querySelector('h2').innerText = "Playback Parameters Missing";
-            document.querySelector('p').innerText = "Redirecting back to dashboard...";
-            setTimeout(() => { window.location.href = "/"; }, 2000);
+        // 3. Initialize Media Engine (Shaka Player)
+        shaka.polyfill.installAll();
+        if (!shaka.Player.isBrowserSupported()) {
+            console.error('Browser built-in engine unsupported.');
+            return;
         }
-    </script>
+
+        const shakaPlayer = new shaka.Player(video);
+
+        shakaPlayer.addEventListener('error', (event) => {
+            console.error('Playback Stream Engine Error:', event.detail);
+        });
+
+        try {
+            // 4. Fetch manifest link and authentication metadata from local backend API
+            const response = await fetch(`/api/getStream?video_id=${videoId}`);
+            const data = await response.json();
+
+            if (!data.manifestUrl) {
+                throw new Error("Unable to read valid streaming path from API gateway response.");
+            }
+
+            // 5. Apply dynamic clear keys if returned in authentication package
+            if (data.keyId && data.keyValue) {
+                shakaPlayer.configure({
+                    drm: {
+                        clearKeys: {
+                            [data.keyId]: data.keyValue
+                        }
+                    }
+                });
+            }
+
+            // 6. Connect source manifest data to core viewport instance
+            await shakaPlayer.load(data.manifestUrl);
+            console.log('Stream source initialization successful!');
+
+        } catch (error) {
+            console.error('Core Pipeline Breakdown:', error);
+        }
+    }
+</script>
+
 </body>
 </html>
