@@ -178,7 +178,6 @@
         }
       }
 
-      /* Consistent Matching Footer */
       .app-footer {
         width: 100%;
         height: 50px;
@@ -291,7 +290,6 @@
         </div>
       </div>
     </div>
-
   <script>
     const batchId = new URLSearchParams(window.location.search).get("batch_id");
 
@@ -374,7 +372,12 @@
       const now = new Date();
 
       classes.forEach((live) => {
-        if (live.homeworkIds?.length && !live.url && !live.videoDetails) return;
+        // Safe Check: Agar runtime array pipeline me koi block unmapped ya corrupt ho
+        if (!live) return;
+
+        // Dynamic array confirmation check to avoid execution freeze
+        const hasHomework = Array.isArray(live.homeworkIds) && live.homeworkIds.length > 0;
+        if (hasHomework && !live.url && !live.videoDetails) return;
 
         let start = live.startTime ? new Date(live.startTime) : null;
         let end = live.endTime ? new Date(live.endTime) : null;
@@ -390,16 +393,18 @@
         let subjectName = live.subjectId?.name || "Live Class";
         let topic = live.topic || "";
         let videoId = live._id || live.id;
-        let isNote = live.homeworkIds?.length && live.isVideoLecture === false;
+        let isNote = (hasHomework || live.homeworkIds?.length) && live.isVideoLecture === false;
 
+        // Engine Tunneling Links Fix (No more blank freeze/unresponsive # paths)
         let link = "#";
         if (status === "LIVE") {
-          link = `/live.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&video_id=${videoId}&start=${unixStart}`;
+          link = `/live.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || live.subjectId || ''}&video_id=${videoId}&start=${unixStart}`;
         } else if (isNote) {
-          let noteId = live.homeworkIds[0]?._id || videoId;
-          link = `/view.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&note=${noteId}`;
-        } else if (status === "ENDED") {
-          link = `/player.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || ''}&video_id=${videoId}`;
+          let noteId = (live.homeworkIds && live.homeworkIds[0]?._id) || videoId;
+          link = `/view.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || live.subjectId || ''}&note=${noteId}`;
+        } else {
+          // UPCOMING aur ENDED dono safe custom player gateway par bypass honge
+          link = `/player.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || live.subjectId || ''}&video_id=${videoId}`;
         }
 
         let badgeColor = "#facc15";
