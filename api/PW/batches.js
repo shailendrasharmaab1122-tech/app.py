@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-    // 1. CORS Headers configuration
+    // 1. CORS & Response Headers configuration
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -9,7 +9,7 @@ export default async function handler(req, res) {
         return res.status(200).end();
     }
 
-    // 2. Destructure all dynamic parameters coming from frontend
+    // 2. Destructure all query parameters from frontend request
     const { type, batch_id, subject_id, topic_id, tab } = req.query;
 
     if (!batch_id) {
@@ -19,27 +19,25 @@ export default async function handler(req, res) {
     try {
         let targetUrl = "";
 
-        // Route 1: CHAPTERS CALL
+        // Dynamic routing system based on type parameter
         if (type === 'chapters') {
             if (!subject_id) {
                 return res.status(400).json({ success: false, error: "Missing subject_id for chapters fetch" });
             }
             targetUrl = `https://eduvibe-pw-api.wasmer.app/chapters.php?batch_id=${encodeURIComponent(batch_id)}&subject_id=${encodeURIComponent(subject_id)}`;
         } 
-        // Route 2: LECTURES CALL
         else if (type === 'lectures') {
             const activeTab = tab || 'videos';
             targetUrl = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${encodeURIComponent(batch_id)}&subject_id=${encodeURIComponent(subject_id)}&topic_id=${encodeURIComponent(topic_id)}&tab=${encodeURIComponent(activeTab)}`;
         } 
-        // Route 3: DEFAULT BATCH CATALOG CALL
         else {
             targetUrl = `https://eduvibe-pw-api.wasmer.app/batch.php?batch_id=${encodeURIComponent(batch_id)}`;
         }
 
-        // 3. Connect safely to the secure terminal backend
+        // Fetch data from secure upstream core cluster
         const response = await fetch(targetUrl, {
             headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
                 'Accept': 'application/json'
             }
         });
@@ -50,35 +48,74 @@ export default async function handler(req, res) {
 
         const rawData = await response.json();
 
-        // 4. BATCH STRUCTURE RE-MAPPING ENGINE (Sirf batch type ke liye)
+        // 3. CORE RE-MAPPING ENGINE: Intercept batch catalog structure layout
         if (!type || type === 'batch') {
-            // Agar backend se data nested aa raha ho toh layers bypass karo
             let actualData = rawData.data || rawData;
-            
-            // Extract Subjects safely
-            let subjects = [];
+
+            let rawSubjects = [];
             if (Array.isArray(actualData)) {
-                subjects = actualData;
+                rawSubjects = actualData;
             } else {
-                subjects = actualData.subjects || actualData.batch_subjects || actualData.faculties || [];
+                rawSubjects = actualData.subjects || actualData.batch_subjects || actualData.faculties || [];
             }
 
-            // Extract Classes safely
+            // Clean, normalize and pipeline every single subject block
+            let standardizedSubjects = rawSubjects.map(sub => {
+                if (!sub) return null;
+                
+                // Track deep nested subject identity object inside Eduvibe layers
+                let nestedSub = sub.subjectId && typeof sub.subjectId === 'object' ? sub.subjectId : {};
+                
+                // Title extraction
+                let title = sub.batch_subject_name || sub.name || sub.subject || nestedSub.name || nestedSub.subject || "Premium Content Module";
+                
+                // Exact Video/Lecture Count Extraction (Fixes the 0 Lectures Bug)
+                let lecturesCount = sub.lectureCount || sub.lectures || nestedSub.videos_count || nestedSub.content_count || sub.totalLectures || 0;
+                
+                // Exact Teacher Name Extraction (Fixes the Faculty Team placeholder bug)
+                let teacherName = "Faculty Team";
+                if (sub.teacherName || sub.teacher_name) {
+                    teacherName = sub.teacherName || sub.teacher_name;
+                } else if (nestedSub.faculties && nestedSub.faculties.length > 0) {
+                    let fac = nestedSub.faculties[0];
+                    teacherName = typeof fac === 'object' ? (fac.name || fac.displayName || "Faculty Team") : fac;
+                } else if (sub.faculties && sub.faculties.length > 0) {
+                    let fac = sub.faculties[0];
+                    teacherName = typeof fac === 'object' ? (fac.name || fac.displayName || "Faculty Team") : fac;
+                }
+
+                // Image Extraction
+                let image = "https://static.pw.live/react-batches/assets/svg/subjects/defaultSubject.svg";
+                if (nestedSub.imageId?.baseUrl && nestedSub.imageId?.key) {
+                    image = nestedSub.imageId.baseUrl + nestedSub.imageId.key;
+                } else if (sub.previewImage || sub.thumbnail || nestedSub.previewImage || nestedSub.thumbnail) {
+                    image = sub.previewImage || sub.thumbnail || nestedSub.previewImage || nestedSub.thumbnail;
+                }
+
+                // Return a flat optimized JSON blueprint straight to Client-Side
+                return {
+                    _id: sub._id || sub.id || nestedSub._id || nestedSub.id,
+                    name: title,
+                    subject: title,
+                    lectureCount: lecturesCount,
+                    teacherName: teacherName,
+                    image: image,
+                    slug: sub.slug || nestedSub.slug || ""
+                };
+            }).filter(Boolean);
+
             let classes = actualData.classes || actualData.live_classes || [];
+            let batchTitle = rawData.batch_title || actualData.batch_title || actualData.name || "The DevCoderZ Dashboard";
 
-            // Extract Title safely
-            let batchTitle = rawData.batch_title || actualData.batch_title || actualData.name || actualData.title || "My Classroom Batch";
-
-            // Frontend ko standard standardized format bypass karke bhejo
             return res.status(200).json({
                 success: true,
                 batch_title: batchTitle,
-                subjects: subjects,
+                subjects: standardizedSubjects,
                 classes: classes
             });
         }
 
-        // Chapters aur Lectures ke liye direct clean output pass kar do
+        // Pass clean objects directly for chapters and lectures execution types
         return res.status(200).json(rawData);
 
     } catch (error) {
