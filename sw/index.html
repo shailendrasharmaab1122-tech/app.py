@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selection Way - Batches</title>
+    <title>Selection Way - Portal</title>
     <style>
-        /* CSS Variables for Selection Way Dark Theme */
         :root {
             --bg-color: #0a0f1c;
             --card-bg: #111827;
@@ -14,327 +13,298 @@
             --primary: #6366f1;
             --primary-hover: #4f46e5;
             --border: #1f2937;
+            --success: #10b981;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
             margin: 0;
             padding: 0;
         }
 
-        /* Navbar Layout */
+        /* Navbar */
         nav {
             background: rgba(10, 15, 28, 0.8);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border);
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 64px;
-            display: flex;
-            align-items: center;
-            z-index: 50;
+            top: 0; left: 0; right: 0; height: 64px;
+            display: flex; align-items: center; z-index: 100;
         }
 
         .nav-container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 20px;
+            display: flex; justify-content: space-between; align-items: center;
         }
 
         .logo {
-            font-size: 20px;
-            font-weight: 700;
-            color: #fff;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-size: 20px; font-weight: 700; color: #fff; text-decoration: none;
+            display: flex; align-items: center; gap: 8px; cursor: pointer;
         }
 
-        .logo img {
-            height: 36px;
+        .logo img { height: 36px; }
+
+        .btn-back {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: none; /* Shuru me hidden rahega */
         }
 
-        /* Main Content Wrapper */
+        /* Main Wrapper */
         main {
-            margin-top: 100px;
-            padding: 20px;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
+            margin-top: 90px; padding: 20px; max-width: 1200px;
+            margin-left: auto; margin-right: auto;
         }
 
-        .header-section {
-            margin-bottom: 30px;
-        }
+        .header-section { margin-bottom: 30px; }
+        .header-title { font-size: 28px; font-weight: 700; margin: 0 0 5px 0; }
+        .header-subtitle { color: var(--text-muted); font-size: 14px; margin: 0; }
 
-        .header-title {
-            font-size: 28px;
-            font-weight: 700;
-            margin: 0 0 5px 0;
-        }
-
-        .header-subtitle {
-            color: var(--text-muted);
-            font-size: 14px;
-            margin: 0;
-        }
-
-        /* Controls: Search and Filters */
-        .controls {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        @media(min-width: 768px) {
-            .controls {
-                flex-direction: row;
-                align-items: center;
-            }
-        }
-
-        .search-box {
-            position: relative;
-            flex-grow: 1;
-            max-width: 400px;
-        }
-
+        /* Search Box */
+        .search-box { margin-top: 15px; max-width: 400px; }
         .search-box input {
-            width: 100%;
-            background-color: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 10px 15px;
-            color: #fff;
-            font-size: 14px;
-            outline: none;
-            box-sizing: border-box;
+            width: 100%; background-color: var(--card-bg); border: 1px solid var(--border);
+            border-radius: 8px; padding: 10px 15px; color: #fff; font-size: 14px; outline: none;
         }
+        .search-box input:focus { border-color: var(--primary); }
 
-        .search-box input:focus {
-            border-color: var(--primary);
-        }
-
-        /* Batches Dynamic Grid */
+        /* Grid Layouts */
         .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px; margin-top: 25px;
         }
 
-        /* Batch Card Design */
+        /* Batch Card */
         .card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.2s, border-color 0.2s;
+            background-color: var(--card-bg); border: 1px solid var(--border);
+            border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;
+            transition: transform 0.2s, border-color 0.2s; cursor: pointer;
+        }
+        .card:hover { transform: translateY(-4px); border-color: var(--primary); }
+        .card-banner { width: 100%; height: 150px; background-color: #1f2937; object-fit: cover; }
+        .card-content { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .card-title { font-size: 16px; font-weight: 600; margin: 0 0 8px 0; line-height: 1.4; }
+        .card-meta { font-size: 13px; color: var(--text-muted); margin-bottom: 15px; }
+        .btn-open {
+            background-color: var(--primary); color: #fff; text-align: center;
+            padding: 8px; border-radius: 6px; font-weight: 500; font-size: 13px;
         }
 
-        .card:hover {
-            transform: translateY(-4px);
-            border-color: var(--primary);
+        /* Content List View (Lectures Screen) */
+        .content-section { display: none; }
+        .content-row {
+            background: var(--card-bg); border: 1px solid var(--border);
+            padding: 15px; border-radius: 8px; margin-bottom: 12px;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 10px;
+        }
+        .content-info { flex: 1; min-width: 250px; }
+        .content-title { font-weight: 600; margin: 0 0 5px 0; font-size: 15px; }
+        .content-type {
+            display: inline-block; padding: 2px 8px; border-radius: 4px;
+            font-size: 11px; font-weight: bold; text-transform: uppercase;
+            background: #2563eb; color: white;
+        }
+        .btn-watch {
+            background-color: var(--success); color: #fff; border: none;
+            padding: 8px 16px; border-radius: 6px; cursor: pointer;
+            font-weight: 500; font-size: 13px; text-decoration: none;
         }
 
-        .card-banner {
-            width: 100%;
-            height: 160px;
-            background-color: #1f2937;
-            object-fit: cover;
-        }
-
-        .card-content {
-            padding: 20px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .card-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin: 0 0 10px 0;
-            line-height: 1.4;
-        }
-
-        .card-meta {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-bottom: 20px;
-        }
-
-        .btn-view {
-            background-color: var(--primary);
-            color: #fff;
-            text-align: center;
-            padding: 10px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 14px;
-            transition: background 0.2s;
-        }
-
-        .btn-view:hover {
-            background-color: var(--primary-hover);
-        }
-
-        /* Status Styling */
-        .status {
-            text-align: center;
-            padding: 40px;
-            color: var(--text-muted);
-            font-size: 16px;
-        }
-
+        /* Statuses */
+        .status { text-align: center; padding: 50px; color: var(--text-muted); }
         .spinner {
-            border: 3px solid rgba(255,255,255,0.1);
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            border-left-color: var(--primary);
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px auto;
+            border: 3px solid rgba(255,255,255,0.1); width: 30px; height: 30px;
+            border-radius: 50%; border-left-color: var(--primary);
+            animation: spin 1s linear infinite; margin: 0 auto 15px auto;
         }
-
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <!-- Navbar Section -->
+    <!-- Navbar -->
     <nav>
         <div class="nav-container">
-            <a href="#" class="logo">
+            <div class="logo" onclick="showBatchesPage()">
                 <img src="https://www.selectionway.com/next_images/logo.png" alt="Logo">
                 <span>Selection Way</span>
-            </a>
+            </div>
+            <button id="backBtn" class="btn-back" onclick="showBatchesPage()">← Back to Batches</button>
         </div>
     </nav>
 
-    <!-- Main Wrapper -->
     <main>
-        <div class="header-section">
-            <h1 class="header-title">Browse Batches</h1>
-            <p class="header-subtitle" id="batchCount">Loading available batches...</p>
-            
-            <div class="controls">
+        <!-- SCREEN 1: BATCHES VIEW -->
+        <div id="batchesPage">
+            <div class="header-section">
+                <h1 class="header-title">Browse Batches</h1>
+                <p class="header-subtitle" id="batchCount">Fetching lists...</p>
                 <div class="search-box">
-                    <input type="text" id="searchField" placeholder="Search batches...">
+                    <input type="text" id="searchField" placeholder="Search your batch...">
                 </div>
             </div>
+            <div id="batchesGrid" class="grid"></div>
         </div>
 
-        <!-- Status Updates -->
-        <div id="loadingStatus" class="status">
-            <div class="spinner"></div>
-            Connecting to NextMate API...
+        <!-- SCREEN 2: BATCH CONTENTS VIEW -->
+        <div id="contentsPage" class="content-section">
+            <div class="header-section">
+                <h1 class="header-title" id="currentBatchTitle">Batch Content</h1>
+                <p class="header-subtitle">Available videos and study materials</p>
+            </div>
+            <div id="contentsList"></div>
         </div>
-        <div id="errorStatus" class="status" style="display: none; color: #ef4444;"></div>
 
-        <!-- Target Grid Area -->
-        <div id="batchesGrid" class="grid"></div>
+        <!-- Global Loader & Error Box -->
+        <div id="loader" class="status"><div class="spinner"></div>Loading...</div>
+        <div id="errorBox" class="status" style="display: none; color: #ef4444;"></div>
     </main>
 
     <script>
-        const TARGET_API = 'https://sw.nextmate.site/api/aggregate';
-        let storeData = [];
+        const AGGREGATE_API = 'https://sw.nextmate.site/api/aggregate';
+        const CONTENTS_API = 'https://sw.nextmate.site/api/batch-contents?id=';
+        
+        let allBatches = [];
 
-        window.addEventListener('DOMContentLoaded', loadApiData);
+        window.addEventListener('DOMContentLoaded', loadAllBatches);
 
-        async function loadApiData() {
+        // 1. Saare Batches Load Karna
+        async function loadAllBatches() {
             try {
-                const res = await fetch(TARGET_API);
-                if (!res.ok) throw new Error(`Server responded with code ${res.status}`);
+                showLoader(true);
+                const res = await fetch(AGGREGATE_API);
+                const data = await res.json();
                 
-                const parsedData = await res.json();
-                console.log("Raw API Output:", parsedData); // Debugging tools me dekhne ke liye
-
-                // NextMate aggregate API nesting keys wrapper parsing
-                if (Array.isArray(parsedData)) {
-                    storeData = parsedData;
-                } else if (parsedData.data && Array.isArray(parsedData.data)) {
-                    storeData = parsedData.data;
-                } else if (parsedData.batches && Array.isArray(parsedData.batches)) {
-                    storeData = parsedData.batches;
-                } else {
-                    // Agar object wrapped object ho toh uske properties nikalna
-                    storeData = Object.values(parsedData).filter(item => typeof item === 'object');
-                }
-
-                document.getElementById('loadingStatus').style.display = 'none';
-
-                if (!storeData || storeData.length === 0) {
-                    showError("API se response toh aaya par uske andar data items khali hain.");
+                // NextMate ke structured format standard routing fallback
+                allBatches = data.batches || data.data || (Array.isArray(data) ? data : []);
+                
+                showLoader(false);
+                if (allBatches.length === 0) {
+                    showError("No batches found or structure changed.");
                     return;
                 }
 
-                document.getElementById('batchCount').innerText = `${storeData.length} batches available`;
-                displayCards(storeData);
-
+                document.getElementById('batchCount').innerText = `${allBatches.length} batches available`;
+                renderBatches(allBatches);
             } catch (err) {
-                document.getElementById('loadingStatus').style.display = 'none';
-                showError(`Data read nahi ho pa rha. Wajah: ${err.message}`);
+                showLoader(false);
+                showError("Failed to load batches: " + err.message);
             }
         }
 
-        function displayCards(items) {
-            const container = document.getElementById('batchesGrid');
-            container.innerHTML = '';
+        function renderBatches(batches) {
+            const grid = document.getElementById('batchesGrid');
+            grid.innerHTML = '';
+            
+            batches.forEach(batch => {
+                // NextMate structure ke hisaab se id extract karna (kabhi _id hota hai toh kabhi id)
+                const batchId = batch.id || batch._id || '';
+                const title = batch.title || batch.name || "Untitled Batch";
+                const desc = batch.description || "No description available.";
+                const image = batch.image || batch.thumbnail || "https://via.placeholder.com/400x200/111827/ffffff?text=Selection+Way";
 
-            items.forEach(item => {
-                // NextMate system variables extraction handles safely
-                const title = item.title || item.name || item.batchName || "New Batch";
-                const desc = item.description || item.shortDesc || "No subtitle details available.";
-                const image = item.image || item.thumbnail || item.banner || "https://www.selectionway.com/next_images/logo.png";
-                const targetUrl = item.url || item.link || "#";
-
-                const element = document.createElement('div');
-                element.className = 'card';
-                element.innerHTML = `
-                    <img class="card-banner" src="${image}" onerror="this.src='https://via.placeholder.com/400x200/111827/ffffff?text=Selection+Way'" alt="Batch Thumbnail">
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.onclick = () => loadBatchContents(batchId, title);
+                card.innerHTML = `
+                    <img class="card-banner" src="${image}" onerror="this.src='https://via.placeholder.com/400x200/111827/ffffff?text=Selection+Way'">
                     <div class="card-content">
                         <div>
                             <h3 class="card-title">${title}</h3>
                             <p class="card-meta">${desc}</p>
                         </div>
-                        <a href="${targetUrl}" target="_blank" class="btn-view">View Details</a>
+                        <div class="btn-open">Open Batch</div>
                     </div>
                 `;
-                container.appendChild(element);
+                grid.appendChild(card);
             });
         }
 
-        function showError(message) {
-            const errDiv = document.getElementById('errorStatus');
-            errDiv.style.display = 'block';
-            errDiv.innerHTML = `<strong>Error:</strong> ${message}<br><small style="color: #9ca3af; margin-top:5px; display:block;">Agar console me CORS blocked error dikhe, toh server backend panel se cross-origin request whitelist honi zaroori hai.</small>`;
+        // 2. Batch par click karne par uske andar ka content load karna
+        async function loadBatchContents(id, batchTitle) {
+            if(!id) { alert("Batch ID missing!"); return; }
+            
+            try {
+                // Screen switch karein aur loading dikhayein
+                document.getElementById('batchesPage').style.display = 'none';
+                document.getElementById('contentsPage').style.display = 'block';
+                document.getElementById('backBtn').style.display = 'block';
+                document.getElementById('currentBatchTitle').innerText = batchTitle;
+                
+                const listContainer = document.getElementById('contentsList');
+                listContainer.innerHTML = '';
+                showLoader(true);
+
+                const res = await fetch(`${CONTENTS_API}${id}`);
+                const data = await res.json();
+                showLoader(false);
+
+                // NextMate ke array ya wrapped target array ko check karna
+                const contents = data.contents || data.data || (Array.isArray(data) ? data : []);
+
+                if(contents.length === 0) {
+                    listContainer.innerHTML = `<div class="status">Is batch me abhi koi content ya videos nahi hain.</div>`;
+                    return;
+                }
+
+                contents.forEach(item => {
+                    const contentTitle = item.title || item.name || "Untitled Video";
+                    const type = item.type || "video"; // video, pdf, etc.
+                    
+                    // Agar koi stream link ya output_360p.mp4 jaisa link ho
+                    const videoLink = item.url || item.videoUrl || item.link || "#"; 
+
+                    const row = document.createElement('div');
+                    row.className = 'content-row';
+                    row.innerHTML = `
+                        <div class="content-info">
+                            <h4 class="content-title">${contentTitle}</h4>
+                            <span class="content-type">${type}</span>
+                        </div>
+                        <a href="${videoLink}" target="_blank" class="btn-watch">Play / View</a>
+                    `;
+                    listContainer.appendChild(row);
+                });
+
+            } catch (err) {
+                showLoader(false);
+                showError("Content load karne me dikkat aayi: " + err.message);
+            }
         }
 
-        // Live filtering logic
+        // Screen toggles
+        function showBatchesPage() {
+            document.getElementById('contentsPage').style.display = 'none';
+            document.getElementById('backBtn').style.display = 'none';
+            document.getElementById('errorBox').style.display = 'none';
+            document.getElementById('batchesPage').style.display = 'block';
+        }
+
+        function showLoader(status) {
+            document.getElementById('loader').style.display = status ? 'block' : 'none';
+        }
+
+        function showError(msg) {
+            const box = document.getElementById('errorBox');
+            box.style.display = 'block';
+            box.innerText = msg;
+        }
+
+        // Live Search Filter for Batches
         document.getElementById('searchField').addEventListener('input', (e) => {
             const query = e.target.value.toLowerCase();
-            const filtered = storeData.filter(item => {
-                const t = (item.title || item.name || '').toLowerCase();
-                const d = (item.description || item.shortDesc || '').toLowerCase();
-                return t.includes(query) || d.includes(query);
+            const filtered = allBatches.filter(b => {
+                const name = (b.title || b.name || '').toLowerCase();
+                return name.includes(query);
             });
-            displayCards(filtered);
-            document.getElementById('batchCount').innerText = `${filtered.length} batches found`;
+            renderBatches(filtered);
         });
     </script>
 </body>
