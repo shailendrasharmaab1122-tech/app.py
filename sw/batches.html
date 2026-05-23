@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batch Content</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body { background-color: #0b0f19; color: #f3f4f6; }
+    </style>
+</head>
+<body class="p-6">
+
+    <div class="max-w-4xl mx-auto">
+        <!-- Back Button -->
+        <a href="index.html" class="inline-flex items-center text-sm text-gray-400 hover:text-white mb-6 transition">
+            ← Back to All Batches
+        </a>
+
+        <!-- Dynamic Batch Header -->
+        <div class="mb-8">
+            <h1 id="batch-title" class="text-3xl font-bold text-white">Loading Batch...</h1>
+            <p id="batch-desc" class="text-gray-400 mt-1">Please wait while we load your classes.</p>
+        </div>
+
+        <!-- Subjects Accordion Section -->
+        <div id="subjects-container" class="space-y-4">
+            <!-- Subjects will load here dynamically -->
+        </div>
+    </div>
+
+    <script>
+        // Mock Data for Subjects inside specific batches
+        const batchContents = {
+            "selection-batch-vod-2": {
+                title: "Selection Batch VOD 2.0",
+                description: "All Subject video lectures & notes",
+                subjects: [
+                    { name: "HISTORY", count: "36 classes" },
+                    { name: "GEOGRAPHY", count: "28 classes" },
+                    { name: "MATHEMATICS", count: "120 classes" }
+                ]
+            },
+            "jee-lakshya-2026": {
+                title: "JEE Lakshya Batch 2026",
+                description: "Core PCM Recorded & Live Classes",
+                subjects: [
+                    { name: "PHYSICS", count: "150 classes" },
+                    { name: "CHEMISTRY", count: "140 classes" },
+                    { name: "MATHEMATICS (JEE)", count: "160 classes" }
+                ]
+            }
+        };
+
+        // 1. URL se Parameters extract karna (?batch=selection-batch-vod-2)
+        const urlParams = new URLSearchParams(window.location.search);
+        const batchId = urlParams.get('batch');
+
+        const titleEl = document.getElementById('batch-title');
+        const descEl = document.getElementById('batch-desc');
+        const container = document.getElementById('subjects-container');
+
+        // 2. Check karna ki data available hai ya nahi
+        if (batchId && batchContents[batchId]) {
+            const currentBatch = batchContents[batchId];
+            
+            // UI elements update karna
+            titleEl.innerText = currentBatch.title;
+            descEl.innerText = currentBatch.description;
+            document.title = currentBatch.title + " - Dashboard";
+
+            // Subjects load karna (Accordion setup jo tumne bheja tha)
+            currentBatch.subjects.forEach((subject, index) => {
+                const subjectBox = document.createElement('div');
+                subjectBox.className = "border border-slate-800 rounded-xl overflow-hidden bg-slate-900/40";
+
+                subjectBox.innerHTML = `
+                    <button onclick="toggleAccordion(${index})" class="w-full flex items-center justify-between p-4 bg-slate-900 hover:bg-slate-800/80 transition-all text-left">
+                        <div>
+                            <h3 class="font-semibold text-white tracking-wide">${subject.name}</h3>
+                            <p class="text-xs text-gray-400 mt-0.5">${subject.count}</p>
+                        </div>
+                        <span id="icon-${index}" class="text-gray-400 transition-transform duration-200">↓</span>
+                    </button>
+                    
+                    <!-- Content Region (Videos List hidden by default) -->
+                    <div id="content-${index}" class="hidden p-4 border-t border-slate-800 bg-slate-950/50">
+                        <p class="text-sm text-gray-400">Loading videos for ${subject.name}...</p>
+                        <!-- Yahan baad me tum specific videos ka dynamic iframe ya link inject kar sakte ho -->
+                    </div>
+                `;
+                container.appendChild(subjectBox);
+            });
+
+        } else {
+            // Agar batch nahi mila ya galat id daali URL me
+            titleEl.innerText = "Batch Not Found";
+            descEl.innerText = "The requested batch does not exist or you don't have access to it.";
+        }
+
+        // Accordion open/close function
+        function toggleAccordion(index) {
+            const content = document.getElementById(`content-${index}`);
+            const icon = document.getElementById(`icon-${index}`);
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.style.transform = "rotate(180deg)";
+            } else {
+                content.classList.add('hidden');
+                icon.style.transform = "rotate(0deg)";
+            }
+        }
+    </script>
+</body>
+</html>
