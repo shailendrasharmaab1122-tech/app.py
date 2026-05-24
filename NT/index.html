@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Next Toppers - Portal</title>
+    <style>
+        /* --- Premium Blue & White Theme --- */
+        :root {
+            --bg-main: #f4f7fc;
+            --bg-white: #ffffff;
+            --primary: #0056b3;
+            --primary-dark: #003d80;
+            --primary-light: #e6f0fa;
+            --text-main: #212529;
+            --text-muted: #6c757d;
+            --border-color: #e2e8f0;
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --transition: all 0.2s ease-in-out;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* --- Navbar --- */
+        .navbar {
+            background-color: var(--bg-white);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .logo span {
+            color: var(--text-main);
+        }
+
+        .nav-links button {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 15px;
+            font-weight: 500;
+            margin-left: 24px;
+            padding: 6px 0;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .nav-links button:hover, .nav-links button.active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        /* --- Main Layout --- */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .page-header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        /* --- Card Styles --- */
+        .card {
+            background: var(--bg-white);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+        }
+
+        .card-body {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card-body h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: var(--text-main);
+        }
+
+        .card-body p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        /* --- Buttons --- */
+        .btn {
+            display: inline-block;
+            text-align: center;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--bg-white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        /* --- Tabs & Lecture Items --- */
+        .subject-tabs-container {
+            display: flex;
+            gap: 12px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 16px;
+            margin-bottom: 30px;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: var(--transition);
+        }
+
+        .tab-btn.active, .tab-btn:hover {
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .lecture-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .lecture-item {
+            background: var(--bg-white);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+        }
+
+        .lecture-info h4 {
+            font-size: 18px;
+            margin-bottom: 6px;
+        }
+
+        .lecture-index {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .lecture-item .btn {
+            width: auto;
+        }
+
+        @media(max-width: 768px) {
+            .lecture-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            .lecture-item .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a onclick="renderPortals()" class="logo">Next<span>Toppers</span></a>
+            <div class="nav-links">
+                <button id="nav-home" class="active" onclick="renderPortals()">Home</button>
+                <button id="nav-batches" onclick="renderBatches()">Batches</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container" id="app-workspace">
+        <!-- Content dynamically fetches here -->
+    </main>
+
+    <script>
+        // --- Next Toppers Custom JSON Structure ---
+        // Yahan tum apna actual API ya static data replace kar sakte ho
+        const learningData = {
+            portals: [
+                { id: "nt-premium", title: "Next Toppers Premium Content", desc: "Access high quality structured batches and subject matrices." }
+            ],
+            batches: [
+                { id: "batch-01", title: "Target Toppers Batch", desc: "Complete syllabus mapping with interactive analysis lectures." },
+                { id: "batch-02", title: "Rankers Capsule Course", desc: "Fast-track conceptual setup with elite tracking modules." }
+            ],
+            lectures: [
+                { batchId: "batch-01", subject: "physics", index: "Lec 01", title: "Basic Introduction & Core Setup", desc: "Fundamental introduction stream.", streamUrl: "https://example.com/stream1.m3u8" },
+                { batchId: "batch-01", subject: "physics", index: "Lec 02", title: "Advanced Conceptual Analysis", desc: "Core implementation concepts.", streamUrl: "https://example.com/stream2.m3u8" },
+                { batchId: "batch-01", subject: "chemistry", index: "Lec 01", title: "Chemical Reactions Part 1", desc: "Basic overview stream.", streamUrl: "https://example.com/stream3.m3u8" }
+            ]
+        };
+
+        let activeBatch = null;
+        let activeSubject = 'physics';
+
+        // 1. Home / Portals
+        function renderPortals() {
+            updateNavState('nav-home');
+            const ws = document.getElementById('app-workspace');
+            let html = '';
+            learningData.portals.forEach(p => {
+                html += `
+                    <div class="card">
+                        <div class="card-body">
+                            <h3>${p.title}</h3>
+                            <p>${p.desc}</p>
+                            <button class="btn btn-primary" onclick="renderBatches()">Explore Batches</button>
+                        </div>
+                    </div>`;
+            });
+            ws.innerHTML = `
+                <header class="page-header">
+                    <h1>Welcome to Next Toppers</h1>
+                    <p>Select your learning portal stream to continue.</p>
+                </header>
+                <div class="grid-layout">${html}</div>`;
+        }
+
+        // 2. Batches
+        function renderBatches() {
+            updateNavState('nav-batches');
+            const ws = document.getElementById('app-workspace');
+            let html = '';
+            learningData.batches.forEach(b => {
+                html += `
+                    <div class="card">
+                        <div class="card-body">
+                            <h3>${b.title}</h3>
+                            <p>${b.desc}</p>
+                            <button class="btn btn-primary" onclick="renderLectures('${b.id}')">View Lectures</button>
+                        </div>
+                    </div>`;
+            });
+            ws.innerHTML = `
+                <header class="page-header">
+                    <h1>Available Batches</h1>
+                    <p>Pick your operational batch to load tracking rooms.</p>
+                </header>
+                <div class="grid-layout">${html}</div>`;
+        }
+
+        // 3. Lectures & Tabs
+        function renderLectures(batchId) {
+            activeBatch = batchId;
+            const ws = document.getElementById('app-workspace');
+            ws.innerHTML = `
+                <div class="subject-tabs-container">
+                    <button class="tab-btn ${activeSubject === 'physics' ? 'active' : ''}" onclick="switchSubject('physics')">Physics</button>
+                    <button class="tab-btn ${activeSubject === 'chemistry' ? 'active' : ''}" onclick="switchSubject('chemistry')">Chemistry</button>
+                </div>
+                <section class="lectures-wrapper">
+                    <h2 style="margin-bottom:20px; color:var(--primary-dark);" id="sub-heading">${activeSubject.toUpperCase()} Lectures</h2>
+                    <div class="lecture-list" id="lecture-container"></div>
+                </section>`;
+            populateLectures();
+        }
+
+        function populateLectures() {
+            const container = document.getElementById('lecture-container');
+            const filtered = learningData.lectures.filter(l => l.batchId === activeBatch && l.subject === activeSubject);
+
+            if(filtered.length === 0) {
+                container.innerHTML = `<p style="color:var(--text-muted); text-align:center; padding:20px;">No lectures available for this subject.</p>`;
+                return;
+            }
+
+            let html = '';
+            filtered.forEach(l => {
+                html += `
+                    <div class="lecture-item">
+                        <div class="lecture-info">
+                            <span class="lecture-index">${l.index}</span>
+                            <h4>${l.title}</h4>
+                            <p>${l.desc}</p>
+                        </div>
+                        <a href="player.html?video=${encodeURIComponent(l.streamUrl)}" class="btn btn-secondary">Play</a>
+                    </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function switchSubject(sub) {
+            activeSubject = sub;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('sub-heading').innerText = sub.toUpperCase() + " Lectures";
+            populateLectures();
+        }
+
+        function updateNavState(id) {
+            document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
+            if(document.getElementById(id)) document.getElementById(id).classList.add('active');
+        }
+
+        window.onload = renderPortals;
+    </script>
+</body>
+</html>
