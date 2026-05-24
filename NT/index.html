@@ -2,7 +2,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RolexCoderZ — Apna Batch Chuno</title>
-<script src="https://rolexcoderz.com/Check/guard.js"></script><style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style><input type="hidden" id="inject_idm_text_selection">
+<style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style><input type="hidden" id="inject_idm_text_selection">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Syne:wght@400;500;600;700;800&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
 <style>
@@ -33,6 +33,19 @@
   --glow:     0 0 40px rgba(255,107,0,.25), 0 0 80px rgba(255,107,0,.08);
 }
 
+/* Light Mode Variables Override */
+body.light-mode {
+  --bg:       #f7f5fa;
+  --bg2:      #ffffff;
+  --bg3:      #f0edf5;
+  --bg4:      #e5e0ed;
+  --cream:    #1a1628;
+  --muted:    rgba(26,22,40,.65);
+  --faint:    rgba(26,22,40,.3);
+  --border:   rgba(255,107,0,.2);
+  --border2:  rgba(255,107,0,.5);
+}
+
 html{scroll-behavior:smooth}
 
 body{
@@ -42,6 +55,7 @@ body{
   min-height:100vh;
   overflow-x:hidden;
   -webkit-font-smoothing:antialiased;
+  transition:background 0.3s, color 0.3s;
 }
 
 /* ═══════════════════════════════════
@@ -119,6 +133,11 @@ nav{
   border-bottom:1px solid rgba(255,107,0,.1);
 }
 
+body.light-mode nav {
+  background: rgba(247, 245, 250, 0.75);
+  border-bottom: 1px solid rgba(255,107,0,.2);
+}
+
 /* top accent line */
 nav::after{
   content:'';
@@ -156,7 +175,7 @@ nav::after{
 }
 .nav-title em{color:var(--acc);font-style:normal;text-shadow:0 0 20px rgba(255,107,0,.5)}
 
-.nav-right{display:flex;align-items:center;gap:10px}
+.nav-right{display:flex;align-items:center;gap:15px}
 .nav-badge{
   font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
   color:var(--acc2);
@@ -171,6 +190,28 @@ nav::after{
   animation:shimmer 3s ease-in-out infinite;
 }
 @keyframes shimmer{0%{left:-100%}100%{left:200%}}
+
+/* Theme Toggle Button Styles */
+.theme-toggle-btn {
+  background: rgba(255, 107, 0, 0.1);
+  border: 1px solid var(--border);
+  color: var(--cream);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+}
+.theme-toggle-btn:hover {
+  background: rgba(255, 107, 0, 0.2);
+  border-color: var(--acc);
+}
 
 /* ═══════════════════════════════════
    MAIN / HERO
@@ -287,11 +328,18 @@ main{
   outline:none;
   transition:border-color .3s,box-shadow .3s,background .3s;
 }
+body.light-mode #search-input {
+  background: rgba(255,255,255,0.9);
+}
 #search-input::placeholder{color:rgba(240,230,211,.25);letter-spacing:.08em}
+body.light-mode #search-input::placeholder{color:rgba(26,22,40,.4)}
 #search-input:focus{
   border-color:rgba(255,107,0,.45);
   background:rgba(19,16,30,.9);
   box-shadow:0 0 0 3px rgba(255,107,0,.08),0 0 20px rgba(255,107,0,.06);
+}
+body.light-mode #search-input:focus{
+  background: #ffffff;
 }
 
 .filter-pills{
@@ -309,6 +357,9 @@ main{
   transition:all .3s cubic-bezier(.16,1,.3,1);
   user-select:none;
   white-space:nowrap;
+}
+body.light-mode .fp {
+  background: rgba(255,255,255,0.8);
 }
 .fp:hover{border-color:rgba(255,107,0,.35);color:var(--acc2);background:rgba(255,107,0,.06)}
 .fp.active{
@@ -437,6 +488,12 @@ main{
     rgba(13,11,20,.7) 65%,
     rgba(13,11,20,.98) 100%);
 }
+body.light-mode .card-img::after {
+  background:linear-gradient(180deg,
+    transparent 20%,
+    rgba(255,255,255,.4) 65%,
+    rgba(255,255,255,.95) 100%);
+}
 
 /* Placeholder when no image */
 .card-img-ph{
@@ -497,7 +554,7 @@ main{
   transition:color .3s;
   flex:1;
 }
-.card:hover .card-name{color:#fff}
+.card:hover .card-name{color:var(--acc2)}
 
 /* META ROW */
 .card-meta{
@@ -508,6 +565,9 @@ main{
   display:flex;align-items:center;gap:5px;
   font-size:.65rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
   color:rgba(240,230,211,.3);
+}
+body.light-mode .meta-item {
+  color: rgba(26,22,40,.5);
 }
 .meta-icon{font-size:.75rem;opacity:.6}
 
@@ -611,7 +671,7 @@ main{
 }
 .pf-text{
   font-size:.58rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;
-  color:rgba(255,107,0,.18);
+  color:rgba(255,107,0,.25);
 }
 .pf-dots{display:flex;gap:6px}
 .pf-dot{
@@ -667,7 +727,7 @@ main{
   .grid{grid-template-columns:repeat(3,1fr)}
 }
 </style>
-<style></style></head>
+</head>
 <body>
 
 <!-- Backgrounds -->
@@ -677,7 +737,7 @@ main{
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
 <div class="orb orb-3"></div>
-<div class="particles" id="particles"><div class="p" style="--l: 28.201203103753603%; --d: 14.557581946926101s; --dl: 10.683127625514413s; --dx: -14.389950741811859px; --c: #ffd166; --s: 2.529051976952068px; --gs: 6.32262994238017px;"></div><div class="p" style="--l: 9.967974826482862%; --d: 8.165532796914455s; --dl: 7.701131712587336s; --dx: -39.4740937861944px; --c: #6c63ff; --s: 2.625729990883109px; --gs: 6.5643249772077725px;"></div><div class="p" style="--l: 87.6236709576579%; --d: 15.885437806004317s; --dl: 2.8989496565155344s; --dx: -38.347077181832105px; --c: #6c63ff; --s: 3.769870686769879px; --gs: 9.424676716924697px;"></div><div class="p" style="--l: 21.888070800916694%; --d: 8.83623078117752s; --dl: 8.269589073639823s; --dx: -37.66423121692028px; --c: #6c63ff; --s: 2.730770556271673px; --gs: 6.826926390679182px;"></div><div class="p" style="--l: 87.76463073861423%; --d: 10.83343172847681s; --dl: 9.708363406119668s; --dx: -15.207310698665326px; --c: #ff6b00; --s: 2.8377351849456574px; --gs: 7.094337962364143px;"></div><div class="p" style="--l: 29.413824431742707%; --d: 7.935503606789348s; --dl: 9.870661258560343s; --dx: 3.2116767324931406px; --c: #ff6b00; --s: 2.5980106610058877px; --gs: 6.495026652514719px;"></div><div class="p" style="--l: 20.24624027722005%; --d: 13.997960985532075s; --dl: 4.800039619216642s; --dx: 8.423632162325543px; --c: #ff6b00; --s: 3.9207227184232876px; --gs: 9.80180679605822px;"></div><div class="p" style="--l: 71.50104029597877%; --d: 13.684421601489102s; --dl: 0.17174923767072547s; --dx: -5.541829815513113px; --c: #ffd166; --s: 2.1346540438203663px; --gs: 5.336635109550915px;"></div><div class="p" style="--l: 55.99915638482018%; --d: 7.1329342968306255s; --dl: 13.596865654558687s; --dx: 20.229866027236625px; --c: #ffd166; --s: 3.493964797422376px; --gs: 8.73491199355594px;"></div><div class="p" style="--l: 67.4899221629809%; --d: 6.891498312772258s; --dl: 1.275415414527554s; --dx: 14.826988334113738px; --c: #ff9a3c; --s: 1.934919771375193px; --gs: 4.837299428437983px;"></div><div class="p" style="--l: 17.870593336185358%; --d: 13.566223239667718s; --dl: 6.9901085135367405s; --dx: -25.378832641622537px; --c: #ffd166; --s: 3.611646909490098px; --gs: 9.029117273725245px;"></div><div class="p" style="--l: 88.66770873763429%; --d: 15.38558614149326s; --dl: 2.268524682411397s; --dx: 35.763783919674815px; --c: #ff9a3c; --s: 3.292404190484244px; --gs: 8.23101047621061px;"></div><div class="p" style="--l: 25.652741171282734%; --d: 11.294558858499125s; --dl: 9.435820418192122s; --dx: 13.6670148357807px; --c: #ffd166; --s: 3.864797385567692px; --gs: 9.661993463919229px;"></div><div class="p" style="--l: 60.35971823094685%; --d: 15.616841713620468s; --dl: 0.11978945844376931s; --dx: -16.59029025767051px; --c: #6c63ff; --s: 2.925144569073002px; --gs: 7.312861422682505px;"></div><div class="p" style="--l: 70.86454752113879%; --d: 6.45599629587001s; --dl: 3.5347036387953024s; --dx: 10.354848827518843px; --c: #6c63ff; --s: 2.5073090186209823px; --gs: 6.268272546552456px;"></div><div class="p" style="--l: 16.317335162242774%; --d: 19.862917365339385s; --dl: 13.00242695795826s; --dx: 39.579048663774486px; --c: #ffd166; --s: 1.8487175918444891px; --gs: 4.621793979611223px;"></div><div class="p" style="--l: 22.3908824909943%; --d: 15.26137787954922s; --dl: 6.573049453809906s; --dx: 24.48858259330633px; --c: #ffd166; --s: 2.5762158378375255px; --gs: 6.4405395945938135px;"></div><div class="p" style="--l: 92.55622902337927%; --d: 15.564348455313262s; --dl: 8.734441175973235s; --dx: 29.751704376946428px; --c: #6c63ff; --s: 3.171837140654434px; --gs: 7.929592851636085px;"></div><div class="p" style="--l: 49.69539969796155%; --d: 19.652216228088307s; --dl: 6.707523351573234s; --dx: 2.8022196928839094px; --c: #ffd166; --s: 3.4659208964713244px; --gs: 8.664802241178311px;"></div><div class="p" style="--l: 9.227794256113885%; --d: 16.79077435154553s; --dl: 3.2141365394863772s; --dx: -14.837931354993215px; --c: #ffd166; --s: 2.2946034127229025px; --gs: 5.736508531807257px;"></div><div class="p" style="--l: 28.586586550095728%; --d: 17.39573549247485s; --dl: 8.469811753372658s; --dx: 17.201778123193527px; --c: #ff6b00; --s: 1.934450123326948px; --gs: 4.83612530831737px;"></div><div class="p" style="--l: 56.731706724785525%; --d: 9.443973926807354s; --dl: 5.650534487549404s; --dx: 1.1126072306542412px; --c: #ff9a3c; --s: 3.697330341115854px; --gs: 9.243325852789635px;"></div><div class="p" style="--l: 45.42444418391342%; --d: 11.55100636250109s; --dl: 8.01805292369087s; --dx: -36.87148225055906px; --c: #ff6b00; --s: 1.748089913754557px; --gs: 4.370224784386393px;"></div><div class="p" style="--l: 60.50544131129306%; --d: 17.281028813682568s; --dl: 9.505485419195477s; --dx: 39.52652562105638px; --c: #ff9a3c; --s: 2.8829313724601224px; --gs: 7.207328431150306px;"></div><div class="p" style="--l: 76.37218565771774%; --d: 16.057712314172427s; --dl: 11.832283367837736s; --dx: -23.65607157820925px; --c: #ff9a3c; --s: 2.3086609836022194px; --gs: 5.771652459005549px;"></div><div class="p" style="--l: 65.92719006474822%; --d: 19.193542516744554s; --dl: 3.3691691104684756s; --dx: -14.108037706514667px; --c: #6c63ff; --s: 3.7867321114993535px; --gs: 9.466830278748384px;"></div><div class="p" style="--l: 11.647531248943244%; --d: 10.698092880258967s; --dl: 11.733977893601786s; --dx: -38.57873455216684px; --c: #ff6b00; --s: 3.8498422427544865px; --gs: 9.624605606886217px;"></div><div class="p" style="--l: 13.208576775396175%; --d: 13.22791771100137s; --dl: 2.02125994647737s; --dx: -1.0562809481205715px; --c: #6c63ff; --s: 1.972139379626899px; --gs: 4.930348449067247px;"></div><div class="p" style="--l: 42.30049913540138%; --d: 13.896724398924732s; --dl: 1.7410478800382136s; --dx: -19.31378076863913px; --c: #ff9a3c; --s: 3.4252538932424814px; --gs: 8.563134733106203px;"></div><div class="p" style="--l: 49.10752717529944%; --d: 13.518632147582398s; --dl: 4.121782841486836s; --dx: -16.937222181581674px; --c: #ff6b00; --s: 3.292079727425288px; --gs: 8.230199318563221px;"></div><div class="p" style="--l: 98.80512266920819%; --d: 14.082883862034672s; --dl: 12.996280961856773s; --dx: -33.02178161394113px; --c: #6c63ff; --s: 2.031140481886362px; --gs: 5.0778512047159055px;"></div><div class="p" style="--l: 14.799016253275676%; --d: 7.385713831564463s; --dl: 8.055399862299234s; --dx: 23.727584393957024px; --c: #ff6b00; --s: 3.4436254814184917px; --gs: 8.60906370354623px;"></div></div>
+<div class="particles" id="particles"></div>
 
 <!-- NAV -->
 <nav>
@@ -686,6 +746,9 @@ main{
     <span class="nav-title">Rolex<em>CoderZ</em></span>
   </a>
   <div class="nav-right">
+    <button class="theme-toggle-btn" id="theme-toggle">
+      <span id="theme-icon">🌙</span> <span id="theme-text">Dark Mode</span>
+    </button>
   </div>
 </nav>
 
@@ -724,7 +787,7 @@ main{
           </div>
   </div>
 
-  
+
   <!-- SEARCH + FILTER TOOLBAR -->
   <div class="toolbar">
     <div class="search-wrap">
@@ -755,7 +818,7 @@ main{
     <span class="results-sort">A–Z order</span>
   </div>
 
-  
+
   <!-- DIVIDER -->
   <div class="divider">
     <span class="div-line"></span>
@@ -783,7 +846,7 @@ main{
                       <div class="card-tag">
               <span class="tag-dot"></span>
               Class 10th            </div>
-          
+
           <div class="card-name">AARAMBH 10th BATCH 26-27</div>
 
           <div class="card-meta">
@@ -820,7 +883,7 @@ main{
                       <div class="card-tag">
               <span class="tag-dot"></span>
               Class 8th            </div>
-          
+
           <div class="card-name">NIRMAAN BATCH Class 8th</div>
 
           <div class="card-meta">
@@ -857,7 +920,7 @@ main{
                       <div class="card-tag">
               <span class="tag-dot"></span>
               Class 11th PCMB            </div>
-          
+
           <div class="card-name">Science (PCMB) 11th - PRARAMBH 2026-27</div>
 
           <div class="card-meta">
@@ -894,7 +957,7 @@ main{
                       <div class="card-tag">
               <span class="tag-dot"></span>
               Class 11th Commerce            </div>
-          
+
           <div class="card-name">Commerce 11th - PRARAMBH 2026-27</div>
 
           <div class="card-meta">
@@ -931,7 +994,7 @@ main{
                       <div class="card-tag">
               <span class="tag-dot"></span>
               Class 11th Humanities            </div>
-          
+
           <div class="card-name">Humanities 11th - PRARAMBH 2026-27</div>
 
           <div class="card-meta">
@@ -968,7 +1031,7 @@ main{
                       <div class="card-tag">
               <span class="tag-dot"></span>
               Class 12th COMMERCE            </div>
-          
+
           <div class="card-name">COMMERCE 12TH - PRARAMBH 26-27</div>
 
           <div class="card-meta">
@@ -1005,7 +1068,7 @@ main{
                       <div class="card-tag">
               <span class="tag-dot"></span>
               Class 12th PCMB            </div>
-          
+
           <div class="card-name">SCIENCE (PCMB)12TH - PRARAMBH 26-27</div>
 
           <div class="card-meta">
@@ -1042,7 +1105,7 @@ main{
                       <div class="card-tag">
               <span class="tag-dot"></span>
               Class 9th            </div>
-          
+
           <div class="card-name">AARAMBH 9TH BATCH 26-27</div>
 
           <div class="card-meta">
@@ -1079,7 +1142,7 @@ main{
                       <div class="card-tag">
               <span class="tag-dot"></span>
               Class 12th Humanities            </div>
-          
+
           <div class="card-name">HUMANITIES 12TH - PRARAMBH 26-27</div>
 
           <div class="card-meta">
@@ -1116,7 +1179,7 @@ main{
                       <div class="card-tag">
               <span class="tag-dot"></span>
               CUET (SCIENCE)            </div>
-          
+
           <div class="card-name">CUET (SCIENCE)</div>
 
           <div class="card-meta">
@@ -1153,7 +1216,7 @@ main{
                       <div class="card-tag">
               <span class="tag-dot"></span>
               CUET COMMERCE            </div>
-          
+
           <div class="card-name">CUET (COMMERCE)</div>
 
           <div class="card-meta">
@@ -1190,7 +1253,7 @@ main{
                       <div class="card-tag">
               <span class="tag-dot"></span>
               CUET Humanities            </div>
-          
+
           <div class="card-name">CUET (HUMANITIES)</div>
 
           <div class="card-meta">
@@ -1227,7 +1290,7 @@ main{
                       <div class="card-tag">
               <span class="tag-dot"></span>
               Class 11th PCMB            </div>
-          
+
           <div class="card-name">SCIENCE (PCMB) 11TH - PRARAMBH PLUS 2026-27</div>
 
           <div class="card-meta">
@@ -1264,7 +1327,7 @@ main{
                       <div class="card-tag">
               <span class="tag-dot"></span>
               Class 11th Commerce            </div>
-          
+
           <div class="card-name">COMMERCE 11TH - PRARAMBH PLUS 2026-27</div>
 
           <div class="card-meta">
@@ -1301,7 +1364,7 @@ main{
                       <div class="card-tag">
               <span class="tag-dot"></span>
               Class 11th Humanities            </div>
-          
+
           <div class="card-name">HUMANITIES 11TH - PRARAMBH PLUS 2026-27</div>
 
           <div class="card-meta">
@@ -1322,7 +1385,7 @@ main{
           </div>
         </div>
       </a>
-      
+
       <!-- No-results message (hidden by default, shown by JS) -->
       <div class="no-results" id="no-results" style="display:none">
         <div class="no-results-icon">🔍</div>
@@ -1414,8 +1477,23 @@ filterBtns.forEach(btn=>{
     filterCards();
   });
 });
-</script>
-<script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;4d42689b8b57448eadca12d9037c095e&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
 
+/* ── DARK/LIGHT MODE TOGGLE ── */
+const themeToggleBtn = document.getElementById('theme-toggle');
+const themeIcon = document.getElementById('theme-icon');
+const themeText = document.getElementById('theme-text');
+
+themeToggleBtn.addEventListener('click', () => {
+  document.body.classList.toggle('light-mode');
+  
+  if (document.body.classList.contains('light-mode')) {
+    themeIcon.textContent = '☀️';
+    themeText.textContent = 'Light Mode';
+  } else {
+    themeIcon.textContent = '🌙';
+    themeText.textContent = 'Dark Mode';
+  }
+});
+</script>
 
 </body></html>
