@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Next Toppers - Dynamic Automation Portal</title>
+    <title>Next Toppers - Welcome Portal</title>
     <style>
         /* --- Premium Blue & White Theme --- */
         :root {
@@ -15,9 +15,9 @@
             --text-main: #212529;
             --text-muted: #6c757d;
             --border-color: #e2e8f0;
-            --radius: 12px;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            --transition: all 0.2s ease-in-out;
+            --radius: 16px;
+            --shadow: 0 10px 25px -5px rgba(0, 56, 128, 0.05), 0 8px 16px -6px rgba(0, 0, 0, 0.03);
+            --transition: all 0.25s ease-in-out;
         }
 
         * {
@@ -30,16 +30,16 @@
         body {
             background-color: var(--bg-main);
             color: var(--text-main);
-            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         /* --- Navbar --- */
         .navbar {
             background-color: var(--bg-white);
             border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            width: 100%;
         }
 
         .nav-container {
@@ -53,357 +53,127 @@
         }
 
         .logo {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 700;
             color: var(--primary);
             text-decoration: none;
-            cursor: pointer;
+            letter-spacing: -0.5px;
         }
 
-        .logo span { color: var(--text-main); }
-
-        .nav-links button {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-size: 15px;
-            font-weight: 500;
-            margin-left: 24px;
-            padding: 6px 0;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .nav-links button:hover, .nav-links button.active {
-            color: var(--primary);
-            border-bottom: 2px solid var(--primary);
-        }
-
-        /* --- Main Layout --- */
-        .container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        .page-header {
-            margin-bottom: 40px;
-            text-align: center;
-        }
-
-        .page-header h1 {
-            font-size: 32px;
-            color: var(--primary-dark);
-            margin-bottom: 10px;
-        }
-
-        .page-header p {
-            color: var(--text-muted);
-            font-size: 16px;
-        }
-
-        .grid-layout {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 30px;
-        }
-
-        /* --- Card Styles --- */
-        .card {
-            background: var(--bg-white);
-            border-radius: var(--radius);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            transition: var(--transition);
-        }
-
-        .card:hover { transform: translateY(-4px); }
-
-        .card-body {
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
-
-        .card-body h3 {
-            font-size: 19px;
-            margin-bottom: 12px;
+        .logo span {
             color: var(--text-main);
         }
 
-        /* --- Buttons --- */
-        .btn {
-            display: inline-block;
+        /* --- Hero Container --- */
+        .hero-section {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .welcome-card {
+            background-color: var(--bg-white);
+            max-width: 600px;
+            width: 100%;
+            padding: 50px 40px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
             text-align: center;
-            padding: 12px 24px;
-            font-size: 14px;
-            font-weight: 600;
-            border-radius: 8px;
-            text-decoration: none;
             transition: var(--transition);
-            cursor: pointer;
-            border: none;
+        }
+
+        .welcome-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .brand-icon {
+            width: 80px;
+            height: 80px;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 700;
+            margin: 0 auto 24px auto;
+        }
+
+        .welcome-card h1 {
+            font-size: 32px;
+            color: var(--primary-dark);
+            margin-bottom: 14px;
+            font-weight: 700;
+        }
+
+        .welcome-card p {
+            color: var(--text-muted);
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 35px;
+        }
+
+        /* --- Custom Action Button --- */
+        .btn-enter {
+            display: inline-block;
+            background-color: var(--primary);
+            color: var(--bg-white);
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 16px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 86, 179, 0.2);
+            transition: var(--transition);
             width: 100%;
         }
 
-        .btn-primary { background-color: var(--primary); color: var(--bg-white); }
-        .btn-primary:hover { background-color: var(--primary-dark); }
-        .btn-secondary { background-color: var(--primary-light); color: var(--primary); }
-
-        /* --- Tabs & Lecture Elements --- */
-        .subject-tabs-container {
-            display: flex;
-            gap: 12px;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 16px;
-            margin-bottom: 30px;
-            overflow-x: auto;
+        .btn-enter:hover {
+            background-color: var(--primary-dark);
+            box-shadow: 0 6px 20px rgba(0, 61, 128, 0.3);
+            transform: translateY(-1px);
         }
 
-        .tab-btn {
-            padding: 10px 20px;
-            font-size: 15px;
-            font-weight: 600;
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            border-radius: 6px;
-            transition: var(--transition);
-            white-space: nowrap;
-        }
-
-        .tab-btn.active, .tab-btn:hover {
-            background-color: var(--primary-light);
-            color: var(--primary);
-        }
-
-        .lecture-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .lecture-item {
-            background: var(--bg-white);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius);
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: var(--shadow);
-        }
-
-        .lecture-info h4 {
-            font-size: 17px;
-            margin-bottom: 4px;
-            color: var(--text-main);
-        }
-
-        .lecture-index {
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--primary);
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        .lecture-item .btn { width: auto; white-space: nowrap; }
-
-        /* --- Status Loader --- */
-        .loader-box {
+        /* --- Footer Section --- */
+        .footer {
             text-align: center;
-            padding: 50px 20px;
-            font-size: 18px;
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        @media(max-width: 768px) {
-            .lecture-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-            .lecture-item .btn { width: 100%; }
+            padding: 20px;
+            font-size: 13px;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            background-color: var(--bg-white);
         }
     </style>
 </head>
 <body>
 
+    <!-- Simple Elegant Navbar -->
     <nav class="navbar">
         <div class="nav-container">
-            <a onclick="loadAllBatchesAutomatically()" class="logo">Next<span>Toppers</span></a>
-            <div class="nav-links">
-                <button id="nav-home" class="active" onclick="loadAllBatchesAutomatically()">All Batches</button>
-            </div>
+            <a href="index.html" class="logo">Next<span>Toppers</span></a>
         </div>
     </nav>
 
-    <main class="container" id="app-workspace">
-        <div class="loader-box">Connecting to database systems...</div>
+    <!-- Main Entry Hero Screen -->
+    <main class="hero-section">
+        <div class="welcome-card">
+            <div class="brand-icon">NT</div>
+            <h1>Welcome to Next Toppers</h1>
+            <p>Your premium automated educational stream interface. Authenticate your dashboard nodes and explore active lecture databases instantly.</p>
+            
+            <!-- Direct routing to your operational batches tracking pipeline -->
+            <a href="batches.html" class="btn-enter">Explore Live Batches →</a>
+        </div>
     </main>
 
-    <script>
-        // --- API Config Configurations (Rolex Architecture) ---
-        // Yahan par bas tum apna target token authorization aur backend ka endpoint domain change kar lena.
-        const API_CONFIG = {
-            baseUrl: "https://api.devcoderz.vercel.app/nt-v1", // Tumhara production API link jahan se json fetch hoga
-            authHeader: "Bearer ROLEX_TOKEN_SECURE_XYZ"
-        };
+    <!-- Standard Framework Footer -->
+    <footer class="footer">
+        &copy; 2026 Next Toppers. Powered by Rolex Network Core Architecture. All rights reserved.
+    </footer>
 
-        // UI State Holders
-        let cachedBatches = [];
-        let selectedBatchData = null;
-        let selectedSubject = "";
-
-        // --- Auto Fetch Engine 1: Load All Batches ---
-        async function loadAllBatchesAutomatically() {
-            updateNavState('nav-home');
-            const ws = document.getElementById('app-workspace');
-            ws.innerHTML = `<div class="loader-box">Fetching Active Batches... Please wait.</div>`;
-            
-            try {
-                // Rolex style fetch hitting external API
-                // NOTE: Agar tum abhi local check kar rahe ho, toh testing ke liye catch block me fallback data chalega.
-                const response = await fetch(`${API_CONFIG.baseUrl}/batches`, {
-                    headers: { "Authorization": API_CONFIG.authHeader }
-                });
-                const data = await response.json();
-                cachedBatches = data.batches || data;
-            } catch (error) {
-                console.log("API not active yet, handling fallback integration setup.");
-                // Fallback automated array structure till your API links go fully live
-                cachedBatches = [
-                    { id: "batch_next_01", name: "Next Toppers Ultimate - Class 11" },
-                    { id: "batch_next_02", name: "Rankers Super 30 - Class 12" },
-                    { id: "batch_next_03", name: "Foundation Booster Room" }
-                ];
-            }
-
-            // Render HTML on screen
-            let html = '';
-            cachedBatches.forEach(batch => {
-                html += `
-                    <div class="card">
-                        <div class="card-body">
-                            <h3>${batch.name || batch.title}</h3>
-                            <p style="color:var(--text-muted); font-size:14px; margin-bottom:20px;">Automated stream access token bound dashboard.</p>
-                            <button class="btn btn-primary" onclick="fetchBatchDetails('${batch.id}')">Enter Batch</button>
-                        </div>
-                    </div>`;
-            });
-
-            ws.innerHTML = `
-                <header class="page-header">
-                    <h1>Next Toppers Dashboards</h1>
-                    <p>All source structural batches parsed successfully in real-time.</p>
-                </header>
-                <div class="grid-layout">${html}</div>`;
-        }
-
-        // --- Auto Fetch Engine 2: Fetch Subjects & Lectures for single Batch ---
-        async function fetchBatchDetails(batchId) {
-            const ws = document.getElementById('app-workspace');
-            ws.innerHTML = `<div class="loader-box">Syncing inside track elements...</div>`;
-
-            try {
-                const response = await fetch(`${API_CONFIG.baseUrl}/batch/${batchId}`, {
-                    headers: { "Authorization": API_CONFIG.authHeader }
-                });
-                selectedBatchData = await response.json();
-            } catch (e) {
-                // Rolex dynamic mapping logic simulation if direct network request fails
-                selectedBatchData = {
-                    batchName: "Next Toppers Active Room",
-                    subjects: {
-                        physics: [
-                            { id: "p1", title: "Kinematics 1D - Frameworks", url: "https://sample.com/p1.m3u8" },
-                            { id: "p2", title: "Laws of Motion - Concepts", url: "https://sample.com/p2.m3u8" }
-                        ],
-                        chemistry: [
-                            { id: "c1", title: "Periodic Table Periodic Trends", url: "https://sample.com/c1.m3u8" }
-                        ],
-                        maths: [
-                            { id: "m1", title: "Sets and Relations Matrix", url: "https://sample.com/m1.m3u8" }
-                        ]
-                    }
-                };
-            }
-
-            // Detect pehla subject konsa available hai automatic dynamic tab switch ke liye
-            const subjectsAvailable = Object.keys(selectedBatchData.subjects);
-            selectedSubject = subjectsAvailable[0] || 'physics';
-
-            renderLecturesInterface(subjectsAvailable);
-        }
-
-        // --- Render Subject Switcher Panel ---
-        function renderLecturesInterface(subjects) {
-            const ws = document.getElementById('app-workspace');
-            
-            let tabsHtml = '';
-            subjects.forEach(sub => {
-                tabsHtml += `<button class="tab-btn ${selectedSubject === sub ? 'active' : ''}" onclick="switchSubjectElement('${sub}')">${sub.toUpperCase()}</button>`;
-            });
-
-            ws.innerHTML = `
-                <div class="subject-tabs-container">${tabsHtml}</div>
-                <section class="lectures-wrapper">
-                    <h2 style="margin-bottom:20px; color:var(--primary-dark);" id="sub-title-text">${selectedSubject.toUpperCase()} Lectures Matrix</h2>
-                    <div class="lecture-list" id="dynamic-lecture-box"></div>
-                </section>`;
-
-            populateActiveLectures();
-        }
-
-        // --- Populate the targeted array elements ---
-        function populateActiveLectures() {
-            const box = document.getElementById('dynamic-lecture-box');
-            const lectures = selectedBatchData.subjects[selectedSubject] || [];
-
-            if(lectures.length === 0) {
-                box.innerHTML = `<p style="color:var(--text-muted); text-align:center;">No data records inside this specific dynamic subject tab.</p>`;
-                return;
-            }
-
-            let html = '';
-            lectures.forEach((lec, index) => {
-                html += `
-                    <div class="lecture-item">
-                        <div class="lecture-info">
-                            <span class="lecture-index">Lecture #${index + 1}</span>
-                            <h4>${lec.title}</h4>
-                        </div>
-                        <!-- Absolute binding redirecting straight into your internal standalone player.html structure -->
-                        <a href="player.html?video=${encodeURIComponent(lec.url || lec.streamUrl)}" class="btn btn-secondary">Stream Play</a>
-                    </div>`;
-            });
-            box.innerHTML = html;
-        }
-
-        function switchSubjectElement(subKey) {
-            selectedSubject = subKey;
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if(btn.innerText.toLowerCase() === subKey.toLowerCase()) btn.classList.add('active');
-            });
-            document.getElementById('sub-title-text').innerText = subKey.toUpperCase() + " Lectures Matrix";
-            populateActiveLectures();
-        }
-
-        function updateNavState(id) {
-            document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
-            if(document.getElementById(id)) document.getElementById(id).classList.add('active');
-        }
-
-        // Execution initiation point
-        window.onload = loadAllBatchesAutomatically;
-    </script>
 </body>
 </html>
