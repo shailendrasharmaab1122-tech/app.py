@@ -1,1499 +1,184 @@
-<!DOCTYPE html><html lang="en" style=""><head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The DevCoderZ</title>
-<style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style><input type="hidden" id="inject_idm_text_selection">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Syne:wght@400;500;600;700;800&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
-<style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-
-:root{
-  --bg:       #06050a;
-  --bg2:      #0d0b14;
-  --bg3:      #13101e;
-  --bg4:      #1a1628;
-  --acc:      #ff6b00;
-  --acc2:     #ff9a3c;
-  --acc3:     #ffd166;
-  --blue:     #6c63ff;
-  --teal:     #00d4aa;
-  --pink:     #ff3d7f;
-  --cream:    #f0e6d3;
-  --muted:    rgba(240,230,211,.45);
-  --faint:    rgba(240,230,211,.18);
-  --gA:       rgba(255,107,0,.18);
-  --gB:       rgba(255,107,0,.08);
-  --gC:       rgba(108,99,255,.12);
-  --border:   rgba(255,107,0,.14);
-  --border2:  rgba(255,107,0,.28);
-  --radius:   16px;
-  --radius-sm:10px;
-  --shadow:   0 24px 64px rgba(0,0,0,.7), 0 4px 16px rgba(0,0,0,.4);
-  --glow:     0 0 40px rgba(255,107,0,.25), 0 0 80px rgba(255,107,0,.08);
-}
-
-/* Light Mode Variables Override */
-body.light-mode {
-  --bg:       #f7f5fa;
-  --bg2:      #ffffff;
-  --bg3:      #f0edf5;
-  --bg4:      #e5e0ed;
-  --cream:    #1a1628;
-  --muted:    rgba(26,22,40,.65);
-  --faint:    rgba(26,22,40,.3);
-  --border:   rgba(255,107,0,.2);
-  --border2:  rgba(255,107,0,.5);
-}
-
-html{scroll-behavior:smooth}
-
-body{
-  background:var(--bg);
-  color:var(--cream);
-  font-family:'Syne',sans-serif;
-  min-height:100vh;
-  overflow-x:hidden;
-  -webkit-font-smoothing:antialiased;
-  transition:background 0.3s, color 0.3s;
-}
-
-/* ═══════════════════════════════════
-   BACKGROUNDS & ATMOSPHERE
-═══════════════════════════════════ */
-
-/* Gradient mesh background */
-.bg-mesh{
-  position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:
-    radial-gradient(ellipse 80% 50% at 10% 10%, rgba(255,107,0,.07) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 60% at 90% 80%, rgba(108,99,255,.06) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(0,212,170,.03) 0%, transparent 60%);
-}
-
-/* Noise texture */
-.bg-noise{
-  position:fixed;inset:0;z-index:1;pointer-events:none;
-  opacity:.3;mix-blend-mode:overlay;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
-  background-size:256px;
-}
-
-/* Grid lines */
-.bg-grid{
-  position:fixed;inset:0;z-index:0;pointer-events:none;
-  background-image:
-    linear-gradient(rgba(255,107,0,.025) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,107,0,.025) 1px,transparent 1px);
-  background-size:60px 60px;
-  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 80%);
-}
-
-/* Floating orbs */
-.orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(80px)}
-.orb-1{width:600px;height:600px;top:-200px;left:-150px;background:rgba(255,107,0,.06);animation:orbFloat1 20s ease-in-out infinite}
-.orb-2{width:500px;height:500px;bottom:-200px;right:-100px;background:rgba(108,99,255,.05);animation:orbFloat2 25s ease-in-out infinite}
-.orb-3{width:300px;height:300px;top:40%;right:10%;background:rgba(0,212,170,.04);animation:orbFloat3 18s ease-in-out infinite}
-
-@keyframes orbFloat1{0%,100%{transform:translate(0,0)}50%{transform:translate(60px,40px)}}
-@keyframes orbFloat2{0%,100%{transform:translate(0,0)}50%{transform:translate(-40px,-60px)}}
-@keyframes orbFloat3{0%,100%{transform:translate(0,0)}50%{transform:translate(-30px,50px)}}
-
-/* ═══════════════════════════════════
-   PARTICLES
-═══════════════════════════════════ */
-.particles{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.p{
-  position:absolute;bottom:-6px;
-  width:var(--s,3px);height:var(--s,3px);
-  border-radius:50%;background:var(--c,var(--acc));
-  opacity:0;
-  animation:particleRise var(--d,9s) ease-in var(--dl,0s) infinite;
-  left:var(--l,50%);
-  box-shadow:0 0 var(--gs,6px) var(--c,var(--acc));
-}
-@keyframes particleRise{
-  0%{opacity:0;transform:translateY(0) translateX(0) scale(.5)}
-  8%{opacity:.7}
-  85%{opacity:.2}
-  100%{opacity:0;transform:translateY(-100vh) translateX(var(--dx,30px)) scale(.2)}
-}
-
-/* ═══════════════════════════════════
-   NAV
-═══════════════════════════════════ */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:200;
-  height:68px;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 clamp(16px,4vw,40px);
-  background:rgba(6,5,10,.75);
-  backdrop-filter:blur(32px) saturate(200%);
-  -webkit-backdrop-filter:blur(32px) saturate(200%);
-  border-bottom:1px solid rgba(255,107,0,.1);
-}
-
-body.light-mode nav {
-  background: rgba(247, 245, 250, 0.75);
-  border-bottom: 1px solid rgba(255,107,0,.2);
-}
-
-/* top accent line */
-nav::after{
-  content:'';
-  position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,
-    transparent 0%,
-    var(--acc) 25%,
-    var(--acc3) 50%,
-    var(--acc) 75%,
-    transparent 100%);
-  animation:navLine 4s ease-in-out infinite;
-}
-@keyframes navLine{0%,100%{opacity:.7;filter:none}50%{opacity:1;filter:drop-shadow(0 0 8px var(--acc))}}
-
-.nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none}
-.nav-logo-box{
-  width:40px;height:40px;
-  background:linear-gradient(135deg,#200800,var(--acc));
-  border:1px solid rgba(255,107,0,.45);
-  border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Bebas Neue',sans-serif;
-  font-size:.9rem;color:#fff;letter-spacing:.05em;
-  box-shadow:0 0 24px rgba(255,107,0,.3);
-  position:relative;overflow:hidden;
-}
-.nav-logo-box::after{
-  content:'';
-  position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(255,255,255,.2),transparent 60%);
-}
-.nav-title{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:1.35rem;letter-spacing:.08em;color:var(--cream);
-}
-.nav-title em{color:var(--acc);font-style:normal;text-shadow:0 0 20px rgba(255,107,0,.5)}
-
-.nav-right{display:flex;align-items:center;gap:15px}
-.nav-badge{
-  font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--acc2);
-  border:1px solid rgba(255,107,0,.22);
-  background:rgba(255,107,0,.05);
-  padding:6px 14px;border-radius:6px;
-  position:relative;overflow:hidden;
-}
-.nav-badge::before{
-  content:'';position:absolute;left:-100%;top:0;width:100%;height:100%;
-  background:linear-gradient(90deg,transparent,rgba(255,107,0,.1),transparent);
-  animation:shimmer 3s ease-in-out infinite;
-}
-@keyframes shimmer{0%{left:-100%}100%{left:200%}}
-
-/* Theme Toggle Button Styles */
-.theme-toggle-btn {
-  background: rgba(255, 107, 0, 0.1);
-  border: 1px solid var(--border);
-  color: var(--cream);
-  padding: 8px 12px;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-family: 'Syne', sans-serif;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.3s ease;
-}
-.theme-toggle-btn:hover {
-  background: rgba(255, 107, 0, 0.2);
-  border-color: var(--acc);
-}
-
-/* ═══════════════════════════════════
-   MAIN / HERO
-═══════════════════════════════════ */
-main{
-  position:relative;z-index:10;
-  padding:calc(68px + 60px) clamp(16px,5vw,48px) 100px;
-  max-width:1300px;margin:0 auto;
-}
-
-/* HERO */
-.hero{
-  display:flex;flex-direction:column;align-items:center;
-  text-align:center;
-  margin-bottom:64px;
-  animation:fadeUp .9s cubic-bezier(.16,1,.3,1) both;
-}
-
-.hero-pill{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:7px 18px;
-  background:rgba(255,107,0,.07);
-  border:1px solid rgba(255,107,0,.2);
-  border-radius:100px;
-  font-size:.65rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
-  color:rgba(255,154,60,.85);
-  margin-bottom:24px;
-}
-.pill-dot{
-  width:6px;height:6px;border-radius:50%;
-  background:var(--acc);
-  box-shadow:0 0 8px var(--acc);
-  animation:pulse 2s ease-in-out infinite;
-}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.6)}}
-
-.hero-h1{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:clamp(3.5rem,10vw,8rem);
-  line-height:.9;
-  letter-spacing:.03em;
-  color:var(--cream);
-  margin-bottom:20px;
-}
-.hero-h1 .line-a{
-  display:block;
-  opacity:.85;
-  animation:fadeUp .9s .05s cubic-bezier(.16,1,.3,1) both;
-}
-.hero-h1 .line-b{
-  display:block;
-  background:linear-gradient(110deg,var(--acc) 0%,var(--acc2) 40%,var(--acc3) 70%,var(--acc2) 100%);
-  background-size:200%;
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  animation:fadeUp .9s .12s cubic-bezier(.16,1,.3,1) both, gradShift 5s ease infinite;
-  filter:drop-shadow(0 0 40px rgba(255,107,0,.3));
-}
-@keyframes gradShift{0%,100%{background-position:0%}50%{background-position:100%}}
-
-.hero-sub{
-  font-size:1rem;font-weight:500;
-  color:var(--muted);
-  letter-spacing:.06em;text-transform:uppercase;
-  margin-bottom:36px;
-  animation:fadeUp .9s .2s cubic-bezier(.16,1,.3,1) both;
-}
-.hero-sub strong{color:var(--acc2)}
-
-/* STATS ROW */
-.hero-stats{
-  display:flex;align-items:center;gap:24px;
-  flex-wrap:wrap;justify-content:center;
-  animation:fadeUp .9s .28s cubic-bezier(.16,1,.3,1) both;
-}
-.stat-item{
-  display:flex;align-items:center;gap:8px;
-  font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--muted);
-}
-.stat-icon{font-size:1rem}
-.stat-val{color:var(--cream);font-size:.8rem}
-.stat-sep{width:1px;height:20px;background:var(--border);flex-shrink:0}
-
-/* ═══════════════════════════════════
-   SEARCH + FILTER TOOLBAR
-═══════════════════════════════════ */
-.toolbar{
-  display:flex;align-items:center;gap:12px;
-  margin-bottom:40px;
-  flex-wrap:wrap;
-  animation:fadeUp .9s .35s cubic-bezier(.16,1,.3,1) both;
-  width:100%;max-width:900px;margin-left:auto;margin-right:auto;margin-bottom:48px;
-}
-
-.search-wrap{
-  flex:1;min-width:220px;
-  position:relative;
-}
-.search-icon{
-  position:absolute;left:16px;top:50%;transform:translateY(-50%);
-  color:rgba(255,107,0,.45);
-  font-size:.95rem;pointer-events:none;
-}
-#search-input{
-  width:100%;height:50px;
-  background:rgba(13,11,20,.8);
-  border:1px solid rgba(255,107,0,.18);
-  border-radius:var(--radius-sm);
-  color:var(--cream);
-  font-family:'Syne',sans-serif;
-  font-size:.92rem;font-weight:500;
-  letter-spacing:.04em;
-  padding:0 16px 0 44px;
-  outline:none;
-  transition:border-color .3s,box-shadow .3s,background .3s;
-}
-body.light-mode #search-input {
-  background: rgba(255,255,255,0.9);
-}
-#search-input::placeholder{color:rgba(240,230,211,.25);letter-spacing:.08em}
-body.light-mode #search-input::placeholder{color:rgba(26,22,40,.4)}
-#search-input:focus{
-  border-color:rgba(255,107,0,.45);
-  background:rgba(19,16,30,.9);
-  box-shadow:0 0 0 3px rgba(255,107,0,.08),0 0 20px rgba(255,107,0,.06);
-}
-body.light-mode #search-input:focus{
-  background: #ffffff;
-}
-
-.filter-pills{
-  display:flex;gap:8px;flex-wrap:wrap;align-items:center;
-}
-.fp{
-  padding:8px 18px;
-  background:rgba(13,11,20,.8);
-  border:1px solid rgba(255,107,0,.15);
-  border-radius:100px;
-  color:var(--muted);
-  font-family:'Syne',sans-serif;
-  font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
-  cursor:pointer;
-  transition:all .3s cubic-bezier(.16,1,.3,1);
-  user-select:none;
-  white-space:nowrap;
-}
-body.light-mode .fp {
-  background: rgba(255,255,255,0.8);
-}
-.fp:hover{border-color:rgba(255,107,0,.35);color:var(--acc2);background:rgba(255,107,0,.06)}
-.fp.active{
-  background:rgba(255,107,0,.12);
-  border-color:var(--acc);
-  color:var(--acc);
-  box-shadow:0 0 16px rgba(255,107,0,.15);
-}
-
-/* ═══════════════════════════════════
-   RESULTS COUNT
-═══════════════════════════════════ */
-.results-bar{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:20px;
-  max-width:100%;
-}
-.results-count{
-  font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--faint);
-}
-.results-count span{color:var(--acc2)}
-.results-sort{
-  font-size:.65rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
-  color:rgba(255,107,0,.35);
-}
-
-/* ═══════════════════════════════════
-   GRID
-═══════════════════════════════════ */
-.grid{
-  width:100%;
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
-  gap:22px;
-}
-
-/* ═══════════════════════════════════
-   CARD
-═══════════════════════════════════ */
-.card{
-  position:relative;
-  display:flex;flex-direction:column;
-  background:linear-gradient(150deg,var(--bg2) 0%,var(--bg3) 100%);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  overflow:hidden;
-  text-decoration:none;color:inherit;
-  cursor:pointer;
-  transition:transform .5s cubic-bezier(.16,1,.3,1), border-color .35s, box-shadow .5s;
-  animation:cardPop .6s cubic-bezier(.16,1,.3,1) both;
-}
-.card:nth-child(1){animation-delay:.04s}
-.card:nth-child(2){animation-delay:.09s}
-.card:nth-child(3){animation-delay:.14s}
-.card:nth-child(4){animation-delay:.19s}
-.card:nth-child(5){animation-delay:.24s}
-.card:nth-child(6){animation-delay:.29s}
-.card:nth-child(7){animation-delay:.34s}
-.card:nth-child(8){animation-delay:.39s}
-.card:nth-child(9){animation-delay:.44s}
-@keyframes cardPop{
-  from{opacity:0;transform:translateY(32px) scale(.97)}
-  to{opacity:1;transform:none}
-}
-
-/* Corner brackets */
-.card::before,.card::after{
-  content:'';
-  position:absolute;z-index:10;
-  width:20px;height:20px;
-  transition:all .4s cubic-bezier(.16,1,.3,1);
-}
-.card::before{top:0;left:0;border-top:2px solid rgba(255,107,0,.4);border-left:2px solid rgba(255,107,0,.4);border-radius:var(--radius) 0 0 0}
-.card::after{bottom:0;right:0;border-bottom:2px solid rgba(255,107,0,.2);border-right:2px solid rgba(255,107,0,.2);border-radius:0 0 var(--radius) 0}
-.card:hover::before{width:36px;height:36px;border-color:var(--acc);box-shadow:0 0 12px rgba(255,107,0,.2)}
-.card:hover::after{width:36px;height:36px;border-color:var(--acc2)}
-
-/* Hover state */
-.card:hover{
-  transform:translateY(-12px) scale(1.01);
-  border-color:var(--border2);
-  box-shadow:
-    0 32px 80px rgba(0,0,0,.65),
-    0 0 0 1px rgba(255,107,0,.15),
-    0 0 50px rgba(255,107,0,.06),
-    inset 0 1px 0 rgba(255,255,255,.05);
-}
-
-/* Top shimmer line */
-.card-line{
-  position:absolute;top:0;left:0;right:0;height:2px;z-index:11;
-  background:linear-gradient(90deg,transparent,var(--acc),var(--acc3),var(--acc),transparent);
-  transform:scaleX(0);transform-origin:left;
-  transition:transform .5s cubic-bezier(.16,1,.3,1);
-}
-.card:hover .card-line{transform:scaleX(1)}
-
-/* Inner glow */
-.card-glow{
-  position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(255,107,0,.06),transparent);
-  opacity:0;transition:opacity .4s;
-}
-.card:hover .card-glow{opacity:1}
-
-/* IMAGE */
-.card-img{
-  position:relative;
-  aspect-ratio:16/8;
-  background:linear-gradient(135deg,#0c0810,#1a0e08);
-  overflow:hidden;flex-shrink:0;
-}
-.card-img img{
-  width:100%;height:100%;object-fit:cover;display:block;
-  transition:transform .8s cubic-bezier(.16,1,.3,1),filter .4s;
-  filter:brightness(.65) saturate(1.1) sepia(.08);
-}
-.card:hover .card-img img{transform:scale(1.1);filter:brightness(.8) saturate(1.35)}
-
-/* image overlay gradient */
-.card-img::after{
-  content:'';position:absolute;inset:0;z-index:2;
-  background:linear-gradient(180deg,
-    transparent 20%,
-    rgba(13,11,20,.7) 65%,
-    rgba(13,11,20,.98) 100%);
-}
-body.light-mode .card-img::after {
-  background:linear-gradient(180deg,
-    transparent 20%,
-    rgba(255,255,255,.4) 65%,
-    rgba(255,255,255,.95) 100%);
-}
-
-/* Placeholder when no image */
-.card-img-ph{
-  width:100%;height:100%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:3.5rem;opacity:.07;user-select:none;
-  background:
-    repeating-conic-gradient(rgba(255,107,0,.04) 0% 25%,transparent 0% 50%) 0 0/24px 24px;
-}
-
-/* Batch number overlay */
-.card-num{
-  position:absolute;bottom:8px;right:14px;z-index:5;
-  font-family:'Bebas Neue',sans-serif;
-  font-size:4rem;letter-spacing:.04em;
-  color:rgba(255,107,0,.06);line-height:1;
-  user-select:none;
-  transition:color .3s;
-}
-.card:hover .card-num{color:rgba(255,107,0,.1)}
-
-/* Left accent bar on image */
-.card-accent-bar{
-  position:absolute;top:0;bottom:0;left:0;z-index:5;
-  width:3px;
-  background:linear-gradient(180deg,var(--acc),transparent);
-  opacity:.5;
-  transition:opacity .3s,width .3s;
-}
-.card:hover .card-accent-bar{opacity:.9;width:4px}
-
-/* BODY */
-.card-body{
-  padding:18px 20px 20px;
-  display:flex;flex-direction:column;gap:10px;
-  flex:1;position:relative;z-index:5;
-}
-
-/* TAG */
-.card-tag{
-  display:inline-flex;align-items:center;gap:6px;
-  align-self:flex-start;
-  font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--acc2);
-  background:rgba(255,107,0,.08);
-  border:1px solid rgba(255,107,0,.2);
-  padding:4px 10px;border-radius:6px;
-  transition:background .3s;
-}
-.card:hover .card-tag{background:rgba(255,107,0,.13)}
-.tag-dot{width:4px;height:4px;border-radius:50%;background:var(--acc2);box-shadow:0 0 5px var(--acc2)}
-
-/* NAME */
-.card-name{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:1.55rem;letter-spacing:.05em;line-height:1.1;
-  color:var(--cream);
-  transition:color .3s;
-  flex:1;
-}
-.card:hover .card-name{color:var(--acc2)}
-
-/* META ROW */
-.card-meta{
-  display:flex;align-items:center;gap:16px;
-  flex-wrap:wrap;
-}
-.meta-item{
-  display:flex;align-items:center;gap:5px;
-  font-size:.65rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
-  color:rgba(240,230,211,.3);
-}
-body.light-mode .meta-item {
-  color: rgba(26,22,40,.5);
-}
-.meta-icon{font-size:.75rem;opacity:.6}
-
-/* FOOTER */
-.card-footer{
-  display:flex;align-items:center;justify-content:space-between;
-  padding-top:14px;margin-top:4px;
-  border-top:1px solid rgba(255,107,0,.09);
-}
-.cf-cta{
-  font-size:.68rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
-  color:rgba(255,154,60,.6);
-  transition:color .3s,letter-spacing .3s;
-}
-.card:hover .cf-cta{color:var(--acc2);letter-spacing:.24em}
-
-.cf-arrow{
-  display:flex;align-items:center;justify-content:center;
-  width:34px;height:34px;
-  border:1px solid rgba(255,107,0,.2);
-  border-radius:8px;
-  color:rgba(255,107,0,.45);
-  font-size:.85rem;
-  background:rgba(255,107,0,.03);
-  transition:all .4s cubic-bezier(.16,1,.3,1);
-  position:relative;overflow:hidden;
-}
-.cf-arrow::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,var(--acc),#cc2200);
-  transform:scale(0);border-radius:8px;
-  transition:transform .4s cubic-bezier(.16,1,.3,1);
-}
-.cf-arrow .a-icon{position:relative;z-index:1;transition:transform .3s,color .3s}
-.card:hover .cf-arrow{
-  border-color:var(--acc);color:#fff;
-  box-shadow:0 0 20px rgba(255,107,0,.4);
-}
-.card:hover .cf-arrow::before{transform:scale(1)}
-.card:hover .cf-arrow .a-icon{transform:translateX(3px);color:#fff}
-
-/* ═══════════════════════════════════
-   EMPTY STATE
-═══════════════════════════════════ */
-.empty{
-  grid-column:1/-1;
-  display:flex;flex-direction:column;align-items:center;
-  padding:100px 20px;
-  text-align:center;
-  animation:fadeUp .8s cubic-bezier(.16,1,.3,1) both;
-}
-.empty-ring{
-  width:90px;height:90px;
-  border-radius:50%;
-  border:2px solid rgba(255,107,0,.12);
-  border-top-color:var(--acc);
-  border-right-color:var(--acc2);
-  animation:spin .8s linear infinite;
-  margin-bottom:24px;
-  position:relative;
-}
-.empty-ring::after{
-  content:'📚';position:absolute;inset:0;
-  display:flex;align-items:center;justify-content:center;
-  font-size:2rem;animation:spin .8s linear infinite reverse;
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-.empty-title{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:1.6rem;letter-spacing:.08em;
-  color:var(--faint);margin-bottom:10px;
-}
-.empty-sub{
-  font-size:.75rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
-  color:rgba(240,230,211,.15);
-}
-
-/* No results state */
-.no-results{
-  grid-column:1/-1;
-  display:flex;flex-direction:column;align-items:center;
-  padding:80px 20px;
-  text-align:center;
-}
-.no-results-icon{font-size:2.5rem;opacity:.2;margin-bottom:16px}
-.no-results-text{
-  font-size:.8rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
-  color:rgba(240,230,211,.2);
-}
-
-/* ═══════════════════════════════════
-   FOOTER
-═══════════════════════════════════ */
-.page-footer{
-  margin-top:80px;
-  padding-top:40px;
-  border-top:1px solid rgba(255,107,0,.07);
-  display:flex;align-items:center;justify-content:center;
-  flex-direction:column;gap:12px;
-  animation:fadeUp .8s .5s cubic-bezier(.16,1,.3,1) both;
-}
-.pf-text{
-  font-size:.65rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;
-  color:rgba(255,107,0,.4);
-}
-.pf-dots{display:flex;gap:6px}
-.pf-dot{
-  width:4px;height:4px;border-radius:50%;
-  background:rgba(255,107,0,.2);
-}
-.pf-dot:nth-child(2){background:rgba(255,107,0,.35);animation:dotBlink 2s 1s ease-in-out infinite}
-@keyframes dotBlink{0%,100%{opacity:.4}50%{opacity:1}}
-
-/* ═══════════════════════════════════
-   DIVIDER
-═══════════════════════════════════ */
-.divider{
-  display:flex;align-items:center;gap:20px;
-  margin-bottom:48px;
-  opacity:.3;
-  animation:fadeUp .9s .42s cubic-bezier(.16,1,.3,1) both;
-}
-.div-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--acc))}
-.div-line.r{background:linear-gradient(90deg,var(--acc),transparent)}
-.div-icon{color:var(--acc);font-size:.8rem;animation:iconSpin 6s linear infinite}
-@keyframes iconSpin{0%,80%{transform:rotate(0)}85%{transform:rotate(360deg)}100%{transform:rotate(360deg)}}
-
-/* ═══════════════════════════════════
-   ANIMATIONS
-═══════════════════════════════════ */
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(24px)}
-  to{opacity:1;transform:none}
-}
-
-/* card hidden when filtered */
-.card.hidden{display:none}
-
-/* ═══════════════════════════════════
-   RESPONSIVE
-═══════════════════════════════════ */
-@media(max-width:768px){
-  nav{padding:0 18px;height:62px}
-  main{padding:calc(62px + 48px) 16px 80px}
-  .grid{grid-template-columns:1fr;gap:16px}
-  .hero{margin-bottom:48px}
-  .toolbar{flex-direction:column;align-items:stretch}
-  .search-wrap{min-width:unset}
-  .hero-stats{gap:14px}
-  .stat-sep:nth-child(4){display:none}
-}
-@media(max-width:480px){
-  .hero-h1{font-size:3.2rem}
-  .filter-pills{display:none}
-}
-@media(min-width:1200px){
-  .grid{grid-template-columns:repeat(3,1fr)}
-}
-</style>
-</head>
-<body>
-
-<!-- Backgrounds -->
-<div class="bg-mesh"></div>
-<div class="bg-noise"></div>
-<div class="bg-grid"></div>
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-<div class="orb orb-3"></div>
-<div class="particles" id="particles"></div>
-
-<!-- NAV -->
-<nav>
-  <a class="nav-brand" href="#">
-    <div class="nav-logo-box">DC</div>
-    <span class="nav-title">The Dev<em>CoderZ</em></span>
-  </a>
-  <div class="nav-right">
-    <button class="theme-toggle-btn" id="theme-toggle">
-      <span id="theme-icon">🌙</span> <span id="theme-text">Dark Mode</span>
-    </button>
-  </div>
-</nav>
-
-<!-- MAIN -->
-<main>
-
-  <!-- HERO -->
-  <div class="hero">
-    <div class="hero-pill">
-      <span class="pill-dot"></span>
-      Your Batches
-    </div>
-    <h1 class="hero-h1">
-      <span class="line-a">Pick Your</span>
-      <span class="line-b">Batch &amp; Start</span>
-    </h1>
-    <p class="hero-sub">
-      Sabse pehle batch choose karo, <strong>phir learning shuru</strong>
-    </p>
-    <div class="hero-stats">
-      <div class="stat-item">
-        <span class="stat-icon">🔥</span>
-        <span class="stat-val">15</span>
-        <span>Batches Available</span>
-      </div>
-            <div class="stat-sep"></div>
-      <div class="stat-item">
-        <span class="stat-icon">⚡</span>
-        <span>Live Now</span>
-      </div>
-      <div class="stat-sep"></div>
-      <div class="stat-item">
-        <span class="stat-icon">🎯</span>
-        <span>Self-Paced</span>
-      </div>
-          </div>
-  </div>
-
-
-  <!-- SEARCH + FILTER TOOLBAR -->
-  <div class="toolbar">
-    <div class="search-wrap">
-      <span class="search-icon">🔍</span>
-      <input type="text" id="search-input" placeholder="BATCH DHUNDO..." autocomplete="off" spellcheck="false">
-    </div>
-    <div class="filter-pills">
-      <div class="fp active" data-filter="all">All</div>
-              <div class="fp" data-filter="Class 10th">Class 10th</div>
-              <div class="fp" data-filter="Class 8th">Class 8th</div>
-              <div class="fp" data-filter="Class 11th PCMB">Class 11th PCMB</div>
-              <div class="fp" data-filter="Class 11th Commerce">Class 11th Commerce</div>
-              <div class="fp" data-filter="Class 11th Humanities">Class 11th Humanities</div>
-              <div class="fp" data-filter="Class 12th COMMERCE">Class 12th COMMERCE</div>
-              <div class="fp" data-filter="Class 12th PCMB">Class 12th PCMB</div>
-              <div class="fp" data-filter="Class 9th">Class 9th</div>
-              <div class="fp" data-filter="Class 12th Humanities">Class 12th Humanities</div>
-              <div class="fp" data-filter="CUET (SCIENCE)">CUET (SCIENCE)</div>
-              <div class="fp" data-filter="CUET COMMERCE">CUET COMMERCE</div>
-              <div class="fp" data-filter="CUET Humanities">CUET Humanities</div>
-          </div>
-  </div>
-
-  <!-- RESULTS BAR -->
-  <div class="results-bar">
-    <span class="results-count" id="results-count">
-      Showing <span id="visible-count">15</span> of 15 batches    </span>
-    <span class="results-sort">A–Z order</span>
-  </div>
-
-
-  <!-- DIVIDER -->
-  <div class="divider">
-    <span class="div-line"></span>
-    <span class="div-icon">✦</span>
-    <span class="div-icon" style="opacity:.4">✦</span>
-    <span class="div-line r"></span>
-  </div>
-
-  <!-- GRID -->
-  <div class="grid" id="batch-grid">
-
-        <a class="card" href="batches.html?course_id=176" data-name="aarambh 10th batch 26-27" data-tag="class 10th">
-        <div class="card-glow"></div>
-        <div class="card-line"></div>
-
-        <!-- Image -->
-        <div class="card-img">
-          <div class="card-accent-bar"></div>
-                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/4628574_125_aarambh%20banner%20app%202026%202.jpg" alt="AARAMBH 10th BATCH 26-27" loading="lazy">
-                    <div class="card-num">01</div>
-        </div>
-
-        <!-- Body -->
-        <div class="card-body">
-                      <div class="card-tag">
-              <span class="tag-dot"></span>
-              Class 10th            </div>
-
-          <div class="card-name">AARAMBH 10th BATCH 26-27</div>
-
-          <div class="card-meta">
-            <div class="meta-item">
-              <span class="meta-icon">📂</span>
-              Batch #01            </div>
-            <div class="meta-item">
-              <span class="meta-icon">▶</span>
-              Start Anytime
-            </div>
-          </div>
-
-          <div class="card-footer">
-            <span class="cf-cta">Start Learning</span>
-            <span class="cf-arrow">
-              <span class="a-icon">→</span>
-            </span>
-          </div>
-        </div>
-      </a>
-            <a class="card" href="batches.html?course_id=177" data-name="nirmaan batch class 8th" data-tag="class 8th">
-        <div class="card-glow"></div>
-        <div class="card-line"></div>
-
-        <!-- Image -->
-        <div class="card-img">
-          <div class="card-accent-bar"></div>
-                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/6956338_125_Nirbhay%20Batch%20Class%208th%20App%20Banners09.jpg" alt="NIRMAAN BATCH Class 8th" loading="lazy">
-                    <div class="card-num">02</div>
-        </div>
-
-        <!-- Body -->
-        <div class="card-body">
-                      <div class="card-tag">
-              <span class="tag-dot"></span>
-              Class 8th            </div>
-
-          <div class="card-name">NIRMAAN BATCH Class 8th</div>
-
-          <div class="card-meta">
-            <div class="meta-item">
-              <span class="meta-icon">📂</span>
-              Batch #02            </div>
-            <div class="meta-item">
-              <span class="meta-icon">▶</span>
-              Start Anytime
-            </div>
-          </div>
-
-          <div class="card-footer">
-            <span class="cf-cta">Start Learning</span>
-            <span class="cf-arrow">
-              <span class="a-icon">→</span>
-            </span>
-          </div>
-        </div>
-      </a>
-            <a class="card" href="batches.html?course_id=107" data-name="science (pcmb) 11th - prarambh 2026-27" data-tag="class 11th pcmb">
-        <div class="card-glow"></div>
-        <div class="card-line"></div>
-
-        <!-- Image -->
-        <div class="card-img">
-          <div class="card-accent-bar"></div>
-                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/2159678_125_Science_Prarambh_Batch_Class_11th_App_Banners.jpg" alt="Science (PCMB) 11th - PRARAMBH 2026-27" loading="lazy">
-                    <div class="card-num">03</div>
-        </div>
-
-        <!-- Body -->
-        <div class="card-body">
-                      <div class="card-tag">
-              <span class="tag-dot"></span>
-              Class 11th PCMB            </div>
-
-          <div class="card-name">Science (PCMB) 11th - PRARAMBH 2026-27</div>
-
-          <div class="card-meta">
-            <div class="meta-item">
-              <span class="meta-icon">📂</span>
-              Batch #03            </div>
-            <div class="meta-item">
-              <span class="meta-icon">▶</span>
-              Start Anytime
-            </div>
-          </div>
-
-          <div class="card-footer">
-            <span class="cf-cta">Start Learning</span>
-            <span class="cf-arrow">
-              <span class="a-icon">→</span>
-            </span>
-          </div>
-        </div>
-      </a>
-            <a class="card" href="batches.html?course_id=108" data-name="commerce 11th - prarambh 2026-27" data-tag="class 11th commerce">
-        <div class="card-glow"></div>
-        <div class="card-line"></div>
-
-        <!-- Image -->
-        <div class="card-img">
-          <div class="card-accent-bar"></div>
-                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/1338423_125_Commerce_Prarambh_Batch_Class_11th_App_Banners.jpg" alt="Commerce 11th - PRARAMBH 2026-27" loading="lazy">
-                    <div class="card-num">04</div>
-        </div>
-
-        <!-- Body -->
-        <div class="card-body">
-                      <div class="card-tag">
-              <span class="tag-dot"></span>
-              Class 11th Commerce            </div>
-
-          <div class="card-name">Commerce 11th - PRARAMBH 2026-27</div>
-
-          <div class="card-meta">
-            <div class="meta-item">
-              <span class="meta-icon">📂</span>
-              Batch #04            </div>
-            <div class="meta-item">
-              <span class="meta-icon">▶</span>
-              Start Anytime
-            </div>
-          </div>
-
-          <div class="card-footer">
-            <span class="cf-cta">Start Learning</span>
-            <span class="cf-arrow">
-              <span class="a-icon">→</span>
-            </span>
-          </div>
-        </div>
-      </a>
-            <a class="card" href="batches.html?course_id=109" data-name="humanities 11th - prarambh 2026-27" data-tag="class 11th humanities">
-        <div class="card-glow"></div>
-        <div class="card-line"></div>
-
-        <!-- Image -->
-        <div class="card-img">
-          <div class="card-accent-bar"></div>
-                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/2936192_125_Humanities_Prarambh_Batch_Class_11th_App_Banners.jpg" alt="Humanities 11th - PRARAMBH 2026-27" loading="lazy">
-                    <div class="card-num">05</div>
-        </div>
-
-        <!-- Body -->
-        <div class="card-body">
-                      <div class="card-tag">
-              <span class="tag-dot"></span>
-              Class 11th Humanities            </div>
-
-          <div class="card-name">Humanities 11th - PRARAMBH 2026-27</div>
-
-          <div class="card-meta">
-            <div class="meta-item">
-              <span class="meta-icon">📂</span>
-              Batch #05            </div>
-            <div class="meta-item">
-              <span class="meta-icon">▶</span>
-              Start Anytime
-            </div>
-          </div>
-
-          <div class="card-footer">
-            <span class="cf-cta">Start Learning</span>
-            <span class="cf-arrow">
-              <span class="a-icon">→</span>
-            </span>
-          </div>
-        </div>
-      </a>
-            <a class="card" href="batches.html?course_id=101" data-name="commerce 12th - prarambh 26-27" data-tag="class 12th commerce">
-        <div class="card-glow"></div>
-        <div class="card-line"></div>
-
-        <!-- Image -->
-        <div class="card-img">
-          <div class="card-accent-bar"></div>
-                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/4018906_125_Commerce Prarambh Batch Class 12th App Banners.jpg" alt="COMMERCE 12TH - PRARAMBH 26-27" loading="lazy">
-                    <div class="card-num">06</div>
-        </div>
-
-        <!-- Body -->
-        <div class="card-body">
-                      <div class="card-tag">
-              <span class="tag-dot"></span>
-              Class 12th COMMERCE            </div>
-
-          <div class="card-name">COMMERCE 12TH - PRARAMBH 26-27</div>
-
-          <div class="card-meta">
-            <div class="meta-item">
-              <span class="meta-icon">📂</span>
-              Batch #06            </div>
-            <div class="meta-item">
-              <span class="meta-icon">▶</span>
-              Start Anytime
-            </div>
-          </div>
-
-          <div class="card-footer">
-            <span class="cf-cta">Start Learning</span>
-            <span class="cf-arrow">
-              <span class="a-icon">→</span>
-            </span>
-          </div>
-        </div>
-      </a>
-            <a class="card" href="batches.html?course_id=103" data-name="science (pcmb)12th - prarambh 26-27" data-tag="class 12th pcmb">
-        <div class="card-glow"></div>
-        <div class="card-line"></div>
-
-        <!-- Image -->
-        <div class="card-img">
-          <div class="card-accent-bar"></div>
-                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/5881826_125_Science Prarambh Batch Class 12th App Banners (1).jpg" alt="SCIENCE (PCMB)12TH - PRARAMBH 26-27" loading="lazy">
-                    <div class="card-num">07</div>
-        </div>
-
-        <!-- Body -->
-        <div class="card-body">
-                      <div class="card-tag">
-              <span class="tag-dot"></span>
-              Class 12th PCMB            </div>
-
-          <div class="card-name">SCIENCE (PCMB)12TH - PRARAMBH 26-27</div>
-
-          <div class="card-meta">
-            <div class="meta-item">
-              <span class="meta-icon">📂</span>
-              Batch #07            </div>
-            <div class="meta-item">
-              <span class="meta-icon">▶</span>
-              Start Anytime
-            </div>
-          </div>
-
-          <div class="card-footer">
-            <span class="cf-cta">Start Learning</span>
-            <span class="cf-arrow">
-              <span class="a-icon">→</span>
-            </span>
-          </div>
-        </div>
-      </a>
-            <a class="card" href="batches.html?course_id=178" data-name="aarambh 9th batch 26-27" data-tag="class 9th">
-        <div class="card-glow"></div>
-        <div class="card-line"></div>
-
-        <!-- Image -->
-        <div class="card-img">
-          <div class="card-accent-bar"></div>
-                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/6571450_125_aarambh 2027 class 9th banner app.png" alt="AARAMBH 9TH BATCH 26-27" loading="lazy">
-                    <div class="card-num">08</div>
-        </div>
-
-        <!-- Body -->
-        <div class="card-body">
-                      <div class="card-tag">
-              <span class="tag-dot"></span>
-              Class 9th            </div>
-
-          <div class="card-name">AARAMBH 9TH BATCH 26-27</div>
-
-          <div class="card-meta">
-            <div class="meta-item">
-              <span class="meta-icon">📂</span>
-              Batch #08            </div>
-            <div class="meta-item">
-              <span class="meta-icon">▶</span>
-              Start Anytime
-            </div>
-          </div>
-
-          <div class="card-footer">
-            <span class="cf-cta">Start Learning</span>
-            <span class="cf-arrow">
-              <span class="a-icon">→</span>
-            </span>
-          </div>
-        </div>
-      </a>
-            <a class="card" href="batches.html?course_id=105" data-name="humanities 12th - prarambh 26-27" data-tag="class 12th humanities">
-        <div class="card-glow"></div>
-        <div class="card-line"></div>
-
-        <!-- Image -->
-        <div class="card-img">
-          <div class="card-accent-bar"></div>
-                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/1300928_125_IMG_5290.jpeg" alt="HUMANITIES 12TH - PRARAMBH 26-27" loading="lazy">
-                    <div class="card-num">09</div>
-        </div>
-
-        <!-- Body -->
-        <div class="card-body">
-                      <div class="card-tag">
-              <span class="tag-dot"></span>
-              Class 12th Humanities            </div>
-
-          <div class="card-name">HUMANITIES 12TH - PRARAMBH 26-27</div>
-
-          <div class="card-meta">
-            <div class="meta-item">
-              <span class="meta-icon">📂</span>
-              Batch #09            </div>
-            <div class="meta-item">
-              <span class="meta-icon">▶</span>
-              Start Anytime
-            </div>
-          </div>
-
-          <div class="card-footer">
-            <span class="cf-cta">Start Learning</span>
-            <span class="cf-arrow">
-              <span class="a-icon">→</span>
-            </span>
-          </div>
-        </div>
-      </a>
-            <a class="card" href="batches.html?course_id=122" data-name="cuet (science)" data-tag="cuet (science)">
-        <div class="card-glow"></div>
-        <div class="card-line"></div>
-
-        <!-- Image -->
-        <div class="card-img">
-          <div class="card-accent-bar"></div>
-                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/346473_125_Science CUET Batch Class 12th PRO App Banners.jpg" alt="CUET (SCIENCE)" loading="lazy">
-                    <div class="card-num">10</div>
-        </div>
-
-        <!-- Body -->
-        <div class="card-body">
-                      <div class="card-tag">
-              <span class="tag-dot"></span>
-              CUET (SCIENCE)            </div>
-
-          <div class="card-name">CUET (SCIENCE)</div>
-
-          <div class="card-meta">
-            <div class="meta-item">
-              <span class="meta-icon">📂</span>
-              Batch #10            </div>
-            <div class="meta-item">
-              <span class="meta-icon">▶</span>
-              Start Anytime
-            </div>
-          </div>
-
-          <div class="card-footer">
-            <span class="cf-cta">Start Learning</span>
-            <span class="cf-arrow">
-              <span class="a-icon">→</span>
-            </span>
-          </div>
-        </div>
-      </a>
-            <a class="card" href="batches.html?course_id=124" data-name="cuet (commerce)" data-tag="cuet commerce">
-        <div class="card-glow"></div>
-        <div class="card-line"></div>
-
-        <!-- Image -->
-        <div class="card-img">
-          <div class="card-accent-bar"></div>
-                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/721208_125_Commerce CUET Batch Class 12th PRO App Banners.jpg" alt="CUET (COMMERCE)" loading="lazy">
-                    <div class="card-num">11</div>
-        </div>
-
-        <!-- Body -->
-        <div class="card-body">
-                      <div class="card-tag">
-              <span class="tag-dot"></span>
-              CUET COMMERCE            </div>
-
-          <div class="card-name">CUET (COMMERCE)</div>
-
-          <div class="card-meta">
-            <div class="meta-item">
-              <span class="meta-icon">📂</span>
-              Batch #11            </div>
-            <div class="meta-item">
-              <span class="meta-icon">▶</span>
-              Start Anytime
-            </div>
-          </div>
-
-          <div class="card-footer">
-            <span class="cf-cta">Start Learning</span>
-            <span class="cf-arrow">
-              <span class="a-icon">→</span>
-            </span>
-          </div>
-        </div>
-      </a>
-            <a class="card" href="batches.html?course_id=123" data-name="cuet (humanities)" data-tag="cuet humanities">
-        <div class="card-glow"></div>
-        <div class="card-line"></div>
-
-        <!-- Image -->
-        <div class="card-img">
-          <div class="card-accent-bar"></div>
-                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/6877813_125_Humanities CUET Batch Class 12th PRO App Banners.jpg" alt="CUET (HUMANITIES)" loading="lazy">
-                    <div class="card-num">12</div>
-        </div>
-
-        <!-- Body -->
-        <div class="card-body">
-                      <div class="card-tag">
-              <span class="tag-dot"></span>
-              CUET Humanities            </div>
-
-          <div class="card-name">CUET (HUMANITIES)</div>
-
-          <div class="card-meta">
-            <div class="meta-item">
-              <span class="meta-icon">📂</span>
-              Batch #12            </div>
-            <div class="meta-item">
-              <span class="meta-icon">▶</span>
-              Start Anytime
-            </div>
-          </div>
-
-          <div class="card-footer">
-            <span class="cf-cta">Start Learning</span>
-            <span class="cf-arrow">
-              <span class="a-icon">→</span>
-            </span>
-          </div>
-        </div>
-      </a>
-            <a class="card" href="batches.html?course_id=112" data-name="science (pcmb) 11th - prarambh plus 2026-27" data-tag="class 11th pcmb">
-        <div class="card-glow"></div>
-        <div class="card-line"></div>
-
-        <!-- Image -->
-        <div class="card-img">
-          <div class="card-accent-bar"></div>
-                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/1046248_125_Science_Plus_Prarambh_Batch_Class_11th_App_Banners.jpg" alt="SCIENCE (PCMB) 11TH - PRARAMBH PLUS 2026-27" loading="lazy">
-                    <div class="card-num">13</div>
-        </div>
-
-        <!-- Body -->
-        <div class="card-body">
-                      <div class="card-tag">
-              <span class="tag-dot"></span>
-              Class 11th PCMB            </div>
-
-          <div class="card-name">SCIENCE (PCMB) 11TH - PRARAMBH PLUS 2026-27</div>
-
-          <div class="card-meta">
-            <div class="meta-item">
-              <span class="meta-icon">📂</span>
-              Batch #13            </div>
-            <div class="meta-item">
-              <span class="meta-icon">▶</span>
-              Start Anytime
-            </div>
-          </div>
-
-          <div class="card-footer">
-            <span class="cf-cta">Start Learning</span>
-            <span class="cf-arrow">
-              <span class="a-icon">→</span>
-            </span>
-          </div>
-        </div>
-      </a>
-            <a class="card" href="batches.html?course_id=110" data-name="commerce 11th - prarambh plus 2026-27" data-tag="class 11th commerce">
-        <div class="card-glow"></div>
-        <div class="card-line"></div>
-
-        <!-- Image -->
-        <div class="card-img">
-          <div class="card-accent-bar"></div>
-                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/486342_125_Commerce_Plus_Prarambh_Batch_Class_11th_App_Banners.jpg" alt="COMMERCE 11TH - PRARAMBH PLUS 2026-27" loading="lazy">
-                    <div class="card-num">14</div>
-        </div>
-
-        <!-- Body -->
-        <div class="card-body">
-                      <div class="card-tag">
-              <span class="tag-dot"></span>
-              Class 11th Commerce            </div>
-
-          <div class="card-name">COMMERCE 11TH - PRARAMBH PLUS 2026-27</div>
-
-          <div class="card-meta">
-            <div class="meta-item">
-              <span class="meta-icon">📂</span>
-              Batch #14            </div>
-            <div class="meta-item">
-              <span class="meta-icon">▶</span>
-              Start Anytime
-            </div>
-          </div>
-
-          <div class="card-footer">
-            <span class="cf-cta">Start Learning</span>
-            <span class="cf-arrow">
-              <span class="a-icon">→</span>
-            </span>
-          </div>
-        </div>
-      </a>
-            <a class="card" href="batches.html?course_id=111" data-name="humanities 11th - prarambh plus 2026-27" data-tag="class 11th humanities">
-        <div class="card-glow"></div>
-        <div class="card-line"></div>
-
-        <!-- Image -->
-        <div class="card-img">
-          <div class="card-accent-bar"></div>
-                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/3557768_125_Humanities_Plus_Prarambh_Batch_Class_11th_App_Banners.jpg" alt="HUMANITIES 11TH - PRARAMBH PLUS 2026-27" loading="lazy">
-                    <div class="card-num">15</div>
-        </div>
-
-        <!-- Body -->
-        <div class="card-body">
-                      <div class="card-tag">
-              <span class="tag-dot"></span>
-              Class 11th Humanities            </div>
-
-          <div class="card-name">HUMANITIES 11TH - PRARAMBH PLUS 2026-27</div>
-
-          <div class="card-meta">
-            <div class="meta-item">
-              <span class="meta-icon">📂</span>
-              Batch #15            </div>
-            <div class="meta-item">
-              <span class="meta-icon">▶</span>
-              Start Anytime
-            </div>
-          </div>
-
-          <div class="card-footer">
-            <span class="cf-cta">Start Learning</span>
-            <span class="cf-arrow">
-              <span class="a-icon">→</span>
-            </span>
-          </div>
-        </div>
-      </a>
-
-      <!-- No-results message (hidden by default, shown by JS) -->
-      <div class="no-results" id="no-results" style="display:none">
-        <div class="no-results-icon">🔍</div>
-        <p class="no-results-text">Koi batch nahi mila — search badlo</p>
-      </div>
-
-      </div>
-
-  <!-- FOOTER -->
-  <div class="page-footer">
-    <div class="pf-dots">
-      <div class="pf-dot"></div>
-      <div class="pf-dot"></div>
-      <div class="pf-dot"></div>
-    </div>
-    <p class="pf-text">Developed by Devansh Sharma ✦ Work Hard, Dream Big</p>
-  </div>
-
-</main>
-
-<script>
-/* ── PARTICLES ── */
-(function(){
-  const c = document.getElementById('particles');
-  const colors = ['#ff6b00','#ff9a3c','#ffd166','#6c63ff'];
-  for(let i=0;i<32;i++){
-    const p=document.createElement('div');
-    p.className='p';
-    const col=colors[Math.floor(Math.random()*colors.length)];
-    const s=(Math.random()*2.5+1.5)+'px';
-    p.style.cssText=`
-      --l:${Math.random()*100}%;
-      --d:${6+Math.random()*14}s;
-      --dl:${Math.random()*14}s;
-      --dx:${(Math.random()-.5)*80}px;
-      --c:${col};
-      --s:${s};
-      --gs:${parseFloat(s)*2.5}px;
-    `;
-    c.appendChild(p);
-  }
-})();
-
-/* ── 3D CARD TILT ── */
-document.querySelectorAll('.card').forEach(card=>{
-  card.addEventListener('mousemove',e=>{
-    const r=card.getBoundingClientRect();
-    const x=(e.clientX-r.left)/r.width-.5;
-    const y=(e.clientY-r.top)/r.height-.5;
-    card.style.transform=`translateY(-12px) scale(1.01) rotateY(${x*5}deg) rotateX(${-y*4}deg)`;
-  });
-  card.addEventListener('mouseleave',()=>{card.style.transform=''});
-});
-
-/* ── SEARCH ── */
-const searchInput = document.getElementById('search-input');
-const cards       = document.querySelectorAll('.card');
-const noResults   = document.getElementById('no-results');
-const visCount    = document.getElementById('visible-count');
-const filterBtns  = document.querySelectorAll('.fp');
-let   activeFilter= 'all';
-
-function filterCards(){
-  const q=searchInput ? searchInput.value.trim().toLowerCase() : '';
-  let vis=0;
-  cards.forEach(card=>{
-    const name=card.dataset.name||'';
-    const tag =card.dataset.tag||'';
-    const matchSearch = !q || name.includes(q) || tag.includes(q);
-    const matchFilter = activeFilter==='all' || tag===activeFilter.toLowerCase();
-    if(matchSearch && matchFilter){
-      card.classList.remove('hidden');
-      vis++;
-    } else {
-      card.classList.add('hidden');
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The DevCoderZ - Matrix Core Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    // System behavior simulation configuration
+    tailwind.config = {
+      darkMode: 'class',
     }
-  });
-  if(visCount) visCount.textContent=vis;
-  if(noResults) noResults.style.display = vis===0 ? 'flex' : 'none';
-}
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    
+    /* Light Mode: White & Premium Corporate Blue */
+    .app-bg { background-color: #f8fafc; color: #0f172a; transition: all 0.3s ease; }
+    .matrix-header { background: rgba(255, 255, 255, 0.85); border-b: 1px solid #e2e8f0; }
+    .workspace-card { background: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px -2px rgba(148, 163, 184, 0.12); transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+    .workspace-card:hover { border-color: #3b82f6; transform: translateY(-4px); box-shadow: 0 12px 30px -4px rgba(59, 130, 246, 0.15); }
+    .btn-action { background: #3b82f6; color: #ffffff; }
+    .btn-action:hover { background: #1d4ed8; }
+    .text-brand { color: #1d4ed8; }
+    .hero-panel { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border: 1px solid #bfdbfe; }
 
-if(searchInput) searchInput.addEventListener('input',filterCards);
+    /* Dark Mode State: Pure High-Contrast Black & White Workspace */
+    .dark .app-bg { background-color: #000000; color: #ffffff; }
+    .dark .matrix-header { background: rgba(0, 0, 0, 0.9); border-b: 1px solid #262626; }
+    .dark .workspace-card { background: #0a0a0a; border: 1px solid #262626; box-shadow: none; }
+    .dark .workspace-card:hover { border-color: #ffffff; background: #121212; box-shadow: 0 0 20px rgba(255,255,255,0.05); }
+    .dark .btn-action { background: #ffffff; color: #000000; }
+    .dark .btn-action:hover { background: #e5e5e5; }
+    .dark .text-brand { color: #ffffff; }
+    .dark .hero-panel { background: #0a0a0a; border: 1px solid #262626; }
 
-filterBtns.forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    filterBtns.forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    activeFilter=btn.dataset.filter;
-    filterCards();
-  });
-});
+    .custom-bar::-webkit-scrollbar { width: 5px; }
+    .custom-bar::-webkit-scrollbar-track { background: transparent; }
+    .custom-bar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    .dark .custom-bar::-webkit-scrollbar-thumb { background: #262626; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col app-bg custom-bar overflow-x-hidden">
 
-/* ── DARK/LIGHT MODE TOGGLE ── */
-const themeToggleBtn = document.getElementById('theme-toggle');
-const themeIcon = document.getElementById('theme-icon');
-const themeText = document.getElementById('theme-text');
+  <!-- Navigation Bar Structural Component -->
+  <header class="matrix-header sticky top-0 z-50 backdrop-blur-md transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-9 h-9 rounded-xl bg-blue-600 dark:bg-white flex items-center justify-center shadow-md shadow-blue-500/10 dark:shadow-none">
+          <i class="fas fa-terminal text-white dark:text-black text-xs"></i>
+        </div>
+        <div>
+          <span class="text-base font-extrabold tracking-tight">The <span class="text-brand font-black">DevCoderZ</span></span>
+          <p class="text-[9px] font-mono tracking-widest text-slate-400 dark:text-neutral-500 uppercase">Architecture Core</p>
+        </div>
+      </div>
+      
+      <div class="flex items-center space-x-4">
+        <button onclick="document.documentElement.classList.toggle('dark')" class="w-8 h-8 rounded-lg border border-slate-200 dark:border-neutral-800 flex items-center justify-center text-slate-500 dark:text-neutral-400 hover:bg-slate-100 dark:hover:bg-neutral-900 transition-all">
+          <i class="fas fa-adjust text-xs"></i>
+        </button>
+        <div class="text-right hidden sm:block">
+          <p class="text-[9px] text-blue-600 dark:text-neutral-400 font-mono font-bold uppercase tracking-wider">Lead Systems Engineer</p>
+          <p class="text-xs font-bold tracking-tight">Devansh Sharma</p>
+        </div>
+        <div class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 flex items-center justify-center">
+          <span class="text-xs font-mono font-bold text-blue-600 dark:text-white">DS</span>
+        </div>
+      </div>
+    </div>
+  </header>
 
-themeToggleBtn.addEventListener('click', () => {
-  document.body.classList.toggle('light-mode');
-  
-  if (document.body.classList.contains('light-mode')) {
-    themeIcon.textContent = '☀️';
-    themeText.textContent = 'Light Mode';
-  } else {
-    themeIcon.textContent = '🌙';
-    themeText.textContent = 'Dark Mode';
-  }
-});
-</script>
+  <!-- Content Stream Panel Interface -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 py-8">
+    
+    <!-- Hero Block Cluster with Slogans -->
+    <div class="mb-10 p-6 sm:p-8 rounded-2xl hero-panel transition-all relative overflow-hidden">
+      <div class="relative z-10 max-w-3xl">
+        <span class="inline-flex items-center space-x-1.5 text-[9px] font-bold tracking-widest uppercase px-2.5 py-1 rounded bg-blue-600/10 dark:bg-neutral-900 text-blue-600 dark:text-neutral-400 border border-blue-200 dark:border-neutral-800 mb-4 font-mono">
+          <span class="w-1.5 h-1.5 rounded-full bg-blue-600 dark:bg-white animate-pulse"></span>
+          <span>SYSTEM RUNTIME Engine // 2026</span>
+        </span>
+        <h1 class="text-xl sm:text-2xl font-black mb-3 tracking-tight leading-snug">
+          "Code is like poetry; it just needs a master engineer."
+        </h1>
+        <p class="text-xs text-slate-500 dark:text-neutral-400 max-w-2xl leading-relaxed">
+          Welcome to the control center. Stream educational architectures, build custom player interfaces, and map data arrays seamlessly. Powered by robust infrastructure nodes.
+        </p>
+      </div>
+    </div>
 
-</body></html>
+    <!-- Active Grid Interface Title -->
+    <div class="mb-6 flex items-center justify-between border-b border-slate-200 dark:border-neutral-800 pb-4">
+      <div class="flex items-center space-x-2">
+        <i class="fas fa-grid text-blue-600 dark:text-white text-xs"></i>
+        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-neutral-400 font-mono">Active Clusters Router</h2>
+      </div>
+    </div>
+
+    <!-- Modular Responsive Grid Node Matrix -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+      
+      <!-- Card Array Node 1 -->
+      <div class="workspace-card rounded-2xl p-5 flex flex-col justify-between">
+        <div>
+          <div class="w-9 h-9 rounded-xl bg-blue-50 dark:bg-neutral-900 border border-blue-100 dark:border-neutral-800 flex items-center justify-center text-blue-600 dark:text-white mb-4 shadow-sm">
+            <i class="fas fa-atom text-xs"></i>
+          </div>
+          <h3 class="text-xs font-bold mb-1 tracking-tight">Class 11 IIT-JEE Core</h3>
+          <p class="text-[11px] text-slate-400 dark:text-neutral-500 line-clamp-2 leading-relaxed mb-5">Complete Physics, Chemistry, and Mathematics engineering curriculum streams.</p>
+        </div>
+        <a href="batches.html?course_id=177" class="w-full py-2.5 rounded-xl btn-action text-xs font-bold tracking-wide transition-all text-center block font-mono">
+          Access Cluster
+        </a>
+      </div>
+
+      <!-- Card Array Node 2 -->
+      <div class="workspace-card rounded-2xl p-5 flex flex-col justify-between">
+        <div>
+          <div class="w-9 h-9 rounded-xl bg-blue-50 dark:bg-neutral-900 border border-blue-100 dark:border-neutral-800 flex items-center justify-center text-blue-600 dark:text-white mb-4 shadow-sm">
+            <i class="fas fa-code text-xs"></i>
+          </div>
+          <h3 class="text-xs font-bold mb-1 tracking-tight">Web Development Core</h3>
+          <p class="text-[11px] text-slate-400 dark:text-neutral-500 line-clamp-2 leading-relaxed mb-5">HTML5, CSS3 Grid Architectures, JavaScript stream control components, and player UI designs.</p>
+        </div>
+        <a href="batches.html?course_id=178" class="w-full py-2.5 rounded-xl btn-action text-xs font-bold tracking-wide transition-all text-center block font-mono">
+          Access Cluster
+        </a>
+      </div>
+
+      <!-- Card Array Node 3 -->
+      <div class="workspace-card rounded-2xl p-5 flex flex-col justify-between">
+        <div>
+          <div class="w-9 h-9 rounded-xl bg-blue-50 dark:bg-neutral-900 border border-blue-100 dark:border-neutral-800 flex items-center justify-center text-blue-600 dark:text-white mb-4 shadow-sm">
+            <i class="fas fa-satellite-dish text-xs"></i>
+          </div>
+          <h3 class="text-xs font-bold mb-1 tracking-tight">Live Broadcaster Matrix</h3>
+          <p class="text-[11px] text-slate-400 dark:text-neutral-500 line-clamp-2 leading-relaxed mb-5">Real-time live network feeds, sports streams, and token validation architectures.</p>
+        </div>
+        <a href="batches.html?course_id=179" class="w-full py-2.5 rounded-xl btn-action text-xs font-bold tracking-wide transition-all text-center block font-mono">
+          Access Cluster
+        </a>
+      </div>
+
+      <!-- Card Array Node 4 -->
+      <div class="workspace-card rounded-2xl p-5 flex flex-col justify-between">
+        <div>
+          <div class="w-9 h-9 rounded-xl bg-blue-50 dark:bg-neutral-900 border border-blue-100 dark:border-neutral-800 flex items-center justify-center text-blue-600 dark:text-white mb-4 shadow-sm">
+            <i class="fas fa-robot text-xs"></i>
+          </div>
+          <h3 class="text-xs font-bold mb-1 tracking-tight">Automation & Scraping</h3>
+          <p class="text-[11px] text-slate-400 dark:text-neutral-500 line-clamp-2 leading-relaxed mb-5">Python scripts, data extraction parsers, and Telegram bot control pipelines.</p>
+        </div>
+        <a href="batches.html?course_id=180" class="w-full py-2.5 rounded-xl btn-action text-xs font-bold tracking-wide transition-all text-center block font-mono">
+          Access Cluster
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- System Global Structural Footer Container -->
+  <footer class="matrix-header border-t py-6 mt-16 transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
+      <div class="flex flex-col space-y-1 items-center md:items-start">
+        <div class="flex items-center space-x-2 text-slate-400 dark:text-neutral-500 font-semibold font-mono">
+          <span class="text-slate-800 dark:text-white font-bold">The DevCoderZ Matrix</span>
+          <span>&copy; 2026</span>
+          <span>&bull;</span>
+          <span class="text-blue-600 dark:text-neutral-400 text-[11px]">"Clean Code. Hidden Logic. Beautiful Outputs."</span>
+        </div>
+        <p class="text-[10px] text-slate-400 dark:text-neutral-600 font-mono text-center md:text-left">Unauthorized replication of this dashboard infrastructure is blocked via system logic layers.</p>
+      </div>
+      <div class="flex items-center space-x-2 bg-slate-50 dark:bg-neutral-950 px-3 py-2 rounded-xl border border-slate-200 dark:border-neutral-900 transition-all">
+        <span class="text-[11px] text-slate-400 dark:text-neutral-500 font-mono">Core Engineered By:</span>
+        <span class="font-bold text-blue-600 dark:text-white font-mono tracking-wide">Devansh Sharma</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
