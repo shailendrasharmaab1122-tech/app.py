@@ -1,236 +1,1421 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Next Toppers - Rolex Bypass Terminal</title>
-    <style>
-        /* --- Premium Blue & White Theme Panel --- */
-        :root {
-            --bg-main: #f4f7fc;
-            --bg-white: #ffffff;
-            --primary: #0056b3;
-            --primary-dark: #003d80;
-            --primary-light: #e6f0fa;
-            --text-main: #212529;
-            --text-muted: #6c757d;
-            --border-color: #e2e8f0;
-            --radius: 16px;
-            --shadow: 0 10px 30px rgba(0, 86, 179, 0.05);
-            --transition: all 0.2s ease-in-out;
-        }
+<!DOCTYPE html><html lang="en" style=""><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RolexCoderZ — Apna Batch Chuno</title>
+<script src="https://rolexcoderz.com/Check/guard.js"></script><style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style><input type="hidden" id="inject_idm_text_selection">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Syne:wght@400;500;600;700;800&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
+:root{
+  --bg:       #06050a;
+  --bg2:      #0d0b14;
+  --bg3:      #13101e;
+  --bg4:      #1a1628;
+  --acc:      #ff6b00;
+  --acc2:     #ff9a3c;
+  --acc3:     #ffd166;
+  --blue:     #6c63ff;
+  --teal:     #00d4aa;
+  --pink:     #ff3d7f;
+  --cream:    #f0e6d3;
+  --muted:    rgba(240,230,211,.45);
+  --faint:    rgba(240,230,211,.18);
+  --gA:       rgba(255,107,0,.18);
+  --gB:       rgba(255,107,0,.08);
+  --gC:       rgba(108,99,255,.12);
+  --border:   rgba(255,107,0,.14);
+  --border2:  rgba(255,107,0,.28);
+  --radius:   16px;
+  --radius-sm:10px;
+  --shadow:   0 24px 64px rgba(0,0,0,.7), 0 4px 16px rgba(0,0,0,.4);
+  --glow:     0 0 40px rgba(255,107,0,.25), 0 0 80px rgba(255,107,0,.08);
+}
 
-        body {
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+html{scroll-behavior:smooth}
 
-        .navbar {
-            background-color: var(--bg-white);
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+body{
+  background:var(--bg);
+  color:var(--cream);
+  font-family:'Syne',sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
 
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+/* ═══════════════════════════════════
+   BACKGROUNDS & ATMOSPHERE
+═══════════════════════════════════ */
 
-        .logo {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--primary);
-            text-decoration: none;
-        }
+/* Gradient mesh background */
+.bg-mesh{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 50% at 10% 10%, rgba(255,107,0,.07) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 60% at 90% 80%, rgba(108,99,255,.06) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(0,212,170,.03) 0%, transparent 60%);
+}
 
-        .logo span { color: var(--text-main); }
+/* Noise texture */
+.bg-noise{
+  position:fixed;inset:0;z-index:1;pointer-events:none;
+  opacity:.3;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  background-size:256px;
+}
 
-        /* --- Hero Core Layout --- */
-        .hero-container {
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-        }
+/* Grid lines */
+.bg-grid{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,107,0,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,107,0,.025) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 80%);
+}
 
-        .terminal-card {
-            background-color: var(--bg-white);
-            max-width: 550px;
-            width: 100%;
-            padding: 45px 35px;
-            border-radius: var(--radius);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
-            text-align: center;
-        }
+/* Floating orbs */
+.orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(80px)}
+.orb-1{width:600px;height:600px;top:-200px;left:-150px;background:rgba(255,107,0,.06);animation:orbFloat1 20s ease-in-out infinite}
+.orb-2{width:500px;height:500px;bottom:-200px;right:-100px;background:rgba(108,99,255,.05);animation:orbFloat2 25s ease-in-out infinite}
+.orb-3{width:300px;height:300px;top:40%;right:10%;background:rgba(0,212,170,.04);animation:orbFloat3 18s ease-in-out infinite}
 
-        .status-badge {
-            display: inline-block;
-            padding: 6px 16px;
-            font-size: 12px;
-            font-weight: 700;
-            background-color: var(--primary-light);
-            color: var(--primary);
-            border-radius: 50px;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+@keyframes orbFloat1{0%,100%{transform:translate(0,0)}50%{transform:translate(60px,40px)}}
+@keyframes orbFloat2{0%,100%{transform:translate(0,0)}50%{transform:translate(-40px,-60px)}}
+@keyframes orbFloat3{0%,100%{transform:translate(0,0)}50%{transform:translate(-30px,50px)}}
 
-        .terminal-card h1 {
-            font-size: 30px;
-            color: var(--primary-dark);
-            margin-bottom: 12px;
-            font-weight: 700;
-        }
+/* ═══════════════════════════════════
+   PARTICLES
+═══════════════════════════════════ */
+.particles{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.p{
+  position:absolute;bottom:-6px;
+  width:var(--s,3px);height:var(--s,3px);
+  border-radius:50%;background:var(--c,var(--acc));
+  opacity:0;
+  animation:particleRise var(--d,9s) ease-in var(--dl,0s) infinite;
+  left:var(--l,50%);
+  box-shadow:0 0 var(--gs,6px) var(--c,var(--acc));
+}
+@keyframes particleRise{
+  0%{opacity:0;transform:translateY(0) translateX(0) scale(.5)}
+  8%{opacity:.7}
+  85%{opacity:.2}
+  100%{opacity:0;transform:translateY(-100vh) translateX(var(--dx,30px)) scale(.2)}
+}
 
-        .terminal-card p {
-            color: var(--text-muted);
-            font-size: 15px;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
+/* ═══════════════════════════════════
+   NAV
+═══════════════════════════════════ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:68px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(16px,4vw,40px);
+  background:rgba(6,5,10,.75);
+  backdrop-filter:blur(32px) saturate(200%);
+  -webkit-backdrop-filter:blur(32px) saturate(200%);
+  border-bottom:1px solid rgba(255,107,0,.1);
+}
 
-        /* --- Dynamic Fetch Action Trigger --- */
-        .action-btn {
-            display: block;
-            background-color: var(--primary);
-            color: var(--bg-white);
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 600;
-            padding: 15px 30px;
-            border-radius: 10px;
-            border: none;
-            width: 100%;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0, 86, 179, 0.15);
-            transition: var(--transition);
-        }
+/* top accent line */
+nav::after{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,
+    transparent 0%,
+    var(--acc) 25%,
+    var(--acc3) 50%,
+    var(--acc) 75%,
+    transparent 100%);
+  animation:navLine 4s ease-in-out infinite;
+}
+@keyframes navLine{0%,100%{opacity:.7;filter:none}50%{opacity:1;filter:drop-shadow(0 0 8px var(--acc))}}
 
-        .action-btn:hover {
-            background-color: var(--primary-dark);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 18px rgba(0, 61, 128, 0.25);
-        }
+.nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.nav-logo-box{
+  width:40px;height:40px;
+  background:linear-gradient(135deg,#200800,var(--acc));
+  border:1px solid rgba(255,107,0,.45);
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:.9rem;color:#fff;letter-spacing:.05em;
+  box-shadow:0 0 24px rgba(255,107,0,.3);
+  position:relative;overflow:hidden;
+}
+.nav-logo-box::after{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.2),transparent 60%);
+}
+.nav-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.35rem;letter-spacing:.08em;color:var(--cream);
+}
+.nav-title em{color:var(--acc);font-style:normal;text-shadow:0 0 20px rgba(255,107,0,.5)}
 
-        /* --- Network Log Panel --- */
-        .network-log {
-            margin-top: 20px;
-            background-color: #f8fafc;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 12px;
-            font-family: "Courier New", Courier, monospace;
-            font-size: 12px;
-            color: #475569;
-            text-align: left;
-            display: none;
-            max-height: 100px;
-            overflow-y: auto;
-        }
-    </style>
-</head>
+.nav-right{display:flex;align-items:center;gap:10px}
+.nav-badge{
+  font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--acc2);
+  border:1px solid rgba(255,107,0,.22);
+  background:rgba(255,107,0,.05);
+  padding:6px 14px;border-radius:6px;
+  position:relative;overflow:hidden;
+}
+.nav-badge::before{
+  content:'';position:absolute;left:-100%;top:0;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,107,0,.1),transparent);
+  animation:shimmer 3s ease-in-out infinite;
+}
+@keyframes shimmer{0%{left:-100%}100%{left:200%}}
+
+/* ═══════════════════════════════════
+   MAIN / HERO
+═══════════════════════════════════ */
+main{
+  position:relative;z-index:10;
+  padding:calc(68px + 60px) clamp(16px,5vw,48px) 100px;
+  max-width:1300px;margin:0 auto;
+}
+
+/* HERO */
+.hero{
+  display:flex;flex-direction:column;align-items:center;
+  text-align:center;
+  margin-bottom:64px;
+  animation:fadeUp .9s cubic-bezier(.16,1,.3,1) both;
+}
+
+.hero-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:7px 18px;
+  background:rgba(255,107,0,.07);
+  border:1px solid rgba(255,107,0,.2);
+  border-radius:100px;
+  font-size:.65rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(255,154,60,.85);
+  margin-bottom:24px;
+}
+.pill-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--acc);
+  box-shadow:0 0 8px var(--acc);
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.6)}}
+
+.hero-h1{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(3.5rem,10vw,8rem);
+  line-height:.9;
+  letter-spacing:.03em;
+  color:var(--cream);
+  margin-bottom:20px;
+}
+.hero-h1 .line-a{
+  display:block;
+  opacity:.85;
+  animation:fadeUp .9s .05s cubic-bezier(.16,1,.3,1) both;
+}
+.hero-h1 .line-b{
+  display:block;
+  background:linear-gradient(110deg,var(--acc) 0%,var(--acc2) 40%,var(--acc3) 70%,var(--acc2) 100%);
+  background-size:200%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:fadeUp .9s .12s cubic-bezier(.16,1,.3,1) both, gradShift 5s ease infinite;
+  filter:drop-shadow(0 0 40px rgba(255,107,0,.3));
+}
+@keyframes gradShift{0%,100%{background-position:0%}50%{background-position:100%}}
+
+.hero-sub{
+  font-size:1rem;font-weight:500;
+  color:var(--muted);
+  letter-spacing:.06em;text-transform:uppercase;
+  margin-bottom:36px;
+  animation:fadeUp .9s .2s cubic-bezier(.16,1,.3,1) both;
+}
+.hero-sub strong{color:var(--acc2)}
+
+/* STATS ROW */
+.hero-stats{
+  display:flex;align-items:center;gap:24px;
+  flex-wrap:wrap;justify-content:center;
+  animation:fadeUp .9s .28s cubic-bezier(.16,1,.3,1) both;
+}
+.stat-item{
+  display:flex;align-items:center;gap:8px;
+  font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);
+}
+.stat-icon{font-size:1rem}
+.stat-val{color:var(--cream);font-size:.8rem}
+.stat-sep{width:1px;height:20px;background:var(--border);flex-shrink:0}
+
+/* ═══════════════════════════════════
+   SEARCH + FILTER TOOLBAR
+═══════════════════════════════════ */
+.toolbar{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:40px;
+  flex-wrap:wrap;
+  animation:fadeUp .9s .35s cubic-bezier(.16,1,.3,1) both;
+  width:100%;max-width:900px;margin-left:auto;margin-right:auto;margin-bottom:48px;
+}
+
+.search-wrap{
+  flex:1;min-width:220px;
+  position:relative;
+}
+.search-icon{
+  position:absolute;left:16px;top:50%;transform:translateY(-50%);
+  color:rgba(255,107,0,.45);
+  font-size:.95rem;pointer-events:none;
+}
+#search-input{
+  width:100%;height:50px;
+  background:rgba(13,11,20,.8);
+  border:1px solid rgba(255,107,0,.18);
+  border-radius:var(--radius-sm);
+  color:var(--cream);
+  font-family:'Syne',sans-serif;
+  font-size:.92rem;font-weight:500;
+  letter-spacing:.04em;
+  padding:0 16px 0 44px;
+  outline:none;
+  transition:border-color .3s,box-shadow .3s,background .3s;
+}
+#search-input::placeholder{color:rgba(240,230,211,.25);letter-spacing:.08em}
+#search-input:focus{
+  border-color:rgba(255,107,0,.45);
+  background:rgba(19,16,30,.9);
+  box-shadow:0 0 0 3px rgba(255,107,0,.08),0 0 20px rgba(255,107,0,.06);
+}
+
+.filter-pills{
+  display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+}
+.fp{
+  padding:8px 18px;
+  background:rgba(13,11,20,.8);
+  border:1px solid rgba(255,107,0,.15);
+  border-radius:100px;
+  color:var(--muted);
+  font-family:'Syne',sans-serif;
+  font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  cursor:pointer;
+  transition:all .3s cubic-bezier(.16,1,.3,1);
+  user-select:none;
+  white-space:nowrap;
+}
+.fp:hover{border-color:rgba(255,107,0,.35);color:var(--acc2);background:rgba(255,107,0,.06)}
+.fp.active{
+  background:rgba(255,107,0,.12);
+  border-color:var(--acc);
+  color:var(--acc);
+  box-shadow:0 0 16px rgba(255,107,0,.15);
+}
+
+/* ═══════════════════════════════════
+   RESULTS COUNT
+═══════════════════════════════════ */
+.results-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;
+  max-width:100%;
+}
+.results-count{
+  font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--faint);
+}
+.results-count span{color:var(--acc2)}
+.results-sort{
+  font-size:.65rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  color:rgba(255,107,0,.35);
+}
+
+/* ═══════════════════════════════════
+   GRID
+═══════════════════════════════════ */
+.grid{
+  width:100%;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  gap:22px;
+}
+
+/* ═══════════════════════════════════
+   CARD
+═══════════════════════════════════ */
+.card{
+  position:relative;
+  display:flex;flex-direction:column;
+  background:linear-gradient(150deg,var(--bg2) 0%,var(--bg3) 100%);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  overflow:hidden;
+  text-decoration:none;color:inherit;
+  cursor:pointer;
+  transition:transform .5s cubic-bezier(.16,1,.3,1), border-color .35s, box-shadow .5s;
+  animation:cardPop .6s cubic-bezier(.16,1,.3,1) both;
+}
+.card:nth-child(1){animation-delay:.04s}
+.card:nth-child(2){animation-delay:.09s}
+.card:nth-child(3){animation-delay:.14s}
+.card:nth-child(4){animation-delay:.19s}
+.card:nth-child(5){animation-delay:.24s}
+.card:nth-child(6){animation-delay:.29s}
+.card:nth-child(7){animation-delay:.34s}
+.card:nth-child(8){animation-delay:.39s}
+.card:nth-child(9){animation-delay:.44s}
+@keyframes cardPop{
+  from{opacity:0;transform:translateY(32px) scale(.97)}
+  to{opacity:1;transform:none}
+}
+
+/* Corner brackets */
+.card::before,.card::after{
+  content:'';
+  position:absolute;z-index:10;
+  width:20px;height:20px;
+  transition:all .4s cubic-bezier(.16,1,.3,1);
+}
+.card::before{top:0;left:0;border-top:2px solid rgba(255,107,0,.4);border-left:2px solid rgba(255,107,0,.4);border-radius:var(--radius) 0 0 0}
+.card::after{bottom:0;right:0;border-bottom:2px solid rgba(255,107,0,.2);border-right:2px solid rgba(255,107,0,.2);border-radius:0 0 var(--radius) 0}
+.card:hover::before{width:36px;height:36px;border-color:var(--acc);box-shadow:0 0 12px rgba(255,107,0,.2)}
+.card:hover::after{width:36px;height:36px;border-color:var(--acc2)}
+
+/* Hover state */
+.card:hover{
+  transform:translateY(-12px) scale(1.01);
+  border-color:var(--border2);
+  box-shadow:
+    0 32px 80px rgba(0,0,0,.65),
+    0 0 0 1px rgba(255,107,0,.15),
+    0 0 50px rgba(255,107,0,.06),
+    inset 0 1px 0 rgba(255,255,255,.05);
+}
+
+/* Top shimmer line */
+.card-line{
+  position:absolute;top:0;left:0;right:0;height:2px;z-index:11;
+  background:linear-gradient(90deg,transparent,var(--acc),var(--acc3),var(--acc),transparent);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .5s cubic-bezier(.16,1,.3,1);
+}
+.card:hover .card-line{transform:scaleX(1)}
+
+/* Inner glow */
+.card-glow{
+  position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(255,107,0,.06),transparent);
+  opacity:0;transition:opacity .4s;
+}
+.card:hover .card-glow{opacity:1}
+
+/* IMAGE */
+.card-img{
+  position:relative;
+  aspect-ratio:16/8;
+  background:linear-gradient(135deg,#0c0810,#1a0e08);
+  overflow:hidden;flex-shrink:0;
+}
+.card-img img{
+  width:100%;height:100%;object-fit:cover;display:block;
+  transition:transform .8s cubic-bezier(.16,1,.3,1),filter .4s;
+  filter:brightness(.65) saturate(1.1) sepia(.08);
+}
+.card:hover .card-img img{transform:scale(1.1);filter:brightness(.8) saturate(1.35)}
+
+/* image overlay gradient */
+.card-img::after{
+  content:'';position:absolute;inset:0;z-index:2;
+  background:linear-gradient(180deg,
+    transparent 20%,
+    rgba(13,11,20,.7) 65%,
+    rgba(13,11,20,.98) 100%);
+}
+
+/* Placeholder when no image */
+.card-img-ph{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:3.5rem;opacity:.07;user-select:none;
+  background:
+    repeating-conic-gradient(rgba(255,107,0,.04) 0% 25%,transparent 0% 50%) 0 0/24px 24px;
+}
+
+/* Batch number overlay */
+.card-num{
+  position:absolute;bottom:8px;right:14px;z-index:5;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:4rem;letter-spacing:.04em;
+  color:rgba(255,107,0,.06);line-height:1;
+  user-select:none;
+  transition:color .3s;
+}
+.card:hover .card-num{color:rgba(255,107,0,.1)}
+
+/* Left accent bar on image */
+.card-accent-bar{
+  position:absolute;top:0;bottom:0;left:0;z-index:5;
+  width:3px;
+  background:linear-gradient(180deg,var(--acc),transparent);
+  opacity:.5;
+  transition:opacity .3s,width .3s;
+}
+.card:hover .card-accent-bar{opacity:.9;width:4px}
+
+/* BODY */
+.card-body{
+  padding:18px 20px 20px;
+  display:flex;flex-direction:column;gap:10px;
+  flex:1;position:relative;z-index:5;
+}
+
+/* TAG */
+.card-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  align-self:flex-start;
+  font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--acc2);
+  background:rgba(255,107,0,.08);
+  border:1px solid rgba(255,107,0,.2);
+  padding:4px 10px;border-radius:6px;
+  transition:background .3s;
+}
+.card:hover .card-tag{background:rgba(255,107,0,.13)}
+.tag-dot{width:4px;height:4px;border-radius:50%;background:var(--acc2);box-shadow:0 0 5px var(--acc2)}
+
+/* NAME */
+.card-name{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.55rem;letter-spacing:.05em;line-height:1.1;
+  color:var(--cream);
+  transition:color .3s;
+  flex:1;
+}
+.card:hover .card-name{color:#fff}
+
+/* META ROW */
+.card-meta{
+  display:flex;align-items:center;gap:16px;
+  flex-wrap:wrap;
+}
+.meta-item{
+  display:flex;align-items:center;gap:5px;
+  font-size:.65rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:rgba(240,230,211,.3);
+}
+.meta-icon{font-size:.75rem;opacity:.6}
+
+/* FOOTER */
+.card-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-top:14px;margin-top:4px;
+  border-top:1px solid rgba(255,107,0,.09);
+}
+.cf-cta{
+  font-size:.68rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(255,154,60,.6);
+  transition:color .3s,letter-spacing .3s;
+}
+.card:hover .cf-cta{color:var(--acc2);letter-spacing:.24em}
+
+.cf-arrow{
+  display:flex;align-items:center;justify-content:center;
+  width:34px;height:34px;
+  border:1px solid rgba(255,107,0,.2);
+  border-radius:8px;
+  color:rgba(255,107,0,.45);
+  font-size:.85rem;
+  background:rgba(255,107,0,.03);
+  transition:all .4s cubic-bezier(.16,1,.3,1);
+  position:relative;overflow:hidden;
+}
+.cf-arrow::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,var(--acc),#cc2200);
+  transform:scale(0);border-radius:8px;
+  transition:transform .4s cubic-bezier(.16,1,.3,1);
+}
+.cf-arrow .a-icon{position:relative;z-index:1;transition:transform .3s,color .3s}
+.card:hover .cf-arrow{
+  border-color:var(--acc);color:#fff;
+  box-shadow:0 0 20px rgba(255,107,0,.4);
+}
+.card:hover .cf-arrow::before{transform:scale(1)}
+.card:hover .cf-arrow .a-icon{transform:translateX(3px);color:#fff}
+
+/* ═══════════════════════════════════
+   EMPTY STATE
+═══════════════════════════════════ */
+.empty{
+  grid-column:1/-1;
+  display:flex;flex-direction:column;align-items:center;
+  padding:100px 20px;
+  text-align:center;
+  animation:fadeUp .8s cubic-bezier(.16,1,.3,1) both;
+}
+.empty-ring{
+  width:90px;height:90px;
+  border-radius:50%;
+  border:2px solid rgba(255,107,0,.12);
+  border-top-color:var(--acc);
+  border-right-color:var(--acc2);
+  animation:spin .8s linear infinite;
+  margin-bottom:24px;
+  position:relative;
+}
+.empty-ring::after{
+  content:'📚';position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:2rem;animation:spin .8s linear infinite reverse;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.6rem;letter-spacing:.08em;
+  color:var(--faint);margin-bottom:10px;
+}
+.empty-sub{
+  font-size:.75rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(240,230,211,.15);
+}
+
+/* No results state */
+.no-results{
+  grid-column:1/-1;
+  display:flex;flex-direction:column;align-items:center;
+  padding:80px 20px;
+  text-align:center;
+}
+.no-results-icon{font-size:2.5rem;opacity:.2;margin-bottom:16px}
+.no-results-text{
+  font-size:.8rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(240,230,211,.2);
+}
+
+/* ═══════════════════════════════════
+   FOOTER
+═══════════════════════════════════ */
+.page-footer{
+  margin-top:80px;
+  padding-top:40px;
+  border-top:1px solid rgba(255,107,0,.07);
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:12px;
+  animation:fadeUp .8s .5s cubic-bezier(.16,1,.3,1) both;
+}
+.pf-text{
+  font-size:.58rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;
+  color:rgba(255,107,0,.18);
+}
+.pf-dots{display:flex;gap:6px}
+.pf-dot{
+  width:4px;height:4px;border-radius:50%;
+  background:rgba(255,107,0,.2);
+}
+.pf-dot:nth-child(2){background:rgba(255,107,0,.35);animation:dotBlink 2s 1s ease-in-out infinite}
+@keyframes dotBlink{0%,100%{opacity:.4}50%{opacity:1}}
+
+/* ═══════════════════════════════════
+   DIVIDER
+═══════════════════════════════════ */
+.divider{
+  display:flex;align-items:center;gap:20px;
+  margin-bottom:48px;
+  opacity:.3;
+  animation:fadeUp .9s .42s cubic-bezier(.16,1,.3,1) both;
+}
+.div-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--acc))}
+.div-line.r{background:linear-gradient(90deg,var(--acc),transparent)}
+.div-icon{color:var(--acc);font-size:.8rem;animation:iconSpin 6s linear infinite}
+@keyframes iconSpin{0%,80%{transform:rotate(0)}85%{transform:rotate(360deg)}100%{transform:rotate(360deg)}}
+
+/* ═══════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════ */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(24px)}
+  to{opacity:1;transform:none}
+}
+
+/* card hidden when filtered */
+.card.hidden{display:none}
+
+/* ═══════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════ */
+@media(max-width:768px){
+  nav{padding:0 18px;height:62px}
+  main{padding:calc(62px + 48px) 16px 80px}
+  .grid{grid-template-columns:1fr;gap:16px}
+  .hero{margin-bottom:48px}
+  .toolbar{flex-direction:column;align-items:stretch}
+  .search-wrap{min-width:unset}
+  .hero-stats{gap:14px}
+  .stat-sep:nth-child(4){display:none}
+}
+@media(max-width:480px){
+  .hero-h1{font-size:3.2rem}
+  .filter-pills{display:none}
+}
+@media(min-width:1200px){
+  .grid{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+<style></style></head>
 <body>
 
-    <!-- Main Navigation Bar -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="index.html" class="logo">Next<span>Toppers</span></a>
+<!-- Backgrounds -->
+<div class="bg-mesh"></div>
+<div class="bg-noise"></div>
+<div class="bg-grid"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="particles" id="particles"><div class="p" style="--l: 28.201203103753603%; --d: 14.557581946926101s; --dl: 10.683127625514413s; --dx: -14.389950741811859px; --c: #ffd166; --s: 2.529051976952068px; --gs: 6.32262994238017px;"></div><div class="p" style="--l: 9.967974826482862%; --d: 8.165532796914455s; --dl: 7.701131712587336s; --dx: -39.4740937861944px; --c: #6c63ff; --s: 2.625729990883109px; --gs: 6.5643249772077725px;"></div><div class="p" style="--l: 87.6236709576579%; --d: 15.885437806004317s; --dl: 2.8989496565155344s; --dx: -38.347077181832105px; --c: #6c63ff; --s: 3.769870686769879px; --gs: 9.424676716924697px;"></div><div class="p" style="--l: 21.888070800916694%; --d: 8.83623078117752s; --dl: 8.269589073639823s; --dx: -37.66423121692028px; --c: #6c63ff; --s: 2.730770556271673px; --gs: 6.826926390679182px;"></div><div class="p" style="--l: 87.76463073861423%; --d: 10.83343172847681s; --dl: 9.708363406119668s; --dx: -15.207310698665326px; --c: #ff6b00; --s: 2.8377351849456574px; --gs: 7.094337962364143px;"></div><div class="p" style="--l: 29.413824431742707%; --d: 7.935503606789348s; --dl: 9.870661258560343s; --dx: 3.2116767324931406px; --c: #ff6b00; --s: 2.5980106610058877px; --gs: 6.495026652514719px;"></div><div class="p" style="--l: 20.24624027722005%; --d: 13.997960985532075s; --dl: 4.800039619216642s; --dx: 8.423632162325543px; --c: #ff6b00; --s: 3.9207227184232876px; --gs: 9.80180679605822px;"></div><div class="p" style="--l: 71.50104029597877%; --d: 13.684421601489102s; --dl: 0.17174923767072547s; --dx: -5.541829815513113px; --c: #ffd166; --s: 2.1346540438203663px; --gs: 5.336635109550915px;"></div><div class="p" style="--l: 55.99915638482018%; --d: 7.1329342968306255s; --dl: 13.596865654558687s; --dx: 20.229866027236625px; --c: #ffd166; --s: 3.493964797422376px; --gs: 8.73491199355594px;"></div><div class="p" style="--l: 67.4899221629809%; --d: 6.891498312772258s; --dl: 1.275415414527554s; --dx: 14.826988334113738px; --c: #ff9a3c; --s: 1.934919771375193px; --gs: 4.837299428437983px;"></div><div class="p" style="--l: 17.870593336185358%; --d: 13.566223239667718s; --dl: 6.9901085135367405s; --dx: -25.378832641622537px; --c: #ffd166; --s: 3.611646909490098px; --gs: 9.029117273725245px;"></div><div class="p" style="--l: 88.66770873763429%; --d: 15.38558614149326s; --dl: 2.268524682411397s; --dx: 35.763783919674815px; --c: #ff9a3c; --s: 3.292404190484244px; --gs: 8.23101047621061px;"></div><div class="p" style="--l: 25.652741171282734%; --d: 11.294558858499125s; --dl: 9.435820418192122s; --dx: 13.6670148357807px; --c: #ffd166; --s: 3.864797385567692px; --gs: 9.661993463919229px;"></div><div class="p" style="--l: 60.35971823094685%; --d: 15.616841713620468s; --dl: 0.11978945844376931s; --dx: -16.59029025767051px; --c: #6c63ff; --s: 2.925144569073002px; --gs: 7.312861422682505px;"></div><div class="p" style="--l: 70.86454752113879%; --d: 6.45599629587001s; --dl: 3.5347036387953024s; --dx: 10.354848827518843px; --c: #6c63ff; --s: 2.5073090186209823px; --gs: 6.268272546552456px;"></div><div class="p" style="--l: 16.317335162242774%; --d: 19.862917365339385s; --dl: 13.00242695795826s; --dx: 39.579048663774486px; --c: #ffd166; --s: 1.8487175918444891px; --gs: 4.621793979611223px;"></div><div class="p" style="--l: 22.3908824909943%; --d: 15.26137787954922s; --dl: 6.573049453809906s; --dx: 24.48858259330633px; --c: #ffd166; --s: 2.5762158378375255px; --gs: 6.4405395945938135px;"></div><div class="p" style="--l: 92.55622902337927%; --d: 15.564348455313262s; --dl: 8.734441175973235s; --dx: 29.751704376946428px; --c: #6c63ff; --s: 3.171837140654434px; --gs: 7.929592851636085px;"></div><div class="p" style="--l: 49.69539969796155%; --d: 19.652216228088307s; --dl: 6.707523351573234s; --dx: 2.8022196928839094px; --c: #ffd166; --s: 3.4659208964713244px; --gs: 8.664802241178311px;"></div><div class="p" style="--l: 9.227794256113885%; --d: 16.79077435154553s; --dl: 3.2141365394863772s; --dx: -14.837931354993215px; --c: #ffd166; --s: 2.2946034127229025px; --gs: 5.736508531807257px;"></div><div class="p" style="--l: 28.586586550095728%; --d: 17.39573549247485s; --dl: 8.469811753372658s; --dx: 17.201778123193527px; --c: #ff6b00; --s: 1.934450123326948px; --gs: 4.83612530831737px;"></div><div class="p" style="--l: 56.731706724785525%; --d: 9.443973926807354s; --dl: 5.650534487549404s; --dx: 1.1126072306542412px; --c: #ff9a3c; --s: 3.697330341115854px; --gs: 9.243325852789635px;"></div><div class="p" style="--l: 45.42444418391342%; --d: 11.55100636250109s; --dl: 8.01805292369087s; --dx: -36.87148225055906px; --c: #ff6b00; --s: 1.748089913754557px; --gs: 4.370224784386393px;"></div><div class="p" style="--l: 60.50544131129306%; --d: 17.281028813682568s; --dl: 9.505485419195477s; --dx: 39.52652562105638px; --c: #ff9a3c; --s: 2.8829313724601224px; --gs: 7.207328431150306px;"></div><div class="p" style="--l: 76.37218565771774%; --d: 16.057712314172427s; --dl: 11.832283367837736s; --dx: -23.65607157820925px; --c: #ff9a3c; --s: 2.3086609836022194px; --gs: 5.771652459005549px;"></div><div class="p" style="--l: 65.92719006474822%; --d: 19.193542516744554s; --dl: 3.3691691104684756s; --dx: -14.108037706514667px; --c: #6c63ff; --s: 3.7867321114993535px; --gs: 9.466830278748384px;"></div><div class="p" style="--l: 11.647531248943244%; --d: 10.698092880258967s; --dl: 11.733977893601786s; --dx: -38.57873455216684px; --c: #ff6b00; --s: 3.8498422427544865px; --gs: 9.624605606886217px;"></div><div class="p" style="--l: 13.208576775396175%; --d: 13.22791771100137s; --dl: 2.02125994647737s; --dx: -1.0562809481205715px; --c: #6c63ff; --s: 1.972139379626899px; --gs: 4.930348449067247px;"></div><div class="p" style="--l: 42.30049913540138%; --d: 13.896724398924732s; --dl: 1.7410478800382136s; --dx: -19.31378076863913px; --c: #ff9a3c; --s: 3.4252538932424814px; --gs: 8.563134733106203px;"></div><div class="p" style="--l: 49.10752717529944%; --d: 13.518632147582398s; --dl: 4.121782841486836s; --dx: -16.937222181581674px; --c: #ff6b00; --s: 3.292079727425288px; --gs: 8.230199318563221px;"></div><div class="p" style="--l: 98.80512266920819%; --d: 14.082883862034672s; --dl: 12.996280961856773s; --dx: -33.02178161394113px; --c: #6c63ff; --s: 2.031140481886362px; --gs: 5.0778512047159055px;"></div><div class="p" style="--l: 14.799016253275676%; --d: 7.385713831564463s; --dl: 8.055399862299234s; --dx: 23.727584393957024px; --c: #ff6b00; --s: 3.4436254814184917px; --gs: 8.60906370354623px;"></div></div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="#">
+    <div class="nav-logo-box">RC</div>
+    <span class="nav-title">Rolex<em>CoderZ</em></span>
+  </a>
+  <div class="nav-right">
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-pill">
+      <span class="pill-dot"></span>
+      Your Batches
+    </div>
+    <h1 class="hero-h1">
+      <span class="line-a">Pick Your</span>
+      <span class="line-b">Batch &amp; Start</span>
+    </h1>
+    <p class="hero-sub">
+      Sabse pehle batch choose karo, <strong>phir learning shuru</strong>
+    </p>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-icon">🔥</span>
+        <span class="stat-val">15</span>
+        <span>Batches Available</span>
+      </div>
+            <div class="stat-sep"></div>
+      <div class="stat-item">
+        <span class="stat-icon">⚡</span>
+        <span>Live Now</span>
+      </div>
+      <div class="stat-sep"></div>
+      <div class="stat-item">
+        <span class="stat-icon">🎯</span>
+        <span>Self-Paced</span>
+      </div>
+          </div>
+  </div>
+
+  
+  <!-- SEARCH + FILTER TOOLBAR -->
+  <div class="toolbar">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search-input" placeholder="BATCH DHUNDO..." autocomplete="off" spellcheck="false">
+    </div>
+    <div class="filter-pills">
+      <div class="fp active" data-filter="all">All</div>
+              <div class="fp" data-filter="Class 10th">Class 10th</div>
+              <div class="fp" data-filter="Class 8th">Class 8th</div>
+              <div class="fp" data-filter="Class 11th PCMB">Class 11th PCMB</div>
+              <div class="fp" data-filter="Class 11th Commerce">Class 11th Commerce</div>
+              <div class="fp" data-filter="Class 11th Humanities">Class 11th Humanities</div>
+              <div class="fp" data-filter="Class 12th COMMERCE">Class 12th COMMERCE</div>
+              <div class="fp" data-filter="Class 12th PCMB">Class 12th PCMB</div>
+              <div class="fp" data-filter="Class 9th">Class 9th</div>
+              <div class="fp" data-filter="Class 12th Humanities">Class 12th Humanities</div>
+              <div class="fp" data-filter="CUET (SCIENCE)">CUET (SCIENCE)</div>
+              <div class="fp" data-filter="CUET COMMERCE">CUET COMMERCE</div>
+              <div class="fp" data-filter="CUET Humanities">CUET Humanities</div>
+          </div>
+  </div>
+
+  <!-- RESULTS BAR -->
+  <div class="results-bar">
+    <span class="results-count" id="results-count">
+      Showing <span id="visible-count">15</span> of 15 batches    </span>
+    <span class="results-sort">A–Z order</span>
+  </div>
+
+  
+  <!-- DIVIDER -->
+  <div class="divider">
+    <span class="div-line"></span>
+    <span class="div-icon">✦</span>
+    <span class="div-icon" style="opacity:.4">✦</span>
+    <span class="div-line r"></span>
+  </div>
+
+  <!-- GRID -->
+  <div class="grid" id="batch-grid">
+
+                <a class="card" href="content/index.php?course_id=176" data-name="aarambh 10th batch 26-27" data-tag="class 10th">
+        <div class="card-glow"></div>
+        <div class="card-line"></div>
+
+        <!-- Image -->
+        <div class="card-img">
+          <div class="card-accent-bar"></div>
+                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/4628574_125_aarambh%20banner%20app%202026%202.jpg" alt="AARAMBH 10th BATCH 26-27" loading="lazy">
+                    <div class="card-num">01</div>
         </div>
-    </nav>
 
-    <!-- Core Authorization & Sync Window -->
-    <main class="hero-container">
-        <div class="terminal-card">
-            <span class="status-badge" id="engine-status">System Ready</span>
-            <h1>Next Toppers Dynamic Core</h1>
-            <p>Automated database mapping layer. Click below to initialize authorization headers, process tokens, and fetch live batches immediately.</p>
-            
-            <!-- Direct Core Trigger Link -->
-            <button class="action-btn" id="init-sync-trigger" onclick="initializeRolexPipeline()">
-                Launch Database Control →
-            </button>
+        <!-- Body -->
+        <div class="card-body">
+                      <div class="card-tag">
+              <span class="tag-dot"></span>
+              Class 10th            </div>
+          
+          <div class="card-name">AARAMBH 10th BATCH 26-27</div>
 
-            <!-- Live Status Debug Console -->
-            <div class="network-log" id="log-console"></div>
+          <div class="card-meta">
+            <div class="meta-item">
+              <span class="meta-icon">📂</span>
+              Batch #01            </div>
+            <div class="meta-item">
+              <span class="meta-icon">▶</span>
+              Start Anytime
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <span class="cf-cta">Start Learning</span>
+            <span class="cf-arrow">
+              <span class="a-icon">→</span>
+            </span>
+          </div>
         </div>
-    </main>
+      </a>
+            <a class="card" href="content/index.php?course_id=177" data-name="nirmaan batch class 8th" data-tag="class 8th">
+        <div class="card-glow"></div>
+        <div class="card-line"></div>
 
-    <script>
-        // --- Rolex Base Dynamic Server Config Elements ---
-        const CONFIG = {
-            pingUrl: "https://api.devcoderz.vercel.app/nt-v1/health", // Server up h ya down check krne ke liye
-            redirectTarget: "batches.html"
-        };
+        <!-- Image -->
+        <div class="card-img">
+          <div class="card-accent-bar"></div>
+                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/6956338_125_Nirbhay%20Batch%20Class%208th%20App%20Banners09.jpg" alt="NIRMAAN BATCH Class 8th" loading="lazy">
+                    <div class="card-num">02</div>
+        </div>
 
-        async function initializeRolexPipeline() {
-            const btn = document.getElementById('init-sync-trigger');
-            const status = document.getElementById('engine-status');
-            const consoleBox = document.getElementById('log-console');
+        <!-- Body -->
+        <div class="card-body">
+                      <div class="card-tag">
+              <span class="tag-dot"></span>
+              Class 8th            </div>
+          
+          <div class="card-name">NIRMAAN BATCH Class 8th</div>
 
-            // UI Alteration state
-            btn.disabled = true;
-            btn.innerText = "Syncing Network Nodes...";
-            status.innerText = "Processing";
-            status.style.backgroundColor = "#fff3cd";
-            status.style.color = "#856404";
-            consoleBox.style.display = "block";
-            consoleBox.innerHTML = "> Injecting secure runtime wrappers...<br>";
+          <div class="card-meta">
+            <div class="meta-item">
+              <span class="meta-icon">📂</span>
+              Batch #02            </div>
+            <div class="meta-item">
+              <span class="meta-icon">▶</span>
+              Start Anytime
+            </div>
+          </div>
 
-            try {
-                consoleBox.innerHTML += "> Pinging server backend endpoints...<br>";
-                
-                // Server tracking framework request execution
-                const response = await fetch(CONFIG.pingUrl, { method: 'GET' }).catch(e => {
-                    // Failover logger simulation logic if endpoint is completely offline during production setup
-                    return { ok: true, simulated: true };
-                });
+          <div class="card-footer">
+            <span class="cf-cta">Start Learning</span>
+            <span class="cf-arrow">
+              <span class="a-icon">→</span>
+            </span>
+          </div>
+        </div>
+      </a>
+            <a class="card" href="content/index.php?course_id=107" data-name="science (pcmb) 11th - prarambh 2026-27" data-tag="class 11th pcmb">
+        <div class="card-glow"></div>
+        <div class="card-line"></div>
 
-                if(response.ok) {
-                    consoleBox.innerHTML += "> Handshake verified! Session active.<br>";
-                    consoleBox.innerHTML += "> Forwarding context payloads into data matrix...<br>";
-                    
-                    status.innerText = "Connected";
-                    status.style.backgroundColor = "#d4edda";
-                    status.style.color = "#155724";
+        <!-- Image -->
+        <div class="card-img">
+          <div class="card-accent-bar"></div>
+                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/2159678_125_Science_Prarambh_Batch_Class_11th_App_Banners.jpg" alt="Science (PCMB) 11th - PRARAMBH 2026-27" loading="lazy">
+                    <div class="card-num">03</div>
+        </div>
 
-                    // Dynamic redirect passing execution control to batches.html pipeline
-                    setTimeout(() => {
-                        window.location.href = CONFIG.redirectTarget;
-                    }, 800);
-                } else {
-                    throw new Error("Invalid response node.");
-                }
+        <!-- Body -->
+        <div class="card-body">
+                      <div class="card-tag">
+              <span class="tag-dot"></span>
+              Class 11th PCMB            </div>
+          
+          <div class="card-name">Science (PCMB) 11th - PRARAMBH 2026-27</div>
 
-            } catch (error) {
-                consoleBox.innerHTML += `<span style="color:#721c24;">> Sync Error: Remote API target unreachable.</span><br>`;
-                consoleBox.innerHTML += `> Deploying sandbox fallback environment routing...<br>`;
-                
-                // Even if network blocks, loop automatically moves user to batch execution space
-                setTimeout(() => {
-                    window.location.href = CONFIG.redirectTarget;
-                }, 1500);
-            }
-        }
-    </script>
-</body>
-</html>
+          <div class="card-meta">
+            <div class="meta-item">
+              <span class="meta-icon">📂</span>
+              Batch #03            </div>
+            <div class="meta-item">
+              <span class="meta-icon">▶</span>
+              Start Anytime
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <span class="cf-cta">Start Learning</span>
+            <span class="cf-arrow">
+              <span class="a-icon">→</span>
+            </span>
+          </div>
+        </div>
+      </a>
+            <a class="card" href="content/index.php?course_id=108" data-name="commerce 11th - prarambh 2026-27" data-tag="class 11th commerce">
+        <div class="card-glow"></div>
+        <div class="card-line"></div>
+
+        <!-- Image -->
+        <div class="card-img">
+          <div class="card-accent-bar"></div>
+                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/1338423_125_Commerce_Prarambh_Batch_Class_11th_App_Banners.jpg" alt="Commerce 11th - PRARAMBH 2026-27" loading="lazy">
+                    <div class="card-num">04</div>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body">
+                      <div class="card-tag">
+              <span class="tag-dot"></span>
+              Class 11th Commerce            </div>
+          
+          <div class="card-name">Commerce 11th - PRARAMBH 2026-27</div>
+
+          <div class="card-meta">
+            <div class="meta-item">
+              <span class="meta-icon">📂</span>
+              Batch #04            </div>
+            <div class="meta-item">
+              <span class="meta-icon">▶</span>
+              Start Anytime
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <span class="cf-cta">Start Learning</span>
+            <span class="cf-arrow">
+              <span class="a-icon">→</span>
+            </span>
+          </div>
+        </div>
+      </a>
+            <a class="card" href="content/index.php?course_id=109" data-name="humanities 11th - prarambh 2026-27" data-tag="class 11th humanities">
+        <div class="card-glow"></div>
+        <div class="card-line"></div>
+
+        <!-- Image -->
+        <div class="card-img">
+          <div class="card-accent-bar"></div>
+                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/2936192_125_Humanities_Prarambh_Batch_Class_11th_App_Banners.jpg" alt="Humanities 11th - PRARAMBH 2026-27" loading="lazy">
+                    <div class="card-num">05</div>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body">
+                      <div class="card-tag">
+              <span class="tag-dot"></span>
+              Class 11th Humanities            </div>
+          
+          <div class="card-name">Humanities 11th - PRARAMBH 2026-27</div>
+
+          <div class="card-meta">
+            <div class="meta-item">
+              <span class="meta-icon">📂</span>
+              Batch #05            </div>
+            <div class="meta-item">
+              <span class="meta-icon">▶</span>
+              Start Anytime
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <span class="cf-cta">Start Learning</span>
+            <span class="cf-arrow">
+              <span class="a-icon">→</span>
+            </span>
+          </div>
+        </div>
+      </a>
+            <a class="card" href="content/index.php?course_id=101" data-name="commerce 12th - prarambh 26-27" data-tag="class 12th commerce">
+        <div class="card-glow"></div>
+        <div class="card-line"></div>
+
+        <!-- Image -->
+        <div class="card-img">
+          <div class="card-accent-bar"></div>
+                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/4018906_125_Commerce Prarambh Batch Class 12th App Banners.jpg" alt="COMMERCE 12TH - PRARAMBH 26-27" loading="lazy">
+                    <div class="card-num">06</div>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body">
+                      <div class="card-tag">
+              <span class="tag-dot"></span>
+              Class 12th COMMERCE            </div>
+          
+          <div class="card-name">COMMERCE 12TH - PRARAMBH 26-27</div>
+
+          <div class="card-meta">
+            <div class="meta-item">
+              <span class="meta-icon">📂</span>
+              Batch #06            </div>
+            <div class="meta-item">
+              <span class="meta-icon">▶</span>
+              Start Anytime
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <span class="cf-cta">Start Learning</span>
+            <span class="cf-arrow">
+              <span class="a-icon">→</span>
+            </span>
+          </div>
+        </div>
+      </a>
+            <a class="card" href="content/index.php?course_id=103" data-name="science (pcmb)12th - prarambh 26-27" data-tag="class 12th pcmb">
+        <div class="card-glow"></div>
+        <div class="card-line"></div>
+
+        <!-- Image -->
+        <div class="card-img">
+          <div class="card-accent-bar"></div>
+                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/5881826_125_Science Prarambh Batch Class 12th App Banners (1).jpg" alt="SCIENCE (PCMB)12TH - PRARAMBH 26-27" loading="lazy">
+                    <div class="card-num">07</div>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body">
+                      <div class="card-tag">
+              <span class="tag-dot"></span>
+              Class 12th PCMB            </div>
+          
+          <div class="card-name">SCIENCE (PCMB)12TH - PRARAMBH 26-27</div>
+
+          <div class="card-meta">
+            <div class="meta-item">
+              <span class="meta-icon">📂</span>
+              Batch #07            </div>
+            <div class="meta-item">
+              <span class="meta-icon">▶</span>
+              Start Anytime
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <span class="cf-cta">Start Learning</span>
+            <span class="cf-arrow">
+              <span class="a-icon">→</span>
+            </span>
+          </div>
+        </div>
+      </a>
+            <a class="card" href="content/index.php?course_id=178" data-name="aarambh 9th batch 26-27" data-tag="class 9th">
+        <div class="card-glow"></div>
+        <div class="card-line"></div>
+
+        <!-- Image -->
+        <div class="card-img">
+          <div class="card-accent-bar"></div>
+                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/6571450_125_aarambh 2027 class 9th banner app.png" alt="AARAMBH 9TH BATCH 26-27" loading="lazy">
+                    <div class="card-num">08</div>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body">
+                      <div class="card-tag">
+              <span class="tag-dot"></span>
+              Class 9th            </div>
+          
+          <div class="card-name">AARAMBH 9TH BATCH 26-27</div>
+
+          <div class="card-meta">
+            <div class="meta-item">
+              <span class="meta-icon">📂</span>
+              Batch #08            </div>
+            <div class="meta-item">
+              <span class="meta-icon">▶</span>
+              Start Anytime
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <span class="cf-cta">Start Learning</span>
+            <span class="cf-arrow">
+              <span class="a-icon">→</span>
+            </span>
+          </div>
+        </div>
+      </a>
+            <a class="card" href="content/index.php?course_id=105" data-name="humanities 12th - prarambh 26-27" data-tag="class 12th humanities">
+        <div class="card-glow"></div>
+        <div class="card-line"></div>
+
+        <!-- Image -->
+        <div class="card-img">
+          <div class="card-accent-bar"></div>
+                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/1300928_125_IMG_5290.jpeg" alt="HUMANITIES 12TH - PRARAMBH 26-27" loading="lazy">
+                    <div class="card-num">09</div>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body">
+                      <div class="card-tag">
+              <span class="tag-dot"></span>
+              Class 12th Humanities            </div>
+          
+          <div class="card-name">HUMANITIES 12TH - PRARAMBH 26-27</div>
+
+          <div class="card-meta">
+            <div class="meta-item">
+              <span class="meta-icon">📂</span>
+              Batch #09            </div>
+            <div class="meta-item">
+              <span class="meta-icon">▶</span>
+              Start Anytime
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <span class="cf-cta">Start Learning</span>
+            <span class="cf-arrow">
+              <span class="a-icon">→</span>
+            </span>
+          </div>
+        </div>
+      </a>
+            <a class="card" href="content/index.php?course_id=122" data-name="cuet (science)" data-tag="cuet (science)">
+        <div class="card-glow"></div>
+        <div class="card-line"></div>
+
+        <!-- Image -->
+        <div class="card-img">
+          <div class="card-accent-bar"></div>
+                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/346473_125_Science CUET Batch Class 12th PRO App Banners.jpg" alt="CUET (SCIENCE)" loading="lazy">
+                    <div class="card-num">10</div>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body">
+                      <div class="card-tag">
+              <span class="tag-dot"></span>
+              CUET (SCIENCE)            </div>
+          
+          <div class="card-name">CUET (SCIENCE)</div>
+
+          <div class="card-meta">
+            <div class="meta-item">
+              <span class="meta-icon">📂</span>
+              Batch #10            </div>
+            <div class="meta-item">
+              <span class="meta-icon">▶</span>
+              Start Anytime
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <span class="cf-cta">Start Learning</span>
+            <span class="cf-arrow">
+              <span class="a-icon">→</span>
+            </span>
+          </div>
+        </div>
+      </a>
+            <a class="card" href="content/index.php?course_id=124" data-name="cuet (commerce)" data-tag="cuet commerce">
+        <div class="card-glow"></div>
+        <div class="card-line"></div>
+
+        <!-- Image -->
+        <div class="card-img">
+          <div class="card-accent-bar"></div>
+                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/721208_125_Commerce CUET Batch Class 12th PRO App Banners.jpg" alt="CUET (COMMERCE)" loading="lazy">
+                    <div class="card-num">11</div>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body">
+                      <div class="card-tag">
+              <span class="tag-dot"></span>
+              CUET COMMERCE            </div>
+          
+          <div class="card-name">CUET (COMMERCE)</div>
+
+          <div class="card-meta">
+            <div class="meta-item">
+              <span class="meta-icon">📂</span>
+              Batch #11            </div>
+            <div class="meta-item">
+              <span class="meta-icon">▶</span>
+              Start Anytime
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <span class="cf-cta">Start Learning</span>
+            <span class="cf-arrow">
+              <span class="a-icon">→</span>
+            </span>
+          </div>
+        </div>
+      </a>
+            <a class="card" href="content/index.php?course_id=123" data-name="cuet (humanities)" data-tag="cuet humanities">
+        <div class="card-glow"></div>
+        <div class="card-line"></div>
+
+        <!-- Image -->
+        <div class="card-img">
+          <div class="card-accent-bar"></div>
+                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/6877813_125_Humanities CUET Batch Class 12th PRO App Banners.jpg" alt="CUET (HUMANITIES)" loading="lazy">
+                    <div class="card-num">12</div>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body">
+                      <div class="card-tag">
+              <span class="tag-dot"></span>
+              CUET Humanities            </div>
+          
+          <div class="card-name">CUET (HUMANITIES)</div>
+
+          <div class="card-meta">
+            <div class="meta-item">
+              <span class="meta-icon">📂</span>
+              Batch #12            </div>
+            <div class="meta-item">
+              <span class="meta-icon">▶</span>
+              Start Anytime
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <span class="cf-cta">Start Learning</span>
+            <span class="cf-arrow">
+              <span class="a-icon">→</span>
+            </span>
+          </div>
+        </div>
+      </a>
+            <a class="card" href="content/index.php?course_id=112" data-name="science (pcmb) 11th - prarambh plus 2026-27" data-tag="class 11th pcmb">
+        <div class="card-glow"></div>
+        <div class="card-line"></div>
+
+        <!-- Image -->
+        <div class="card-img">
+          <div class="card-accent-bar"></div>
+                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/1046248_125_Science_Plus_Prarambh_Batch_Class_11th_App_Banners.jpg" alt="SCIENCE (PCMB) 11TH - PRARAMBH PLUS 2026-27" loading="lazy">
+                    <div class="card-num">13</div>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body">
+                      <div class="card-tag">
+              <span class="tag-dot"></span>
+              Class 11th PCMB            </div>
+          
+          <div class="card-name">SCIENCE (PCMB) 11TH - PRARAMBH PLUS 2026-27</div>
+
+          <div class="card-meta">
+            <div class="meta-item">
+              <span class="meta-icon">📂</span>
+              Batch #13            </div>
+            <div class="meta-item">
+              <span class="meta-icon">▶</span>
+              Start Anytime
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <span class="cf-cta">Start Learning</span>
+            <span class="cf-arrow">
+              <span class="a-icon">→</span>
+            </span>
+          </div>
+        </div>
+      </a>
+            <a class="card" href="content/index.php?course_id=110" data-name="commerce 11th - prarambh plus 2026-27" data-tag="class 11th commerce">
+        <div class="card-glow"></div>
+        <div class="card-line"></div>
+
+        <!-- Image -->
+        <div class="card-img">
+          <div class="card-accent-bar"></div>
+                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/486342_125_Commerce_Plus_Prarambh_Batch_Class_11th_App_Banners.jpg" alt="COMMERCE 11TH - PRARAMBH PLUS 2026-27" loading="lazy">
+                    <div class="card-num">14</div>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body">
+                      <div class="card-tag">
+              <span class="tag-dot"></span>
+              Class 11th Commerce            </div>
+          
+          <div class="card-name">COMMERCE 11TH - PRARAMBH PLUS 2026-27</div>
+
+          <div class="card-meta">
+            <div class="meta-item">
+              <span class="meta-icon">📂</span>
+              Batch #14            </div>
+            <div class="meta-item">
+              <span class="meta-icon">▶</span>
+              Start Anytime
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <span class="cf-cta">Start Learning</span>
+            <span class="cf-arrow">
+              <span class="a-icon">→</span>
+            </span>
+          </div>
+        </div>
+      </a>
+            <a class="card" href="content/index.php?course_id=111" data-name="humanities 11th - prarambh plus 2026-27" data-tag="class 11th humanities">
+        <div class="card-glow"></div>
+        <div class="card-line"></div>
+
+        <!-- Image -->
+        <div class="card-img">
+          <div class="card-accent-bar"></div>
+                      <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/3557768_125_Humanities_Plus_Prarambh_Batch_Class_11th_App_Banners.jpg" alt="HUMANITIES 11TH - PRARAMBH PLUS 2026-27" loading="lazy">
+                    <div class="card-num">15</div>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body">
+                      <div class="card-tag">
+              <span class="tag-dot"></span>
+              Class 11th Humanities            </div>
+          
+          <div class="card-name">HUMANITIES 11TH - PRARAMBH PLUS 2026-27</div>
+
+          <div class="card-meta">
+            <div class="meta-item">
+              <span class="meta-icon">📂</span>
+              Batch #15            </div>
+            <div class="meta-item">
+              <span class="meta-icon">▶</span>
+              Start Anytime
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <span class="cf-cta">Start Learning</span>
+            <span class="cf-arrow">
+              <span class="a-icon">→</span>
+            </span>
+          </div>
+        </div>
+      </a>
+      
+      <!-- No-results message (hidden by default, shown by JS) -->
+      <div class="no-results" id="no-results" style="display:none">
+        <div class="no-results-icon">🔍</div>
+        <p class="no-results-text">Koi batch nahi mila — search badlo</p>
+      </div>
+
+      </div>
+
+  <!-- FOOTER -->
+  <div class="page-footer">
+    <div class="pf-dots">
+      <div class="pf-dot"></div>
+      <div class="pf-dot"></div>
+      <div class="pf-dot"></div>
+    </div>
+    <p class="pf-text">RolexCoderZ — Work Hard , Dream Big ✦ Never Give Up</p>
+  </div>
+
+</main>
+
+<script>
+/* ── PARTICLES ── */
+(function(){
+  const c = document.getElementById('particles');
+  const colors = ['#ff6b00','#ff9a3c','#ffd166','#6c63ff'];
+  for(let i=0;i<32;i++){
+    const p=document.createElement('div');
+    p.className='p';
+    const col=colors[Math.floor(Math.random()*colors.length)];
+    const s=(Math.random()*2.5+1.5)+'px';
+    p.style.cssText=`
+      --l:${Math.random()*100}%;
+      --d:${6+Math.random()*14}s;
+      --dl:${Math.random()*14}s;
+      --dx:${(Math.random()-.5)*80}px;
+      --c:${col};
+      --s:${s};
+      --gs:${parseFloat(s)*2.5}px;
+    `;
+    c.appendChild(p);
+  }
+})();
+
+/* ── 3D CARD TILT ── */
+document.querySelectorAll('.card').forEach(card=>{
+  card.addEventListener('mousemove',e=>{
+    const r=card.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width-.5;
+    const y=(e.clientY-r.top)/r.height-.5;
+    card.style.transform=`translateY(-12px) scale(1.01) rotateY(${x*5}deg) rotateX(${-y*4}deg)`;
+  });
+  card.addEventListener('mouseleave',()=>{card.style.transform=''});
+});
+
+/* ── SEARCH ── */
+const searchInput = document.getElementById('search-input');
+const cards       = document.querySelectorAll('.card');
+const noResults   = document.getElementById('no-results');
+const visCount    = document.getElementById('visible-count');
+const filterBtns  = document.querySelectorAll('.fp');
+let   activeFilter= 'all';
+
+function filterCards(){
+  const q=searchInput ? searchInput.value.trim().toLowerCase() : '';
+  let vis=0;
+  cards.forEach(card=>{
+    const name=card.dataset.name||'';
+    const tag =card.dataset.tag||'';
+    const matchSearch = !q || name.includes(q) || tag.includes(q);
+    const matchFilter = activeFilter==='all' || tag===activeFilter.toLowerCase();
+    if(matchSearch && matchFilter){
+      card.classList.remove('hidden');
+      vis++;
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+  if(visCount) visCount.textContent=vis;
+  if(noResults) noResults.style.display = vis===0 ? 'flex' : 'none';
+}
+
+if(searchInput) searchInput.addEventListener('input',filterCards);
+
+filterBtns.forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    filterBtns.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter=btn.dataset.filter;
+    filterCards();
+  });
+});
+</script>
+<script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;4d42689b8b57448eadca12d9037c095e&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
+
+
+</body></html>
