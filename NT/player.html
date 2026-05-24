@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Next Toppers - Premium Player</title>
+    <!-- Include HLS.js Core Library Engine -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        body { margin: 0; background-color: #000; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif; color: #fff; }
+        .player-wrapper { width: 90%; max-width: 900px; aspect-ratio: 16/9; background-color: #111; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; }
+        video { width: 100%; height: 100%; object-fit: contain; }
+        .error-msg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #ff4d4d; font-weight: 600; text-align: center; display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="player-wrapper">
+        <video id="video-stream-core" controls autoplay crossorigin></video>
+        <div id="error-box" class="error-msg">Failed to load dynamic network m3u8 stream.</div>
+    </div>
+
+    <script>
+        // URL Parameter query string parse logic 
+        const urlParams = new URLSearchParams(window.location.search);
+        const m3u8StreamUrl = urlParams.get('video');
+
+        window.onload = function() {
+            if (m3u8StreamUrl) {
+                initPremiumPlayer(decodeURIComponent(m3u8StreamUrl));
+            } else {
+                document.getElementById('error-box').style.display = 'block';
+                document.getElementById('error-box').innerText = "No playback stream target specified.";
+            }
+        };
+
+        // --- STAGE 4: Player execution and handling ---
+        function initPremiumPlayer(sourceUrl) {
+            const video = document.getElementById('video-stream-core');
+
+            if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(sourceUrl);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    video.play();
+                });
+                hls.on(Hls.Events.ERROR, function(event, data) {
+                    if (data.fatal) {
+                        document.getElementById('error-box').style.display = 'block';
+                    }
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                // Native integration fallback for Apple ecosystems (Safari / iOS)
+                video.src = sourceUrl;
+                video.addEventListener('loadedmetadata', function() {
+                    video.play();
+                });
+            } else {
+                document.getElementById('error-box').style.display = 'block';
+                document.getElementById('error-box').innerText = "Your system context doesn't support HLS streaming protocol.";
+            }
+        }
+    </script>
+</body>
+</html>
