@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Next Toppers - Lectures</title>
+    <style>
+        :root {
+            --bg-main: #f4f7fc;
+            --bg-white: #ffffff;
+            --primary: #0056b3;
+            --primary-dark: #003d80;
+            --primary-light: #e6f0fa;
+            --text-main: #212529;
+            --text-muted: #6c757d;
+            --border-color: #e2e8f0;
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-main); }
+        .navbar { background-color: var(--bg-white); border-bottom: 1px solid var(--border-color); }
+        .nav-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; height: 70px; display: flex; align-items: center; }
+        .logo { font-size: 22px; font-weight: 700; color: var(--primary); text-decoration: none; }
+        .logo span { color: var(--text-main); }
+        
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        .lecture-list { display: flex; flex-direction: column; gap: 16px; margin-top: 30px; }
+        
+        .lecture-item { background: var(--bg-white); border: 1px solid var(--border-color); border-radius: var(--radius); padding: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); }
+        .lecture-info h4 { font-size: 18px; margin-bottom: 4px; }
+        .lecture-index { font-size: 12px; font-weight: 700; color: var(--primary); display: block; }
+        
+        .btn { display: inline-block; padding: 10px 20px; font-size: 14px; font-weight: 600; border-radius: 6px; text-decoration: none; background-color: var(--primary-light); color: var(--primary); transition: 0.2s; }
+        .btn:hover { background-color: var(--primary); color: white; }
+        .loader-box { text-align: center; padding: 50px; font-size: 18px; color: var(--primary); font-weight: 600; }
+        .back-link { color: var(--primary); text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="batches.html" class="logo">Next<span>Toppers</span></a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div id="back-nav-container"></div>
+        <div class="lecture-list" id="lectures-box">
+            <div class="loader-box">Syncing API streams panel...</div>
+        </div>
+    </main>
+
+    <script>
+        const API_URL = "https://api.devcoderz.vercel.app/nt-v1";
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const batchId = urlParams.get('batchId');
+        const subject = urlParams.get('subject');
+
+        window.onload = function() {
+            if (batchId && subject) {
+                // Back button direct specific batch ke subjects panel par return karega
+                document.getElementById('back-nav-container').innerHTML = `<a href="batches.html?batchId=${batchId}" class="back-link">← Back to Subjects</a>`;
+                fetchLectures();
+            } else {
+                window.location.href = "batches.html";
+            }
+        };
+
+        // --- STAGE 3: Lectures Fetch Krna (M3u8 link internal data se aayegi) ---
+        async function fetchLectures() {
+            const container = document.getElementById('lectures-box');
+            
+            try {
+                // API se request hit karna parameter base pr
+                const response = await fetch(`${API_URL}/lectures?batchId=${batchId}&subject=${subject}`);
+                const lectures = await response.json(); // Expected: [{ title: "Lec 01", streamUrl: "..." }]
+
+                if(lectures.length === 0) {
+                    container.innerHTML = `<p style="text-align:center; color:var(--text-muted);">No live or recorded streams active in this panel.</p>`;
+                    return;
+                }
+
+                let html = '';
+                lectures.forEach((lec, idx) => {
+                    html += `
+                        <div class="lecture-item">
+                            <div class="lecture-info">
+                                <span class="lecture-index">Video Module #${idx+1}</span>
+                                <h4>${lec.title}</h4>
+                            </div>
+                            <!-- API se mili m3u8 link direct encoder pass karke player.html ko send hogi -->
+                            <a href="player.html?video=${encodeURIComponent(lec.streamUrl)}" class="btn">Play Stream</a>
+                        </div>`;
+                });
+                container.innerHTML = html;
+
+            } catch (error) {
+                container.innerHTML = `<div class="loader-box" style="color:red;">Failed to retrieve active stream nodes.</div>`;
+            }
+        }
+    </script>
+</body>
+</html>
