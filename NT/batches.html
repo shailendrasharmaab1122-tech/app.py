@@ -27,13 +27,12 @@
   <header class="glass sticky top-0 z-40 border-b border-gray-800/60 backdrop-blur-md">
     <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
       <div class="flex items-center space-x-3">
-        <a href="/" class="flex items-center space-x-2">
+        <a href="https://devcoderz.vercel.app/NT/" class="flex items-center space-x-2">
           <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
             <i class="fas fa-code text-white text-base"></i>
           </div>
           <span class="text-lg font-bold tracking-tight text-white">The <span class="gradient-text">DevCoderZ</span></span>
         </a>
-        <span id="navChip" class="text-[11px] font-medium px-2 py-0.5 rounded-md bg-gray-800/80 text-gray-400 border border-gray-700/50">#Loading</span>
       </div>
       <div class="flex items-center space-x-4">
         <div class="text-right hidden sm:block">
@@ -49,7 +48,7 @@
 
   <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6">
     <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
-      <a id="backBtn" href="#" class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-gray-900 hover:bg-gray-800 border border-gray-800 text-xs font-medium text-gray-400 hover:text-white transition-all">
+      <a id="backBtn" href="https://devcoderz.vercel.app/NT/" class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-gray-900 hover:bg-gray-800 border border-gray-800 text-xs font-medium text-gray-400 hover:text-white transition-all">
         <i class="fas fa-arrow-left text-[10px]"></i>
         <span id="backLabel">Dashboard</span>
       </a>
@@ -194,8 +193,6 @@
 
     async function bootPage() {
       pStart();
-      const navChip = document.getElementById('navChip');
-      if (navChip) navChip.textContent = '#' + COURSE_ID;
 
       const backBtn = document.getElementById('backBtn');
       if (backBtn) {
@@ -204,7 +201,7 @@
           const bl = document.getElementById('backLabel');
           if (bl) bl.textContent = PAGE_FOLDER_TITLE ? (PAGE_FOLDER_TITLE.length > 18 ? PAGE_FOLDER_TITLE.substring(0, 15) + '...' : PAGE_FOLDER_TITLE) : 'Back';
         } else {
-          backBtn.href = '/';
+          backBtn.href = 'https://devcoderz.vercel.app/NT/';
           const bl = document.getElementById('backLabel');
           if (bl) bl.textContent = 'Dashboard';
         }
@@ -339,7 +336,6 @@
             </div>
             <div class="min-w-0">
               <h4 class="text-xs font-bold text-gray-200 group-hover:text-white line-clamp-1 transition-all">${f.title || 'Sub Folder'}</h4>
-              <p class="text-[10px] text-gray-500 mt-0.5">${d.videos_count || 0} Videos &bull; ${d.attachments_count || 0} Files</p>
             </div>
           </div>
           <i class="fas fa-chevron-right text-[10px] text-gray-600 group-hover:text-gray-400 transition-all transform group-hover:translate-x-0.5 pr-1"></i>
@@ -387,6 +383,7 @@
       });
     }
 
+    // Binary Obfuscation Array Context Helper
     function boa(str) {
       try { return btoa(unescape(encodeURIComponent(str))); } catch(e) { return ''; }
     }
@@ -394,7 +391,7 @@
     function playStream(enc) {
       try {
         const dec = decodeURIComponent(escape(atob(enc)));
-        if(dec) alert('Initializing Streaming Core Router Context Link Pipeline:\\n' + dec);
+        if(dec) alert('Initializing Streaming Core Router Context Link Pipeline:\n' + dec);
       } catch(e) {}
     }
 
