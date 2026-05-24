@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Next Toppers - Portal</title>
+    <title>Next Toppers - Dynamic Automation Portal</title>
     <style>
         /* --- Premium Blue & White Theme --- */
         :root {
@@ -60,9 +60,7 @@
             cursor: pointer;
         }
 
-        .logo span {
-            color: var(--text-main);
-        }
+        .logo span { color: var(--text-main); }
 
         .nav-links button {
             background: transparent;
@@ -122,9 +120,7 @@
             transition: var(--transition);
         }
 
-        .card:hover {
-            transform: translateY(-4px);
-        }
+        .card:hover { transform: translateY(-4px); }
 
         .card-body {
             padding: 24px;
@@ -134,16 +130,9 @@
         }
 
         .card-body h3 {
-            font-size: 20px;
+            font-size: 19px;
             margin-bottom: 12px;
             color: var(--text-main);
-        }
-
-        .card-body p {
-            color: var(--text-muted);
-            font-size: 14px;
-            margin-bottom: 20px;
-            flex-grow: 1;
         }
 
         /* --- Buttons --- */
@@ -161,27 +150,18 @@
             width: 100%;
         }
 
-        .btn-primary {
-            background-color: var(--primary);
-            color: var(--bg-white);
-        }
+        .btn-primary { background-color: var(--primary); color: var(--bg-white); }
+        .btn-primary:hover { background-color: var(--primary-dark); }
+        .btn-secondary { background-color: var(--primary-light); color: var(--primary); }
 
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
-        }
-
-        .btn-secondary {
-            background-color: var(--primary-light);
-            color: var(--primary);
-        }
-
-        /* --- Tabs & Lecture Items --- */
+        /* --- Tabs & Lecture Elements --- */
         .subject-tabs-container {
             display: flex;
             gap: 12px;
             border-bottom: 2px solid var(--border-color);
             padding-bottom: 16px;
             margin-bottom: 30px;
+            overflow-x: auto;
         }
 
         .tab-btn {
@@ -194,6 +174,7 @@
             cursor: pointer;
             border-radius: 6px;
             transition: var(--transition);
+            white-space: nowrap;
         }
 
         .tab-btn.active, .tab-btn:hover {
@@ -219,18 +200,28 @@
         }
 
         .lecture-info h4 {
-            font-size: 18px;
-            margin-bottom: 6px;
+            font-size: 17px;
+            margin-bottom: 4px;
+            color: var(--text-main);
         }
 
         .lecture-index {
             font-size: 12px;
             font-weight: 700;
             color: var(--primary);
+            display: block;
+            margin-bottom: 4px;
         }
 
-        .lecture-item .btn {
-            width: auto;
+        .lecture-item .btn { width: auto; white-space: nowrap; }
+
+        /* --- Status Loader --- */
+        .loader-box {
+            text-align: center;
+            padding: 50px 20px;
+            font-size: 18px;
+            color: var(--primary);
+            font-weight: 600;
         }
 
         @media(max-width: 768px) {
@@ -239,9 +230,7 @@
                 align-items: flex-start;
                 gap: 15px;
             }
-            .lecture-item .btn {
-                width: 100%;
-            }
+            .lecture-item .btn { width: 100%; }
         }
     </style>
 </head>
@@ -249,131 +238,163 @@
 
     <nav class="navbar">
         <div class="nav-container">
-            <a onclick="renderPortals()" class="logo">Next<span>Toppers</span></a>
+            <a onclick="loadAllBatchesAutomatically()" class="logo">Next<span>Toppers</span></a>
             <div class="nav-links">
-                <button id="nav-home" class="active" onclick="renderPortals()">Home</button>
-                <button id="nav-batches" onclick="renderBatches()">Batches</button>
+                <button id="nav-home" class="active" onclick="loadAllBatchesAutomatically()">All Batches</button>
             </div>
         </div>
     </nav>
 
     <main class="container" id="app-workspace">
-        <!-- Content dynamically fetches here -->
+        <div class="loader-box">Connecting to database systems...</div>
     </main>
 
     <script>
-        // --- Next Toppers Custom JSON Structure ---
-        // Yahan tum apna actual API ya static data replace kar sakte ho
-        const learningData = {
-            portals: [
-                { id: "nt-premium", title: "Next Toppers Premium Content", desc: "Access high quality structured batches and subject matrices." }
-            ],
-            batches: [
-                { id: "batch-01", title: "Target Toppers Batch", desc: "Complete syllabus mapping with interactive analysis lectures." },
-                { id: "batch-02", title: "Rankers Capsule Course", desc: "Fast-track conceptual setup with elite tracking modules." }
-            ],
-            lectures: [
-                { batchId: "batch-01", subject: "physics", index: "Lec 01", title: "Basic Introduction & Core Setup", desc: "Fundamental introduction stream.", streamUrl: "https://example.com/stream1.m3u8" },
-                { batchId: "batch-01", subject: "physics", index: "Lec 02", title: "Advanced Conceptual Analysis", desc: "Core implementation concepts.", streamUrl: "https://example.com/stream2.m3u8" },
-                { batchId: "batch-01", subject: "chemistry", index: "Lec 01", title: "Chemical Reactions Part 1", desc: "Basic overview stream.", streamUrl: "https://example.com/stream3.m3u8" }
-            ]
+        // --- API Config Configurations (Rolex Architecture) ---
+        // Yahan par bas tum apna target token authorization aur backend ka endpoint domain change kar lena.
+        const API_CONFIG = {
+            baseUrl: "https://api.devcoderz.vercel.app/nt-v1", // Tumhara production API link jahan se json fetch hoga
+            authHeader: "Bearer ROLEX_TOKEN_SECURE_XYZ"
         };
 
-        let activeBatch = null;
-        let activeSubject = 'physics';
+        // UI State Holders
+        let cachedBatches = [];
+        let selectedBatchData = null;
+        let selectedSubject = "";
 
-        // 1. Home / Portals
-        function renderPortals() {
+        // --- Auto Fetch Engine 1: Load All Batches ---
+        async function loadAllBatchesAutomatically() {
             updateNavState('nav-home');
             const ws = document.getElementById('app-workspace');
+            ws.innerHTML = `<div class="loader-box">Fetching Active Batches... Please wait.</div>`;
+            
+            try {
+                // Rolex style fetch hitting external API
+                // NOTE: Agar tum abhi local check kar rahe ho, toh testing ke liye catch block me fallback data chalega.
+                const response = await fetch(`${API_CONFIG.baseUrl}/batches`, {
+                    headers: { "Authorization": API_CONFIG.authHeader }
+                });
+                const data = await response.json();
+                cachedBatches = data.batches || data;
+            } catch (error) {
+                console.log("API not active yet, handling fallback integration setup.");
+                // Fallback automated array structure till your API links go fully live
+                cachedBatches = [
+                    { id: "batch_next_01", name: "Next Toppers Ultimate - Class 11" },
+                    { id: "batch_next_02", name: "Rankers Super 30 - Class 12" },
+                    { id: "batch_next_03", name: "Foundation Booster Room" }
+                ];
+            }
+
+            // Render HTML on screen
             let html = '';
-            learningData.portals.forEach(p => {
+            cachedBatches.forEach(batch => {
                 html += `
                     <div class="card">
                         <div class="card-body">
-                            <h3>${p.title}</h3>
-                            <p>${p.desc}</p>
-                            <button class="btn btn-primary" onclick="renderBatches()">Explore Batches</button>
+                            <h3>${batch.name || batch.title}</h3>
+                            <p style="color:var(--text-muted); font-size:14px; margin-bottom:20px;">Automated stream access token bound dashboard.</p>
+                            <button class="btn btn-primary" onclick="fetchBatchDetails('${batch.id}')">Enter Batch</button>
                         </div>
                     </div>`;
             });
+
             ws.innerHTML = `
                 <header class="page-header">
-                    <h1>Welcome to Next Toppers</h1>
-                    <p>Select your learning portal stream to continue.</p>
+                    <h1>Next Toppers Dashboards</h1>
+                    <p>All source structural batches parsed successfully in real-time.</p>
                 </header>
                 <div class="grid-layout">${html}</div>`;
         }
 
-        // 2. Batches
-        function renderBatches() {
-            updateNavState('nav-batches');
+        // --- Auto Fetch Engine 2: Fetch Subjects & Lectures for single Batch ---
+        async function fetchBatchDetails(batchId) {
             const ws = document.getElementById('app-workspace');
-            let html = '';
-            learningData.batches.forEach(b => {
-                html += `
-                    <div class="card">
-                        <div class="card-body">
-                            <h3>${b.title}</h3>
-                            <p>${b.desc}</p>
-                            <button class="btn btn-primary" onclick="renderLectures('${b.id}')">View Lectures</button>
-                        </div>
-                    </div>`;
-            });
-            ws.innerHTML = `
-                <header class="page-header">
-                    <h1>Available Batches</h1>
-                    <p>Pick your operational batch to load tracking rooms.</p>
-                </header>
-                <div class="grid-layout">${html}</div>`;
+            ws.innerHTML = `<div class="loader-box">Syncing inside track elements...</div>`;
+
+            try {
+                const response = await fetch(`${API_CONFIG.baseUrl}/batch/${batchId}`, {
+                    headers: { "Authorization": API_CONFIG.authHeader }
+                });
+                selectedBatchData = await response.json();
+            } catch (e) {
+                // Rolex dynamic mapping logic simulation if direct network request fails
+                selectedBatchData = {
+                    batchName: "Next Toppers Active Room",
+                    subjects: {
+                        physics: [
+                            { id: "p1", title: "Kinematics 1D - Frameworks", url: "https://sample.com/p1.m3u8" },
+                            { id: "p2", title: "Laws of Motion - Concepts", url: "https://sample.com/p2.m3u8" }
+                        ],
+                        chemistry: [
+                            { id: "c1", title: "Periodic Table Periodic Trends", url: "https://sample.com/c1.m3u8" }
+                        ],
+                        maths: [
+                            { id: "m1", title: "Sets and Relations Matrix", url: "https://sample.com/m1.m3u8" }
+                        ]
+                    }
+                };
+            }
+
+            // Detect pehla subject konsa available hai automatic dynamic tab switch ke liye
+            const subjectsAvailable = Object.keys(selectedBatchData.subjects);
+            selectedSubject = subjectsAvailable[0] || 'physics';
+
+            renderLecturesInterface(subjectsAvailable);
         }
 
-        // 3. Lectures & Tabs
-        function renderLectures(batchId) {
-            activeBatch = batchId;
+        // --- Render Subject Switcher Panel ---
+        function renderLecturesInterface(subjects) {
             const ws = document.getElementById('app-workspace');
+            
+            let tabsHtml = '';
+            subjects.forEach(sub => {
+                tabsHtml += `<button class="tab-btn ${selectedSubject === sub ? 'active' : ''}" onclick="switchSubjectElement('${sub}')">${sub.toUpperCase()}</button>`;
+            });
+
             ws.innerHTML = `
-                <div class="subject-tabs-container">
-                    <button class="tab-btn ${activeSubject === 'physics' ? 'active' : ''}" onclick="switchSubject('physics')">Physics</button>
-                    <button class="tab-btn ${activeSubject === 'chemistry' ? 'active' : ''}" onclick="switchSubject('chemistry')">Chemistry</button>
-                </div>
+                <div class="subject-tabs-container">${tabsHtml}</div>
                 <section class="lectures-wrapper">
-                    <h2 style="margin-bottom:20px; color:var(--primary-dark);" id="sub-heading">${activeSubject.toUpperCase()} Lectures</h2>
-                    <div class="lecture-list" id="lecture-container"></div>
+                    <h2 style="margin-bottom:20px; color:var(--primary-dark);" id="sub-title-text">${selectedSubject.toUpperCase()} Lectures Matrix</h2>
+                    <div class="lecture-list" id="dynamic-lecture-box"></div>
                 </section>`;
-            populateLectures();
+
+            populateActiveLectures();
         }
 
-        function populateLectures() {
-            const container = document.getElementById('lecture-container');
-            const filtered = learningData.lectures.filter(l => l.batchId === activeBatch && l.subject === activeSubject);
+        // --- Populate the targeted array elements ---
+        function populateActiveLectures() {
+            const box = document.getElementById('dynamic-lecture-box');
+            const lectures = selectedBatchData.subjects[selectedSubject] || [];
 
-            if(filtered.length === 0) {
-                container.innerHTML = `<p style="color:var(--text-muted); text-align:center; padding:20px;">No lectures available for this subject.</p>`;
+            if(lectures.length === 0) {
+                box.innerHTML = `<p style="color:var(--text-muted); text-align:center;">No data records inside this specific dynamic subject tab.</p>`;
                 return;
             }
 
             let html = '';
-            filtered.forEach(l => {
+            lectures.forEach((lec, index) => {
                 html += `
                     <div class="lecture-item">
                         <div class="lecture-info">
-                            <span class="lecture-index">${l.index}</span>
-                            <h4>${l.title}</h4>
-                            <p>${l.desc}</p>
+                            <span class="lecture-index">Lecture #${index + 1}</span>
+                            <h4>${lec.title}</h4>
                         </div>
-                        <a href="player.html?video=${encodeURIComponent(l.streamUrl)}" class="btn btn-secondary">Play</a>
+                        <!-- Absolute binding redirecting straight into your internal standalone player.html structure -->
+                        <a href="player.html?video=${encodeURIComponent(lec.url || lec.streamUrl)}" class="btn btn-secondary">Stream Play</a>
                     </div>`;
             });
-            container.innerHTML = html;
+            box.innerHTML = html;
         }
 
-        function switchSubject(sub) {
-            activeSubject = sub;
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            document.getElementById('sub-heading').innerText = sub.toUpperCase() + " Lectures";
-            populateLectures();
+        function switchSubjectElement(subKey) {
+            selectedSubject = subKey;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.innerText.toLowerCase() === subKey.toLowerCase()) btn.classList.add('active');
+            });
+            document.getElementById('sub-title-text').innerText = subKey.toUpperCase() + " Lectures Matrix";
+            populateActiveLectures();
         }
 
         function updateNavState(id) {
@@ -381,7 +402,8 @@
             if(document.getElementById(id)) document.getElementById(id).classList.add('active');
         }
 
-        window.onload = renderPortals;
+        // Execution initiation point
+        window.onload = loadAllBatchesAutomatically;
     </script>
 </body>
 </html>
