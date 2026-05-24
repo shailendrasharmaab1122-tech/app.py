@@ -7,7 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700&display=swap');
     body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0b0f19; color: #f3f4f6; }
     .glass { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
     .gradient-text { background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #1d4ed8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -127,7 +127,7 @@
       </div>
     </div>
 
-    <!-- PANEL: MAIN CONTENT (SUBJECTS GRID) -->
+    <!-- PANEL: MAIN CONTENT (SUBJECTS OR SUB-FOLDERS) -->
     <div id="panel-content" class="tab-panel hidden">
       <div id="contentGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
       <div id="emptyContent" class="hidden text-center py-12 glass rounded-xl border border-gray-800/80">
@@ -138,10 +138,10 @@
       </div>
     </div>
 
-    <!-- PANEL: LECTURES VIEW (IN-FOLDER DETAILED COMPONENT) -->
+    <!-- PANEL: LECTURES VIEW (FLES/VIDEOS DETAILED COMPONENT) -->
     <div id="panel-lectures" class="tab-panel hidden space-y-8">
       <!-- Lectures Block -->
-      <div>
+      <div id="lectureSection">
         <h3 class="text-xs font-bold uppercase tracking-widest text-blue-400 mb-4 flex items-center space-x-2">
           <i class="fas fa-play-circle text-sm"></i><span>Video Lectures</span>
         </h3>
@@ -149,7 +149,7 @@
       </div>
 
       <!-- Notes Block -->
-      <div>
+      <div id="notesSection">
         <h3 class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-4 flex items-center space-x-2">
           <i class="fas fa-file-alt text-sm"></i><span>Revision Notes</span>
         </h3>
@@ -157,7 +157,7 @@
       </div>
 
       <!-- DPPs Block -->
-      <div>
+      <div id="dppSection">
         <h3 class="text-xs font-bold uppercase tracking-widest text-amber-500 mb-4 flex items-center space-x-2">
           <i class="fas fa-book-open text-sm"></i><span>Daily Practice Papers (DPP)</span>
         </h3>
@@ -196,11 +196,12 @@
 
   <script>
     const _qs = new URLSearchParams(window.location.search);
-    const COURSE_ID = _qs.get('course_id') || '177';
+    const COURSE_ID = _qs.get('course_id') || '176';
     const PAGE_FOLDER_ID = _qs.get('folder_id') || '';
     const PAGE_FOLDER_TITLE = _qs.get('folder_title') || '';
     
-    const INIT_TAB = PAGE_FOLDER_ID ? 'lectures' : (_qs.get('tab') || 'overview');
+    // Default system loader configuration 
+    let INIT_TAB = _qs.get('tab') || 'overview';
     const API = 'https://ntxapi.wasmer.app/';
 
     function pStart() {
@@ -238,19 +239,16 @@
       const backBtn = document.getElementById('backBtn');
       if (backBtn) {
         if (PAGE_FOLDER_ID) {
-          // Subject folder ke andar hone par back krne se batches.html par dynamic core parameter bypass hoga
+          // Jab hum kisi folder me honge, toh back button dashboard par na bhej kar pichle tab par layega
           backBtn.href = `batches.html?course_id=${encodeURIComponent(COURSE_ID)}&tab=content`;
           const bl = document.getElementById('backLabel');
           if (bl) bl.textContent = PAGE_FOLDER_TITLE ? (PAGE_FOLDER_TITLE.length > 18 ? PAGE_FOLDER_TITLE.substring(0, 15) + '...' : PAGE_FOLDER_TITLE) : 'Back';
         } else {
-          // Dashboard route standard domain landing selector interface
           backBtn.href = 'https://devcoderz.vercel.app/NT/';
           const bl = document.getElementById('backLabel');
           if (bl) bl.textContent = 'Dashboard';
         }
       }
-
-      switchTab(INIT_TAB);
 
       const dUrl = `${API}?course_id=${encodeURIComponent(COURSE_ID)}&action=details&rc=nt`;
       const cUrl = `${API}?course_id=${encodeURIComponent(COURSE_ID)}&action=content&rc=nt${PAGE_FOLDER_ID ? '&folder_id=' + encodeURIComponent(PAGE_FOLDER_ID) : ''}`;
@@ -284,13 +282,13 @@
 
         if (detailObj) {
           if (hTitle) hTitle.textContent = detailObj.title || 'Course Details';
-          if (hDesc) hDesc.textContent = detailObj.short_description || 'Welcome to this structured learning curriculum dynamic system module.';
-          if (iTarget) iTarget.innerHTML = detailObj.description || '<p>Detailed orientation overview structure text timeline structural component.</p>';
+          if (hDesc) hDesc.textContent = detailObj.short_description || 'Welcome to this structured learning curriculum.';
+          if (iTarget) iTarget.innerHTML = detailObj.description || '<p>Detailed orientation overview structure.</p>';
           if (hSec) hSec.classList.remove('hidden');
         } else {
           if (hTitle) hTitle.textContent = 'Batch Access';
-          if (hDesc) hDesc.textContent = 'Resource engine configuration node dynamic validation successfully connected.';
-          if (iTarget) iTarget.textContent = 'Dynamic contextual system architecture mapped via remote configuration API layer.';
+          if (hDesc) hDesc.textContent = 'Resource engine configuration node active.';
+          if (iTarget) iTarget.textContent = 'Dynamic contextual system architecture mapped via API layer.';
           if (hSec) hSec.classList.remove('hidden');
         }
 
@@ -311,12 +309,17 @@
 
         renderLive(live);
 
-        if (PAGE_FOLDER_ID) {
-          const tabs = document.getElementById('tabContainer');
-          if(tabs) tabs.classList.add('hidden');
-          renderLecturesPage(videos, attachments, tests);
+        // ROLEX IMPLEMENTATION TRICK: 
+        // Agar response me folders hain, toh pehle folders (sub-folders) dikhao index UI ki tarah.
+        if (folders.length > 0) {
+          switchTab('content'); // Sub folders ko content panel me hi render karo
+          renderContent(folders);
         } else {
-          renderContent(folders, videos, tests);
+          // Agar folders bilkul nahi hain sirf videos/files hain, tab direct Lectures page open karo
+          const tabs = document.getElementById('tabContainer');
+          if(tabs && PAGE_FOLDER_ID) tabs.classList.add('hidden');
+          switchTab('lectures'); 
+          renderLecturesPage(videos, attachments, tests);
         }
 
       } catch (e) {
@@ -362,12 +365,14 @@
       });
     }
 
-    function renderContent(folders, videos, tests) {
+    // Dynamic extraction fixes for object layouts (handles response structure variant)
+    function renderContent(folders) {
       const g = document.getElementById('contentGrid');
       const emp = document.getElementById('emptyContent');
       if (!g) return;
       g.innerHTML = '';
-      if (folders.length === 0 && videos.length === 0 && tests.length === 0) {
+      
+      if (folders.length === 0) {
         if (emp) emp.classList.remove('hidden');
         return;
       }
@@ -375,11 +380,14 @@
 
       folders.forEach(f => {
         const d = f.data || {};
+        
+        // Sahi entity_id ya id uthane ka full proof pattern (7100 ke andar wale id ko check krega)
+        const targetId = d.id || f.entity_id || f.id || d.folder_id || '';
+        
         const card = document.createElement('div');
         card.className = 'glass rounded-xl p-4 border border-gray-800/80 hover:border-gray-700 hover:bg-gray-900/40 transition-all cursor-pointer flex items-center justify-between group';
         card.onclick = () => {
-          // Folder click krne par window target page configuration trigger logic
-          window.location.href = `batches.html?course_id=${encodeURIComponent(COURSE_ID)}&folder_id=${encodeURIComponent(d.folder_id || '')}&folder_title=${encodeURIComponent(f.title || '')}`;
+          window.location.href = `batches.html?course_id=${encodeURIComponent(COURSE_ID)}&folder_id=${encodeURIComponent(targetId)}&folder_title=${encodeURIComponent(f.title || '')}&tab=content`;
         };
         card.innerHTML = `
           <div class="flex items-center space-x-3 min-w-0">
@@ -407,8 +415,9 @@
 
       // VIDEO LECTURES
       if(videos.length === 0) {
-        lGrid.innerHTML = `<p class="text-xs text-gray-600 py-2 col-span-full">No lectures uploaded in this folder.</p>`;
+        document.getElementById('lectureSection').classList.add('hidden');
       } else {
+        document.getElementById('lectureSection').classList.remove('hidden');
         videos.forEach(v => {
           const d = v.data || {};
           const card = document.createElement('div');
@@ -431,7 +440,7 @@
         });
       }
 
-      // ATTACHMENTS (NOTES & DPPS SORTING SCHEDULER LAYER)
+      // ATTACHMENTS HANDLING (NOTES & DPPS)
       let notesCount = 0, dppCount = 0;
       attachments.forEach(att => {
         const d = att.data || {};
@@ -453,7 +462,7 @@
                 <h4 class="text-xs font-bold text-gray-200 group-hover:text-white line-clamp-2 transition-all">${att.title || 'Daily Practice Problem'}</h4>
               </div>
             </div>
-            <a href="${d.attachment_url || '#'}" target="_blank" class="w-8 h-8 rounded-lg bg-gray-900 border border-gray-800 flex items-center justify-center text-gray-400 hover:text-amber-400 hover:border-amber-500/20 transition-all">
+            <a href="${d.attachment_url || d.file_url || '#'}" target="_blank" class="w-8 h-8 rounded-lg bg-gray-900 border border-gray-800 flex items-center justify-center text-gray-400 hover:text-amber-400 hover:border-amber-500/20 transition-all">
               <i class="fas fa-download text-[10px]"></i>
             </a>
           `;
@@ -470,7 +479,7 @@
                 <h4 class="text-xs font-bold text-gray-200 group-hover:text-white line-clamp-2 transition-all">${att.title || 'Class Note PDF'}</h4>
               </div>
             </div>
-            <a href="${d.attachment_url || '#'}" target="_blank" class="w-8 h-8 rounded-lg bg-gray-900 border border-gray-800 flex items-center justify-center text-gray-400 hover:text-emerald-400 hover:border-emerald-500/20 transition-all">
+            <a href="${d.attachment_url || d.file_url || '#'}" target="_blank" class="w-8 h-8 rounded-lg bg-gray-900 border border-gray-800 flex items-center justify-center text-gray-400 hover:text-emerald-400 hover:border-emerald-500/20 transition-all">
               <i class="fas fa-external-link-alt text-[10px]"></i>
             </a>
           `;
@@ -478,8 +487,18 @@
         }
       });
 
-      if(notesCount === 0) nGrid.innerHTML = `<p class="text-xs text-gray-600 py-2 col-span-full">No revision notes attached here.</p>`;
-      if(dppCount === 0) dGrid.innerHTML = `<p class="text-xs text-gray-600 py-2 col-span-full">No DPP sheets available in this schedule.</p>`;
+      // Show/Hide section divs based on availability
+      if(notesCount === 0) document.getElementById('notesSection').classList.add('hidden');
+      else document.getElementById('notesSection').classList.remove('hidden');
+      
+      if(dppCount === 0) document.getElementById('dppSection').classList.add('hidden');
+      else document.getElementById('dppSection').classList.remove('hidden');
+
+      // Fallback message if folder completely empty
+      if(videos.length === 0 && notesCount === 0 && dppCount === 0) {
+        lGrid.innerHTML = `<p class="text-xs text-gray-600 py-2 col-span-full">This folder is currently empty.</p>`;
+        document.getElementById('lectureSection').classList.remove('hidden');
+      }
     }
 
     function boa(str) {
