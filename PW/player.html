@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Plyr Premium Player</title>
+<title>Eduvibe Premium Plyr</title>
 
 <link rel="stylesheet" href="https://gray-madelina-19.tiiny.site/ogx.css">
 <link rel="stylesheet" href="https://gray-madelina-19.tiiny.site/plyrx55.css">
@@ -30,7 +30,6 @@ video{
     height:100%;
     position:relative !important;
 }
-/* ================= LIVE PILL ================= */
 .live-pill{
     display:flex !important;
     align-items:center;
@@ -87,14 +86,11 @@ video{
 
 <script>
 (async () => {
-    // 1. DYNAMIC DATA ROUTER: Fetch URLs from the Address Bar
     const urlParams = new URLSearchParams(window.location.search);
-    const batchId = urlParams.get("batch_id");
-    const subjectId = urlParams.get("subject_id");
-    const videoId = urlParams.get("video_id") || urlParams.get("topic_id");
+    const videoId = urlParams.get("video_id") || urlParams.get("id") || urlParams.get("topic_id");
 
     if (!videoId) {
-        alert("Video ID Context Missing!");
+        alert("Eduvibe Video Param (video_id or id) Missing!");
         return;
     }
 
@@ -103,7 +99,7 @@ video{
 
     shaka.polyfill.installAll();
     if (!shaka.Player.isBrowserSupported()) {
-        alert("Browser not supported for premium core decoders!");
+        alert("Decoder Engine mismatch!");
         return;
     }
 
@@ -113,10 +109,21 @@ video{
     let tracks = [];
 
     try {
-        // 🔥 CORE EXTRACTION: Build the real dynamic API tunnel link
-        let source = `https://devcoderz.vercel.app/api/getStream?video_id=${encodeURIComponent(videoId)}`;
-        
-        // Dynamic upstream filter to automatically process CloudFront tokens/Signatures smoothly
+        let source = `https://eduvibe-pw-api.wasmer.app/api/getStream?video_id=${encodeURIComponent(videoId)}`;
+
+        shakaPlayer.configure({
+            streaming: {
+                bufferingGoal: 10,
+                rebufferingGoal: 2,
+                bufferBehind: 15,
+                lowLatencyMode: true
+            },
+            abr: {
+                enabled: true,
+                defaultBandwidthEstimate: 500000
+            }
+        });
+
         shakaPlayer.getNetworkingEngine().registerRequestFilter((type, request) => {
             if(source.includes('?')) {
                 const manifestUrl = new URL(source);
@@ -129,14 +136,12 @@ video{
             }
         });
 
-        // Initialize Mount point onto Shaka Stream
         await shakaPlayer.load(source);
-        console.log("✅ Stream Core Engine Loaded");
+        console.log("✅ Eduvibe Live Node Feed Connected");
 
         tracks = shakaPlayer.getVariantTracks().filter(t => t.height);
         const resolutions = [...new Set(tracks.map(t => t.height))].sort((a,b)=>b-a);
 
-        // 2. PLYR CONFIGURATION INTEGRATION
         plyr = new Plyr(video, {
             autoplay: true,
             keyboard: false,
@@ -166,13 +171,12 @@ video{
                 options: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3]
             }
         });
-        
+
         container.addEventListener("dblclick", e=>{ e.stopPropagation(); e.preventDefault(); }, true);
         ['touchstart','touchmove','touchend','click'].forEach(ev=>{
             video.addEventListener(ev, e=>e.stopImmediatePropagation(), true);
         });
 
-        /* ================= LIVE BUTTON SYSTEM ================= */
         const controls = container.querySelector('.plyr__controls');
         const timeDisplay = controls?.querySelector('.plyr__time--current');
         let liveBtn;
@@ -190,13 +194,17 @@ video{
             timeDisplay.insertAdjacentElement('afterend', liveBtn);
         }
 
-        const LIVE_THRESHOLD = 30;
+        const LIVE_THRESHOLD = 5;
         function updateLiveState() {
             if (!liveBtn) return;
             const seekRange = shakaPlayer.seekRange();
             const distance = seekRange.end - video.currentTime;
-            const isLive = distance <= LIVE_THRESHOLD;
+            
+            if (distance > 8 && !video.paused) { 
+                video.currentTime = seekRange.end - 1; 
+            }
 
+            const isLive = distance <= LIVE_THRESHOLD;
             liveBtn.classList.toggle('live-now', isLive);
             liveBtn.classList.toggle('live-behind', !isLive);
         }
@@ -205,10 +213,9 @@ video{
         video.addEventListener('timeupdate', updateLiveState);
 
     } catch(err){
-        console.error("❌ Error loading dynamic stream routing:", err);
+        console.error("❌ Eduvibe Engine Link Refused or Expired:", err);
     }
 
-    /* ================= SCRIPT LOADING MANAGER ================= */
     function loadScriptOnce(id, src) {
         return new Promise((resolve, reject) => {
             if (document.getElementById(id)) return resolve();
@@ -219,12 +226,9 @@ video{
         });
     }
 
-    /* ================= DYNAMIC VIEWER COUNTER SYSTEM ================= */
     let socket;
     if (videoId) {
         await loadScriptOnce("_socket", "https://cdn.socket.io/4.7.5/socket.io.min.js");
-        
-        // Connected straight to your dynamic Koyeb Cluster Instance
         socket = io("https://absolute-lynelle-bots-tg12345-47d47cb0.koyeb.app");
 
         socket.on("connect", () => {
@@ -256,7 +260,6 @@ video{
         setTimeout(attachViewerBadge, 300);
     }
 
-    /* ================= SCREEN LOCK & GESTURES ================= */
     const lockLandscape = async () => {
         const o = screen.orientation;
         if(o?.lock){ try{ await o.lock("landscape"); }catch{} }
@@ -303,7 +306,6 @@ video{
         }
     });
 
-    /* ================= PC HOTKEYS ================= */
     document.addEventListener("keydown", (e) => {
         const focused = document.activeElement;
         if (focused && (focused.classList?.contains('plyr__control') || focused.closest?.('.plyr'))) {
@@ -326,7 +328,6 @@ video{
         }
     });
 
-    /* ================= RECOVERY CLEANUP ================= */
     window.addEventListener("beforeunload", () => {
         socket?.disconnect();
         shakaPlayer.destroy();
