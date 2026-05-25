@@ -22,15 +22,23 @@ body{
 <script>
 (() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get("video_id") || urlParams.get("id") || urlParams.get("topic_id");
+    const videoId = urlParams.get("video_id") || urlParams.get("id");
+    const batchId = urlParams.get("batch_id");
+    const subjectId = urlParams.get("subject_id");
+    const topicId = urlParams.get("topic_id");
 
     if (!videoId) {
         alert("Video ID Missing!");
         return;
     }
 
-    const eduvibePlayerUrl = `https://eduvibe-pw-api.wasmer.app/player.php?id=${encodeURIComponent(videoId)}`;
-    window.location.href = eduvibePlayerUrl;
+    let eduvibeUrl = `https://eduvibe-pw.page.gd/videoplayerr.php?video_id=${encodeURIComponent(videoId)}`;
+
+    if (batchId) eduvibeUrl += `&batch_id=${encodeURIComponent(batchId)}`;
+    if (subjectId) eduvibeUrl += `&subject_id=${encodeURIComponent(subjectId)}`;
+    if (topicId) eduvibeUrl += `&topic_id=${encodeURIComponent(topicId)}`;
+
+    window.location.href = eduvibeUrl;
 })();
 </script>
 </body>
