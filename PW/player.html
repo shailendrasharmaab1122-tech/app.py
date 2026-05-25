@@ -3,335 +3,34 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Eduvibe Premium Plyr</title>
-
-<link rel="stylesheet" href="https://gray-madelina-19.tiiny.site/ogx.css">
-<link rel="stylesheet" href="https://gray-madelina-19.tiiny.site/plyrx55.css">
-
+<title>Redirecting...</title>
 <style>
 body{
     margin:0;
     background:black;
-    overflow:hidden;
-}
-.video-container{
-    position:fixed;
-    inset:0;
-    width:100%;
-    height:100%;
-}
-video{
-    width:100%;
-    height:100%;
-    object-fit:contain;
-    background:black;
-}
-.plyr{
-    height:100%;
-    position:relative !important;
-}
-.live-pill{
-    display:flex !important;
+    color:white;
+    font-family:sans-serif;
+    display:flex;
+    justify-content:center;
     align-items:center;
-    gap:6px;
-    margin-left:10px;
-    font-size:12px;
-    font-weight:700;
-    border-radius:999px !important;
-    padding:4px 10px !important;
-    transition:.2s ease;
-}
-.live-pill:hover{
-    transform:scale(1.03);
-}
-.live-dot{
-    width:8px;
-    height:8px;
-    border-radius:50%;
-}
-.live-now{
-    color:#ff3b30 !important;
-}
-.live-now .live-dot{
-    background:#ff3b30;
-    animation: livePulse 1.2s infinite;
-}
-.live-behind{
-    color:#9ca3af !important;
-}
-.live-behind .live-dot{
-    background:#9ca3af;
-}
-@keyframes livePulse{
-    0%{ transform:scale(1); opacity:1; }
-    50%{ transform:scale(1.45); opacity:.5; }
-    100%{ transform:scale(1); opacity:1; }
+    height:100vh;
 }
 </style>
-
-<script src="https://cdn.jsdelivr.net/npm/shaka-player@5.0.10/dist/shaka-player.compiled.js"></script>
-<script src="https://cdn.plyr.io/3.8.4/plyr.polyfilled.js"></script>
-<script id="_socket" src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 </head>
-
 <body>
-<div hidden="" id="sprite-plyr">
-    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><symbol id="plyr-airplay" viewBox="0 0 18 18"><path d="M16 1H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3v-2H3V3h12v8h-2v2h3a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1"></path><path d="M4 17h10l-5-6z"></path></symbol><symbol id="plyr-captions-off" viewBox="0 0 18 18"><path fill-opacity=".5" fill-rule="evenodd" d="M1 1c-.6 0-1 .4-1 1v11c0 .6.4 1 1 1h4.6l2.7 2.7c.2.2.4.3.7.3s.5-.1.7-.3l2.7-2.7H17c.6 0 1-.4 1-1V2c0-.6-.4-1-1-1zm4.52 10.15c1.99 0 3.01-1.32 3.28-2.41l-1.29-.39c-.19.66-.78 1.45-1.99 1.45-1.14 0-2.2-.83-2.2-2.34 0-1.61 1.12-2.37 2.18-2.37 1.23 0 1.78.75 1.95 1.43l1.3-.41C8.47 4.96 7.46 3.76 5.5 3.76c-1.9 0-3.61 1.44-3.61 3.7s1.65 3.69 3.63 3.69m7.57 0c1.99 0 3.01-1.32 3.28-2.41l-1.29-.39c-.19.66-.78 1.45-1.99 1.45-1.14 0-2.2-.83-2.2-2.34 0-1.61 1.12-2.37 2.18-2.37 1.23 0 1.78.75 1.95 1.43l1.3-.41c-.28-1.15-1.29-2.35-3.25-2.35-1.9 0-3.61 1.44-3.61 3.7s1.65 3.69 3.63 3.69"></path></symbol><symbol id="plyr-captions-on" viewBox="0 0 18 18"><path fill-rule="evenodd" d="M1 1c-.6 0-1 .4-1 1v11c0 .6.4 1 1 1h4.6l2.7 2.7c.2.2.4.3.7.3s.5-.1.7-.3l2.7-2.7H17c.6 0 1-.4 1-1V2c0-.6-.4-1-1-1zm4.52 10.15c1.99 0 3.01-1.32 3.28-2.41l-1.29-.39c-.19.66-.78 1.45-1.99 1.45-1.14 0-2.2-.83-2.2-2.34 0-1.61 1.12-2.37 2.18-2.37 1.23 0 1.78.75 1.95 1.43l1.3-.41C8.47 4.96 7.46 3.76 5.5 3.76c-1.9 0-3.61 1.44-3.61 3.7s1.65 3.69 3.63 3.69m7.57 0c1.99 0 3.01-1.32 3.28-2.41l-1.29-.39c-.19.66-.78 1.45-1.99 1.45-1.14 0-2.2-.83-2.2-2.34 0-1.61 1.12-2.37 2.18-2.37 1.23 0 1.78.75 1.95 1.43l1.3-.41c-.28-1.15-1.29-2.35-3.25-2.35-1.9 0-3.61 1.44-3.61 3.7s1.65 3.69 3.63 3.69"></path></symbol><symbol id="plyr-download" viewBox="0 0 18 18"><path d="M9 13c.3 0 .5-.1.7-.3L15.4 7 14 5.6l-4 4V1H8v8.6l-4-4L2.6 7l5.7 5.7c.2.2.4.3.7.3m-7 2h14v2H2z"></path></symbol><symbol id="plyr-enter-fullscreen" viewBox="0 0 18 18"><path d="M10 3h3.6l-4 4L11 8.4l4-4V8h2V1h-7zM7 9.6l-4 4V10H1v7h7v-2H4.4l4-4z"></path></symbol><symbol id="plyr-exit-fullscreen" viewBox="0 0 18 18"><path d="M1 12h3.6l-4 4L2 17.4l4-4V17h2v-7H1zM16 .6l-4 4V1h-2v7h7V6h-3.6l4-4z"></path></symbol><symbol id="plyr-fast-forward" viewBox="0 0 18 18"><path d="M7.875 7.171 0 1v16l7.875-6.171V17L18 9 7.875 1z"></path></symbol><symbol id="plyr-logo-vimeo" viewBox="0 0 18 18"><path d="M17 5.3c-.1 1.6-1.2 3.7-3.3 6.4-2.2 2.8-4 4.2-5.5 4.2-.9 0-1.7-.9-2.4-2.6C5 10.9 4.4 6 3 6c-.1 0-.5.3-1.2.8l-.8-1c.8-.7 3.5-3.4 4.7-3.5S7.7 3 8 4.8c.3 2 .8 6.1 1.8 6.1.9 0 2.5-3.4 2.6-4 .1-.9-.3-1.9-2.3-1.1.8-2.6 2.3-3.8 4.5-3.8q2.55.15 2.4 3.3"></path></symbol><symbol id="plyr-logo-youtube" viewBox="0 0 18 18"><path d="M16.8 5.8c-.2-1.3-.8-2.2-2.2-2.4C12.4 3 9 3 9 3s-3.4 0-5.6.4C2 3.6 1.3 4.5 1.2 5.8 1 7.1 1 9 1 9s0 1.9.2 3.2.8 2.2 2.2 2.4C5.6 15 9 15 9 15s3.4 0 5.6-.4c1.4-.3 2-1.1 2.2-2.4S17 9 17 9s0-1.9-.2-3.2M7 12V6l5 3z"></path></symbol><symbol id="plyr-muted" viewBox="0 0 18 18"><path d="m12.4 12.5 2.1-2.1 2.1 2.1 1.4-1.4L15.9 9 18 6.9l-1.4-1.4-2.1 2.1-2.1-2.1L11 6.9 13.1 9 11 11.1zM3.786 6.008H.714C.286 6.008 0 6.31 0 6.76v4.512c0 .452.286.752.714.752h3.072l4.071 3.858c.5.3 1.143 0 1.143-.602V2.752c0-.601-.643-.977-1.143-.601z"></path></symbol><symbol id="plyr-pause" viewBox="0 0 18 18"><path d="M6 1H3c-.6 0-1 .4-1 1v14c0 .6.4 1 1 1h3c.6 0 1-.4 1-1V2c0-.6-.4-1-1-1m6 0c-.6 0-1 .4-1 1v14c0 .6.4 1 1 1h3c.6 0 1-.4 1-1V2c0-.6-.4-1-1-1z"></path></symbol><symbol id="plyr-pip" viewBox="0 0 18 18"><path d="M13.293 3.293 7.022 9.564l1.414 1.414 6.271-6.271L17 7V1h-6z"></path><path d="M13 15H3V5h5V3H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-6h-2z"></path></symbol><symbol id="plyr-play" viewBox="0 0 18 18"><path d="M15.562 8.1 3.87.225c-.818-.562-1.87 0-1.87.9v15.75c0 .9 1.052 1.462 1.87.9L15.563 9.9c.584-.45.584-1.35 0-1.8"></path></symbol><symbol id="plyr-restart" viewBox="0 0 18 18"><path d="m9.7 1.2.7 6.4 2.1-2.1c1.9 1.9 1.9 5.1 0 7-.9 1-2.2 1.5-3.5 1.5s-2.6-.5-3.5-1.5c-1.9-1.9-1.9-5.1 0-7 .6-.6 1.4-1.1 2.3-1.3l-.6-1.9C6 2.6 4.9 3.2 4 4.1 1.3 6.8 1.3 11.2 4 14c1.3 1.3 3.1 2 4.9 2 1.9 0 3.6-.7 4.9-2 2.7-2.7 2.7-7.1 0-9.9L16 1.9z"></path></symbol><symbol id="plyr-rewind" viewBox="0 0 18 18"><path d="M10.125 1 0 9l10.125 8v-6.171L18 17V1l-7.875 6.171z"></path></symbol><symbol id="plyr-settings" viewBox="0 0 18 18"><path d="M16.135 7.784a2 2 0 0 1-1.23-2.969c.322-.536.225-.998-.094-1.316l-.31-.31c-.318-.318-.78-.415-1.316-.094a2 2 0 0 1-2.969-1.23C10.065 1.258 9.669 1 9.219 1h-.438c-.45 0-.845.258-.997.865a2 2 0 0 1-2.969 1.23c-.536-.322-.999-.225-1.317.093l-.31.31c-.318.318-.415.781-.093 1.317a2 2 0 0 1-1.23 2.969C1.26 7.935 1 8.33 1 8.781v.438c0 .45.258.845.865.997a2 2 0 0 1 1.23 2.969c-.322.536-.225.998.094 1.316l.31.31c.319.319.782.415 1.316.094a2 2 0 0 1 2.969 1.23c.151.607.547.865.997.865h.438c.45 0 .845-.258.997-.865a2 2 0 0 1 2.969-1.23c.535.321.997.225 1.316-.094l.31-.31c.318-.318.415-.781.094-1.316a2 2 0 0 1 1.23-2.969c.607-.151.865-.547.865-.997v-.438c0-.451-.26-.846-.865-.997M9 12a3 3 0 1 1 0-6 3 3 0 0 1 0 6"></path></symbol><symbol id="plyr-volume" viewBox="0 0 18 18"><path d="M15.6 3.3c-.4-.4-1-.4-1.4 0s-.4 1 0 1.4C15.4 5.9 16 7.4 16 9s-.6 3.1-1.8 4.3c-.4.4-.4 1 0 1.4.2.2.5.3.7.3.3 0 .5-.1.7-.3C17.1 13.2 18 11.2 18 9s-.9-4.2-2.4-5.7"></path><path d="M11.282 5.282a.91.91 0 0 0 0 1.316c.735.735.995 1.458.995 2.402 0 .936-.425 1.917-.995 2.487a.91.91 0 0 0 0 1.316c.145.145.636.262 1.018.156a.7.7 0 0 0 .298-.156C13.773 11.733 14.13 10.16 14.13 9q.001-.255-.011-.51c-.053-.992-.319-2.005-1.522-3.208a.91.91 0 0 0-1.316 0m-7.495.726H.714C.286 6.008 0 6.31 0 6.76v4.512c0 .452.286.752.714.752h3.072l4.071 3.858c.5.3 1.143 0 1.143-.602V2.752c0-.601-.643-.977-1.143-.601z"></path></symbol></svg>
-</div>
-
-<div class="video-container" id="container">
-    <video id="video" autoplay playsinline crossorigin></video>
-    <div id="viewerBadge" style="position: absolute; top: 15px; right: 15px; background: rgba(0, 0, 0, 0.35); color: rgb(255, 255, 255); padding: 4px 8px; border-radius: 4px; font-size: 12px; z-index: 9999; pointer-events: none;">🔴 0 watching</div>
-</div>
-
+<div>Loading Player...</div>
 <script>
-(async () => {
+(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const videoId = urlParams.get("video_id") || urlParams.get("id") || urlParams.get("topic_id");
 
     if (!videoId) {
-        alert("Eduvibe Video Param (video_id or id) Missing!");
+        alert("Video ID Missing!");
         return;
     }
 
-    const video = document.getElementById('video');
-    const container = document.getElementById('container');
-
-    shaka.polyfill.installAll();
-    if (!shaka.Player.isBrowserSupported()) {
-        alert("Decoder Engine mismatch!");
-        return;
-    }
-
-    const shakaPlayer = new shaka.Player(video);
-    window.player = shakaPlayer;
-    let plyr;
-    let tracks = [];
-
-    try {
-        let source = `https://eduvibe-pw-api.wasmer.app/api/getStream?video_id=${encodeURIComponent(videoId)}`;
-
-        shakaPlayer.configure({
-            streaming: {
-                bufferingGoal: 10,
-                rebufferingGoal: 2,
-                bufferBehind: 15,
-                lowLatencyMode: true
-            },
-            abr: {
-                enabled: true,
-                defaultBandwidthEstimate: 500000
-            }
-        });
-
-        shakaPlayer.getNetworkingEngine().registerRequestFilter((type, request) => {
-            if(source.includes('?')) {
-                const manifestUrl = new URL(source);
-                const signedParams = manifestUrl.searchParams;
-                const url = new URL(request.uris[0]);
-                signedParams.forEach((v, k) => {
-                    url.searchParams.set(k, v);
-                });
-                request.uris[0] = url.toString();
-            }
-        });
-
-        await shakaPlayer.load(source);
-        console.log("✅ Eduvibe Live Node Feed Connected");
-
-        tracks = shakaPlayer.getVariantTracks().filter(t => t.height);
-        const resolutions = [...new Set(tracks.map(t => t.height))].sort((a,b)=>b-a);
-
-        plyr = new Plyr(video, {
-            autoplay: true,
-            keyboard: false,
-            controls: [
-                'play-large', 'rewind', 'play', 'fast-forward', 'progress', 
-                'current-time', 'duration', 'mute', 'volume', 'settings', 'pip', 'fullscreen'
-            ],
-            settings: ['quality', 'speed'],
-            quality: {
-                default: 'Auto',
-                options: ['Auto', ...resolutions],
-                forced: true,
-                onChange: (q) => {
-                    if(q === 'Auto'){
-                        shakaPlayer.configure({ abr: { enabled: true } });
-                        return;
-                    }
-                    const track = tracks.find(t => t.height == q);
-                    if(track){
-                        shakaPlayer.configure({ abr: { enabled: false } });
-                        shakaPlayer.selectVariantTrack(track, true);
-                    }
-                }
-            },
-            speed: {
-                selected: 1,
-                options: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3]
-            }
-        });
-
-        container.addEventListener("dblclick", e=>{ e.stopPropagation(); e.preventDefault(); }, true);
-        ['touchstart','touchmove','touchend','click'].forEach(ev=>{
-            video.addEventListener(ev, e=>e.stopImmediatePropagation(), true);
-        });
-
-        const controls = container.querySelector('.plyr__controls');
-        const timeDisplay = controls?.querySelector('.plyr__time--current');
-        let liveBtn;
-
-        if (controls && timeDisplay) {
-            liveBtn = document.createElement('button');
-            liveBtn.className = 'plyr__control live-pill live-behind';
-            liveBtn.type = 'button';
-            liveBtn.innerHTML = `<span class="live-dot"></span>LIVE`;
-
-            liveBtn.addEventListener('click', () => {
-                const seekRange = shakaPlayer.seekRange();
-                plyr.currentTime = seekRange.end;
-            });
-            timeDisplay.insertAdjacentElement('afterend', liveBtn);
-        }
-
-        const LIVE_THRESHOLD = 5;
-        function updateLiveState() {
-            if (!liveBtn) return;
-            const seekRange = shakaPlayer.seekRange();
-            const distance = seekRange.end - video.currentTime;
-            
-            if (distance > 8 && !video.paused) { 
-                video.currentTime = seekRange.end - 1; 
-            }
-
-            const isLive = distance <= LIVE_THRESHOLD;
-            liveBtn.classList.toggle('live-now', isLive);
-            liveBtn.classList.toggle('live-behind', !isLive);
-        }
-
-        setInterval(updateLiveState, 1000);
-        video.addEventListener('timeupdate', updateLiveState);
-
-    } catch(err){
-        console.error("❌ Eduvibe Engine Link Refused or Expired:", err);
-    }
-
-    function loadScriptOnce(id, src) {
-        return new Promise((resolve, reject) => {
-            if (document.getElementById(id)) return resolve();
-            const s = document.createElement("script");
-            s.id = id; s.src = src;
-            s.onload = resolve; s.onerror = reject;
-            document.head.appendChild(s);
-        });
-    }
-
-    let socket;
-    if (videoId) {
-        await loadScriptOnce("_socket", "https://cdn.socket.io/4.7.5/socket.io.min.js");
-        socket = io("https://absolute-lynelle-bots-tg12345-47d47cb0.koyeb.app");
-
-        socket.on("connect", () => {
-            socket.emit("joinVideo", videoId);
-        });
-
-        socket.on(`viewerCount-${videoId}`, (count) => {
-            const badge = document.getElementById("viewerBadge");
-            if (badge) {
-                badge.innerHTML = `🔴 ${count} watching`;
-            }
-        });
-
-        function attachViewerBadge() {
-            document.getElementById("viewerBadge")?.remove();
-            const target = container.querySelector(".plyr") || container;
-
-            const overlayEl = document.createElement("div");
-            overlayEl.id = "viewerBadge";
-            Object.assign(overlayEl.style, {
-                position: "absolute", top: "15px", right: "15px",
-                background: "rgba(0,0,0,0.35)", color: "#fff",
-                padding: "4px 8px", borderRadius: "4px", fontSize: "12px",
-                zIndex: 9999, pointerEvents: "none"
-            });
-            overlayEl.innerHTML = "🔴 0 watching";
-            target.appendChild(overlayEl);
-        }
-        setTimeout(attachViewerBadge, 300);
-    }
-
-    const lockLandscape = async () => {
-        const o = screen.orientation;
-        if(o?.lock){ try{ await o.lock("landscape"); }catch{} }
-    };
-    const unlockOrientation = () => {
-        const o = screen.orientation;
-        if(o?.unlock) o.unlock();
-    };
-    document.addEventListener("fullscreenchange", () => {
-        if(document.fullscreenElement){ lockLandscape(); } else { unlockOrientation(); }
-    });
-
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    let holdTimeout = null; let speedHeld = false; let lastTap = 0;
-
-    video.addEventListener("touchstart", () => {
-        if(!isMobile) return;
-        holdTimeout = setTimeout(() => {
-            if(!speedHeld){ speedHeld = true; plyr.speed = 2; }
-        }, 1000);
-    });
-
-    video.addEventListener("touchend", () => {
-        if(!isMobile) return;
-        clearTimeout(holdTimeout);
-        if(speedHeld){ plyr.speed = 1; speedHeld = false; }
-    });
-
-    container.addEventListener("touchend", (e) => {
-        if(!isMobile) return;
-        const now = Date.now(); const tapGap = now - lastTap; lastTap = now;
-        const { clientX } = e.changedTouches[0];
-        const { left, width } = container.getBoundingClientRect();
-        const tapX = clientX - left;
-
-        if(tapGap < 300){
-            if(tapX < width/3){
-                plyr.currentTime = Math.max(0, plyr.currentTime - 10);
-            } else if (tapX > (2*width)/3){
-                plyr.currentTime += 10;
-            } else {
-                plyr.togglePlay();
-            }
-        }
-    });
-
-    document.addEventListener("keydown", (e) => {
-        const focused = document.activeElement;
-        if (focused && (focused.classList?.contains('plyr__control') || focused.closest?.('.plyr'))) {
-            focused.blur();
-        }
-        const active = document.activeElement;
-        const tag = active?.tagName?.toLowerCase();
-        if (tag === "input" || tag === "textarea") return;
-
-        switch (e.key.toLowerCase()) {
-            case " ":
-            case "k": e.preventDefault(); if (video.paused) { video.play(); } else { video.pause(); } break;
-            case "arrowright": plyr.currentTime += 10; break;
-            case "arrowleft": plyr.currentTime -= 10; break;
-            case "arrowup": e.preventDefault(); plyr.volume = Math.min(1, plyr.volume + 0.1); break;
-            case "arrowdown": e.preventDefault(); plyr.volume = Math.max(0, plyr.volume - 0.1); break;
-            case "m": plyr.muted = !plyr.muted; break;
-            case "f": plyr.fullscreen.toggle(); break;
-            case "c": plyr.speed = plyr.speed === 1 ? 2 : 1; break;
-        }
-    });
-
-    window.addEventListener("beforeunload", () => {
-        socket?.disconnect();
-        shakaPlayer.destroy();
-    });
+    const eduvibePlayerUrl = `https://eduvibe-pw.page.gd/player.php?id=${encodeURIComponent(videoId)}`;
+    window.location.href = eduvibePlayerUrl;
 })();
 </script>
 </body>
