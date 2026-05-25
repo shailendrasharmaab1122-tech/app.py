@@ -2,35 +2,117 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard | The DevCoderZ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The DevCoderZ | Learning Portal</title>
     <style>
-        :root { --bg: #05070a; --s1: #0b0f17; --p: #3b82f6; --tx: #e2e8f0; --rd: #ef4444; }
-        body { background: var(--bg); color: var(--tx); font-family: 'Segoe UI', sans-serif; margin: 0; }
-        .nav { padding: 20px 40px; border-bottom: 1px solid #1e293b; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.5rem; font-weight: 800; color: var(--p); }
-        .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
-        .batch-card { background: var(--s1); padding: 20px; border-radius: 12px; border: 1px solid #1e293b; margin-bottom: 15px; cursor: pointer; transition: 0.3s; }
-        .batch-card:hover { border-color: var(--p); transform: translateY(-2px); }
-        footer { text-align: center; padding: 50px; color: #475569; font-size: 0.8rem; }
+        :root {
+            --bg: #050a14;
+            --card: #0b1526;
+            --accent: #0ea5e9;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #1e293b;
+        }
+        body { 
+            background: var(--bg); 
+            color: var(--text); 
+            font-family: sans-serif; 
+            margin: 0; 
+            padding: 0; 
+        }
+        header { 
+            background: #080f1e; 
+            padding: 20px 5%; 
+            border-bottom: 1px solid var(--border); 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+        }
+        .brand { 
+            font-size: 1.5rem; 
+            font-weight: 800; 
+            color: var(--accent); 
+            text-decoration: none; 
+        }
+        .container { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+            gap: 20px; 
+            padding: 40px 5%; 
+        }
+        .card { 
+            background: var(--card); 
+            border: 1px solid var(--border); 
+            padding: 20px; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            transition: 0.3s; 
+        }
+        .card:hover { 
+            border-color: var(--accent); 
+            transform: translateY(-5px); 
+        }
+        footer { 
+            text-align: center; 
+            padding: 40px; 
+            border-top: 1px solid var(--border); 
+            color: var(--text-muted); 
+            font-size: 0.9rem; 
+        }
     </style>
 </head>
 <body>
-    <div class="nav">
-        <div class="logo">DC | The DevCoderZ</div>
-    </div>
-    <div class="container" id="list">
-        <!-- Batches yahan load honge -->
-    </div>
-    <footer>Powered by The DevCoderZ | Developed by Devansh Sharma</footer>
 
-    <script>
-        // Yahan tumhara wahi fetch logic aayega jo tum use kar rahe the
-        async function loadData() {
-            // Tumhara API call...
+<header>
+    <a href="batches.html" class="brand">The DevCoderZ</a>
+</header>
+
+<div class="container" id="contentArea"></div>
+
+<footer>
+    © 2026 The DevCoderZ | Developed by Devansh Sharma
+</footer>
+
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const courseId = params.get('course_id') || '176';
+    const folderId = params.get('folder_id');
+
+    async function loadData() {
+        let url = `https://ntxapi.wasmer.app/?course_id=${courseId}&action=content&rc=nt`;
+        if (folderId) url += `&folder_id=${folderId}`;
+
+        try {
+            const response = await fetch(url);
+            const result = await response.json();
+            if (result.success) render(result.data);
+        } catch (err) {
+            document.getElementById('contentArea').innerHTML = '<p>Error loading data.</p>';
         }
-        function handleItem(el) {
-            window.location.href = 'player.html?token=' + el.dataset.token;
-        }
-    </script>
+    }
+
+    function render(data) {
+        const container = document.getElementById('contentArea');
+        container.innerHTML = '';
+
+        (data.folders || []).forEach(f => {
+            const div = document.createElement('div');
+            div.className = 'card';
+            div.innerHTML = `<h3>📁 ${f.name}</h3>`;
+            div.onclick = () => window.location.href = `?course_id=${courseId}&folder_id=${f.id}`;
+            container.appendChild(div);
+        });
+
+        (data.videos || []).forEach(v => {
+            const div = document.createElement('div');
+            div.className = 'card';
+            div.innerHTML = `<h3>▶ ${v.name}</h3>`;
+            div.onclick = () => window.location.href = `player.html?video_url=${encodeURIComponent(v.url)}`;
+            container.appendChild(div);
+        });
+    }
+
+    loadData();
+</script>
 </body>
 </html>
