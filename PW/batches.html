@@ -223,7 +223,7 @@
                         <div class="index_class_4-eWzl6K">
                           <div class="btn-X2VsdQ shareBatch-A_b2oM" onclick="goToAnnouncements()" style="cursor: pointer">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M14.1426 15.8113C15.5636 15.6427 16.9337 15.3087 18.2333 14.8289C17.1557 13.6328 16.4999 12.0492 16.4999 10.3125V9.78689C16.5 9.7746 16.5 9.76231 16.5 9.75C16.5 7.26472 14.4853 5.25 12 5.25C9.51472 5.25 7.5 7.26472 7.5 9.75L7.49985 10.3125C7.49985 12.0492 6.84396 13.6328 5.76636 14.8289C7.06605 15.3087 8.43632 15.6428 9.85735 15.8113M14.1426 15.8113C13.44 15.8946 12.7249 15.9375 11.9999 15.9375C11.2749 15.9375 10.5599 15.8946 9.85735 15.8113M14.1426 15.8113C14.2124 16.0283 14.25 16.2598 14.25 16.5C14.25 17.7426 13.2426 18.75 12 18.75C10.7574 18.75 9.75 17.7426 9.75 16.5C9.75 16.2598 9.78764 16.0284 9.85735 15.8113" stroke="#1B2124" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round"></path>
+                              <path d="M14.1426 15.8113C15.5636 15.6427 16.9337 15.3087 18.2333 14.8289C17.1557 13.6328 16.4999 12.0492 16.4999 12.0492V9.78689C16.5 9.7746 16.5 9.76231 16.5 9.75C16.5 7.26472 14.4853 5.25 12 5.25C9.51472 5.25 7.5 7.26472 7.5 9.75L7.49985 10.3125C7.49985 12.0492 6.84396 13.6328 5.76636 14.8289C7.06605 15.3087 8.43632 15.6428 9.85735 15.8113M14.1426 15.8113C13.44 15.8946 12.7249 15.9375 11.9999 15.9375C11.2749 15.9375 10.5599 15.8946 9.85735 15.8113M14.1426 15.8113C14.2124 16.0283 14.25 16.2598 14.25 16.5C14.25 17.7426 13.2426 18.75 12 18.75C10.7574 18.75 9.75 17.7426 9.75 16.5C9.75 16.2598 9.78764 16.0284 9.85735 15.8113" stroke="#1B2124" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round"></path>
                               <circle cx="16.125" cy="7.125" r="3.1875" fill="#BF2734" stroke="white" stroke-width="1.125"></circle>
                             </svg>
                             Announcement
@@ -329,13 +329,15 @@
         let isNote = live.homeworkIds?.length && live.isVideoLecture === false;
 
         let link = "#";
+        let targetSubjectId = live.subjectId?._id || live.subjectId || '';
+
         if (status === "LIVE") {
-          link = `/live.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || live.subjectId || ''}&video_id=${videoId}&start=${unixStart}`;
+          link = `/PW/player/index.html?batch_id=${batchId}&subject_id=${targetSubjectId}&video_id=${videoId}&start=${unixStart}`;
         } else if (isNote) {
           let noteId = live.homeworkIds[0]?._id || videoId;
-          link = `/view.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || live.subjectId || ''}&note=${noteId}`;
+          link = `/view.html?batch_id=${batchId}&subject_id=${targetSubjectId}&note=${noteId}`;
         } else if (status === "ENDED") {
-          link = `/player.html?batch_id=${batchId}&subject_id=${live.subjectId?._id || live.subjectId || ''}&video_id=${videoId}`;
+          link = `/PW/player/index.html?batch_id=${batchId}&subject_id=${targetSubjectId}&video_id=${videoId}`;
         }
 
         let badgeColor = "#facc15";
@@ -387,7 +389,7 @@
       subjects.forEach((sub) => {
         let subjectTitle = sub.subject || sub.name || "Premium Content Module";
         let escapedSubject = encodeURIComponent(subjectTitle.replace(/'/g, "%27"));
-        
+
         let teacher = "Unknown";
         if (sub.teacherIds?.length && typeof sub.teacherIds[0] === "object") {
           teacher = (sub.teacherIds[0].firstName || "") + " " + (sub.teacherIds[0].lastName || "");
