@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Unacademy - Dashboard</title>
+    <meta name="theme-color" content="#0d0e12">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        background: '#0d0e12',
+                        surface: '#16181f',
+                        border: '#262935',
+                        primary: '#08bd80',
+                        primaryHover: '#069a68',
+                        textMain: '#ffffff',
+                        textMuted: '#94a3b8'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0d0e12;
+            color: #ffffff;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0d0e12;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #262935;
+            border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #3f4458;
+        }
+    </style>
+</head>
+<body class="custom-scrollbar">
+
+    <div id="loader" class="fixed inset-0 bg-background flex items-center justify-center z-[9999]">
+        <div class="w-12 h-12 border-4 border-border border-t-primary rounded-full animate-spin"></div>
+    </div>
+
+    <div class="min-h-screen flex w-full">
+        <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-surface border-r border-border z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out lg:sticky lg:top-0 lg:h-screen">
+            <div class="flex flex-col h-full">
+                <div class="flex items-center justify-between p-4 border-b border-border">
+                    <div class="flex items-center gap-3">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAA4VBMVEX///8sgfYJvYAbe/ajxfUAunqa3cQlNkL///0pOUQlNULf4uMnN0Lt7/AkNkE8SVPj5ueZn6ROWWLw8vJTXmayt7ouPUjEyMvLzs+5vL5qcnjS1dZDT1jY2913gIZ/hoyOlZpmb3Wip6o+S1W1uLqKj5Q3Qk1dZWwKePTg7flfaW/s9fwogPKArvJZl/MAdfXR5Pi70/jh9/G+2PZuo/Q1hfFLkPCMtvW91PZ1qPKryfXM4PiXvPJFjPDb6vpwpfS459dq0KpFxpdXyZ561LTM7uIswo3u+/il4syN2r5hzaUjbDslAAAOa0lEQVR4nN1dCVvbOBM2GKrDshwntoKdxHYMOcrRQltoC7ss7bawu///B31yDggksSVbPvK9z9NyJZFejzSaGY1GmlY6TOPIi6NRMJy0+8eWZR3325NhMIpi78gwy2++VBieHThjQDEFmBDM/6EZAOU/AP5LCsZOYHtG3R2VA5z9b3iRQzAAAAPW9kPb9bo9o9UyE7RaRq/ruXbotxnFCVfsjBY0YZ1dF4bh+hbmAkKWb3u99IFo9k4i30LJo7B8t+nCTJ5/pxseUwLw2I+PzJW/wDfCSX5++ZV5FPtjDAg+DrudinqbC50TH2FCrSCXMAw3sCgGyD9pKknP55qEOvFg/qPcjJq/Gg5ihyster4h6/Gg5ihyster4h6/Gg5ihyster4h6/Gg5ihyster4h6/Gg5ihyster4h6/Gg5ihyster4h6/Gg5ihyster4h" class="w-8 h-8 object-contain rounded">
+                        <span class="text-lg font-bold text-textMain tracking-wide">Unacademy</span>
+                    </div>
+                    <button onclick="toggleSidebar()" class="lg:hidden text-textMuted hover:text-textMain p-1 rounded-md hover:bg-background">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+
+                <nav class="flex-1 p-4 space-y-1">
+                    <a href="#" class="flex items-center gap-3 px-3 py-2.5 bg-background text-primary font-medium rounded-lg transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V16zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V16z"/></svg>
+                        My Batches
+                    </a>
+                    <button onclick="goToAnnouncements()" class="w-full flex items-center gap-3 px-3 py-2.5 text-textMuted hover:text-textMain hover:bg-background/50 rounded-lg transition-colors text-left">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.033 6.033 0 00-4.59-5.741C13.07 4.54 12.338 4 11.5 4s-1.57.54-1.91 1.259A6.033 6.033 0 005 11v3.159c0 .538-.214 1.055-.595 1.436L3 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                        Announcements
+                    </button>
+                </nav>
+
+                <div class="p-4 border-t border-border bg-background/30">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-sm">
+                            ST
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-textMain truncate">Premium Student</p>
+                            <p class="text-xs text-textMuted truncate">Active Subscriber</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <div class="fixed inset-0 bg-black/60 z-40 hidden" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+        <div class="flex-1 flex flex-col min-w-0 overflow-x-hidden">
+            <header class="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-border bg-surface/80 backdrop-blur-md px-4 lg:px-8">
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleSidebar()" class="lg:hidden text-textMuted hover:text-textMain p-1 rounded-md hover:bg-background">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    </button>
+                    <h1 id="batchTitle" class="text-lg lg:text-xl font-bold text-textMain truncate max-w-[220px] md:max-w-xl">Loading Course Dashboard...</h1>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                        Live Learning
+                    </span>
+                </div>
+            </header>
+
+            <main class="flex-1 p-4 lg:p-8 space-y-8 max-w-[1600px] w-full mx-auto">
+                <section class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                            <h2 class="text-lg font-bold tracking-tight text-textMain">Live & Upcoming Classes</h2>
+                        </div>
+                    </div>
+                    <div id="liveClassesContainer" class="flex gap-4 overflow-x-auto pb-3 custom-scrollbar snap-x"></div>
+                </section>
+
+                <section class="space-y-4">
+                    <div class="border-b border-border pb-2">
+                        <h2 class="text-lg font-bold tracking-tight text-textMain">Course Subjects</h2>
+                        <p class="text-sm text-textMuted">Select a subject module to access recorded legacy data, tests, and DPPs.</p>
+                    </div>
+                    <div id="subjectsContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4"></div>
+                </section>
+            </main>
+
+            <footer class="w-full h-14 border-t border-border bg-surface flex items-center justify-center text-xs font-medium text-textMuted mt-12">
+                Learn with the Best &copy; Unacademy Legacy Panel
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        const batchId = new URLSearchParams(window.location.search).get("batch_id");
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+
+        function goToAnnouncements() {
+            if (!batchId) {
+                alert("Batch ID parameter missing");
+                return;
+            }
+            window.location.href = "/announcements.html?batch_id=" + encodeURIComponent(batchId);
+        }
+
+        if (!batchId) {
+            alert("Batch ID missing in URL query parameters");
+            document.getElementById("loader").style.display = "none";
+        } else {
+            fetch("https://devcoderz.vercel.app/api/PW/batches.js?type=batch&batch_id=" + encodeURIComponent(batchId))
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.success === false) {
+                        alert(data.error || "Failed to structure unacademy data bundle");
+                        document.getElementById("loader").style.display = "none";
+                        return;
+                    }
+
+                    document.getElementById("batchTitle").innerText = data.batch_title || "Unacademy Premium Batch";
+                    
+                    renderLiveClasses(data.classes || []);
+                    renderSubjects(data.subjects || []);
+                    
+                    document.getElementById("loader").style.display = "none";
+                })
+                .catch((err) => {
+                    console.error(err);
+                    document.getElementById("loader").style.display = "none";
+                });
+        }
+
+        function renderLiveClasses(classes) {
+            const container = document.getElementById("liveClassesContainer");
+            container.innerHTML = "";
+
+            if (!classes || classes.length === 0) {
+                container.innerHTML = `
+                    <div class="w-full bg-surface border border-border rounded-xl p-6 text-center text-sm text-textMuted shadow-sm">
+                        No live sessions scheduled on air at the moment. Check your course calendar.
+                    </div>`;
+                return;
+            }
+
+            const now = new Date();
+
+            classes.forEach((live) => {
+                if (!live) return;
+                if (live.homeworkIds?.length && !live.url && !live.videoDetails) return;
+
+                let start = live.startTime ? new Date(live.startTime) : null;
+                let end = live.endTime ? new Date(live.endTime) : null;
+                let unixStart = start ? Math.floor(start.getTime() / 1000) : null;
+
+                let status = "UPCOMING";
+                if (start && now >= start && (!end || now <= end)) {
+                    status = "LIVE";
+                } else if (end && now > end) {
+                    status = "ENDED";
+                }
+
+                let subjectName = live.subjectId?.name || "Premium Subject";
+                let topic = live.topic || "Core Subject Lecture Content";
+                let videoId = live._id || live.id;
+                let isNote = live.homeworkIds?.length && live.isVideoLecture === false;
+
+                let link = "#";
+                let targetSubjectId = live.subjectId?._id || live.subjectId || '';
+
+                if (status === "LIVE") {
+                    link = `/PW/player/index.html?batch_id=${batchId}&subject_id=${targetSubjectId}&video_id=${videoId}&start=${unixStart}`;
+                } else if (isNote) {
+                    let noteId = live.homeworkIds[0]?._id || videoId;
+                    link = `/view.html?batch_id=${batchId}&subject_id=${targetSubjectId}&note=${noteId}`;
+                } else if (status === "ENDED") {
+                    link = `/PW/player/index.html?batch_id=${batchId}&subject_id=${targetSubjectId}&video_id=${videoId}`;
+                }
+
+                let badgeClass = "bg-yellow-500/10 text-yellow-500 border-yellow-500/20";
+                if (status === "LIVE") badgeClass = "bg-red-500/10 text-red-500 border-red-500/20 animate-pulse";
+                if (status === "ENDED") badgeClass = "bg-slate-500/10 text-slate-400 border-slate-500/20";
+
+                let timeText = start ? start.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Kolkata" }) : "TBD";
+
+                const card = `
+                <a href="${link}" class="snap-start block min-w-[290px] sm:min-w-[320px] max-w-[320px] bg-surface border border-border hover:border-primary/40 rounded-xl overflow-hidden group transition-all duration-200">
+                    <div class="relative w-full aspect-video bg-background overflow-hidden">
+                        <img src="https://img-cdn.publive.online/fit-in/640x430/filters:format(webp)/entrackr/media/post_attachments/wp-content/uploads/2022/03/Pw.jpg" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <span class="absolute top-2.5 right-2.5 px-2 py-0.5 text-[11px] font-bold rounded border ${badgeClass}">
+                            ${status}
+                        </span>
+                    </div>
+                    <div class="p-4 space-y-3">
+                        <div class="space-y-1">
+                            <span class="text-xs font-semibold text-primary tracking-wide uppercase">${subjectName}</span>
+                            <h3 class="text-sm font-bold text-textMain line-clamp-2 h-10 group-hover:text-primary transition-colors">${topic}</h3>
+                        </div>
+                        <div class="pt-2 border-t border-border/50 flex items-center justify-between text-xs text-textMuted">
+                            <span class="flex items-center gap-1">🕒 ${timeText} IST</span>
+                            <span>👤 Expert Faculty</span>
+                        </div>
+                        <div class="w-full py-2 text-center rounded-lg text-xs font-semibold bg-background border border-border group-hover:bg-primary group-hover:text-background group-hover:border-primary transition-all duration-200">
+                            ${status === "LIVE" ? "Join Stream Now" : status === "ENDED" ? "Watch Recording" : "Awaiting Schedule"}
+                        </div>
+                    </div>
+                </a>`;
+                container.innerHTML += card;
+            });
+        }
+
+        function renderSubjects(subjects) {
+            const container = document.getElementById("subjectsContainer");
+            container.innerHTML = "";
+
+            if (!subjects || subjects.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full bg-surface border border-border rounded-xl p-8 text-center text-sm text-textMuted">
+                        No subject modules cataloged inside this core stream yet.
+                    </div>`;
+                return;
+            }
+
+            subjects.forEach((sub) => {
+                let subjectTitle = sub.subject || sub.name || "Specialized Course Core";
+                let escapedSubject = encodeURIComponent(subjectTitle.replace(/'/g, "%27"));
+
+                let teacher = "Unacademy Educator";
+                if (sub.teacherIds?.length && typeof sub.teacherIds[0] === "object") {
+                    teacher = (sub.teacherIds[0].firstName || "") + " " + (sub.teacherIds[0].lastName || "");
+                } else {
+                    teacher = sub.teacherName || "Unacademy Educator";
+                }
+
+                let image = "https://static.pw.live/react-batches/assets/svg/subjects/defaultSubject.svg";
+                if (sub.imageId?.baseUrl) {
+                    image = sub.imageId.baseUrl + sub.imageId.key;
+                } else if (sub.image) {
+                    image = sub.image;
+                }
+
+                let totalLectures = sub.lectureCount !== undefined ? sub.lectureCount : 0;
+
+                const card = `
+                <div onclick='location.href="/PW/chapters.html?batch_id=${batchId}&subject_id=${sub._id || ''}&subject_slug=${sub.slug || ''}&subject=${escapedSubject}"'
+                     class="bg-surface border border-border hover:border-primary/30 rounded-xl p-4 flex items-center gap-4 cursor-pointer hover:-translate-y-1 hover:shadow-lg transition-all duration-200 group">
+                    <div class="w-14 h-14 rounded-xl bg-background border border-border flex-shrink-0 flex items-center justify-center overflow-hidden p-2">
+                        <img src="${image}" class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-200">
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h4 class="text-sm font-bold text-textMain truncate group-hover:text-primary transition-colors">${subjectTitle}</h4>
+                        <p class="text-xs text-textMuted mt-0.5 font-medium">${totalLectures} Interactive Lectures</p>
+                        <p class="text-[11px] text-primary/80 mt-2 truncate font-medium bg-primary/5 border border-primary/10 rounded px-1.5 py-0.5 inline-block">
+                            👨‍🏫 ${teacher}
+                        </p>
+                    </div>
+                </div>`;
+                container.innerHTML += card;
+            });
+        }
+    </script>
+</body>
+</html>
