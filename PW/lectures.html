@@ -25,8 +25,7 @@
         .spinner { width: 45px; height: 45px; border: 4px solid #f1f5f9; border-top: 4px solid #4f46e5; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
         * { user-select: auto !important; -webkit-user-select: auto !important; }
-        
-        /* Matching Subtle Footer Glow Effect */
+
         .glow-text { text-shadow: 0 0 8px rgba(79,70,229,0.2); }
     </style>
 </head>
@@ -43,7 +42,7 @@
             </button>
             <div class="hidden sm:flex items-center gap-2">
                 <div class="h-9 w-9 bg-white rounded-lg flex items-center justify-center font-bold text-[#4f46e5]">TDC</div>
-                <span class="text-xl font-black tracking-tight text-white">The DevCoderZ</span>
+                <span class="text-xl font-black tracking-tight text-white">The DevCoderz</span>
             </div>
         </div>
         <div class="text-xs text-white/90 bg-white/10 px-3 py-1.5 rounded-full border border-white/20 font-medium">
@@ -107,129 +106,5 @@
 
       function renderLectures(lectures) {
         let html = "";
-        if (lectures.length === 0) {
+        if (!lectures || lectures.length === 0) {
             document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#64748b; font-family:sans-serif;'>No Lectures Online</div>";
-            return;
-        }
-        lectures.forEach(item => {
-          if (!item) return;
-          const lectureId = item._id || (item.videoDetails && item.videoDetails._id);
-          if (!lectureId) return;
-
-          html += `
-        <div class="index_class_3-FAUYHF lecture-card" data-id="${lectureId}" style="position:relative; margin-bottom:16px; cursor:pointer;" onclick="openLecture('${lectureId}')">
-        <div class="index_class_1-MVi_no">
-        <div class="index_class_3-bfYHa0">
-        <img src="${item.videoDetails?.image || "https://static.pw.live/react-batches/assets/study/blue-play-icon.svg"}" class="index_class_4-h3krT0">
-        <img src="https://static.pw.live/react-batches/assets/study/blue-play-icon.svg" class="play-icon-WPnSAT">
-        </div>
-        <section class="card_details-jhfM5S">
-        <div class="index_class_5-jpm8N4"><div class="index_class_7-QWiBzJ"><img class="index_class_8-c71iDH" src="https://static.pw.live/react-batches/assets/study/clock.svg"><span style="margin-left:4px;">${item.videoDetails?.duration || "00:00"}</span></div></div>
-        <div class="index_class_9-MwVgjv"><p class="index_class_10-F64Ile" style="color:#1e293b; font-weight:600; font-size:14px; line-height:1.4;">${item.topic || item.videoDetails?.name || "Untitled Lecture"}</p></div>
-        <div class="index_class_12-Cq8EEY" onclick="event.stopPropagation();">
-            <div class="dropdown-wrapper" style="position:relative;">
-                <div class="three-dot-btn" onclick="event.stopPropagation(); toggleDropdown('${lectureId}', event)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="moreVerticalIcon-zDj749"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
-                </div>
-                <div class="dropdown-menu" id="dropdown-${lectureId}" style="display:none; position:absolute; right:0; top:28px; background:#fff; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.15); padding:8px 0; min-width:160px; z-index:1000;">
-                    <div onclick="event.stopPropagation(); toggleComplete('${lectureId}')" class="dropdown-item" style="padding:10px 14px; font-size:14px; color:#333; font-family:sans-serif;">
-                        <span id="dropdown-text-${lectureId}">Mark as complete</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        </section>
-        </div>
-        </div>`;
-        });
-        document.getElementById("contentContainer").innerHTML = html;
-        restoreCompletedLectures();
-      }
-
-      function renderNotes(lectures) {
-        let html = "";
-        if (lectures.length === 0) {
-            document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#64748b; font-family:sans-serif;'>No Material Available</div>";
-            return;
-        }
-        lectures.forEach(item => {
-          if (!item || !item.download_url) return;
-          html += `
-        <div class="index_class_3-FAUYHF" style="margin-bottom:16px; cursor:pointer;" onclick="window.open('${item.download_url}', '_blank')">
-            <div class="index_class_1-MVi_no">
-                <div class="index_class_3-bfYHa0" style="background:#fff1f2; display:flex; align-items:center; justify-content:center;">
-                    <span style="font-size:30px;">📄</span>
-                </div>
-                <section class="card_details-jhfM5S">
-                    <div class="index_class_9-MwVgjv">
-                        <p class="index_class_10-F64Ile" style="color:#1e293b; font-weight:600; font-size:14px;">${item.title || "PDF Resource File"}</p>
-                    </div>
-                </section>
-            </div>
-        </div>`;
-        });
-        document.getElementById("contentContainer").innerHTML = html;
-      }
-
-      function renderQuizzes(quizzes) {
-        let html = "";
-        if (quizzes.length === 0) {
-            document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#64748b; font-family:sans-serif;'>No Quiz Modules Found</div>";
-            return;
-        }
-        quizzes.forEach(quiz => {
-          const test = quiz.dppQuizDetails?.test || {};
-          const scheduleId = quiz.dppQuizDetails?.scheduleId;
-          if (!test._id || !scheduleId) return;
-          html += `
-        <div class="index_class_3-FAUYHF" style="margin-bottom:16px; cursor:pointer;" onclick="openDpp('${test._id}','${scheduleId}')">
-            <div class="index_class_1-MVi_no">
-                <div class="index_class_3-bfYHa0" style="background:#f0fdf4; display:flex; align-items:center; justify-content:center;">
-                    <span style="font-size:30px;">📝</span>
-                </div>
-                <section class="card_details-jhfM5S">
-                    <div class="index_class_9-MwVgjv">
-                        <p class="index_class_10-F64Ile" style="color:#1e293b; font-weight:600; font-size:14px;">${test.name || "DPP Practice Set"}</p>
-                    </div>
-                </section>
-            </div>
-        </div>`;
-        });
-        document.getElementById("contentContainer").innerHTML = html;
-      }
-
-      function changeTab(tab) {
-        const url = new URL(window.location.href);
-        url.searchParams.set("tab", tab);
-        window.location.href = url.toString();
-      }
-
-      function openLecture(id) {
-        window.location.href = `./player.html?video_id=${id}&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}`;
-      }
-
-      function openDpp(testId, scheduleId) {
-        window.location.href = `./dpp.html?batch_id=${batchId}&schedule_id=${scheduleId}&test_id=${testId}`;
-      }
-
-      let openDropdownId = null;
-      function closeAllDropdowns() { document.querySelectorAll(".dropdown-menu").forEach(menu => { menu.style.display = "none"; }); openDropdownId = null; }
-      function toggleDropdown(id, e) { e.stopPropagation(); if (openDropdownId === id) { closeAllDropdowns(); return; } closeAllDropdowns(); const menu = document.getElementById("dropdown-" + id); if (menu) { menu.style.display = "block"; openDropdownId = id; } }
-      document.addEventListener("click", () => { document.querySelectorAll(".dropdown-menu").forEach(m => m.style.display = "none"); });
-
-      function toggleComplete(id) {
-        let arr = JSON.parse(localStorage.getItem("completedLectures")) || [];
-        if (arr.includes(id)) { arr = arr.filter(x => x !== id); applyUI(id, false); } else { arr.push(id); applyUI(id, true); }
-        localStorage.setItem("completedLectures", JSON.stringify(arr));
-      }
-
-      function applyUI(id, state) {
-        let card = document.querySelector(`.lecture-card[data-id="${id}"]`);
-        let text = document.getElementById("dropdown-text-" + id);
-        if (!card) return;
-        if (state) { card.classList.add("completed-lecture"); if (text) text.innerText = "Undo completion"; } else { card.classList.remove("completed-lecture"); if (text) text.innerText = "Mark as complete"; }
-      }
-      function restoreCompletedLectures() { let arr = JSON.parse(localStorage.getItem("completedLectures")) || []; arr.forEach(id => applyUI(id, true)); }
-    </script>
-</body>
-</html>
