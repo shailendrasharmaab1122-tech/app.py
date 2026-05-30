@@ -1,67 +1,39 @@
-l<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="pageTitle">The DevCoderz</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://www.pw.live/batches-new/index.BZrLlnYz.css" rel="stylesheet" type="text/css">
     <style>
-        body { background-color: #f1f5f9; font-family: sans-serif; margin: 0; padding: 0; }
-
-        .custom-tabs-container { display: flex; gap: 8px; overflow-x: auto; padding: 12px 4px; margin-bottom: 16px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-        .custom-tabs-container::-webkit-scrollbar { display: none; }
-
-        .tab-btn { background: #ffffff; color: #475569; border: 1px solid #e2e8f0; padding: 10px 18px; font-size: 13px; font-weight: 600; border-radius: 30px; white-space: nowrap; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-        .tab-btn.active-tab { background: #4f46e5; color: #ffffff; border-color: #4f46e5; box-shadow: 0 4px 10px rgba(79,70,229,0.25); }
-
-        .main-wrapper { max-width: 800px; margin: auto; padding: 16px; }
-        .topic-header-title { color: #0f172a; font-size: 20px; font-weight: 700; margin: 8px 0 16px 4px; font-family: system-ui, sans-serif; border-left: 4px solid #4f46e5; padding-left: 10px; }
-
-        .completed-lecture { border: 2px solid #10b981 !important; border-radius: 12px; box-shadow: 0 0 12px rgba(16,185,129,0.15); }
-        .dropdown-item:hover { background: #f1f5f9; }
-
-        #loadingScreen { position: fixed; inset: 0; background: #fff; display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 99999; }
-        .spinner { width: 45px; height: 45px; border: 4px solid #f1f5f9; border-top: 4px solid #4f46e5; border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        * { user-select: auto !important; -webkit-user-select: auto !important; }
-
-        /* Matching Subtle Footer Glow Effect */
-        .glow-text { text-shadow: 0 0 8px rgba(79,70,229,0.2); }
+        body { background-color: #f8fafc; font-family: sans-serif; margin: 0; padding: 0; }
+        .custom-tabs-container { display: flex; gap: 8px; overflow-x: auto; padding: 12px; margin-bottom: 16px; scrollbar-width: none; }
+        .tab-btn { background: #ffffff; color: #475569; border: 1px solid #e2e8f0; padding: 10px 18px; font-size: 13px; font-weight: 600; border-radius: 30px; white-space: nowrap; cursor: pointer; }
+        .tab-btn.active-tab { background: #4f46e5; color: #ffffff; border-color: #4f46e5; }
+        .main-wrapper { max-width: 600px; margin: auto; padding: 10px; }
+        .card { background: white; border-radius: 16px; padding: 16px; margin-bottom: 14px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #f1f5f9; display: flex; align-items: center; gap: 16px; cursor: pointer; transition: transform 0.2s; }
+        .card:active { transform: scale(0.98); }
+        .img-box { width: 80px; height: 60px; border-radius: 8px; overflow: hidden; flex-shrink: 0; background: #eef2ff; display: flex; align-items: center; justify-content: center; }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .text-box { flex-grow: 1; }
+        .title-text { font-size: 14px; font-weight: 700; color: #1e293b; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .meta-text { font-size: 12px; color: #64748b; }
+        #loadingScreen { position: fixed; inset: 0; background: #fff; display: flex; align-items: center; justify-content: center; z-index: 99999; }
     </style>
 </head>
-<body class="pb-24">
-    <div id="loadingScreen" style="display: flex;">
-      <div class="spinner"></div>
-      <p style="margin-top: 14px; font-weight: 600; color: #4f46e5; font-family: sans-serif;">Loading Channels...</p>
-    </div>
+<body class="pb-20">
+    <div id="loadingScreen">Loading...</div>
 
-    <nav class="h-16 bg-[#4f46e5] flex items-center justify-between px-6 shadow-md sticky top-0 z-50">
-        <div class="flex items-center gap-4">
-            <button id="backToChaptersBtn" class="bg-white/20 hover:bg-white/30 text-white text-xs font-bold py-2 px-4 rounded-lg transition-all">
-                ← Back
-            </button>
-            <div class="hidden sm:flex items-center gap-2">
-                <div class="h-9 w-9 bg-white rounded-lg flex items-center justify-center font-bold text-[#4f46e5]">TDC</div>
-                <span class="text-xl font-black tracking-tight text-white">The DevCoderZ</span>
-            </div>
-        </div>
-        <div class="text-xs text-white/90 bg-white/10 px-3 py-1.5 rounded-full border border-white/20 font-medium">
-            Multi-Stream Hub
-        </div>
+    <nav class="h-16 bg-[#4f46e5] flex items-center px-6 text-white font-bold shadow-lg">
+        <button onclick="history.back()" class="mr-4">← Back</button>
+        The DevCoderz
     </nav>
 
     <div class="main-wrapper">
-        <h3 class="topic-header-title" id="topicName">Loading Topic...</h3>
+        <h3 class="text-lg font-bold text-slate-800 ml-2 mb-4" id="topicName">Loading...</h3>
         <div class="custom-tabs-container" id="tabsContainer"></div>
-        <div class="index_class_2-nA57WL" id="contentContainer"></div>
+        <div id="contentContainer"></div>
     </div>
-
-    <footer class="h-12 border-t border-slate-200 bg-white text-center text-xs text-slate-500 flex items-center justify-center gap-1 fixed bottom-0 inset-x-0 z-50 shadow-inner">
-        <span>© 2026 The DevCoderz. All Rights Reserved.</span>
-        <span>•</span>
-        <span>Developed by <span class="text-[#4f46e5] font-bold tracking-wide glow-text">Devansh Sharma</span></span>
-    </footer>
 
     <script>
       const params = new URLSearchParams(window.location.search);
@@ -70,167 +42,73 @@ l<!DOCTYPE html>
       const topicId = params.get("chapter_id") || params.get("topic_id");
       const activeTab = params.get("tab") || "videos";
 
-      if (!batchId || !subjectId || !topicId) {
-        document.body.innerHTML = "<div style='padding:50px; text-align:center; font-family:sans-serif;'>Invalid Request Parameters</div>";
-        throw new Error();
-      }
-
-      document.getElementById('backToChaptersBtn').onclick = () => {
-         window.location.href = `./chapters.html?batch_id=${batchId}&subject_id=${subjectId}`;
-      };
-
       const cleanApiUrl = `https://DevCoderz.vercel.app/api/PW/batches.js?type=lectures&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}&tab=${activeTab}`;
 
       fetch(cleanApiUrl)
-        .then(res => { if(!res.ok) throw new Error(); return res.json(); })
+        .then(res => res.json())
         .then(data => {
           document.getElementById("loadingScreen").style.display = "none";
           document.getElementById("topicName").innerText = data.topic_name || "Topic";
           renderTabs();
           if (activeTab === "videos" || activeTab === "DppVideos") renderLectures(data.lectures || []);
-          if (activeTab === "notes" || activeTab === "DppNotes") renderNotes(data.lectures || []);
-          if (activeTab === "dppQuiz") renderQuizzes(data.dpp_quizzes || []);
-        })
-        .catch(err => {
-            document.getElementById("loadingScreen").innerHTML = `<div style="text-align:center; color:#ef4444; padding:20px; font-family:sans-serif;"><h3>❌ Network Tunnel Error</h3></div>`;
+          else if (activeTab === "notes" || activeTab === "DppNotes") renderNotes(data.lectures || []);
+          else renderQuizzes(data.dpp_quizzes || []);
         });
 
       function renderTabs() {
         const tabs = [["videos", "Lectures"], ["notes", "Notes"], ["dppQuiz", "DPP Quiz"], ["DppNotes", "DPP PDF"], ["DppVideos", "DPP Solutions"]];
         let html = "";
         tabs.forEach(t => {
-          const isActive = activeTab === t[0] ? "active-tab" : "";
-          html += `<button onclick="changeTab('${t[0]}')" class="tab-btn ${isActive}">${t[1]}</button>`;
+          html += `<button onclick="window.location.href='?batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}&tab=${t[0]}'" class="tab-btn ${activeTab === t[0] ? 'active-tab' : ''}">${t[1]}</button>`;
         });
         document.getElementById("tabsContainer").innerHTML = html;
       }
 
-      function renderLectures(lectures) {
+      function renderLectures(list) {
         let html = "";
-        if (lectures.length === 0) {
-            document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#64748b; font-family:sans-serif;'>No Lectures Online</div>";
-            return;
-        }
-        lectures.forEach(item => {
-          if (!item) return;
-          const lectureId = item._id || (item.videoDetails && item.videoDetails._id);
-          if (!lectureId) return;
-
+        list.forEach(i => {
           html += `
-        <div class="index_class_3-FAUYHF lecture-card" data-id="${lectureId}" style="position:relative; margin-bottom:16px; cursor:pointer;" onclick="openLecture('${lectureId}')">
-        <div class="index_class_1-MVi_no">
-        <div class="index_class_3-bfYHa0">
-        <img src="${item.videoDetails?.image || "https://static.pw.live/react-batches/assets/study/blue-play-icon.svg"}" class="index_class_4-h3krT0">
-        <img src="https://static.pw.live/react-batches/assets/study/blue-play-icon.svg" class="play-icon-WPnSAT">
-        </div>
-        <section class="card_details-jhfM5S">
-        <div class="index_class_5-jpm8N4"><div class="index_class_7-QWiBzJ"><img class="index_class_8-c71iDH" src="https://static.pw.live/react-batches/assets/study/clock.svg"><span style="margin-left:4px;">${item.videoDetails?.duration || "00:00"}</span></div></div>
-        <div class="index_class_9-MwVgjv"><p class="index_class_10-F64Ile" style="color:#1e293b; font-weight:600; font-size:14px; line-height:1.4;">${item.topic || item.videoDetails?.name || "Untitled Lecture"}</p></div>
-        <div class="index_class_12-Cq8EEY" onclick="event.stopPropagation();">
-            <div class="dropdown-wrapper" style="position:relative;">
-                <div class="three-dot-btn" onclick="event.stopPropagation(); toggleDropdown('${lectureId}', event)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="moreVerticalIcon-zDj749"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+            <div class="card" onclick="window.location.href='./player.html?video_id=${i.video_id || i.id}&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}'">
+                <div class="img-box"><img src="${i.image || 'https://static.pw.live/react-batches/assets/study/blue-play-icon.svg'}"></div>
+                <div class="text-box">
+                    <div class="title-text">${i.name || "Lecture"}</div>
+                    <div class="meta-text">🕒 ${i.duration || "00:00"}</div>
                 </div>
-                <div class="dropdown-menu" id="dropdown-${lectureId}" style="display:none; position:absolute; right:0; top:28px; background:#fff; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.15); padding:8px 0; min-width:160px; z-index:1000;">
-                    <div onclick="event.stopPropagation(); toggleComplete('${lectureId}')" class="dropdown-item" style="padding:10px 14px; font-size:14px; color:#333; font-family:sans-serif;">
-                        <span id="dropdown-text-${lectureId}">Mark as complete</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        </section>
-        </div>
-        </div>`;
-        });
-        document.getElementById("contentContainer").innerHTML = html;
-        restoreCompletedLectures();
-      }
-
-      function renderNotes(lectures) {
-        let html = "";
-        if (lectures.length === 0) {
-            document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#64748b; font-family:sans-serif;'>No Material Available</div>";
-            return;
-        }
-        lectures.forEach(item => {
-          if (!item || !item.download_url) return;
-          html += `
-        <div class="index_class_3-FAUYHF" style="margin-bottom:16px; cursor:pointer;" onclick="window.open('${item.download_url}', '_blank')">
-            <div class="index_class_1-MVi_no">
-                <div class="index_class_3-bfYHa0" style="background:#fff1f2; display:flex; align-items:center; justify-content:center;">
-                    <span style="font-size:30px;">📄</span>
-                </div>
-                <section class="card_details-jhfM5S">
-                    <div class="index_class_9-MwVgjv">
-                        <p class="index_class_10-F64Ile" style="color:#1e293b; font-weight:600; font-size:14px;">${item.title || "PDF Resource File"}</p>
-                    </div>
-                </section>
-            </div>
-        </div>`;
+            </div>`;
         });
         document.getElementById("contentContainer").innerHTML = html;
       }
 
-      function renderQuizzes(quizzes) {
+      function renderNotes(list) {
         let html = "";
-        if (quizzes.length === 0) {
-            document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#64748b; font-family:sans-serif;'>No Quiz Modules Found</div>";
-            return;
-        }
-        quizzes.forEach(quiz => {
-          const test = quiz.dppQuizDetails?.test || {};
-          const scheduleId = quiz.dppQuizDetails?.scheduleId;
-          if (!test._id || !scheduleId) return;
+        list.forEach(i => {
           html += `
-        <div class="index_class_3-FAUYHF" style="margin-bottom:16px; cursor:pointer;" onclick="openDpp('${test._id}','${scheduleId}')">
-            <div class="index_class_1-MVi_no">
-                <div class="index_class_3-bfYHa0" style="background:#f0fdf4; display:flex; align-items:center; justify-content:center;">
-                    <span style="font-size:30px;">📝</span>
+            <div class="card" onclick="window.open('${i.download_url}', '_blank')">
+                <div class="img-box" style="font-size:24px;">📄</div>
+                <div class="text-box">
+                    <div class="title-text">${i.title || "Study Material"}</div>
+                    <div class="meta-text">PDF Document</div>
                 </div>
-                <section class="card_details-jhfM5S">
-                    <div class="index_class_9-MwVgjv">
-                        <p class="index_class_10-F64Ile" style="color:#1e293b; font-weight:600; font-size:14px;">${test.name || "DPP Practice Set"}</p>
-                    </div>
-                </section>
-            </div>
-        </div>`;
+            </div>`;
         });
         document.getElementById("contentContainer").innerHTML = html;
       }
 
-      function changeTab(tab) {
-        const url = new URL(window.location.href);
-        url.searchParams.set("tab", tab);
-        window.location.href = url.toString();
+      function renderQuizzes(list) {
+        let html = "";
+        list.forEach(i => {
+          const test = i.dppQuizDetails?.test || {};
+          html += `
+            <div class="card" onclick="window.location.href='./dpp.html?batch_id=${batchId}&schedule_id=${i.dppQuizDetails?.scheduleId}&test_id=${test._id}'">
+                <div class="img-box" style="font-size:24px;">📝</div>
+                <div class="text-box">
+                    <div class="title-text">${test.name || "DPP Quiz"}</div>
+                    <div class="meta-text">Attempt Now</div>
+                </div>
+            </div>`;
+        });
+        document.getElementById("contentContainer").innerHTML = html;
       }
-
-      function openLecture(id) {
-        window.location.href = `./player.html?video_id=${id}&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}`;
-      }
-
-      function openDpp(testId, scheduleId) {
-        window.location.href = `./dpp.html?batch_id=${batchId}&schedule_id=${scheduleId}&test_id=${testId}`;
-      }
-
-      let openDropdownId = null;
-      function closeAllDropdowns() { document.querySelectorAll(".dropdown-menu").forEach(menu => { menu.style.display = "none"; }); openDropdownId = null; }
-      function toggleDropdown(id, e) { e.stopPropagation(); if (openDropdownId === id) { closeAllDropdowns(); return; } closeAllDropdowns(); const menu = document.getElementById("dropdown-" + id); if (menu) { menu.style.display = "block"; openDropdownId = id; } }
-      document.addEventListener("click", () => { document.querySelectorAll(".dropdown-menu").forEach(m => m.style.display = "none"); });
-
-      function toggleComplete(id) {
-        let arr = JSON.parse(localStorage.getItem("completedLectures")) || [];
-        if (arr.includes(id)) { arr = arr.filter(x => x !== id); applyUI(id, false); } else { arr.push(id); applyUI(id, true); }
-        localStorage.setItem("completedLectures", JSON.stringify(arr));
-      }
-
-      function applyUI(id, state) {
-        let card = document.querySelector(`.lecture-card[data-id="${id}"]`);
-        let text = document.getElementById("dropdown-text-" + id);
-        if (!card) return;
-        if (state) { card.classList.add("completed-lecture"); if (text) text.innerText = "Undo completion"; } else { card.classList.remove("completed-lecture"); if (text) text.innerText = "Mark as complete"; }
-      }
-      function restoreCompletedLectures() { let arr = JSON.parse(localStorage.getItem("completedLectures")) || []; arr.forEach(id => applyUI(id, true)); }
     </script>
 </body>
 </html>
-
