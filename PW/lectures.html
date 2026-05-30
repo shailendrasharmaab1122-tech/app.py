@@ -108,3 +108,256 @@
         let html = "";
         if (!lectures || lectures.length === 0) {
             document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#64748b; font-family:sans-serif;'>No Lectures Online</div>";
+    <script>
+      const params = new URLSearchParams(window.location.search);
+
+      const batchId = params.get("batch_id");
+      const subjectId = params.get("subject_id");
+      const topicId = params.get("topic_id") || params.get("chapter_id");
+      const activeTab = params.get("tab") || "videos";
+
+      if (!batchId || !subjectId || !topicId) {
+        document.body.innerHTML = "<div style='padding:50px; text-align:center;'>Invalid Request Parameters</div>";
+        throw new Error("Missing Params");
+      }
+
+      const apiUrl = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}&tab=${activeTab}`;
+
+      fetch(apiUrl, { credentials: "include" })
+        .then((res) => res.json())
+        .then((data) => {
+          document.getElementById("loadingScreen").style.display = "none";
+
+          document.getElementById("topicName").innerText = data.topic_name || "Topic";
+          document.getElementById("pageTitle").innerText = data.topic_name || "Topic";
+
+          renderTabs();
+
+          if (activeTab === "videos" || activeTab === "DppVideos") {
+            renderLectures(data.lectures || []);
+          }
+          if (activeTab === "notes" || activeTab === "DppNotes") {
+            renderNotes(data.lectures || []);
+          }
+          if (activeTab === "dppQuiz") {
+            renderQuizzes(data.dpp_quizzes || []);
+          }
+        })
+        .catch(err => {
+            document.getElementById("loadingScreen").innerHTML = `<div style="text-align:center; color:#ef4444; padding:20px;"><h3>❌ Failed to load API</h3></div>`;
+        });
+
+      // ================= TABS =================
+      function renderTabs() {
+        const tabs = [
+          ["videos", "Lectures"],
+          ["notes", "Notes"],
+          ["dppQuiz", "DPP Quiz"],
+          ["DppNotes", "DPP PDF"],
+          ["DppVideos", "DPP Solutions"],
+        ];
+
+        let html = "";
+        tabs.forEach((t) => {
+          html += `
+        <button onclick="changeTab('${t[0]}')"
+        class="index_class_2-xQMaV5 ${activeTab === t[0] ? "active-Wkjz3n" : ""}">
+            ${t[1]}
+        </button>`;
+        });
+
+        document.getElementById("tabsContainer").innerHTML = html;
+      }
+
+      // ================= LECTURES (FIXED BUGS) =================
+      function renderLectures(lectures) {
+        let html = "";
+        
+        if (!lectures || lectures.length === 0) {
+            document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#64748b;'>No Lectures Found</div>";
+            return;
+        }
+
+        lectures.forEach((item) => {
+          if (!item) return;
+
+          // Flexible ID checking ताकि कोई भी ऑब्जेक्ट स्किप न हो (PW + DevCoderz API Full Support)
+          const lectureId = item.video_id || item._id || item.id || (item.videoDetails && (item.videoDetails._id || item.videoDetails.id));
+          if (!lectureId) return;
+
+          // Fallback fields for name, image and duration
+          const title = item.name || item.topic || item.title || item.videoDetails?.name || "Untitled Lecture";
+          const imageUrl = item.image || item.videoDetails?.image || "https://static.pw.live/react-batches/assets/study/blue-play-icon.svg";
+          const duration = item.duration || item.videoDetails?.duration || "00:00";
+
+          html += `
+          <div class="index_class_3-FAUYHF lecture-card"
+               data-id="${lectureId}"
+               style="position:relative;"
+               onclick="openLecture('${lectureId}')">
+
+          <div class="index_class_1-MVi_no">
+          <div class="index_class_3-bfYHa0">
+          <img src="${imageUrl}" class="index_class_4-h3krT0" onerror="this.src='https://static.pw.live/react-batches/assets/study/blue-play-icon.svg'">
+          <img src="https://static.pw.live/react-batches/assets/study/blue-play-icon.svg" class="play-icon-WPnSAT">
+          </div>
+
+          <section class="card_details-jhfM5S">
+          <div class="index_class_5-jpm8N4">
+          <div class="index_class_7-QWiBzJ">
+          <img class="index_class_8-c71iDH" src="https://static.pw.live/react-batches/assets/study/clock.svg">
+          <span>${duration}</span>
+          </div>
+          </div>
+
+          <div class="index_class_9-MwVgjv">
+          <p class="index_class_10-F64Ile">${title}</p>
+          </div>
+
+          <div class="index_class_12-Cq8EEY" onclick="event.stopPropagation();">
+              <div class="dropdown-wrapper" style="position:relative;">
+                  <div class="three-dot-btn" onclick="event.stopPropagation(); toggleDropdown('${lectureId}', event)" style="cursor:pointer;">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis-vertical moreVerticalIcon-zDj749">
+                          <circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle>
+                      </svg>
+                  </div>
+
+                  <div class="dropdown-menu" id="dropdown-${lectureId}" style="display:none; position:absolute; right:0; top:28px; background:#fff; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.15); padding:8px 0; min-width:180px; z-index:1000;">
+                      <div onclick="event.stopPropagation(); toggleComplete('${lectureId}')" class="dropdown-item" style="padding:10px 14px; cursor:pointer; font-size:14px;">
+                          <span id="dropdown-text-${lectureId}">Mark as complete</span>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="index_class_12-Cq8EEY"></div>
+          </section>
+          </div>
+          </div>`;
+        });
+
+        document.getElementById("contentContainer").innerHTML = html;
+        restoreCompletedLectures();
+      }
+      // ================= NOTES =================
+      function renderNotes(lectures) {
+        let html = "";
+        if (!lectures || lectures.length === 0) {
+            document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#64748b;'>No Material Available</div>";
+            return;
+        }
+
+        lectures.forEach((item) => {
+          const downloadUrl = item.download_url || item.attachment?.url;
+          if (!item || !downloadUrl) return;
+          const noteTitle = item.title || item.name || "PDF Resource File";
+
+          html += `
+        <div class="index_class_3-FAUYHF" onclick="window.open('${downloadUrl}', '_blank')">
+            <div class="index_class_1-MVi_no">
+                <section class="card_details-jhfM5S">
+                    <div class="index_class_9-MwVgjv">
+                        <p class="index_class_10-F64Ile">📄 ${noteTitle}</p>
+                    </div>
+                </section>
+            </div>
+        </div>`;
+        });
+
+        document.getElementById("contentContainer").innerHTML = html;
+      }
+
+      // ================= QUIZ =================
+      function renderQuizzes(quizzes) {
+        let html = "";
+        if (!quizzes || quizzes.length === 0) {
+            document.getElementById("contentContainer").innerHTML = "<div style='text-align:center; padding:40px; color:#64748b;'>No Quiz Modules Found</div>";
+            return;
+        }
+
+        quizzes.forEach((quiz) => {
+          const test = quiz.dppQuizDetails?.test || quiz.test || {};
+          const scheduleId = quiz.dppQuizDetails?.scheduleId || quiz.scheduleId;
+
+          const testId = test._id || test.id;
+          if (!testId || !scheduleId) return;
+
+          html += `
+        <div class="index_class_3-FAUYHF" onclick="openDpp('${testId}','${scheduleId}')">
+            <div class="index_class_1-MVi_no">
+                <section class="card_details-jhfM5S">
+                    <div class="index_class_9-MwVgjv">
+                        <p class="index_class_10-F64Ile">📝 ${test.name || "DPP Quiz"}</p>
+                    </div>
+                </section>
+            </div>
+        </div>`;
+        });
+
+        document.getElementById("contentContainer").innerHTML = html;
+      }
+
+      // ================= NAVIGATION & DROPDOWNS =================
+      function changeTab(tab) {
+        const url = new URL(window.location.href);
+        url.searchParams.set("tab", tab);
+        window.location.href = url.toString();
+      }
+
+      function openLecture(id) {
+        window.location.href = `/videoplayerr.php?video_id=${id}&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}`;
+      }
+
+      function openDpp(testId, scheduleId) {
+        window.location.href = `/dpp.php?batch_id=${batchId}&schedule_id=${scheduleId}&test_id=${testId}`;
+      }
+
+      let openDropdownId = null;
+      function closeAllDropdowns() {
+        document.querySelectorAll(".dropdown-menu").forEach((menu) => { menu.style.display = "none"; });
+        openDropdownId = null;
+      }
+
+      function toggleDropdown(id, e) {
+        e.stopPropagation();
+        if (openDropdownId === id) { closeAllDropdowns(); return; }
+        closeAllDropdowns();
+        const menu = document.getElementById("dropdown-" + id);
+        if (menu) { menu.style.display = "block"; openDropdownId = id; }
+      }
+
+      document.addEventListener("click", () => {
+        document.querySelectorAll(".dropdown-menu").forEach((m) => (m.style.display = "none"));
+      });
+
+      // ================= LOCAL STORAGE (MARK AS COMPLETE) =================
+      function toggleComplete(id) {
+        let arr = JSON.parse(localStorage.getItem("completedLectures")) || [];
+        if (arr.includes(id)) { 
+            arr = arr.filter((x) => x !== id); 
+            applyUI(id, false); 
+        } else { 
+            arr.push(id); 
+            applyUI(id, true); 
+        }
+        localStorage.setItem("completedLectures", JSON.stringify(arr));
+      }
+
+      function applyUI(id, state) {
+        let card = document.querySelector(`.lecture-card[data-id="${id}"]`);
+        let text = document.getElementById("dropdown-text-" + id);
+        if (!card) return;
+        if (state) { 
+            card.classList.add("completed-lecture"); 
+            if (text) text.innerText = "Undo completion"; 
+        } else { 
+            card.classList.remove("completed-lecture"); 
+            if (text) text.innerText = "Mark as complete"; 
+        }
+      }
+
+      function restoreCompletedLectures() {
+        let arr = JSON.parse(localStorage.getItem("completedLectures")) || [];
+        arr.forEach((id) => applyUI(id, true));
+      }
+    </script>
+</body></html>
