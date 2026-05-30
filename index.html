@@ -23,6 +23,14 @@
         .CR_NAME{font-size:14px;font-weight:900;color:#fff;letter-spacing:1px}
         .CR_TAG{font-size:9px;color:var(--0x3);text-transform:uppercase;font-weight:bold;margin-top:3px}
         footer{padding:20px 0;font-family:monospace;font-size:12px;color:#30363d;letter-spacing:4px;font-weight:bold}
+        #overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(1,4,9,0.95);z-index:9999;display:flex;justify-content:center;align-items:center;opacity:0;visibility:hidden;transition:0.3s}
+        .popup{background:#161b22;padding:30px;border-radius:20px;border:2px solid #38bdf8;text-align:center;max-width:320px;width:85%}
+        .popup h3{color:#38bdf8;margin-top:0;font-family:monospace}
+        .popup p{font-size:14px;color:#fff;margin-bottom:20px}
+        .btn-group{display:flex;flex-direction:column;gap:10px}
+        .btn{padding:12px;border-radius:10px;text-decoration:none;font-weight:bold;font-family:monospace;cursor:pointer;display:block}
+        .join-btn{background:#38bdf8;color:#010409}
+        .skip-btn{background:transparent;color:#30363d;border:1px solid #30363d}
         @media (max-width:500px){
             .C0x{padding:20px;gap:15px;border-radius:20px}
             .C0x img{width:60px;height:60px;min-width:60px}
@@ -34,9 +42,19 @@
 </head>
 <body>
 
+<div id="overlay">
+    <div class="popup">
+        <h3>JOIN TELEGRAM</h3>
+        <p>Join our channel to get daily updated codes, feature leaks, and premium batch access.</p>
+        <div class="btn-group">
+            <a href="https://t.me/+8tZSJ5FyTXVjM2M1" class="btn join-btn" target="_blank">JOIN NOW</a>
+            <div class="btn skip-btn" onclick="closePopup()">SKIP</div>
+        </div>
+    </div>
+</div>
+
 <div id="_O0x">
     <div class="L0x">&lt;DevCoderZ/&gt;</div>
-    
     <div class="G0x">
         <a href="https://devcoderz.vercel.app/PW/" class="C0x">
             <img src="pw.png" alt="PW">
@@ -46,7 +64,6 @@
                 <p>Here you will get the access of premium batches of PW.</p>
             </div>
         </a>
-
         <a href="https://devcoderz.vercel.app/nexttoppers" class="C0x">
             <img src="nt.png" alt="NT">
             <div class="TX0x">
@@ -55,7 +72,6 @@
                 <p>Advanced Educational Interface for high-speed NT Portal Access.</p>
             </div>
         </a>
-
         <a href="https://devcoderz.vercel.app/nexttoppers/old-batches" class="C0x">
             <img src="nt.png" alt="NT">
             <div class="TX0x">
@@ -64,7 +80,6 @@
                 <p>Unlock the vault of previous year content and archived batches.</p>
             </div>
         </a>
-
         <a href="https://devcoderz.vercel.app/cricket" class="C0x">
             <img src="cricket.png" alt="IPL">
             <div class="TX0x">
@@ -73,7 +88,6 @@
                 <p>Ultra low-latency 4K UHD streaming for all major tournaments.</p>
             </div>
         </a>
-
         <a href="https://devcoderz.vercel.app/missionjeet" class="C0x">
             <img src="mj.png" alt="MJ">
             <div class="TX0x">
@@ -82,7 +96,6 @@
                 <p>Gateway to MJ curriculum. High-definition educational streams.</p>
             </div>
         </a>
-
         <a href="https://devcoderz.vercel.app/vibrant" class="C0x">
             <img src="vt.png" alt="VT">
             <div class="TX0x">
@@ -92,7 +105,6 @@
             </div>
         </a>
     </div>
-
     <div class="CR0x">
         <div class="CR_ITEM">
             <div class="CR_NAME">Devansh Sharma</div>
@@ -104,11 +116,18 @@
             <div class="CR_TAG">Co-Founder</div>
         </div>
     </div>
-
     <footer>Powered by The DevCoderZ</footer>
 </div>
 
 <script>
+    setTimeout(() => {
+        document.getElementById('overlay').style.opacity = '1';
+        document.getElementById('overlay').style.visibility = 'visible';
+    }, 1000);
+    function closePopup() {
+        document.getElementById('overlay').style.opacity = '0';
+        document.getElementById('overlay').style.visibility = 'hidden';
+    }
     document.addEventListener('DOMContentLoaded', () => {
         const els = [document.querySelector('.L0x'), ...document.querySelectorAll('.C0x'), document.querySelector('.CR0x')];
         els.forEach((el, i) => {
