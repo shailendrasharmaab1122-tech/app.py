@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
     <title>DevCoderZ | Main Web</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root{--0x3:#38bdf8;--0x2:#010409}
         body,html{margin:0;padding:0;width:100%;height:100%;background:var(--0x2);color:#fff;font-family:'Segoe UI',sans-serif;overflow-x:hidden}
@@ -28,21 +27,27 @@
             .C0x img{width:60px;height:60px;min-width:60px}
             .C0x h2{font-size:1.2rem}
             .C0x p{font-size:13px}
-            .L0x{margin:30px 0}
         }
     </style>
 </head>
 <body>
 
 <div id="tgPopup" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:999999; backdrop-filter:blur(15px); align-items:center; justify-content:center; padding:20px;">
-    <div style="background:#0d1117; border:3px solid #38bdf8; padding:50px; border-radius:30px; width:100%; max-width:550px; text-align:center; box-shadow:0 0 60px rgba(56,189,248,0.3);">
-        <div style="font-size:60px; margin-bottom:20px;">🚀</div>
-        <h1 style="color:#fff; font-size:2.5rem; margin-top:0;">Join Telegram</h1>
-        <p style="color:#c9d1d9; font-size:1.2rem; margin:20px 0 40px 0; line-height:1.6;">Official DevCoderZ channel join karein! Yahan aapko naye Coding Features, API Updates, aur Premium Streaming Tricks ka access sabse pehle milega.</p>
-        <div style="display:flex; flex-direction:column; gap:20px;">
-            <a href="https://t.me/+8tZSJ5FyTXVjM2M1" target="_blank" style="background:#38bdf8; color:#010409; padding:20px; border-radius:15px; text-decoration:none; font-weight:900; font-size:1.2rem; font-family:monospace; transition:0.3s;">JOIN OFFICIAL CHANNEL</a>
-            <button onclick="closeTgPopup()" style="background:transparent; border:2px solid #30363d; color:#8b949e; padding:15px; border-radius:15px; cursor:pointer; font-weight:bold; font-size:1rem;">Skip & Continue</button>
+    <div style="background:#0d1117; border:3px solid #38bdf8; padding:40px; border-radius:30px; width:100%; max-width:550px; text-align:center; box-shadow:0 0 60px rgba(56,189,248,0.3);">
+        <h1 style="color:#fff; font-size:2rem; margin-top:0;">Join Our Telegram</h1>
+        <p style="color:#c9d1d9; font-size:1.1rem; margin:20px 0; line-height:1.6;">
+            On our Telegram channel, you can get free lectures for:<br><br>
+            • <b>Physics Wallah (PW)</b><br>
+            • <b>Next Toppers (NT)</b><br>
+            • <b>Vibrant Academy (VT)</b><br>
+            • <b>Mission Jeet (MJ)</b><br><br>
+            Join our channel now for all updates!
+        </p>
+        <div style="display:flex; flex-direction:column; gap:15px;">
+            <a href="https://t.me/+8tZSJ5FyTXVjM2M1" target="_blank" style="background:#38bdf8; color:#010409; padding:18px; border-radius:15px; text-decoration:none; font-weight:900; font-family:monospace; transition:0.3s;">JOIN TELEGRAM CHANNEL</a>
+            <button onclick="closeTgPopup()" style="background:transparent; border:2px solid #30363d; color:#8b949e; padding:12px; border-radius:15px; cursor:pointer; font-weight:bold;">Skip & Continue</button>
         </div>
+        <p style="color:#30363d; font-family:monospace; font-size:12px; margin-top:30px; letter-spacing:2px;">POWERED BY THE DEVCODERZ</p>
     </div>
 </div>
 
@@ -68,39 +73,12 @@
             </div>
         </a>
 
-        <a href="https://devcoderz.vercel.app/nexttoppers/old-batches" class="C0x">
-            <img src="nt.png" alt="NT">
-            <div class="TX0x">
-                <div class="DEVBY">Developed by DevCoderZ</div>
-                <h2>NT OLD BATCHES</h2>
-                <p>Unlock an extensive vault of archived content and previous year batches.</p>
-            </div>
-        </a>
-
         <a href="https://devcoderz.vercel.app/cricket" class="C0x">
             <img src="cricket.png" alt="IPL">
             <div class="TX0x">
                 <div class="DEVBY">Developed by DevCoderZ</div>
                 <h2>LIVE CRICKET</h2>
-                <p>Experience ultra low-latency 4K UHD streaming for all major sports tournaments.</p>
-            </div>
-        </a>
-
-        <a href="https://devcoderz.vercel.app/missionjeet" class="C0x">
-            <img src="mj.png" alt="MJ">
-            <div class="TX0x">
-                <div class="DEVBY">Developed by DevCoderZ</div>
-                <h2>MISSION JEET</h2>
-                <p>High-definition educational streams tailored for competitive success.</p>
-            </div>
-        </a>
-
-        <a href="https://devcoderz.vercel.app/vibrant" class="C0x">
-            <img src="vt.png" alt="VT">
-            <div class="TX0x">
-                <div class="DEVBY">Developed by DevCoderZ</div>
-                <h2>VIBRANT ACADEMY</h2>
-                <p>Kota-tier elite education content optimized for smooth global streaming.</p>
+                <p>Experience ultra low-latency 4K UHD streaming for all major sports.</p>
             </div>
         </a>
     </div>
@@ -117,7 +95,7 @@
         </div>
     </div>
 
-    <footer>Powered by The DevCoderZ</footer>
+    <footer>POWERED BY THE DEVCODERZ</footer>
 </div>
 
 <script>
@@ -132,19 +110,6 @@
                 document.getElementById('tgPopup').style.display = 'flex';
             }, 1000);
         }
-
-        const els = [document.querySelector('.L0x'), ...document.querySelectorAll('.C0x'), document.querySelector('.CR0x')];
-        els.forEach((el, i) => {
-            if(el){
-                el.style.opacity = '0';
-                el.style.transform = 'translateY(30px)';
-                el.style.transition = '0.8s cubic-bezier(0.2, 0.8, 0.2, 1)';
-                setTimeout(() => {
-                    el.style.opacity = '1';
-                    el.style.transform = 'translateY(0)';
-                }, 100 * i);
-            }
-        });
     };
 </script>
 
