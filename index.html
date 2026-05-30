@@ -34,13 +34,14 @@
 </head>
 <body>
 
-<div id="tgPopup" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:999999; backdrop-filter:blur(8px); align-items:center; justify-content:center; padding:20px;">
-    <div style="background:#161b22; border:2px solid #38bdf8; padding:30px; border-radius:20px; width:100%; max-width:400px; text-align:center; box-shadow:0 0 30px rgba(56,189,248,0.2);">
-        <h2 style="color:#fff; margin-top:0;">Join Telegram</h2>
-        <p style="color:#f1f5f9; margin:15px 0 25px 0;">Official Channel join karo aur naye Coding Features, API Updates aur Tricks ke bare mein update raho!</p>
-        <div style="display:flex; flex-direction:column; gap:12px;">
-            <a href="https://t.me/+8tZSJ5FyTXVjM2M1" target="_blank" style="background:#38bdf8; color:#010409; padding:12px; border-radius:10px; text-decoration:none; font-weight:900; font-family:monospace;">JOIN CHANNEL</a>
-            <button onclick="closeTgPopup()" style="background:transparent; border:1px solid #30363d; color:#8b949e; padding:10px; border-radius:10px; cursor:pointer; font-weight:bold;">Skip & Continue</button>
+<div id="tgPopup" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:999999; backdrop-filter:blur(15px); align-items:center; justify-content:center; padding:20px;">
+    <div style="background:#0d1117; border:3px solid #38bdf8; padding:50px; border-radius:30px; width:100%; max-width:550px; text-align:center; box-shadow:0 0 60px rgba(56,189,248,0.3);">
+        <div style="font-size:60px; margin-bottom:20px;">🚀</div>
+        <h1 style="color:#fff; font-size:2.5rem; margin-top:0;">Join Telegram</h1>
+        <p style="color:#c9d1d9; font-size:1.2rem; margin:20px 0 40px 0; line-height:1.6;">Official DevCoderZ channel join karein! Yahan aapko naye Coding Features, API Updates, aur Premium Streaming Tricks ka access sabse pehle milega.</p>
+        <div style="display:flex; flex-direction:column; gap:20px;">
+            <a href="https://t.me/+8tZSJ5FyTXVjM2M1" target="_blank" style="background:#38bdf8; color:#010409; padding:20px; border-radius:15px; text-decoration:none; font-weight:900; font-size:1.2rem; font-family:monospace; transition:0.3s;">JOIN OFFICIAL CHANNEL</a>
+            <button onclick="closeTgPopup()" style="background:transparent; border:2px solid #30363d; color:#8b949e; padding:15px; border-radius:15px; cursor:pointer; font-weight:bold; font-size:1rem;">Skip & Continue</button>
         </div>
     </div>
 </div>
@@ -54,7 +55,7 @@
             <div class="TX0x">
                 <div class="DEVBY">Developed by DevCoderZ</div>
                 <h2>PHYSICS WALLAH</h2>
-                <p>Here you will get the access of premium batches of PW.</p>
+                <p>Access premium educational batches with our optimized high-speed interface.</p>
             </div>
         </a>
 
@@ -63,7 +64,7 @@
             <div class="TX0x">
                 <div class="DEVBY">Developed by DevCoderZ</div>
                 <h2>NEXT TOPPERS</h2>
-                <p>Advanced Educational Interface for high-speed NT Portal Access.</p>
+                <p>Advanced learning portal providing seamless access to elite curriculum.</p>
             </div>
         </a>
 
@@ -72,7 +73,7 @@
             <div class="TX0x">
                 <div class="DEVBY">Developed by DevCoderZ</div>
                 <h2>NT OLD BATCHES</h2>
-                <p>Unlock the vault of previous year content and archived batches.</p>
+                <p>Unlock an extensive vault of archived content and previous year batches.</p>
             </div>
         </a>
 
@@ -81,7 +82,7 @@
             <div class="TX0x">
                 <div class="DEVBY">Developed by DevCoderZ</div>
                 <h2>LIVE CRICKET</h2>
-                <p>Ultra low-latency 4K UHD streaming for all major tournaments.</p>
+                <p>Experience ultra low-latency 4K UHD streaming for all major sports tournaments.</p>
             </div>
         </a>
 
@@ -90,7 +91,7 @@
             <div class="TX0x">
                 <div class="DEVBY">Developed by DevCoderZ</div>
                 <h2>MISSION JEET</h2>
-                <p>Gateway to MJ curriculum. High-definition educational streams.</p>
+                <p>High-definition educational streams tailored for competitive success.</p>
             </div>
         </a>
 
@@ -99,7 +100,7 @@
             <div class="TX0x">
                 <div class="DEVBY">Developed by DevCoderZ</div>
                 <h2>VIBRANT ACADEMY</h2>
-                <p>Top-tier Kota education optimized for seamless streaming.</p>
+                <p>Kota-tier elite education content optimized for smooth global streaming.</p>
             </div>
         </a>
     </div>
@@ -129,7 +130,7 @@
         if (!localStorage.getItem('tgPopupShown')) {
             setTimeout(() => {
                 document.getElementById('tgPopup').style.display = 'flex';
-            }, 2000);
+            }, 1000);
         }
 
         const els = [document.querySelector('.L0x'), ...document.querySelectorAll('.C0x'), document.querySelector('.CR0x')];
