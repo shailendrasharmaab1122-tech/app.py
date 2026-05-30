@@ -121,7 +121,7 @@
         throw new Error("Missing Params");
       }
 
-      const apiUrl = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}&tab=${activeTab}`;
+      const apiUrl = `https://devcoderz.vercel.app/api/PW?batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}&tab=${activeTab}`;
 
       fetch(apiUrl, { credentials: "include" })
         .then((res) => res.json())
@@ -181,7 +181,7 @@
         lectures.forEach((item) => {
           if (!item) return;
 
-          // Flexible ID checking ताकि कोई भी ऑब्जेक्ट स्किप न हो (PW + DevCoderz API Full Support)
+          // (PW + DevCoderz API Full Support)
           const lectureId = item.video_id || item._id || item.id || (item.videoDetails && (item.videoDetails._id || item.videoDetails.id));
           if (!lectureId) return;
 
@@ -304,7 +304,7 @@
       }
 
       function openLecture(id) {
-        window.location.href = `/videoplayerr.php?video_id=${id}&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}`;
+        window.location.href = `/player.html?video_id=${id}&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}`;
       }
 
       function openDpp(testId, scheduleId) {
