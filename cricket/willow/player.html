@@ -1,74 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>DevCoderZ X Cricket</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-  <meta name="referrer" content="no-referrer">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.css">
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-  <script src="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.polyfilled.js"></script>
-  <style>
-    body{background-color:#000;margin:0;padding:0;overflow:hidden;height:100%;width:100%}.video-container{position:relative;width:100%;height:100%;background:#000;display:flex;align-items:center;justify-content:center}:root{--plyr-color-main:#00bfff}.plyr--video .plyr__controls{background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.7))!important;padding-bottom:20px!important}.plyr--hide-controls .plyr__controls{opacity:0;pointer-events:none}.dev-tag-clean{position:absolute;top:15px;right:15px;color:rgba(255,255,255,0.6);font-family:sans-serif;font-size:10px;font-weight:700;z-index:2147483647;pointer-events:none;text-transform:uppercase;letter-spacing:1.8px;text-shadow:1px 1px 2px rgba(0,0,0,0.9)}
-    #_0x_u_btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,191,255,0.9);color:#fff;padding:15px 30px;border-radius:50px;font-family:sans-serif;font-size:14px;font-weight:800;cursor:pointer;z-index:2147483646;display:flex;align-items:center;box-shadow:0 0 30px rgba(0,0,0,0.6);border:none;text-transform:uppercase;letter-spacing:1px;animation:p_scale 1.2s infinite ease-in-out;white-space:nowrap}
-    @keyframes p_scale{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.05)}}.plyr{height:100%;width:100%}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Streaming | Devansh Sharma</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.1/shaka-player.ui.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.1/controls.min.css">
+    <style>
+        body { background-color: #000; margin: 0; font-family: sans-serif; overflow: hidden; }
+        .video-container { position: relative; width: 100vw; height: 100vh; background-color: black; }
+        
+        /* Developer Watermark */
+        .dev-watermark {
+            position: absolute; top: 20px; left: 20px; z-index: 10;
+            color: rgba(255,255,255,0.6); font-size: 14px;
+            pointer-events: none; text-shadow: 1px 1px 2px #000;
+        }
+
+        /* Popup Styles */
+        .popup-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+            display: flex; align-items: center; justify-content: center; z-index: 100;
+        }
+        .popup-box {
+            background: #1a1a1a; padding: 30px; border-radius: 15px;
+            text-align: center; border: 1px solid #333; max-width: 400px; width: 90%;
+        }
+        .popup-box h2 { color: #fff; margin-bottom: 20px; }
+        .btn-group { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
+        .btn { padding: 10px 20px; border-radius: 5px; cursor: pointer; border: none; font-weight: bold; }
+        .btn-join { background: #0088cc; color: white; }
+        .btn-skip { background: #444; color: white; }
+    </style>
 </head>
+
 <body>
-  <div class="video-container" id="main-ui">
-    <div class="dev-tag-clean" id="_0x5a21"></div>
-    <button id="_0x_u_btn">🔊 Tap to Unmute</button>
-    <video autoplay playsinline muted id="_0x11ff"></video>
-  </div>
-  <script>
-    (function(){
-      const _0x_a = window.atob;
-      const _0x_allowed = _0x_a("ZGV2Y29kZXJ6LnZlcmNlbC5hcHA="); 
-      if (!window.location.hostname.includes(_0x_allowed) && window.location.hostname !== "localhost") {
-        document.body.innerHTML = "<div style='color:white;text-align:center;margin-top:20%;font-family:sans-serif;'><h1>Domain Not Authorized!</h1><p>Contact DevCoderZ for Access</p></div>";
-        return;
-      }
-      const _0x_v = document['getElementById']('_0x11ff');
-      const _0x_t = document['getElementById']('_0x5a21');
-      const _0x_b = document['getElementById']('_0x_u_btn');
-      _0x_t['innerText'] = _0x_a("RGV2ZWxvcGVyIDogRGV2YW5zaCBTaGFybWE=");
-      const _0x_p = new Plyr(_0x_v, {autoplay:!![],hideControls:!![],controls:['play-large','play','progress','current-time','mute','volume','settings','fullscreen']});
-      _0x_p['on']('ready', () => {
-        const _0x_c = _0x_v['closest']('.plyr');
-        _0x_c['appendChild'](_0x_t);
-        _0x_c['appendChild'](_0x_b);
-      });
-      _0x_p['on']('enterfullscreen', () => {
-        if (screen['orientation'] && screen['orientation']['lock']) {
-          screen['orientation']['lock']('landscape')['catch'](() => {});
-        }
-      });
-      _0x_p['on']('exitfullscreen', () => {
-        if (screen['orientation'] && screen['orientation']['unlock']) {
-          screen['orientation']['unlock']();
-        }
-      });
-      const _0x_f = () => {
-        _0x_v['muted'] = ![];
-        _0x_v['volume'] = 1;
-        _0x_b['style']['display'] = 'none';
-        window['removeEventListener']('touchstart', _0x_f);
-        window['removeEventListener']('click', _0x_f);
-      };
-      _0x_b['addEventListener']('click', _0x_f);
-      window['addEventListener']('touchstart', _0x_f);
-      if (Hls['isSupported']()) {
-        const _0x_h = new Hls();
-        _0x_h['loadSource']("https://l.ratanliton2.workers.dev/?url=https://game.denver69.fun/Series/willow_hin.m3u8");
-        _0x_h['attachMedia'](_0x_v);
-        _0x_h['on'](Hls['Events']['MANIFEST_PARSED'], (_0x_e, _0x_m) => {
-          const _0x_q = _0x_m['levels']['map'](_0x_l => _0x_l['height'])['sort']((_0x_1, _0x_2) => _0x_2 - _0x_1);
-          _0x_p['config']['quality'] = { default: _0x_q[0], options: _0x_q, forced: !![], onChange: (v) => {
-            _0x_h['levels']['forEach']((l, i) => { if (l['height'] === v) _0x_h['currentLevel'] = i; });
-          }};
+
+    <div class="video-container" id="player-container">
+        <div class="dev-watermark">Developer: Devansh Sharma</div>
+        <video id="video" autoplay playsinline style="width:100%; height:100%;"></video>
+    </div>
+
+    <!-- Popup -->
+    <div class="popup-overlay" id="tg-popup">
+        <div class="popup-box">
+            <h2>Join Official Channel</h2>
+            <p style="color: #ccc;">Get latest updates and links on our Telegram channel.</p>
+            <div class="btn-group">
+                <button class="btn btn-join" onclick="window.open('https://t.me/+8tZSJ5FyTXVjM2M1', '_blank')">Join Now</button>
+                <button class="btn btn-skip" onclick="document.getElementById('tg-popup').style.display='none'">Skip</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    async function init() {
+        const video = document.getElementById("video");
+        const player = new shaka.Player(video);
+        const ui = new shaka.ui.Overlay(player, document.getElementById("player-container"), video);
+
+        player.configure({
+            drm: {
+                clearKeys: {
+                    '01c9bbf8137e58378a5ead514998a7b4': "fb01e61809e80e5e93a889cd31daab22"
+                }
+            }
         });
-      }
-      setInterval(() => { if(_0x_v['paused'] && _0x_v['readyState'] > 2) _0x_v['play'](); }, 2500);
-    })();
-  </script>
+
+        try {
+            await player.load("https://dck1-fs-live.dtcdn.dazn.com/out/v1/814bffb9b389f652/d65feac5647949e6b45b2674d4715398/index.mpd");
+        } catch (error) {
+            console.error("Error loading video", error);
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", init);
+    </script>
+
 </body>
 </html>
