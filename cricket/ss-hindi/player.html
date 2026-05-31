@@ -4,24 +4,53 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Live Streaming | Devansh Sharma</title>
-    <meta name="referrer" content="no-referrer">
     <script src="https://cdn.jsdelivr.net/npm/shaka-player@4.16.2/dist/shaka-player.ui.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shaka-player@4.16.2/dist/controls.css">
     <style>
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; overflow: hidden; font-family: sans-serif; }
-        #player-container { width: 100%; height: 100%; background: #000; }
-        .footer-branding { position: fixed; bottom: 10px; right: 15px; color: rgba(255,255,255,0.5); font-size: 12px; z-index: 10; pointer-events: none; }
-        .tg-btn { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); z-index: 10; padding: 12px 25px; background: #0088cc; color: #fff; text-decoration: none; border-radius: 25px; font-weight: bold; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; overflow: hidden; }
+        #player-container { width: 100%; height: 100%; position: relative; }
+        
+        /* Developer Watermark */
+        .dev-watermark {
+            position: absolute; top: 20px; left: 20px; z-index: 10;
+            color: rgba(255,255,255,0.6); font-family: sans-serif; font-size: 14px;
+            pointer-events: none; text-shadow: 1px 1px 2px #000;
+        }
+
+        /* Popup Styles */
+        .popup-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+            display: flex; align-items: center; justify-content: center; z-index: 100;
+        }
+        .popup-box {
+            background: #1a1a1a; padding: 30px; border-radius: 15px;
+            text-align: center; border: 1px solid #333; max-width: 400px; width: 90%;
+        }
+        .popup-box h2 { color: #fff; margin-bottom: 20px; }
+        .btn-group { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
+        .btn { padding: 10px 20px; border-radius: 5px; cursor: pointer; border: none; font-weight: bold; }
+        .btn-join { background: #0088cc; color: white; }
+        .btn-skip { background: #444; color: white; }
     </style>
 </head>
 <body>
 
 <div id="player-container" data-shaka-player-container>
+    <div class="dev-watermark">Developer: Devansh Sharma</div>
     <video id="video" autoplay playsinline></video>
 </div>
 
-<div class="footer-branding">Powered by Devansh Sharma</div>
-<a href="https://t.me/+IhSW51QysxU3NzY1" target="_blank" class="tg-btn">Join Telegram Channel</a>
+<!-- Popup -->
+<div class="popup-overlay" id="tg-popup">
+    <div class="popup-box">
+        <h2>Join Official Channel</h2>
+        <p style="color: #ccc;">Get latest updates and links on our Telegram channel.</p>
+        <div class="btn-group">
+            <button class="btn btn-join" onclick="window.open('https://t.me/+IhSW51QysxU3NzY1', '_blank')">Join Now</button>
+            <button class="btn btn-skip" onclick="document.getElementById('tg-popup').style.display='none'">Skip</button>
+        </div>
+    </div>
+</div>
 
 <script>
 (function(){
@@ -50,9 +79,7 @@
 
         try {
             await player.load(CONFIG.streamUrl);
-        } catch (e) {
-            console.error("Error loading video", e);
-        }
+        } catch (e) { console.error("Error", e); }
     }
 
     document.addEventListener('DOMContentLoaded', initPlayer);
