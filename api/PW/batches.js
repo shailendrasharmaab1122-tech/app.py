@@ -5,24 +5,33 @@ export default async function handler(req, res) {
 
     if (req.method === 'OPTIONS') return res.status(200).end();
 
-    const urlParts = req.url.split('/');
-    const batchId = urlParts[4];
-    const subjectId = urlParts[6];
-    const pathType = urlParts[urlParts.length - 1].split('?')[0];
+    // URL को साफ करें और पाथ निकालें
+    const cleanUrl = req.url.split('?')[0]; 
+    const urlParts = cleanUrl.split('/').filter(Boolean); 
+    // अब urlParts में सिर्फ काम के शब्द होंगे: ['api', 'proxy', 'batch', 'ID', 'details'...]
+
+    const batchId = urlParts[3]; 
+    const pathType = urlParts[urlParts.length - 1]; 
+    const query = new URLSearchParams(req.query).toString();
 
     try {
         const baseUrl = "https://streamworld.vercel.app/api";
-        const query = new URLSearchParams(req.query).toString();
         let targetUrl = "";
 
         if (pathType === 'details') {
             targetUrl = `${baseUrl}/batch/${batchId}/details`;
-        } else if (pathType === 'topics') {
-            targetUrl = `${baseUrl}/batch/${batchId}/subject/${subjectId}/topics?${query}`;
-        } else if (pathType === 'contents') {
-            targetUrl = `${baseUrl}/batch/${batchId}/subject/${subjectId}/contents?${query}`;
-        } else {
-            return res.status(404).json({ success: false, error: "Invalid path" });
+        } 
+        else if (pathType === 'topics' || pathType === 'contents') {
+            // यहाँ subjectId को इंडेक्स 5 पर ढूंढ रहे हैं
+            const subjectId = urlParts[5];
+            targetUrl = `${baseUrl}/batch/${batchId}/subject/${subjectId}/${pathType}?${query}`;
+        } 
+        else {
+            return res.status(404).json({ 
+                success: false, 
+                error: "Invalid path", 
+                debug: { urlParts, pathType } // ये आपको बताएगा कि कोड क्या पढ़ रहा है
+            });
         }
 
         const response = await fetch(targetUrl, {
