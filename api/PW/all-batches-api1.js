@@ -4,7 +4,7 @@ export default async function handler(req, res) {
     res.setHeader('Content-Type', 'application/json');
 
     try {
-        const response = await fetch("http://deltastudy/allbatches.json");
+        const response = await fetch("http://deltastudy.site/allbatches.json");
         if (!response.ok) throw new Error("Core database array unreachable.");
         const data = await response.json();
         return res.status(200).json(data);
