@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/PW/batches",
+      "destination": "/api/PW/batches.js"
+    }
+  ]
+}
