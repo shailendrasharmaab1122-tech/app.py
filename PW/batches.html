@@ -47,7 +47,6 @@
         alert("Batch ID missing");
         document.getElementById("loader").style.display = "none";
       } else {
-        // Proxy ka use karenge taaki data load ho
         fetch(`/api/stream?url=${encodeURIComponent(penpencilUrl)}`)
           .then(res => res.json())
           .then(data => {
@@ -82,16 +81,16 @@
         if (!subjects.length) { container.innerHTML = '<p class="text-slate-500 italic">No subjects found.</p>'; return; }
 
         container.innerHTML = subjects.map(sub => {
-          const teacherName = sub.teachers?.map(t => t.name).join(", ") || "PW Faculty";
-          const img = sub.image || 'https://static.pw.live/react-batches/assets/svg/subjects/defaultSubject.svg';
+          const teacherName = sub.teacherIds?.map(t => `${t.firstName || ""} ${t.lastName || ""}`).join(", ") || "PW Faculty";
+          const img = (sub.imageId?.baseUrl && sub.imageId?.key) ? (sub.imageId.baseUrl + sub.imageId.key) : 'https://static.pw.live/react-batches/assets/svg/subjects/defaultSubject.svg';
           
           return `
             <div class="subject_card" onclick='location.href="/PW/chapters.html?batch_id=${batchId}&subject_id=${sub._id}"'>
               <div class="flex items-center gap-3">
-                <img src="${img}" class="w-14 h-14 object-contain">
+                <img src="${img}" class="w-14 h-14 object-contain rounded-lg">
                 <div>
-                  <h3 class="font-bold text-md text-slate-800">${sub.name}</h3>
-                  <p class="text-[11px] font-semibold text-indigo-600 uppercase">${teacherName}</p>
+                  <h3 class="font-bold text-md text-slate-800 truncate">${sub.subject || sub.name || "Subject"}</h3>
+                  <p class="text-[11px] font-semibold text-indigo-600 uppercase truncate max-w-[160px]">${teacherName}</p>
                   <p class="text-xs text-slate-500 mt-0.5">${sub.lectureCount || 0} Lectures</p>
                 </div>
               </div>
