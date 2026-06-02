@@ -275,7 +275,7 @@
       alert("Batch ID missing");
       document.getElementById("loader").style.display = "none";
     } else {
-      fetch("https://eduvibe-pw-api.wasmer.app/batch.php?batch_id=${encodeURIComponent(batch_id)"
+      fetch(`https://eduvibe-pw-api.wasmer.app/batch.php?batch_id=${encodeURIComponent(batchId)}`)
         .then((res) => res.json())
         .then((data) => {
           if (data.success === false) {
