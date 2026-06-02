@@ -42,7 +42,7 @@
       const topicId = params.get("chapter_id") || params.get("topic_id");
       const activeTab = params.get("tab") || "videos";
 
-      const cleanApiUrl = `https://DevCoderz.vercel.app/api/PW/all-batches.api4.js?type=lectures&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}&tab=${activeTab}`;
+      const cleanApiUrl = `https://DevCoderz.vercel.app/api/PW/all-batches-api4.js?type=lectures&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}&tab=${activeTab}`;
 
       fetch(cleanApiUrl)
         .then(res => res.json())
