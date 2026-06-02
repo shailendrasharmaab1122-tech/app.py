@@ -3,119 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">The DevCoderz</title>
+    <title id="pageTitle">Lectures - The DevCoderz</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #f8fafc; font-family: sans-serif; margin: 0; padding: 0; }
-        .custom-tabs-container { display: flex; gap: 8px; overflow-x: auto; padding: 12px; margin-bottom: 16px; scrollbar-width: none; }
-        .tab-btn { background: #ffffff; color: #475569; border: 1px solid #e2e8f0; padding: 10px 18px; font-size: 13px; font-weight: 600; border-radius: 30px; white-space: nowrap; cursor: pointer; }
-        .tab-btn.active-tab { background: #4f46e5; color: #ffffff; border-color: #4f46e5; }
-        .main-wrapper { max-width: 600px; margin: auto; padding: 10px; }
-        .card { background: white; border-radius: 16px; padding: 16px; margin-bottom: 14px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #f1f5f9; display: flex; align-items: center; gap: 16px; cursor: pointer; transition: transform 0.2s; }
-        .card:active { transform: scale(0.98); }
-        .img-box { width: 80px; height: 60px; border-radius: 8px; overflow: hidden; flex-shrink: 0; background: #eef2ff; display: flex; align-items: center; justify-content: center; }
-        .img-box img { width: 100%; height: 100%; object-fit: cover; }
-        .text-box { flex-grow: 1; }
-        .title-text { font-size: 14px; font-weight: 700; color: #1e293b; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .meta-text { font-size: 12px; color: #64748b; }
-        #loadingScreen { position: fixed; inset: 0; background: #fff; display: flex; align-items: center; justify-content: center; z-index: 99999; font-size: 14px; }
+        #loadingScreen { position: fixed; inset: 0; background: #fff; display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 99999; }
+        .spinner { width: 40px; height: 40px; border: 4px solid #ddd; border-top: 4px solid #4f46e5; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .completed-lecture { border: 2px solid #22c55e !important; border-radius: 12px; }
+        .dropdown-menu { display:none; position:absolute; right:0; top:28px; background:#fff; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.15); padding:8px 0; min-width:180px; z-index:1000; }
+        .dropdown-item:hover { background: #f3f4f6; }
     </style>
 </head>
-<body class="pb-20">
-    <div id="loadingScreen">Loading...</div>
+<body class="bg-slate-50 pb-20">
+
+    <div id="loadingScreen">
+        <div class="spinner"></div>
+        <p class="mt-2 text-slate-600">Loading content...</p>
+    </div>
 
     <nav class="h-16 bg-[#4f46e5] flex items-center px-6 text-white font-bold shadow-lg">
         <button onclick="history.back()" class="mr-4">← Back</button>
-        The DevCoderz
+        <span id="navTitle">The DevCoderz</span>
     </nav>
 
-    <div class="main-wrapper">
-        <h3 class="text-lg font-bold text-slate-800 ml-2 mb-4" id="topicName">Loading...</h3>
-        <div class="custom-tabs-container" id="tabsContainer"></div>
-        <div id="contentContainer"></div>
+    <div class="max-w-3xl mx-auto p-4">
+        <h3 class="text-lg font-bold text-slate-800 mb-4" id="topicName">Loading...</h3>
+        
+        <div id="tabsContainer" class="flex gap-2 overflow-x-auto pb-4"></div>
+        <div id="contentContainer" class="space-y-4"></div>
     </div>
 
     <script>
-      const params = new URLSearchParams(window.location.search);
-      const batchId = params.get("batch_id");
-      const subjectId = params.get("subject_id");
-      const topicId = params.get("chapter_id") || params.get("topic_id");
-      const activeTab = params.get("tab") || "videos";
+        const params = new URLSearchParams(window.location.search);
+        const batchId = params.get("batch_id");
+        const subjectId = params.get("subject_id");
+        const topicId = params.get("topic_id");
+        const activeTab = params.get("tab") || "videos";
 
-      const cleanApiUrl = `https://edunova-pw.site/api/get-lectures.php?batch_id=${encodeURIComponent(batchId)}&subject_id=${encodeURIComponent(subjectId)}&topic_id=${encodeURIComponent(topicId)}&tab=${encodeURIComponent(activeTab)}`;
+        // API Integration
+        const apiUrl = `https://edunova-pw.site/api/get-lectures.php?batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}&tab=${activeTab}`;
 
-      fetch(cleanApiUrl)
-        .then(res => {
-          if (!res.ok) throw new Error("Network error");
-          return res.json();
-        })
-        .then(data => {
-          document.getElementById("loadingScreen").style.display = "none";
-          document.getElementById("topicName").innerText = data.topic_name || "Topic";
-          renderTabs();
-          if (activeTab === "videos" || activeTab === "DppVideos") renderLectures(data.lectures || []);
-          else if (activeTab === "notes" || activeTab === "DppNotes") renderNotes(data.lectures || []);
-          else renderQuizzes(data.dpp_quizzes || []);
-        })
-        .catch(err => {
-          document.getElementById("loadingScreen").innerText = "Error: Failed to load content. Check URL parameters.";
-          console.error(err);
-        });
+        fetch(apiUrl)
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById("loadingScreen").style.display = "none";
+                document.getElementById("topicName").innerText = data.topic_name || "Lectures";
+                renderTabs();
+                renderContent(data.lectures || []);
+            })
+            .catch(err => {
+                document.getElementById("loadingScreen").innerHTML = "<p class='text-red-500'>Error loading data</p>";
+                console.error(err);
+            });
 
-      function renderTabs() {
-        const tabs = [["videos", "Lectures"], ["notes", "Notes"], ["dppQuiz", "DPP Quiz"], ["DppNotes", "DPP PDF"], ["DppVideos", "DPP Solutions"]];
-        let html = "";
-        tabs.forEach(t => {
-          html += `<button onclick="window.location.href='?batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}&tab=${t[0]}'" class="tab-btn ${activeTab === t[0] ? 'active-tab' : ''}">${t[1]}</button>`;
-        });
-        document.getElementById("tabsContainer").innerHTML = html;
-      }
+        function renderTabs() {
+            const tabs = [["videos", "Lectures"], ["notes", "Notes"], ["dppQuiz", "DPP Quiz"], ["DppNotes", "DPP PDF"], ["DppVideos", "DPP Solutions"]];
+            const container = document.getElementById("tabsContainer");
+            container.innerHTML = tabs.map(t => `
+                <button onclick="window.location.href='?batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}&tab=${t[0]}'" 
+                class="px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap ${activeTab === t[0] ? 'bg-[#4f46e5] text-white' : 'bg-white border text-slate-600'}">
+                ${t[1]}</button>
+            `).join('');
+        }
 
-      function renderLectures(list) {
-        let html = "";
-        list.forEach(i => {
-          html += `
-            <div class="card" onclick="window.location.href='./player.html?video_id=${i.video_id || i.id}&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}'">
-                <div class="img-box"><img src="${i.image || 'https://static.pw.live/react-batches/assets/study/blue-play-icon.svg'}"></div>
-                <div class="text-box">
-                    <div class="title-text">${i.name || "Lecture"}</div>
-                    <div class="meta-text">🕒 ${i.duration || "00:00"}</div>
+        function renderContent(list) {
+            const container = document.getElementById("contentContainer");
+            container.innerHTML = list.map(i => `
+                <div id="card-${i.id}" class="bg-white p-4 rounded-xl shadow border border-slate-200 flex items-center gap-4 cursor-pointer" onclick="openLecture('${i.id}', '${i.name}')">
+                    <div class="w-20 h-16 bg-blue-50 rounded flex items-center justify-center shrink-0">
+                        <img src="${i.image || 'https://static.pw.live/react-batches/assets/study/blue-play-icon.svg'}" class="w-full h-full object-cover rounded">
+                    </div>
+                    <div class="flex-grow">
+                        <p class="font-bold text-sm text-slate-800 line-clamp-2">${i.name || "Lecture"}</p>
+                        <p class="text-xs text-slate-500">🕒 ${i.duration || "00:00"}</p>
+                    </div>
+                    <div class="relative" onclick="event.stopPropagation()">
+                        <button onclick="toggleDropdown('${i.id}')" class="p-2">⋮</button>
+                        <div id="dropdown-${i.id}" class="dropdown-menu">
+                            <div onclick="toggleComplete('${i.id}')" class="dropdown-item px-4 py-2 text-sm cursor-pointer">
+                                Mark as <span id="text-${i.id}">Complete</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>`;
-        });
-        document.getElementById("contentContainer").innerHTML = html || "<div class='text-center mt-10 text-slate-400'>No videos found.</div>";
-      }
+            `).join('');
+            
+            // Check completed status
+            list.forEach(i => { if(localStorage.getItem(i.id)) document.getElementById(`card-${i.id}`).classList.add('completed-lecture'); });
+        }
 
-      function renderNotes(list) {
-        let html = "";
-        list.forEach(i => {
-          html += `
-            <div class="card" onclick="window.open('${i.download_url}', '_blank')">
-                <div class="img-box" style="font-size:24px;">📄</div>
-                <div class="text-box">
-                    <div class="title-text">${i.title || "Study Material"}</div>
-                    <div class="meta-text">PDF Document</div>
-                </div>
-            </div>`;
-        });
-        document.getElementById("contentContainer").innerHTML = html || "<div class='text-center mt-10 text-slate-400'>No notes found.</div>";
-      }
+        function openLecture(id, name) {
+            window.location.href = `./player.html?video_id=${id}&batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}`;
+        }
 
-      function renderQuizzes(list) {
-        let html = "";
-        list.forEach(i => {
-          const test = i.dppQuizDetails?.test || {};
-          html += `
-            <div class="card" onclick="window.location.href='./dpp.html?batch_id=${batchId}&schedule_id=${i.dppQuizDetails?.scheduleId}&test_id=${test._id}'">
-                <div class="img-box" style="font-size:24px;">📝</div>
-                <div class="text-box">
-                    <div class="title-text">${test.name || "DPP Quiz"}</div>
-                    <div class="meta-text">Attempt Now</div>
-                </div>
-            </div>`;
-        });
-        document.getElementById("contentContainer").innerHTML = html || "<div class='text-center mt-10 text-slate-400'>No quizzes found.</div>";
-      }
+        function toggleDropdown(id) {
+            const el = document.getElementById(`dropdown-${id}`);
+            el.style.display = el.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function toggleComplete(id) {
+            const card = document.getElementById(`card-${id}`);
+            if(localStorage.getItem(id)) {
+                localStorage.removeItem(id);
+                card.classList.remove('completed-lecture');
+                document.getElementById(`text-${id}`).innerText = "Complete";
+            } else {
+                localStorage.setItem(id, "true");
+                card.classList.add('completed-lecture');
+                document.getElementById(`text-${id}`).innerText = "Incomplete";
+            }
+            toggleDropdown(id);
+        }
     </script>
 </body>
 </html>
