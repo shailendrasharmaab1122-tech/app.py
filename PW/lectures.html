@@ -58,7 +58,7 @@
           else renderQuizzes(data.dpp_quizzes || []);
         })
         .catch(err => {
-          document.getElementById("loadingScreen").innerText = "Error: Failed to load content.";
+          document.getElementById("loadingScreen").innerText = "Error: Failed to load content. Check URL parameters.";
           console.error(err);
         });
 
@@ -83,7 +83,7 @@
                 </div>
             </div>`;
         });
-        document.getElementById("contentContainer").innerHTML = html || "<div class='text-center mt-10 text-slate-400'>No videos available.</div>";
+        document.getElementById("contentContainer").innerHTML = html || "<div class='text-center mt-10 text-slate-400'>No videos found.</div>";
       }
 
       function renderNotes(list) {
@@ -98,7 +98,7 @@
                 </div>
             </div>`;
         });
-        document.getElementById("contentContainer").innerHTML = html || "<div class='text-center mt-10 text-slate-400'>No notes available.</div>";
+        document.getElementById("contentContainer").innerHTML = html || "<div class='text-center mt-10 text-slate-400'>No notes found.</div>";
       }
 
       function renderQuizzes(list) {
@@ -114,7 +114,7 @@
                 </div>
             </div>`;
         });
-        document.getElementById("contentContainer").innerHTML = html || "<div class='text-center mt-10 text-slate-400'>No quizzes available.</div>";
+        document.getElementById("contentContainer").innerHTML = html || "<div class='text-center mt-10 text-slate-400'>No quizzes found.</div>";
       }
     </script>
 </body>
