@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The DevCoderZ Player</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.0/shaka-player.compiled.js"></script>
+    <style>
+        body { margin: 0; background: #000; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .player-wrapper { width: 100%; max-width: 900px; }
+        video { width: 100%; }
+    </style>
+</head>
+<body>
+    <div class="player-wrapper">
+        <video id="video" controls playsinline></video>
+    </div>
+    <script src="/stream.js"></script>
+</body>
+</html>
