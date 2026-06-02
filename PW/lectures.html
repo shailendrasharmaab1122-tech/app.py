@@ -109,4 +109,13 @@
             <div class="card" onclick="window.location.href='./dpp.html?batch_id=${batchId}&schedule_id=${i.dppQuizDetails?.scheduleId}&test_id=${test._id}'">
                 <div class="img-box" style="font-size:24px;">📝</div>
                 <div class="text-box">
-                    <div class="title-text">${test.
+                    <div class="title-text">${test.name || "DPP Quiz"}</div>
+                    <div class="meta-text">Attempt Now</div>
+                </div>
+            </div>`;
+        });
+        document.getElementById("contentContainer").innerHTML = html || "<div class='text-center mt-10 text-slate-400'>No quizzes available.</div>";
+      }
+    </script>
+</body>
+</html>
