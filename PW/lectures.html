@@ -38,8 +38,11 @@
         const activeTab = params.get("tab") || "videos";
 
         const targetApi = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${bId}&subject_id=${sId}&topic_id=${tId}&tab=${activeTab}`;
-
-                document.getElementById("loadingScreen").style.display = "none";
+const proxyUrl = /api/stream?url=${encodeURIComponent(targetApi)}`;
+fetch(proxyUrl)
+.then(res => res.json())
+.then(data => {
+               document.getElementById("loadingScreen").style.display = "none";
                 document.getElementById("topicName").innerText = data.topic_name || "Topic";
                 renderTabs();
 
