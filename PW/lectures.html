@@ -9,8 +9,7 @@
         body { background-color: #f8fafc; font-family: sans-serif; }
         .tab-btn { background: #ffffff; color: #475569; border: 1px solid #e2e8f0; padding: 10px 18px; font-size: 13px; font-weight: 600; border-radius: 30px; white-space: nowrap; cursor: pointer; }
         .tab-btn.active-tab { background: #4f46e5; color: #ffffff; border-color: #4f46e5; }
-        .card { background: white; border-radius: 16px; padding: 16px; margin-bottom: 14px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #f1f5f9; display: flex; align-items: center; gap: 16px; cursor: pointer; transition: transform 0.2s; }
-        .card:active { transform: scale(0.98); }
+        .card { background: white; border-radius: 16px; padding: 16px; margin-bottom: 14px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #f1f5f9; display: flex; align-items: center; gap: 16px; cursor: pointer; }
         .img-box { width: 80px; height: 60px; border-radius: 8px; overflow: hidden; flex-shrink: 0; background: #eef2ff; display: flex; align-items: center; justify-content: center; }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
         #loadingScreen { position: fixed; inset: 0; background: #fff; display: flex; align-items: center; justify-content: center; z-index: 99999; }
@@ -37,15 +36,20 @@
         const tId = params.get("chapter_id") || params.get("topic_id");
         const activeTab = params.get("tab") || "videos";
 
-        const targetApi = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${bId}&subject_id=${sId}&topic_id=${tId}&tab=${activeTab}`;
-        
+        // Apni API call karein (CORS bypass ke liye)
+        fetch(`/api/PW/get-lectures?batch_id=${bId}&subject_id=${sId}&topic_id=${tId}&tab=${activeTab}`)
+            .then(res => res.json())
+            .then(data => {
                 document.getElementById("loadingScreen").style.display = "none";
                 document.getElementById("topicName").innerText = data.topic_name || "Topic";
                 renderTabs();
-                
                 if (activeTab === "videos" || activeTab === "DppVideos") renderLectures(data.lectures || []);
                 else if (activeTab === "notes" || activeTab === "DppNotes") renderNotes(data.lectures || []);
                 else renderQuizzes(data.dpp_quizzes || []);
+            })
+            .catch(err => {
+                document.getElementById("loadingScreen").innerHTML = "Error loading content. Please check API.";
+                console.error(err);
             });
 
         function renderTabs() {
@@ -60,7 +64,7 @@
                 <div class="card" onclick="window.location.href='./player.html?video_id=${i.video_id || i.id}&batch_id=${bId}&subject_id=${sId}&topic_id=${tId}'">
                     <div class="img-box"><img src="${i.image || 'https://static.pw.live/react-batches/assets/study/blue-play-icon.svg'}"></div>
                     <div class="flex-grow">
-                        <div class="font-bold text-sm text-slate-800 line-clamp-2">${i.name || "Lecture"}</div>
+                        <div class="font-bold text-sm text-slate-800">${i.name || "Lecture"}</div>
                         <div class="text-xs text-slate-500 mt-1">🕒 ${i.duration || "00:00"}</div>
                     </div>
                 </div>`).join('') || "<p class='text-center text-slate-400 mt-10'>No data found.</p>";
