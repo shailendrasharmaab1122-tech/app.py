@@ -1,4 +1,4 @@
-Export default async function handler(req, res) {
+export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -10,22 +10,7 @@ Export default async function handler(req, res) {
     const { url, video_id, batch_id, subjectSlug, topicSlug } = req.query;
 
     if (url) {
-        try {
-            const response = await fetch(url, {
-                headers: {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-                    'Accept': 'application/json, text/plain, */*',
-                    'Origin': 'https://DevCoderz.vercel.app/api/PW/batches.js/',
-                    'Referer': 'https://DevCoderz.vercel.app/api/PW/batches.js/'
-                }
-            });
-
-            if (!response.ok) throw new Error();
-            const data = await response.json();
-            return res.status(200).json(data);
-        } catch (error) {
-            return res.status(500).json({ error: "Failed to fetch structured layout" });
-        }
+        // ... (आपका पुराना कोड)
     }
 
     if (!video_id) {
@@ -36,13 +21,11 @@ Export default async function handler(req, res) {
 
     if (subjectSlug && topicSlug) {
         try {
-            const deltaDataServer = `https://apiserver.deltastudy.site/api/pw/datacontent?batchId=${bId}&subjectSlug=${subjectSlug}&topicSlug=${topicSlug}&contentType=videos`;
+            // यहाँ encodeURIComponent का इस्तेमाल करें
+            const deltaDataServer = `https://apiserver.deltastudy.site/api/pw/datacontent?batchId=${bId}&subjectSlug=${encodeURIComponent(subjectSlug)}&topicSlug=${encodeURIComponent(topicSlug)}&contentType=videos`;
 
             const dResponse = await fetch(deltaDataServer, {
-                headers: {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-                    'Accept': 'application/json'
-                }
+                headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' }
             });
 
             if (dResponse.ok) {
@@ -63,38 +46,14 @@ Export default async function handler(req, res) {
         } catch (err) {}
     }
 
-    try {
-        const eduVibeApi = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${bId}&video_id=${video_id}&tab=videos`;
-        const vResponse = await fetch(eduVibeApi, {
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-                'Accept': 'application/json'
-            }
-        });
+    // ... (EduVibe वाला पार्ट)
 
-        if (vResponse.ok) {
-            const vData = await vResponse.json();
-            const lecture = vData.lectures?.find(l => l?.videoDetails?._id === video_id || l?._id === video_id);
-
-            if (lecture && lecture.videoDetails?.manifestUrl) {
-                return res.status(200).json({
-                    success: true,
-                    manifestUrl: lecture.videoDetails.manifestUrl,
-                    keyId: lecture.videoDetails.keyId || "",
-                    keyValue: lecture.videoDetails.keyValue || "",
-                    source: "EduVibe-Tunnel-V3"
-                });
-            }
-        }
-    } catch (err) {}
-
+    // यहाँ बदलाव करें: auto-sync की जगह खाली स्ट्रिंग
     return res.status(200).json({
         success: true,
         manifestUrl: `https://sec-prod-mediacdn.pw.live/files/${video_id}/master.mpd`,
-        keyId: "auto-sync",
-        keyValue: "auto-sync",
+        keyId: "",
+        keyValue: "",
         source: "Unsigned-Raw-Tunnel"
     });
 }
-
-
