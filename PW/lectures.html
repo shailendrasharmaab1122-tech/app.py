@@ -3,32 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lectures</title>
+    <title>Lectures - The DevCoderZ</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50 pb-10">
-    <div id="content" class="max-w-md mx-auto p-4 space-y-4">
-        <h1 class="text-xl font-bold">Lectures</h1>
-        <div id="list">Loading...</div>
+<body class="bg-gray-50 pb-20">
+    <div id="loadingScreen" class="fixed inset-0 bg-white flex items-center justify-center z-50">please wait...</div>
+
+    <nav class="h-16 bg-black text-white flex items-center px-6 font-bold shadow-lg">The DevCoderZ</nav>
+
+    <div class="max-w-[600px] mx-auto p-4">
+        <h3 class="text-lg font-bold text-slate-800 mb-4" id="topicName">Loading...</h3>
+        
+        <div class="flex gap-2 overflow-x-auto pb-4 mb-2" id="tabsContainer">
+            <button onclick="changeTab('videos')" class="px-4 py-2 bg-black text-white rounded-full text-xs font-bold">Lectures</button>
+            <button onclick="changeTab('notes')" class="px-4 py-2 bg-gray-200 rounded-full text-xs font-bold">Notes</button>
+            <button onclick="changeTab('dppQuiz')" class="px-4 py-2 bg-gray-200 rounded-full text-xs font-bold">DPP</button>
+            <button onclick="changeTab('DppVideos')" class="px-4 py-2 bg-gray-200 rounded-full text-xs font-bold">DPP Sol.</button>
+        </div>
+
+        <div id="contentContainer" class="space-y-3"></div>
     </div>
+
+    <footer class="text-center text-gray-400 text-[10px] mt-10 mb-5">
+        Powered by The DevCoderZ
+    </footer>
 
     <script>
         const params = new URLSearchParams(window.location.search);
-        const url = `https://apiserver.deltastudy.site/api/pw/datacontent?batchId=${params.get("b")}&subjectSlug=${params.get("s")}&topicSlug=${params.get("t")}&contentType=videos`;
+        const bId = params.get("batch_id");
+        const sId = params.get("subject_id");
+        const tId = params.get("topic_id") || params.get("chapter_id");
+        const activeTab = params.get("tab") || "videos";
 
-        fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`)
+        function changeTab(tab) {
+            window.location.href = `?batch_id=${bId}&subject_id=${sId}&topic_id=${tId}&tab=${tab}`;
+        }
+
+        fetch(`/api/PW/all-batches-api4?batch_id=${bId}&subject_id=${sId}&topic_id=${tId}&tab=${activeTab}`)
             .then(res => res.json())
             .then(data => {
-                const list = JSON.parse(data.contents).data;
-                const container = document.getElementById('list');
-                container.innerHTML = "";
-                list.forEach(i => {
-                    container.innerHTML += `
-                        <div class="bg-white p-4 rounded-xl shadow border">
-                            <p class="font-bold text-sm">${i.name}</p>
-                            <button onclick="window.location.href='player.html?url=${encodeURIComponent(i.url)}'" class="mt-2 w-full bg-black text-white p-2 rounded">Watch</button>
-                        </div>`;
-                });
+                document.getElementById("loadingScreen").style.display = "none";
+                document.getElementById("topicName").innerText = data.topic_name || "Topic";
+                
+                const list = activeTab.includes('Quiz') ? (data.dpp_quizzes || []) : (data.lectures || []);
+                const container = document.getElementById("contentContainer");
+
+                container.innerHTML = list.map(i => `
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+                        <div>
+                            <div class="font-bold text-sm">${i.name || i.title || "Item"}</div>
+                            <div class="text-xs text-gray-500">${i.duration || ''}</div>
+                        </div>
+                        <button onclick="window.location.href='./player.html?video_id=${i.video_id || i.id}&url=${encodeURIComponent(i.url || i.download_url || '')}'" 
+                            class="bg-blue-600 text-white px-4 py-2 rounded-lg text-xs font-bold">Open</button>
+                    </div>
+                `).join('') || "<p class='text-center text-gray-400'>No content found.</p>";
+            })
+            .catch(err => {
+                document.getElementById("loadingScreen").innerText = "Error: API not responding.";
             });
     </script>
 </body>
