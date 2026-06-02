@@ -65,7 +65,7 @@
             const pageTitle = document.getElementById('pageTitle');
 
             // Fixed: Variables are now using bId and sId
-            const targetApi = `https://eduvibe-pw-api.wasmer.app/chapters.php?batch_id=${encodeURIComponent(bId)}&subject_id=${encodeURIComponent(sId)}`;
+            const targetApi = `/api/PW/all-batches-api3?batch_id=${encodeURIComponent(bId)}&subject_id=${encodeURIComponent(sId)}`;
 
             try {
                 statusText.innerText = "Connecting secure channel stream...";
