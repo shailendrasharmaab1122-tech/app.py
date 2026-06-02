@@ -3,100 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">Topic</title>
-    <link href="https://www.pw.live/batches-new/index.BZrLlnYz.css" rel="stylesheet">
-    <style>
-        .completed-lecture { border: 2px solid #22c55e !important; border-radius: 12px; }
-        .dropdown-item:hover { background: #f3f4f6; }
-        #loadingScreen { position: fixed; inset: 0; background: #fff; display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 99999; }
-        .spinner { width: 40px; height: 40px; border: 4px solid #ddd; border-top: 4px solid #22c55e; border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-    </style>
+    <title>Lectures</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div id="loadingScreen">
-        <div class="spinner"></div>
-        <p>Loading content...</p>
-    </div>
-
-    <div id="root">
-        <div class="wrapper-fOD1sd">
-            <div class="layout-rbPRWR">
-                <section id="pw-container" class="pwContainer-oQpUPM">
-                    <div class="index_class_1-FuYGeK">
-                        <div class="wrapper-C0ts2n">
-                            <h3 class="topic_name-E3X8eg" id="topicName">Loading...</h3>
-                            <section class="index_class_1-CoB5Zo" id="tabsContainer"></section>
-                            <div class="index_class_2-nA57WL" id="contentContainer"></div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-        </div>
+<body class="bg-gray-50 pb-10">
+    <div id="content" class="max-w-md mx-auto p-4 space-y-4">
+        <h1 class="text-xl font-bold">Lectures</h1>
+        <div id="list">Loading...</div>
     </div>
 
     <script>
         const params = new URLSearchParams(window.location.search);
-        const bId = params.get("batch_id");
-        const sId = params.get("subject_id");
-        const tId = params.get("chapter_id") || params.get("topic_id");
-        const activeTab = params.get("tab") || "videos";
+        const url = `https://apiserver.deltastudy.site/api/pw/datacontent?batchId=${params.get("b")}&subjectSlug=${params.get("s")}&topicSlug=${params.get("t")}&contentType=videos`;
 
-        // API Fetching (Using your Proxy)
-        const targetApi = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${bId}&subject_id=${sId}&topic_id=${tId}&tab=${activeTab}`;
-        const proxyUrl = `/api/stream?url=${encodeURIComponent(targetApi)}`;
-
-        fetch(proxyUrl)
+        fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`)
             .then(res => res.json())
             .then(data => {
-                document.getElementById("loadingScreen").style.display = "none";
-                document.getElementById("topicName").innerText = data.topic_name || "Topic";
-                renderLectures(data.lectures || []);
-            })
-            .catch(err => {
-                console.error("Error:", err);
-                document.getElementById("loadingScreen").innerHTML = "<p>Failed to load data</p>";
+                const list = JSON.parse(data.contents).data;
+                const container = document.getElementById('list');
+                container.innerHTML = "";
+                list.forEach(i => {
+                    container.innerHTML += `
+                        <div class="bg-white p-4 rounded-xl shadow border">
+                            <p class="font-bold text-sm">${i.name}</p>
+                            <button onclick="window.location.href='player.html?url=${encodeURIComponent(i.url)}'" class="mt-2 w-full bg-black text-white p-2 rounded">Watch</button>
+                        </div>`;
+                });
             });
-
-        function renderLectures(list) {
-            const container = document.getElementById("contentContainer");
-            container.innerHTML = list.map(i => `
-                <div class="index_class_3-FAUYHF lecture-card" data-id="${i.video_id || i.id}">
-                    <div class="index_class_1-MVi_no">
-                        <div class="index_class_3-bfYHa0">
-                            <img src="${i.image}" class="index_class_4-h3krT0">
-                            <img src="https://static.pw.live/react-batches/assets/study/blue-play-icon.svg" class="play-icon-WPnSAT">
-                        </div>
-                        <section class="card_details-jhfM5S">
-                            <div class="index_class_9-MwVgjv">
-                                <p class="index_class_10-F64Ile">${i.name}</p>
-                            </div>
-                            <div class="index_class_12-Cq8EEY" onclick="event.stopPropagation();">
-                                <div class="dropdown-wrapper" style="position:relative;">
-                                    <div class="three-dot-btn" onclick="toggleDropdown('${i.video_id || i.id}', event)" style="cursor:pointer;">
-                                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
-                                    </div>
-                                    <div class="dropdown-menu" id="dropdown-${i.video_id || i.id}" style="display:none; position:absolute; right:0; top:28px; background:#fff; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.15); z-index:1000; min-width:150px;">
-                                        <div onclick="toggleComplete('${i.video_id || i.id}')" class="dropdown-item" style="padding:10px; cursor:pointer;">Mark as complete</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>`).join('');
-        }
-
-        function toggleDropdown(id, event) {
-            event.stopPropagation();
-            const menu = document.getElementById('dropdown-' + id);
-            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
-        }
-
-        function toggleComplete(id) {
-            const card = document.querySelector(`[data-id="${id}"]`);
-            card.classList.toggle('completed-lecture');
-            document.getElementById('dropdown-' + id).style.display = 'none';
-        }
     </script>
 </body>
 </html>
