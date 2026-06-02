@@ -64,7 +64,7 @@
             const statusText = document.getElementById('statusText');
             const pageTitle = document.getElementById('pageTitle');
 
-            const targetApi = `/api/PW/all-batches-api3.js?type=chapters&batch_id=${bId}&subject_id=${sId}`;
+            const targetApi =            `https://eduvibe-pw-api.wasmer.app/chapters.php?batch_id=${encodeURIComponent(batch_id)}&subject_id=${encodeURIComponent(subject_id)}`;
 
             try {
                 statusText.innerText = "Connecting secure channel stream...";
