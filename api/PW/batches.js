@@ -8,12 +8,14 @@ export async function GET(request) {
 
   try {
     const { searchParams } = new URL(request.url);
-    
+
     const batch_id = searchParams.get('batch_id');
     const type = searchParams.get('type');
-    const subject_id = searchParams.get('subject_id');
-    const topic_id = searchParams.get('topic_id');
-    const tab = searchParams.get('tab') || 'videos';
+    const name = searchParams.get('name');           // ← Dynamic name
+    const subjectId = searchParams.get('subjectId') || searchParams.get('SubjectId');
+    const subjectSlug = searchParams.get('subjectSlug');
+    const topicSlug = searchParams.get('topicSlug');
+    const contentType = searchParams.get('contentType') || 'videos';
 
     if (!batch_id) {
       return NextResponse.json({ success: false, error: "batch_id is required" }, { status: 400, headers });
@@ -21,20 +23,26 @@ export async function GET(request) {
 
     let targetUrl = '';
 
-    if (type === 'chapters' && subject_id) {
-      targetUrl = `https://eduvibe-pw-api.wasmer.app/chapters.php?batch_id=\( {encodeURIComponent(batch_id)}&subject_id= \){encodeURIComponent(subject_id)}`;
+    if (type === 'chapters' && subjectId) {
+      targetUrl = `https://apiserver.deltastudy.site/api/pw/topics?BatchId=\( {encodeURIComponent(batch_id)}&SubjectId= \){encodeURIComponent(subjectId)}`;
     } 
-    else if (type === 'lectures' && subject_id && topic_id) {
-      targetUrl = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=\( {encodeURIComponent(batch_id)}&subject_id= \){encodeURIComponent(subject_id)}&topic_id=\( {encodeURIComponent(topic_id)}&tab= \){encodeURIComponent(tab)}`;
+    else if (type === 'lectures' && subjectSlug && topicSlug) {
+      targetUrl = `https://apiserver.deltastudy.site/api/pw/datacontent?batchId=\( {encodeURIComponent(batch_id)}&subjectSlug= \){encodeURIComponent(subjectSlug)}&topicSlug=\( {encodeURIComponent(topicSlug)}&contentType= \){encodeURIComponent(contentType)}`;
     } 
     else {
-      // Default: Batch Details
-      targetUrl = `https://eduvibe-pw-api.wasmer.app/batch.php?batch_id=${encodeURIComponent(batch_id)}`;
+      // Batches API - Dynamic (with or without name)
+      targetUrl = `https://deltastudy.site/study-v2/batches/${batch_id}`;
+      
+      if (name) {
+        targetUrl += `?name=${encodeURIComponent(name)}&_rsc=gts2v`;
+      } else {
+        targetUrl += `?_rsc=gts2v`;
+      }
     }
 
     const response = await fetch(targetUrl, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
       },
     });
 
@@ -42,35 +50,13 @@ export async function GET(request) {
       return NextResponse.json({ success: false, error: `API Error: ${response.status}` }, { status: response.status, headers });
     }
 
-    const rawData = await response.json();
+    const data = await response.json();
 
-    // Batch ke liye clean transformation
-    if (!type || type === 'batch') {
-      const subjects = (rawData.subjects || []).map(sub => ({
-        _id: sub._id || sub.subjectId?._id,
-        name: sub.subject || sub.name || "Unknown Subject",
-        subject: sub.subject || sub.name,
-        lectureCount: sub.lectureCount || 0,
-        teacherName: sub.teacherIds?.[0]?.firstName 
-                     ? `${sub.teacherIds[0].firstName} ${sub.teacherIds[0].lastName || ''}`.trim() 
-                     : "Faculty Team",
-        image: sub.imageId?.baseUrl && sub.imageId?.key 
-               ? sub.imageId.baseUrl + sub.imageId.key 
-               : "https://static.pw.live/react-batches/assets/svg/subjects/defaultSubject.svg",
-        slug: sub.slug || ""
-      }));
-
-      return NextResponse.json({
-        success: true,
-        batch_title: rawData.batch_title || "Arjuna JEE 2027",
-        subjects: subjects,
-        classes: rawData.classes || [],
-        total_classes: rawData.total_classes || 0
-      }, { headers });
-    }
-
-    // Chapters aur Lectures ke liye raw data return
-    return NextResponse.json(rawData, { headers });
+    return NextResponse.json({
+      success: true,
+      type: type || 'batch',
+      data: data
+    }, { headers });
 
   } catch (error) {
     console.error("Proxy Error:", error);
