@@ -36,20 +36,23 @@
         const tId = params.get("chapter_id") || params.get("topic_id");
         const activeTab = params.get("tab") || "videos";
 
-        const targetApi = `https://corsproxy.io/?https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${bId}&subject_id=${sId}&topic_id=${tId}&tab=${activeTab}`;
+        const targetUrl = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${bId}&subject_id=${sId}&topic_id=${tId}&tab=${activeTab}`;
+        const finalApi = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
 
-        fetch(targetApi)
+        fetch(finalApi)
             .then(res => res.json())
             .then(data => {
+                const responseData = JSON.parse(data.contents);
                 document.getElementById("loadingScreen").style.display = "none";
-                document.getElementById("topicName").innerText = data.topic_name || "Topic";
+                document.getElementById("topicName").innerText = responseData.topic_name || "Topic";
                 renderTabs();
-                if (activeTab === "videos" || activeTab === "DppVideos") renderLectures(data.lectures || []);
-                else if (activeTab === "notes" || activeTab === "DppNotes") renderNotes(data.lectures || []);
-                else renderQuizzes(data.dpp_quizzes || []);
+                if (activeTab === "videos" || activeTab === "DppVideos") renderLectures(responseData.lectures || []);
+                else if (activeTab === "notes" || activeTab === "DppNotes") renderNotes(responseData.lectures || []);
+                else renderQuizzes(responseData.dpp_quizzes || []);
             })
             .catch(err => {
-                document.getElementById("loadingScreen").innerText = "Failed to load content.";
+                document.getElementById("loadingScreen").innerText = "Connection Failed!";
+                console.error(err);
             });
 
         function renderTabs() {
