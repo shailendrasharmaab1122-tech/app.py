@@ -42,7 +42,7 @@
       const topicId = params.get("chapter_id") || params.get("topic_id");
       const activeTab = params.get("tab") || "videos";
 
-      const cleanApiUrl = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${encodeURIComponent(batchId)}&subject_id=${encodeURIComponent(subjectId)}&topic_id=${encodeURIComponent(topicId)}&tab=${encodeURIComponent(activeTab)}`;
+      const cleanApiUrl = `https://edunova-pw.site/api/get-lectures.php?batch_id=${encodeURIComponent(batchId)}&subject_id=${encodeURIComponent(subjectId)}&topic_id=${encodeURIComponent(topicId)}&tab=${encodeURIComponent(activeTab)}`;
 
       fetch(cleanApiUrl)
         .then(res => {
