@@ -1,22 +1,14 @@
 const videoEl = document.getElementById('lecture-player');
-const videoContainer = videoEl.parentElement;
 let shakaPlayer = null;
-let plyrInstance = null;
 
 async function initPlayer(videoId, batchId, subjectSlug, topicSlug) {
-  // 1. अपनी API से डेटा निकालें
   const response = await fetch(`/api/stream?video_id=${videoId}&batch_id=${batchId}&subjectSlug=${subjectSlug}&topicSlug=${topicSlug}`);
   const data = await response.json();
-  
-  if (!data.success) return console.error("Data fetch failed");
-
-  // 2. Shaka Player Setup
+  if (!data.success) return;
   shakaPlayer = new shaka.Player(videoEl);
-  shakaPlayer.configure({
-    drm: { clearKeys: { [data.keyId]: data.keyValue } }
-  });
-
-  // Signed URL Fix
+  if(data.keyId && data.keyValue) {
+    shakaPlayer.configure({ drm: { clearKeys: { [data.keyId]: data.keyValue } } });
+  }
   const manifestObj = new URL(data.manifestUrl);
   shakaPlayer.getNetworkingEngine().registerRequestFilter((type, request) => {
     if (type !== shaka.net.NetworkingEngine.RequestType.SEGMENT) return;
@@ -26,14 +18,10 @@ async function initPlayer(videoId, batchId, subjectSlug, topicSlug) {
       request.uris[0] = segUrl.toString();
     });
   });
-
   await shakaPlayer.load(data.manifestUrl);
   const tracks = shakaPlayer.getVariantTracks();
-  const resolutions = [...new Map(tracks.filter(t => t.height).map(t => [t.height, t])).values()]
-    .sort((a,b) => b.height - a.height).map(t => t.height);
-
-  // 3. Plyr UI Setup
-  plyrInstance = new Plyr(videoEl, {
+  const resolutions = [...new Map(tracks.filter(t => t.height).map(t => [t.height, t])).values()].sort((a,b) => b.height - a.height).map(t => t.height);
+  new Plyr(videoEl, {
     controls: ['play-large', 'rewind', 'play', 'mute', 'volume', 'fast-forward', 'progress', 'current-time', 'duration', 'download', 'settings', 'fullscreen'],
     settings: ['quality', 'speed'],
     quality: {
@@ -41,14 +29,12 @@ async function initPlayer(videoId, batchId, subjectSlug, topicSlug) {
       options: ['Auto', ...resolutions],
       forced: true,
       onChange: (q) => {
-        if (q === 'Auto') {
-          shakaPlayer.configure({ abr: { enabled: true } });
-        } else {
+        if (q === 'Auto') shakaPlayer.configure({ abr: { enabled: true } });
+        else {
           shakaPlayer.configure({ abr: { enabled: false } });
           shakaPlayer.selectVariantTrack(tracks.find(t => t.height == q), true);
         }
       }
-    },
-    speed: { selected: 1, options: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3] }
+    }
   });
 }
