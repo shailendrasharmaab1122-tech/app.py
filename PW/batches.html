@@ -10,8 +10,10 @@
       @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
       .live-card { min-width: 320px; transition: 0.2s; }
       .live-card:hover { transform: translateY(-4px); }
-      .subject_card-WgK2V0 { background: #fff; border-radius: 14px; padding: 12px; transition: 0.25s; cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
-      .subject_card-WgK2V0:hover { transform: translateY(-6px); box-shadow: 0 10px 25px rgba(0,0,0,0.12); }
+      .subject_card { background: #fff; border-radius: 14px; padding: 12px; transition: 0.25s; cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+      .subject_card:hover { transform: translateY(-6px); box-shadow: 0 10px 25px rgba(0,0,0,0.12); }
+      .app-footer { width: 100%; height: 50px; background: #ffffff; border-top: 1px solid #eaeaea; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: #666666; margin-top: 30px; }
+      .app-footer span { color: #4f46e5; font-weight: 700; margin-left: 4px; }
     </style>
 </head>
 <body class="bg-slate-50">
@@ -19,17 +21,21 @@
       <div class="spinner"></div>
     </div>
 
-    <div id="root" class="max-w-6xl mx-auto p-4 md:p-10">
-      <h1 id="batchTitle" class="text-3xl font-bold text-slate-800 mb-6">Loading Batch...</h1>
+    <div class="max-w-6xl mx-auto p-4 md:p-10">
+      <h1 id="batchTitle" class="text-3xl font-bold text-slate-800 mb-8">Loading Batch...</h1>
       
       <div class="mb-10">
-        <h2 class="text-xl font-bold mb-4">Live Classes</h2>
+        <h2 class="text-xl font-bold mb-4 text-slate-700">Live Classes</h2>
         <div id="liveClassesContainer" class="flex gap-4 overflow-x-auto pb-4"></div>
       </div>
 
       <div>
-        <h2 class="text-xl font-bold mb-4">Subjects</h2>
+        <h2 class="text-xl font-bold mb-4 text-slate-700">Subjects</h2>
         <div id="subjectsContainer" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+      </div>
+
+      <div class="app-footer">
+        Developed by - <span>Devansh Sharma</span>
       </div>
     </div>
 
@@ -41,6 +47,7 @@
         alert("Batch ID missing");
         document.getElementById("loader").style.display = "none";
       } else {
+        // Proxy ka use karenge taaki data load ho
         fetch(`/api/stream?url=${encodeURIComponent(penpencilUrl)}`)
           .then(res => res.json())
           .then(data => {
@@ -58,34 +65,39 @@
 
       function renderClasses(classes) {
         const container = document.getElementById("liveClassesContainer");
-        container.innerHTML = classes.length ? "" : '<p class="text-slate-500">No classes found.</p>';
-        classes.forEach(live => {
-          const card = `
-            <div class="live-card bg-white p-4 rounded-xl shadow border">
-              <p class="text-indigo-600 font-bold text-sm">${live.subjectId?.name || "Class"}</p>
-              <p class="font-bold text-slate-800 mt-1">${live.topic || "Untitled"}</p>
-              <button onclick="location.href='/PW/player/index.html?batch_id=${batchId}&video_id=${live._id}'" class="mt-4 w-full bg-indigo-600 text-white py-2 rounded-lg text-sm font-bold">Join</button>
-            </div>`;
-          container.innerHTML += card;
-        });
+        if (!classes.length) { container.innerHTML = '<p class="text-slate-500 italic p-4">No live classes scheduled.</p>'; return; }
+        
+        container.innerHTML = classes.map(live => `
+          <div class="live-card bg-white p-4 rounded-xl shadow border border-slate-100">
+            <p class="text-indigo-600 font-bold text-xs">${live.subjectId?.name || "Live Class"}</p>
+            <p class="font-bold text-slate-800 mt-1 truncate">${live.topic || "Untitled"}</p>
+            <button onclick="location.href='/PW/player/index.html?batch_id=${batchId}&video_id=${live._id}'" 
+                    class="mt-4 w-full bg-indigo-600 text-white py-2 rounded-lg text-sm font-bold">Join Class</button>
+          </div>
+        `).join('');
       }
 
       function renderSubjects(subjects) {
         const container = document.getElementById("subjectsContainer");
-        container.innerHTML = subjects.length ? "" : '<p class="text-slate-500">No subjects found.</p>';
-        subjects.forEach(sub => {
-          const card = `
-            <div class="subject_card-WgK2V0" onclick='location.href="/PW/chapters.html?batch_id=${batchId}&subject_id=${sub._id}"'>
-              <div class="flex items-center gap-4">
-                <img src="${sub.image || 'https://static.pw.live/react-batches/assets/svg/subjects/defaultSubject.svg'}" class="w-16 h-16 object-contain">
+        if (!subjects.length) { container.innerHTML = '<p class="text-slate-500 italic">No subjects found.</p>'; return; }
+
+        container.innerHTML = subjects.map(sub => {
+          const teacherName = sub.teachers?.map(t => t.name).join(", ") || "PW Faculty";
+          const img = sub.image || 'https://static.pw.live/react-batches/assets/svg/subjects/defaultSubject.svg';
+          
+          return `
+            <div class="subject_card" onclick='location.href="/PW/chapters.html?batch_id=${batchId}&subject_id=${sub._id}"'>
+              <div class="flex items-center gap-3">
+                <img src="${img}" class="w-14 h-14 object-contain">
                 <div>
-                  <h3 class="font-bold text-lg">${sub.name}</h3>
-                  <p class="text-sm text-slate-500">${sub.lectureCount || 0} Lectures</p>
+                  <h3 class="font-bold text-md text-slate-800">${sub.name}</h3>
+                  <p class="text-[11px] font-semibold text-indigo-600 uppercase">${teacherName}</p>
+                  <p class="text-xs text-slate-500 mt-0.5">${sub.lectureCount || 0} Lectures</p>
                 </div>
               </div>
-            </div>`;
-          container.innerHTML += card;
-        });
+            </div>
+          `;
+        }).join('');
       }
     </script>
 </body>
