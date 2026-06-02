@@ -1,35 +1,69 @@
-export default async function handler(req, res) {
-    const { batch_id } = req.query;
+import { NextResponse } from 'next/server';
 
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+export async function GET(request) {
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Content-Type': 'application/json; charset=utf-8',
+  };
 
-    if (req.method === 'OPTIONS') {
-        return res.status(200).end();
-    }
+  try {
+    const { searchParams } = new URL(request.url);
+
+    const batch_id = searchParams.get('batch_id');
+    const type = searchParams.get('type');
+    const name = searchParams.get('name');           // ← Dynamic name
+    const subjectId = searchParams.get('subjectId') || searchParams.get('SubjectId');
+    const subjectSlug = searchParams.get('subjectSlug');
+    const topicSlug = searchParams.get('topicSlug');
+    const contentType = searchParams.get('contentType') || 'videos';
 
     if (!batch_id) {
-        return res.status(400).json({ error: "Required batch identity parameter missing." });
+      return NextResponse.json({ success: false, error: "batch_id is required" }, { status: 400, headers });
     }
 
-    try {
-        const targetUrl = `https://eduvibe-pw-api.wasmer.app/batch.php?batch_id=${encodeURIComponent(batch_id)}`;
-        
-        const response = await fetch(targetUrl, {
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-            }
-        });
+    let targetUrl = '';
 
-        if (!response.ok) throw new Error("Wasmer cluster response failed");
+    if (type === 'chapters' && subjectId) {
+      targetUrl = `https://apiserver.deltastudy.site/api/pw/topics?BatchId=\( {encodeURIComponent(batch_id)}&SubjectId= \){encodeURIComponent(subjectId)}`;
+    } 
+    else if (type === 'lectures' && subjectSlug && topicSlug) {
+      targetUrl = `https://apiserver.deltastudy.site/api/pw/datacontent?batchId=\( {encodeURIComponent(batch_id)}&subjectSlug= \){encodeURIComponent(subjectSlug)}&topicSlug=\( {encodeURIComponent(topicSlug)}&contentType= \){encodeURIComponent(contentType)}`;
+    } 
+    else {
+      // Batches API - Dynamic (with or without name)
+      targetUrl = `https://deltastudy.site/study-v2/batches/${batch_id}`;
 
-        const data = await response.json();
-        return res.status(200).json(data);
-
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: "Failed to fetch stream data securely from core network." });
+      if (name) {
+        targetUrl += `?name=${encodeURIComponent(name)}&_rsc=gts2v`;
+      } else {
+        targetUrl += `?_rsc=gts2v`;
+      }
     }
+
+    const response = await fetch(targetUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+      },
+    });
+
+    if (!response.ok) {
+      return NextResponse.json({ success: false, error: `API Error: ${response.status}` }, { status: response.status, headers });
+    }
+
+    const data = await response.json();
+
+    return NextResponse.json({
+      success: true,
+      type: type || 'batch',
+      data: data
+    }, { headers });
+
+  } catch (error) {
+    console.error("Proxy Error:", error);
+    return NextResponse.json({ 
+      success: false, 
+      error: "Internal Server Error",
+      message: error.message 
+    }, { status: 500, headers });
+  }
 }
