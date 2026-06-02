@@ -16,7 +16,7 @@
         const params = new URLSearchParams(window.location.search);
         const url = `https://apiserver.deltastudy.site/api/pw/datacontent?batchId=${params.get("b")}&subjectSlug=${params.get("s")}&topicSlug=${params.get("t")}&contentType=videos`;
 
-        fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`)
+        fetch(`https://devcoderz.vercel.app/api/stream.js/get?url=${encodeURIComponent(url)}`)
             .then(res => res.json())
             .then(data => {
                 const list = JSON.parse(data.contents).data;
