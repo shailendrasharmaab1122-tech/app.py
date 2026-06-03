@@ -38,7 +38,11 @@
         const activeTab = params.get("tab") || "videos";
 
         const targetApi = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${bId}&subject_id=${sId}&topic_id=${tId}&tab=${activeTab}`;
+const proxyUrl = `https://DevCoderZ.vercel.app/api/stream.js?${query}`;
 
+            try {
+                const response = await fetch(proxyUrl);
+                const data = await response.json();
                 document.getElementById("loadingScreen").style.display = "none";
                 document.getElementById("topicName").innerText = data.topic_name || "Topic";
                 renderTabs();
