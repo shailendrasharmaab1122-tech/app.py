@@ -110,9 +110,10 @@
             }
         }
 
-        function openLectures(chapterId) {
-            window.location.href = "./lectures.html?batch_id=" + bId + "&subject_id=" + sId + "&chapter_id=" + chapterId;
+                function openLectures(chapterId) {
+            window.location.href = `./lectures.html?batch_id=${bId}&subject_id=${sId}&topic_id=${chapterId}`;
         }
+
 
         if (bId && sId) loadChapters();
     </script>
