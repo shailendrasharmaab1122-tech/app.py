@@ -3,26 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lectures</title>
+    <title>The DevCoderz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; }
-        iframe { width: 100%; height: 100%; border: none; }
+        body { background-color: #f8fafc; font-family: sans-serif; }
+        .tab-btn { background: #ffffff; color: #475569; border: 1px solid #e2e8f0; padding: 10px 18px; font-size: 13px; font-weight: 600; border-radius: 30px; white-space: nowrap; cursor: pointer; }
+        .tab-btn.active-tab { background: #4f46e5; color: #ffffff; border-color: #4f46e5; }
+        .card { background: white; border-radius: 16px; padding: 16px; margin-bottom: 14px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #f1f5f9; display: flex; align-items: center; gap: 16px; cursor: pointer; transition: transform 0.2s; }
+        .card:active { transform: scale(0.98); }
+        .img-box { width: 80px; height: 60px; border-radius: 8px; overflow: hidden; flex-shrink: 0; background: #eef2ff; display: flex; align-items: center; justify-content: center; }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; }
+        #loadingScreen { position: fixed; inset: 0; background: #fff; display: flex; align-items: center; justify-content: center; z-index: 99999; }
     </style>
 </head>
-<body>
+<body class="pb-20">
+    <div id="loadingScreen">Loading...</div>
 
-    <iframe id="contentFrame" src="" allowfullscreen></iframe>
+    <nav class="h-16 bg-[#4f46e5] flex items-center px-6 text-white font-bold shadow-lg">
+        <button onclick="history.back()" class="mr-4">← Back</button>
+        The DevCoderz
+    </nav>
+
+    <div class="max-w-[600px] mx-auto p-4">
+        <h3 class="text-lg font-bold text-slate-800 mb-4" id="topicName">Loading...</h3>
+        <div class="flex gap-2 overflow-x-auto pb-4 mb-2 scrollbar-hide" id="tabsContainer"></div>
+        <div id="contentContainer"></div>
+    </div>
 
     <script>
         const params = new URLSearchParams(window.location.search);
-        const batchId = params.get("batch_id");
-        const subjectId = params.get("subject_id");
-        const topicId = params.get("topic_id");
+        const bId = params.get("batch_id");
+        const sId = params.get("subject_id");
+        const tId = params.get("chapter_id") || params.get("topic_id");
+        const activeTab = params.get("tab") || "videos";
 
-        const targetUrl = `https://edunova-pw.site/pwl/?batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}`;
-        
-        document.getElementById('contentFrame').src = targetUrl;
+        const targetApi = `https://eduvibe-pw-api.wasmer.app/get-lectures.php?batch_id=${bId}&subject_id=${sId}&topic_id=${tId}&tab=${activeTab}`;
+
+                document.getElementById("loadingScreen").style.display = "none";
+                document.getElementById("topicName").innerText = data.topic_name || "Topic";
+                renderTabs();
+
+                if (activeTab === "videos" || activeTab === "DppVideos") renderLectures(data.lectures || []);
+                else if (activeTab === "notes" || activeTab === "DppNotes") renderNotes(data.lectures || []);
+                else renderQuizzes(data.dpp_quizzes || []);
+            });
+
+        function renderTabs() {
+            const tabs = [["videos", "Lectures"], ["notes", "Notes"], ["dppQuiz", "DPP Quiz"], ["DppNotes", "DPP PDF"], ["DppVideos", "DPP Solutions"]];
+            document.getElementById("tabsContainer").innerHTML = tabs.map(t => 
+                `<button onclick="window.location.href='?batch_id=${bId}&subject_id=${sId}&topic_id=${tId}&tab=${t[0]}'" class="tab-btn ${activeTab === t[0] ? 'active-tab' : ''}">${t[1]}</button>`
+            ).join('');
+        }
+
+        function renderLectures(list) {
+            document.getElementById("contentContainer").innerHTML = list.map(i => `
+                <div class="card" onclick="window.location.href='./player.html?video_id=${i.video_id || i.id}&batch_id=${bId}&subject_id=${sId}&topic_id=${tId}'">
+                    <div class="img-box"><img src="${i.image || 'https://static.pw.live/react-batches/assets/study/blue-play-icon.svg'}"></div>
+                    <div class="flex-grow">
+                        <div class="font-bold text-sm text-slate-800 line-clamp-2">${i.name || "Lecture"}</div>
+                        <div class="text-xs text-slate-500 mt-1">🕒 ${i.duration || "00:00"}</div>
+                    </div>
+                </div>`).join('') || "<p class='text-center text-slate-400 mt-10'>No data found.</p>";
+        }
+
+        function renderNotes(list) {
+            document.getElementById("contentContainer").innerHTML = list.map(i => `
+                <div class="card" onclick="window.open('${i.download_url}', '_blank')">
+                    <div class="img-box text-2xl">📄</div>
+                    <div class="flex-grow font-bold text-sm text-slate-800">${i.title || "Study Material"}</div>
+                </div>`).join('') || "<p class='text-center text-slate-400 mt-10'>No notes found.</p>";
+        }
+
+        function renderQuizzes(list) {
+            document.getElementById("contentContainer").innerHTML = list.map(i => `
+                <div class="card" onclick="window.location.href='./dpp.html?batch_id=${bId}&schedule_id=${i.dppQuizDetails?.scheduleId}&test_id=${i.dppQuizDetails?.test?._id}'">
+                    <div class="img-box text-2xl">📝</div>
+                    <div class="flex-grow font-bold text-sm text-slate-800">${i.dppQuizDetails?.test?.name || "DPP Quiz"}</div>
+                </div>`).join('') || "<p class='text-center text-slate-400 mt-10'>No quizzes found.</p>";
+        }
     </script>
-
 </body>
 </html>
+
