@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lectures</title>
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; }
+        iframe { width: 100%; height: 100%; border: none; }
+    </style>
+</head>
+<body>
+
+    <iframe id="contentFrame" src="" allowfullscreen></iframe>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const batchId = params.get("batch_id");
+        const subjectId = params.get("subject_id");
+        const topicId = params.get("topic_id");
+
+        const targetUrl = `https://edunova-pw.site/pwl/?batch_id=${batchId}&subject_id=${subjectId}&topic_id=${topicId}`;
+        
+        document.getElementById('contentFrame').src = targetUrl;
+    </script>
+
+</body>
+</html>
