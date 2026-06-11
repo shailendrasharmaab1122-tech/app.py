@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE DEVCODERZ PREMIUM</title>
+    <script src="https://cdn.jsdelivr.net/npm/shaka-player@4.7.11/dist/shaka-player.compiled.min.js"></script>
+    <style>
+        body, html { margin:0; padding:0; background:#000; color:#fff; height:100%; overflow:hidden; font-family: sans-serif; }
+        #player-ui { position:relative; width:100%; height:100%; }
+        video { width:100%; height:100%; object-fit:contain; }
+
+
+        .brand { position:absolute; top:20px; left:20px; color:rgba(14, 165, 233, 0.4); font-weight:800; pointer-events:none; z-index:10; }
+
+
+        .controls { position:absolute; bottom:0; width:100%; padding:20px; background:linear-gradient(transparent, #000); transition:0.3s; }
+        .progress-bar { width:100%; height:6px; background:#444; border-radius:3px; position:relative; cursor:pointer; margin-bottom:15px; }
+        #played { height:100%; width:0%; background:#0ea5e9; border-radius:3px; }
+        #thumb { position:absolute; top:-4px; width:14px; height:14px; background:#fff; border-radius:50%; left:0; }
+
+        .actions { display:flex; justify-content:space-between; align-items:center; }
+        .btn { background:none; border:1px solid #555; padding:8px 12px; border-radius:20px; color:#fff; font-size:12px; cursor:pointer; }
+        .settings-menu { position:absolute; bottom:70px; right:20px; background:#1a1a1a; padding:15px; border-radius:10px; display:none; }
+    </style>
+</head>
+<body>
+
+<div id="player-ui">
+    <div class="brand">The DevCoderZ</div>
+    <video id="v" playsinline></video>
+
+    <div style="position:absolute; inset:0; display:flex;">
+        <div style="flex:1" onclick="handleTap('left')"></div>
+        <div style="flex:1" onclick="handleTap('right')"></div>
+    </div>
+
+    <div class="controls">
+        <div class="progress-bar" id="seek-bar"><div id="played"><div id="thumb"></div></div></div>
+        <div class="actions">
+            <button class="btn" onclick="history.back()">← Back</button>
+            <button class="btn" id="play-pause">Play</button>
+            <button class="btn" onclick="document.querySelector('.settings-menu').style.display='block'">⚙️ Settings</button>
+        </div>
+    </div>
+
+    <div class="settings-menu">
+        <label>Speed</label>
+        <select id="spd" onchange="v.playbackRate=this.value">
+            <option value="1">1x</option><option value="1.25">1.25x</option><option value="1.5">1.5x</option>
+            <option value="1.75">1.75x</option><option value="2">2x</option><option value="2.25">2.25x</option>
+            <option value="2.5">2.5x</option><option value="2.75">2.75x</option><option value="3">3x</option>
+        </select><br><br>
+        <label>Quality</label>
+        <select id="qlty" onchange="changeQuality(this.value)">
+            <option value="-1">AUTO</option><option value="720">720p</option>
+        </select><br><br>
+        <button class="btn" onclick="downloadVideo()">⬇ Download</button>
+        <button class="btn" onclick="alert('Attachments')">📎 Attachments</button>
+    </div>
+</div>
+
+<script src="/PW/player.js"></script>
+<script>
+    const v = document.getElementById('v'), bar = document.getElementById('seek-bar'), played = document.getElementById('played');
+    let player = new shaka.Player(v);
+
+
+    bar.onpointerdown = bar.onpointermove = (e) => {
+        if(e.buttons !== 1) return;
+        const pos = (e.clientX - bar.getBoundingClientRect().left) / bar.offsetWidth;
+        v.currentTime = pos * v.duration;
+    };
+
+
+    let lastTap = 0;
+    function handleTap(side) {
+        let now = new Date().getTime();
+        if(now - lastTap < 500) side === 'left' ? v.currentTime -= 10 : v.currentTime += 10;
+        lastTap = now;
+    }
+
+ 
+    function downloadVideo() {
+        const p = new URLSearchParams(window.location.search);
+        window.location.href = `download.html?v=${p.get('v')}&b=${p.get('b')}`;
+    }
+
+    v.ontimeupdate = () => {
+        let pct = (v.currentTime / v.duration) * 100;
+        played.style.width = pct + "%";
+    };
+
+    document.getElementById('play-pause').onclick = () => {
+        v.paused ? v.play() : v.pause();
+        document.getElementById('play-pause').textContent = v.paused ? "Play" : "Pause";
+    };
+</script>
+</body>
+</html>
