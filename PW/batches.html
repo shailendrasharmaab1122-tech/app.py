@@ -58,7 +58,7 @@
     <script>
         const batchId = new URLSearchParams(window.location.search).get("batch_id");
         
-        fetch(`/api/PW/batches.js?batch_id=${encodeURIComponent(batchId)}`)
+        fetch(`/api/PW/all-batches-api2.js?batch_id=${encodeURIComponent(batchId)}`)
             .then(res => res.json())
             .then(data => {
                 const res = data.data || data;
