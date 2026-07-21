@@ -9,8 +9,9 @@
         body,html{margin:0;padding:0;width:100%;height:100%;background:#010409;font-family:sans-serif;color:#fff;overflow:hidden}
         #_D0x_ROOT{display:flex;width:100%;height:100vh;flex-direction:column;overflow:hidden;}
         .H0x{height:60px;background:#F7F5F2;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid #E0DFDC;box-sizing:border-box;z-index:1000;position:relative;}
-        .M0x{width:100%;height:calc(100vh - 60px);overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}
+        .M0x{width:100%;height:calc(100vh - 60px);overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;position:relative;}
         .I0x{width:100%;height:100%;border:none;}
+        .hide-overlay{position:absolute;top:0;left:0;width:100%;height:70px;background:#F7F5F2;z-index:10;pointer-events:none;}
         #menuPanel{position:fixed;top:0;left:-300px;width:280px;height:100%;background:#F7F5F2;border-right:1px solid #E0DFDC;z-index:100001;transition:0.3s;padding:20px;box-sizing:border-box}
         #menuPanel.active{left:0}
         .menu-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:none;z-index:100000}
@@ -46,7 +47,8 @@
         <div style="width:20px"></div>
     </header>
     <main class="M0x">
-        <iframe id="CF" class="I0x" src="https://sigma-main-lilac.vercel.app/nexttoppers?trim=header" sandbox="allow-forms allow-scripts allow-same-origin allow-top-navigation"></iframe>
+        <div class="hide-overlay"></div>
+        <iframe id="CF" class="I0x" src="https://sigma-main-lilac.vercel.app/nexttoppers" sandbox="allow-forms allow-scripts allow-same-origin allow-top-navigation"></iframe>
     </main>
 </div>
 
