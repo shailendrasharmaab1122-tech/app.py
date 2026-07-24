@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Video Player</title>
+    <style>
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; overflow: hidden; }
+        #player-frame { position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: none; display: block; }
+    </style>
+</head>
+<body>
+    <iframe id="player-frame" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const bId = params.get('batchId') || params.get('batch_id');
+        const sId = params.get('subjectId') || params.get('subject_id');
+        const vId = params.get('videoId') || params.get('video_id');
+        const title = params.get('title') || params.get('video_name') || 'Video Player';
+        const baseUrl = "https://vidcloud.eu.org/play.php";
+        const targetUrl = `${baseUrl}?batch_id=${bId}&subject_id=${sId}&video_id=${vId}&video_name=${encodeURIComponent(title)}&video_type=new&play_type=Lecture&enc_video_url=`;
+        document.getElementById('player-frame').src = targetUrl;
+    </script>
+</body>
+</html>
