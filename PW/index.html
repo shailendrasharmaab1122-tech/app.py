@@ -91,7 +91,7 @@
       .content {
         position: absolute;
         top: 160px;
-        bottom: 40px; /* Adjusted to leave space for the sticky footer */
+        bottom: 40px;
         left: 0;
         right: 0;
         overflow-y: auto;
@@ -220,7 +220,7 @@
         color: #64748b;
       }
 
-      /* Custom Matching Footer Style */
+
       .app-footer {
         position: fixed;
         bottom: 0;
@@ -250,7 +250,7 @@
   <body>
     <div class="header">
       The DevCoderZ
-      <span>⚡ Smart Learning Terminal</span>
+      <span>PW</span>
     </div>
 
     <div class="search-section">
@@ -272,6 +272,12 @@
     </div>
 
     <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js');
+        });
+      }
+
       const FALLBACK_IMG = "https://devcoderz.vercel.app/pw.png";
 
       let ALL = [];
@@ -295,7 +301,7 @@
 
       showSkeleton();
 
-      fetch("/api/PW/all-batches-api1.js")
+      fetch("https://devcoderz-api.vercel.app/api/all-batches.js")
         .then((r) => r.json())
         .then((d) => {
           ALL = d.batches || d.data?.batches || d.data || [];
@@ -491,7 +497,7 @@
             if (batch) {
               cachedBatches[id] = batch;
             } else if (!cachedBatches[id]) {
-              fetch("/api/PW/all-batches-api1.js")
+              fetch("/list.js")
                 .then((r) => r.json())
                 .then((d) => {
                   let list = d.batches || d.data?.batches || d.data || [];
@@ -517,7 +523,7 @@
 
         if (e.target.classList.contains("explore-btn")) {
           let id = e.target.dataset.id;
-          window.location.href = "batches.html?batch_id=" + id;
+          window.location.href = "/batches.html?batch_id=" + id;
         }
       });
 
